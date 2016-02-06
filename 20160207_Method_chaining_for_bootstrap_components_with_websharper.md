@@ -1,4 +1,4 @@
-#Method chaining for Bootstrap components with WebSharper in F#
+# Method chaining for Bootstrap components with WebSharper in F#
 
 Lately I have been playing extensively with WebSharper and have been working on improving the structure and reusability of Bootstrap components built with WebSharper. I like writing HTML from F# as it allows me to reuse code by using namespaces and modules to group reusable functions and elements. 
 
@@ -9,7 +9,7 @@ If you want to follow this tutorial, here are the steps that I took before start
 - Create a new WebSharper.UI.Next single page application
 - Add bootstrap CSS and JS in index.html
 
-##Method chaining
+## Method chaining
 
 Method chaining comes from the OOP world. It is the act of creating methods on an object which alters the object and returns itself. For example, we could do the following:
 
@@ -26,7 +26,7 @@ __But how does Method chaining will help us with WebSharper and Bootstrap?__
 
 Bootstrap has a lot of UI components and each elements have multiple configurations. For example, a form can align its inputs vertically, horizontally or  inline all the inputs.The nav tabs can be displayed as tabs or pills and when it is displayed as pills, it can be represented vertically. Bootstrap offers a rich set of components that can be used to suit our needs and the best way to know it all is to read the [documentation](http://getbootstrap.com/components/#nav). Read for the first time the documentation is good but reading the documentation over and over again hoping to know by heart the whole framework isn’t a great solution, at least it doesn’t work for me as I tend to forget after few hours… So we need an abstraction of Bootstrap in F# which will allows us to easily discover all the features and configurations of Bootstrap. This can be achieved with the help of __Method chaining__.
 
-##WebSharper and HTML
+## WebSharper and HTML
 
 WebSharper exposes some functions to create HTML tags under [WebSharper.UI.Next.Html](https://github.com/intellifactory/websharper.ui.next/blob/master/WebSharper.UI.Next/HTML.fs). Each HTML tag has its equivalent, for `<div>` you will find `div` to create divs without attributes or `divAttr` for those with attributes, for `<table>` you will have `table` and `tableAttr`. To specify attribute you can use `Attr` or `attr` like so `pAttr [ attr.``class`` “text-muted” ] [ text “Hello world.” ]`. The first argument of each xAttr function takes a list of `attr` and the second argument is a list of `Doc`. A `Doc` is a representation of a `DOM element`, it can be any ensemble of elements.
 
@@ -63,7 +63,7 @@ We will do it in two steps:
 1. List down all the possible combinations
 2. Use Method chaining to build a comprehensive Nav tabs type
 
-##List down the combinations
+## List down the combinations
 
 First we will start by looking at the possibilities offered by Nav tabs. I have listed below the combinations that I found (I probably forgot some but that will be enough to convey the idea behind this post).
 
@@ -158,7 +158,7 @@ let nav = {
 
 There is one problem with that: __we need to specify all members even when most of the time we will have the same configuration__. Even though _most of the time_ we will use a default configuration, it is important to give the possibility to construct all the facets of the component. And because there might be many facets, that’s where we will use __Method chaining__ to construct a human readable set of functions to help us initialise it.
 
-##Method chaining with NavTabs
+## Method chaining with NavTabs
 
 As we explaining at the beginning the purpose of Method chaining is to provide a set of functions which are human readable and which make it easy to discover what kind of configuration we can have for our types. The first thing we need to do is to have a function to create the type in a default state:
 
@@ -305,7 +305,7 @@ And here is the result:
 
 ![result image](https://3.bp.blogspot.com/-VAK2kyZD7w0/VrZ0_3oekoI/AAAAAAAAAEU/a0fxK-zK0_I/s1600/Screen%2BShot%2B2016-02-06%2Bat%2B21.16.57.png)
 
-##Conclusion
+## Conclusion
 
 Today we explored a way of creating (kind of) a DSL to build Bootstrap components with WebSharper in F# using Method chaining. 
 
