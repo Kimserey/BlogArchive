@@ -160,38 +160,51 @@ There is one problem with that: __we need to specify all members even when most 
 
 ##Method chaining with NavTabs
 
-As we explaining at the beginning the purpose of Method chaining is to provide a set of functions which are human readable and which make it easy to discover what kind of configuration we can have for our types. The first thing we need to do is to have a first function to create the type as a default state.
+As we explaining at the beginning the purpose of Method chaining is to provide a set of functions which are human readable and which make it easy to discover what kind of configuration we can have for our types. The first thing we need to do is to have a function to create the type in a default state:
 
 ```
 type NavTabs with
      static member Create() = { Tabs = []; NavTabType = Normal; IsJustified = false }
 ```
 
-We are now in a better position to create nav tabs as we can just call NavTabs.Create(). The next step would be to provide a function to add tabs.
+We are now in a better position to create Nav tabs as we can just call `NavTabs.Create()`.
+What we need next is to make the other configurations available. 
+We will do that by following the `.Withxxx()` pattern we employed in our example of Method chaining.
 
-From this method we get a default configuration. What we need next is to make the other configurations available. We will do that by following the .Withxxx pattern we employed in our example of method chaining.
-
-On the navtabtype we will then have:
+On the `NavTabs` type we will then have:
 
 ```
 type NavTabs with
-     static member Create() = { Tabs = []; NavTabType = Normal; IsJustified = false }
+     static member Create() = 
+        { Tabs = []
+          NavTabType = Normal
+          IsJustified = false }
+     
      member x.WithTabs tabs = { x with Tabs = tabs }
+     
      member x.Justify isJustified = { x with IsJustified = isJustified }
+     
      member x.WithNavTabType navTabType = { x with NavTabType = navTabType }
 ```
 
-We do the same for the tab type with a create function
+We do the same for the `NavTab` type:
 
 ```
 type NavTab with
-     static member Create id = ...
-     member x.WithTitle title = ...
-     member x.WithContent content = ...
-     member x.WithNavTabState state = ...
+    static member Create id =
+        { Id = id
+          Title = ""
+          Content = Doc.Empty
+          State = NavTabState.Normal }
+          
+    member x.WithContent doc = { x with Content = doc }
+    
+    member x.WithTitle title = { x with Title = title }
+    
+    member x.WithState state = { x with State = state }
 ```
 
-Now when we want to make the same example as before with three tabs, pills and justified, we need to write:
+Now to create the same example as before (three tabs, pills and justified), we can write:
 
 ```
 let tabs =
@@ -203,94 +216,89 @@ let tabs =
                         .WithTitle("Home")
                         .WithContent(text "Home page here.")
                         .WithState(NavTabState.Active)
-
-                    NavTab.Create("account")
-                        .WithTitle("Account")
-                        .WithContent(text "Account page here.")
-
-                    NavTab.Create("profile")
-                        .WithTitle("Profile")
-                        .WithContent(text "Profile page here.")
-
-                    NavTab.Create("hello")
-                        .WithTitle("Hello")
-                        .WithState(NavTabState.Disabled) ])
+                  ... other tabs ...
+                ])
 ```
-
-This is longer to write then the previous one where we define everything ourself but this method has multiple advantage. First every time you hit “.” you will get an autocompletion which is helpful to discover all the available configurations. Secondly and most importantly, when you want to create just default nav tabs (with tabs horizontal, non justified) you just need to write:
+This code is longer the previous one but this is much more understandable as we know exactly what we are creating.
+Also, every time you hit “.” (at least on VS) you will get an autocompletion which is helpful to discover all the available configurations.
+Most importantly, when you want to just create default Nav tabs (with tabs horizontal, non justified) you just need to write:
 
 ```
-NavTabs.Create().WithTabs([ … ])
+let nav = NavTabs.Create().WithTabs([ ... tabs here ... ])
+
+... equivalent to ...
+
+let nav = {
+     Tabs = [ ... tabs here... ]
+     NavTabsType = Horizontal
+     IsJustified = false
+}
 ```
 
-There will be no need to configure the other members. We are now done with creating the nav tabs, the last bit remaining is to render the tab. To do that we need to take our crafted record and transform it to a WebSharper Doc. This component is kind of special as it is composed by two distinct components: the tabs and the contents. For that we will need two render functions on NavTabs and NavTab.
+We are now done with creating the Nav tabs, the last bit remaining is to render it. To do that we need to take our crafted records and transform it to a `WebSharper Doc`.
 
-Let start by NavTab with RenderTab and RenderContent:
+_This Bootstrap component is kind of special as it is composed by two distinct components: the tabs and the contents. Because of that we will need two render functions on `NavTabs` and `NavTab` to render respectively the tabs and the contents._
+
+Let start by `NavTab` with `RenderTab()` and `RenderContent()`:
 
 ```
 type NavTab with
      member x.RenderTab() =
-            liAttr [ attr.role "presentation"
-                      attr.``class`` (match x.State with
-                                     | NavTabState.Normal -> ""
-                                     | NavTabState.Active -> "active"
-                                     | NavTabState.Disabled -> "disabled") ]
-                   [ (match x.State with
-                      | NavTabState.Disabled -> aAttr [ attr.href “#” ] [ text x.Title ]
-                      | _ ->  aAttr [ attr.href ("#" + x.Id)
-                                           Attr.Create “role” “tab"
-                                           Attr.Create “data-toggle” “tab” ]
-                                         [ text x.Title ]) ]
+        liAttr [ attr.role "presentation"
+                 attr.``class`` (match x.State with
+                                 | NavTabState.Normal -> ""
+                                 | NavTabState.Active -> "active"
+                                 | NavTabState.Disabled -> "disabled") ]
+               [ (match x.State with
+                  | NavTabState.Disabled -> aAttr [ attr.href “#” ] [ text x.Title ]
+                  | _ ->  aAttr [ attr.href ("#" + x.Id)
+                                  Attr.Create “role” “tab"
+                                  Attr.Create “data-toggle” “tab” ]
+                                [ text x.Title ]) ]
+     
      member x.RenderContent() =
-            divAttr [ Attr.Create “role" "tabpanel"
-                          attr.id x.Id
-                          attr.``class`` (match x.State with NavTabState.Active -> "tab-pane fade in active" | _ -> "tab-content tab-pane fade") ]
-                        [ x.Content ]
+        divAttr [ Attr.Create “role" "tabpanel"
+                  attr.id x.Id
+                  attr.``class`` (match x.State with
+                                  | NavTabState.Active -> "tab-pane fade in active"
+                                  | _ -> "tab-content tab-pane fade") ]
+                [ x.Content ]
 ```
 
-The Render functions transform our crafted record type to a WebSharper Doc by pattern matching over all the configurations and translating it to the correct HTML and CSS classes. We do the same for NavTabs:
+The `Render functions` transform our crafted record type to a `WebSharper Doc` by pattern matching over all the configurations and translating it to the correct HTML and CSS classes.
+We do the same for `NavTabs`:
 
 ```
 type NavTabs with
      member x.RenderTabs()=
-            ulAttr [ attr.``class`` ("nav "
-                                           + (if x.IsJustified then "nav-justified " else "")
+        ulAttr [ attr.``class`` ("nav "
+                                 + (if x.IsJustified then "nav-justified " else "")
                                  + (match x.NavTabType with
-                                        | Normal -> "nav-tabs"
-                                        | Pill Horizontal -> "nav-pills"
-                                        | Pill Vertical -> "nav-pills nav-stacked")) ]
-                      (x.Tabs |> List.map NavTab.RenderTab |> Seq.cast)
-     member x.RenderContent() =
-            divAttr [ attr.``class`` "tab-content" ] (x.Tabs |> List.map NavTab.RenderContent |> Seq.cast)
+                                    | Normal -> "nav-tabs"
+                                    | Pill Horizontal -> "nav-pills"
+                                    | Pill Vertical -> "nav-pills nav-stacked")) ]
+               (x.Tabs |> List.map NavTab.RenderTab |> Seq.cast)
+    
+    member x.RenderContent() =
+        divAttr [ attr.``class`` "tab-content" ] (x.Tabs |> List.map NavTab.RenderContent |> Seq.cast)
 ```
 
-Finally we can call Render on the NavTabs record to get a doc and display it on the screen. The result code to create nav tabs is the following:
+Finally we can call `Render()` on the `NavTabs` record to get a `Doc` and display it on the screen. 
+The result code to create Nav tabs is the following:
 
 ```
-let tabs =
-    NavTabs.Create()
-            .Justify(true)
-            .WithType(Pill Vertical)
-            .WithTabs(
-                [ NavTab.Create("home")
-                        .WithTitle("Home")
-                        .WithContent(text "Home page here.")
-                        .WithState(NavTabState.Active)
+let tabs = ... creation of Nav tabs ...
 
-                    NavTab.Create("account")
-                        .WithTitle("Account")
-                        .WithContent(text "Account page here.")
+let nav =
+    tabs.RenderTabs()
+let content =
+    tabs.RenderContent()
 
-                    NavTab.Create("profile")
-                        .WithTitle("Profile")
-                        .WithContent(text "Profile page here.")
+[ nav; conntent ]
+|> Seq.cast
+|> Doc.Concat
+|> Doc.RunById "main"
 
-                    NavTab.Create("hello")
-                        .WithTitle("Hello")
-                        .WithState(NavTabState.Disabled) ])
-
-tabs.Render()
-|> Doc.RunById “main"
 ```
 
 And here is the result:
@@ -299,4 +307,12 @@ And here is the result:
 
 ##Conclusion
 
-Today we explore a way of creating kind of a DSL to build Bootstrap components with WebSharper in F# using Method chaining. This approach has the advantage of being very flexible and easy to extend. With the code being very readable, it is easy, even after few months, to understand it. Another good point is that it also facilitates other developers none familiar with Bootstrap to create UI components as the DSL guides them to configure the elements. The drawback is that it takes time to build the functions and sometime the Render functions aren’t straight forward. Overall I think the advantages win over the drawbacks because of the readability and the maintainability. More time will be saved then the time spent making those functions. I have created many more components for Bootstrap and you can have a look here http://kimserey.github.io/WebSharperBootstrap/ . I hope you enjoyed reading this post! As usual, if you have any comments hit me on twitter @Kimserey_Lam, thanks for reading!
+Today we explored a way of creating (kind of) a DSL to build Bootstrap components with WebSharper in F# using Method chaining. 
+
+This approach has the advantage of being very flexible and easy to extend. With the code being very readable, it is easy, even after few months, to understand it. Another good point is that it facilitates other developers none familiar with Bootstrap to create UI components as the DSL guides them to configure the elements. 
+The drawback is that it takes time to build the functions and sometime the `Render functions` aren’t straight forward. 
+Overall I think the advantages win over the drawbacks because of the readability and the maintainability. More time will be saved then the time spent making those functions.
+
+This approach isn't specific to Bootstrap or WebSharper. It can be applied to any kind of UI abstraction where you want to create a DSL that allows you to build UI elements in a friendly way.
+
+I have created many more components for Bootstrap and you can have a look here [http://kimserey.github.io/WebSharperBootstrap/](http://kimserey.github.io/WebSharperBootstrap/). I hope you enjoyed reading this post! As usual, if you have any comments hit me on twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam), thanks for reading!
