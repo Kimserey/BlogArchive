@@ -61,40 +61,40 @@ __So how can I expose the power of Bootstrap without having to rewrite the WebSh
 We will do it in two steps:
      
 1. List down all the possible combinations
-2. Use Method chaining to build a comprehensive type which will create nav tabs menu
+2. Use Method chaining to build a comprehensive Nav tabs type
 
 ##List down the combinations
 
-First we will start by looking at the possibilities offered by nav tabs. I have listed below the combinations that I found (I probably forgot some but that will be enough to convey the idea behind this post. ):
+First we will start by looking at the possibilities offered by Nav tabs. I have listed below the combinations that I found (I probably forgot some but that will be enough to convey the idea behind this post).
 
-- The nav can be display as tabs
-- The nav can be display as Pills
-- The nav can be justified (take the whole width available)
+- The Nav can be display as tabs
+- The Nav can be display as Pills
+- The Nav can be justified (take the whole width available)
 - Pills can be stacked vertically
 - Tabs can have an active state
 - Tabs can have a disable disable
 
-From this list we can already separate the possibilities in three groups. One group affecting the nav in general, another group which is affecting only the nav when it is displayed as pills and the last one affecting one tab.
+From this list we can already separate the possibilities in three groups:
+- A group affecting the Nav in general
+- A group affecting only single tabs
+- A group affecting Pills only
 
-##Create NavTabs type
 
-Now that we are aware of the possibilities we can start writing our NavTabs type. Taking the first three configuration affecting the nav in general, we defines whether the nav is tabs or pills and whether it is justified or not:
+Now that we are aware of the possibilities, we can start writing our `NavTabs` type. Taking the configurations affecting the Nav in general, we defines whether the Nav is displayed as tabs or pills and whether it is justified or not:
 
 ```
 type NavTabs = {
      Tabs: NavTab list
      NavTabType: NavTabType
-      IsJustified: bool
+     IsJustified: bool
 }
-and  NavTabType =
+and NavTabType =
 | Normal
 | Pill
 ```
-
-Then we can move on to the tabs which can be normal, active or disable:
-
+Then we can move on to the tabs which can have different states affecting their display: normal, active or disabled:
 ```
-type NavTabState = {
+type NavTab = {
      Id: string
      Text: string
      Content: Doc
@@ -104,37 +104,59 @@ and NavTabState =
 | Normal
 | Active
 | Disabled
+```
 
-Lastly we need to revisit our NavTabType as our last requirement is to allow Pills to be stacked. We do that by specifying it in the NavBarType:
+Lastely we need to revisit our `NavTabType` as our last requirement is to allow pills to be stacked. We do that by specifying it in the `NavTabType`:
 
+```
 type NavTabs = {
      Tabs: NavTab list
      NavTabType: NavTabType
      IsJustified: bool
 }
-and  NavTabType =
+and NavTabType =
 | Normal
 | Pill of PillStack
 and PillStack =
-          | Horizontal
-          | Vertical
+| Horizontal
+| Vertical
 ```
 
 Here’s the complete code of the NavTabs type:
-...
-...
+```
+type NavTabs = {
+     Tabs: NavTab list
+     NavTabType: NavTabType
+     IsJustified: bool
+}
+and NavTabs = {
+     Tabs: NavTab list
+     NavTabType: NavTabType
+     IsJustified: bool
+}
+and NavTabType =
+| Normal
+| Pill of PillStack
+and PillStack =
+| Horizontal
+| Vertical
+```
 
-Now we have all the configurations and if we want to create a nav tabs with 3 tabs, justified with pills in an vertical layer, we would write:
+Now we have all the configurations in and if we want to create a Nav tabs with three tabs, justified with pills in a vertical layer, we would write the following:
 
 ```
 let nav = {
-     Tabs = [  { Id = “first-tab”; Text = “First tab”; Content = Doc.Empty; State = Active }; { … }; { ... }  ]
+     Tabs = [ { Id = “first-tab”
+                Text = “First tab”
+                Content = Doc.Empty
+                State = Active }
+              { ... other tabs ... } ]
      NavTabsType = Pill Vertical
      IsJustified = true
 }
 ```
 
-We’ve got all the foundation to make nav tabs but there is one problem with that: we need to specify all members even when most of the time we will have the same configuration. I say “most of the time” because it is important as there will be time where those configuration will be required. So how can we make it easier to initialise all the members and create nav tabs in a more pleasant way? That’s where we will use Method chaining to construct a human readable set of functions to help us initialise it.
+There is one problem with that: __we need to specify all members even when most of the time we will have the same configuration__. Even though _most of the time_ we will use a default configuration, it is important to give the possibility to construct all the facets of the component. And because there might be many facets, that’s where we will use __Method chaining__ to construct a human readable set of functions to help us initialise it.
 
 ##Method chaining with NavTabs
 
