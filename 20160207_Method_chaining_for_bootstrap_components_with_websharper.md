@@ -30,7 +30,7 @@ Bootstrap has a lot of UI components and each elements have multiple configurati
 
 WebSharper exposes some functions to create HTML tags under [WebSharper.UI.Next.Html](https://github.com/intellifactory/websharper.ui.next/blob/master/WebSharper.UI.Next/HTML.fs). Each HTML tag has its equivalent, for `<div>` you will find `div` to create divs without attributes or `divAttr` for those with attributes, for `<table>` you will have `table` and `tableAttr`. To specify attribute you can use `Attr` or `attr` like so `pAttr [ attr.``class`` “text-muted” ] [ text “Hello world.” ]`. The first argument of each xAttr function takes a list of `attr` and the second argument is a list of `Doc`. A `Doc` is a representation of a `DOM element`, it can be any ensemble of elements.
 
-For this tutorial, we will take as example the creation of [Nav tabs](http://getbootstrap.com/components/#nav-tabs) as it is quite complex already and there are few ways to configure tabs which will have a look.
+For this tutorial, we will take as example the creation of [Nav tabs](http://getbootstrap.com/components/#nav-tabs) as it is quite complex already and there are few ways to configure tabs which we will look at.
 
 ![example Nav tabs](https://4.bp.blogspot.com/-qAzlnGKaik0/VrZ1wSLhSxI/AAAAAAAAAEY/hfXVUEnGQ_4/s1600/Screen%2BShot%2B2016-02-06%2Bat%2B22.37.25.png)
 
@@ -68,16 +68,16 @@ We will do it in two steps:
 First we will start by looking at the possibilities offered by Nav tabs. I have listed below the combinations that I found (I probably forgot some but that will be enough to convey the idea behind this post).
 
 - The Nav can be display as tabs
-- The Nav can be display as Pills
+- The Nav can be display as pills
 - The Nav can be justified (take the whole width available)
 - Pills can be stacked vertically
 - Tabs can have an active state
-- Tabs can have a disable disable
+- Tabs can have a disable state
 
 From this list we can already separate the possibilities in three groups:
 - A group affecting the Nav in general
 - A group affecting only single tabs
-- A group affecting Pills only
+- A group affecting pills only
 
 
 Now that we are aware of the possibilities, we can start writing our `NavTabs` type. Taking the configurations affecting the Nav in general, we defines whether the Nav is displayed as tabs or pills and whether it is justified or not:
@@ -106,7 +106,7 @@ and NavTabState =
 | Disabled
 ```
 
-Lastely we need to revisit our `NavTabType` as our last requirement is to allow pills to be stacked. We do that by specifying it in the `NavTabType`:
+Lastly we need to revisit our `NavTabType` as our last requirement is to allow pills to be stacked. We do that by specifying it in the `NavTabType`:
 
 ```
 type NavTabs = {
@@ -122,17 +122,18 @@ and PillStack =
 | Vertical
 ```
 
-Here’s the complete code of the NavTabs type:
+Here’s the complete code of the `NavTabs` type:
 ```
 type NavTabs = {
      Tabs: NavTab list
      NavTabType: NavTabType
      IsJustified: bool
 }
-and NavTabs = {
-     Tabs: NavTab list
-     NavTabType: NavTabType
-     IsJustified: bool
+and NavTab = {
+     Id: string
+     Text: string
+     Content: Doc
+     State: NavTabState
 }
 and NavTabType =
 | Normal
@@ -142,7 +143,7 @@ and PillStack =
 | Vertical
 ```
 
-Now we have all the configurations in and if we want to create a Nav tabs with three tabs, justified with pills in a vertical layer, we would write the following:
+Now we have all the configurations in and if we want to create Nav tabs composed by three tabs, justified with pills in a vertical layout, we would write the following:
 
 ```
 let nav = {
@@ -156,15 +157,18 @@ let nav = {
 }
 ```
 
-There is one problem with that: __we need to specify all members even when most of the time we will have the same configuration__. Even though _most of the time_ we will use a default configuration, it is important to give the possibility to construct all the facets of the component. And because there might be many facets, that’s where we will use __Method chaining__ to construct a human readable set of functions to help us initialise it.
+As we can see, __we need to specify all members even if most of the time we will have the same configuration__. But even though _most of the time_ we will use a default configuration, it is important to give the possibility to construct all the facets of the component. And because there might be many facets, that’s where we will use __Method chaining__ to construct a human readable set of functions to help us initialise it.
 
 ## Method chaining with NavTabs
 
-As we explaining at the beginning the purpose of Method chaining is to provide a set of functions which are human readable and which make it easy to discover what kind of configuration we can have for our types. The first thing we need to do is to have a function to create the type in a default state:
+As we explaining at the beginning, the purpose of Method chaining is to provide a set of functions which are human readable and which make it easy to discover what kind of configuration we can have for our types. The first thing we need to do is to have a function to create the type in a default state:
 
 ```
 type NavTabs with
-     static member Create() = { Tabs = []; NavTabType = Normal; IsJustified = false }
+     static member Create() = 
+        { Tabs = []
+          NavTabType = Normal
+          IsJustified = false }
 ```
 
 We are now in a better position to create Nav tabs as we can just call `NavTabs.Create()`.
@@ -179,12 +183,12 @@ type NavTabs with
         { Tabs = []
           NavTabType = Normal
           IsJustified = false }
-     
-     member x.WithTabs tabs = { x with Tabs = tabs }
-     
-     member x.Justify isJustified = { x with IsJustified = isJustified }
-     
-     member x.WithNavTabType navTabType = { x with NavTabType = navTabType }
+     member x.WithTabs tabs = 
+        { x with Tabs = tabs }
+     member x.Justify isJustified = 
+        { x with IsJustified = isJustified }
+     member x.WithNavTabType navTabType = 
+        { x with NavTabType = navTabType }
 ```
 
 We do the same for the `NavTab` type:
@@ -196,12 +200,12 @@ type NavTab with
           Title = ""
           Content = Doc.Empty
           State = NavTabState.Normal }
-          
-    member x.WithContent doc = { x with Content = doc }
-    
-    member x.WithTitle title = { x with Title = title }
-    
-    member x.WithState state = { x with State = state }
+    member x.WithContent doc = 
+        { x with Content = doc }
+    member x.WithTitle title = 
+        { x with Title = title }
+    member x.WithState state = 
+        { x with State = state }
 ```
 
 Now to create the same example as before (three tabs, pills and justified), we can write:
@@ -219,8 +223,8 @@ let tabs =
                   ... other tabs ...
                 ])
 ```
-This code is longer the previous one but this is much more understandable as we know exactly what we are creating.
-Also, every time you hit “.” (at least on VS) you will get an autocompletion which is helpful to discover all the available configurations.
+This code is longer than before but this is much more understandable as we know exactly what we are creating.
+Also, every time you hit `.` (at least on VS), you will get an autocompletion which is helpful to discover all the available configurations.
 Most importantly, when you want to just create default Nav tabs (with tabs horizontal, non justified) you just need to write:
 
 ```
@@ -237,7 +241,7 @@ let nav = {
 
 We are now done with creating the Nav tabs, the last bit remaining is to render it. To do that we need to take our crafted records and transform it to a `WebSharper Doc`.
 
-_This Bootstrap component is kind of special as it is composed by two distinct components: the tabs and the contents. Because of that we will need two render functions on `NavTabs` and `NavTab` to render respectively the tabs and the contents._
+_The Nav tabs Bootstrap component is kind of special as it is composed by two distinct components: the tabs and the contents. Because of that we will need two render functions on `NavTabs` and `NavTab` to render the tabs and the contents._
 
 Let start by `NavTab` with `RenderTab()` and `RenderContent()`:
 
@@ -250,18 +254,22 @@ type NavTab with
                                  | NavTabState.Active -> "active"
                                  | NavTabState.Disabled -> "disabled") ]
                [ (match x.State with
-                  | NavTabState.Disabled -> aAttr [ attr.href “#” ] [ text x.Title ]
-                  | _ ->  aAttr [ attr.href ("#" + x.Id)
-                                  Attr.Create “role” “tab"
-                                  Attr.Create “data-toggle” “tab” ]
-                                [ text x.Title ]) ]
+                  | NavTabState.Disabled -> 
+                        aAttr [ attr.href “#” ] [ text x.Title ]
+                  | _ ->  
+                        aAttr [ attr.href ("#" + x.Id)
+                                Attr.Create “role” “tab"
+                                Attr.Create “data-toggle” “tab” ]
+                              [ text x.Title ]) ]
      
      member x.RenderContent() =
         divAttr [ Attr.Create “role" "tabpanel"
                   attr.id x.Id
                   attr.``class`` (match x.State with
-                                  | NavTabState.Active -> "tab-pane fade in active"
-                                  | _ -> "tab-content tab-pane fade") ]
+                                  | NavTabState.Active -> 
+                                        "tab-pane fade in active"
+                                  | _ -> 
+                                        "tab-content tab-pane fade") ]
                 [ x.Content ]
 ```
 
@@ -283,7 +291,7 @@ type NavTabs with
         divAttr [ attr.``class`` "tab-content" ] (x.Tabs |> List.map NavTab.RenderContent |> Seq.cast)
 ```
 
-Finally we can call `Render()` on the `NavTabs` record to get a `Doc` and display it on the screen. 
+Finally we can call `Render()` on the `NavTabs` record to get a `Doc` and display it on the page. 
 The result code to create Nav tabs is the following:
 
 ```
@@ -309,10 +317,10 @@ And here is the result:
 
 Today we explored a way of creating (kind of) a DSL to build Bootstrap components with WebSharper in F# using Method chaining. 
 
-This approach has the advantage of being very flexible and easy to extend. With the code being very readable, it is easy, even after few months, to understand it. Another good point is that it facilitates other developers none familiar with Bootstrap to create UI components as the DSL guides them to configure the elements. 
+This approach has the advantage of being very flexible and easy to extend. With the code being very readable it is easy, even after few months, to understand it. Another good point is that it facilitates other developers none familiar with Bootstrap to create UI components as the DSL guides them to configure the elements. 
 The drawback is that it takes time to build the functions and sometime the `Render functions` aren’t straight forward. 
-Overall I think the advantages win over the drawbacks because of the readability and the maintainability. More time will be saved then the time spent making those functions.
+Overall I think the advantages win over the drawbacks because of the readability and the maintainability.
 
-This approach isn't specific to Bootstrap or WebSharper. It can be applied to any kind of UI abstraction where you want to create a DSL that allows you to build UI elements in a friendly way.
+This approach isn't specific to Bootstrap or WebSharper. It can be applied to any kind of UI abstraction where it is beneficial to create a DSL which builds UI elements in a friendly way.
 
 I have created many more components for Bootstrap and you can have a look here [http://kimserey.github.io/WebSharperBootstrap/](http://kimserey.github.io/WebSharperBootstrap/). I hope you enjoyed reading this post! As usual, if you have any comments hit me on twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam), thanks for reading!
