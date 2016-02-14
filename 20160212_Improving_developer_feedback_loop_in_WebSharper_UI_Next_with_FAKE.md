@@ -136,12 +136,16 @@ After running the build script, FAKE is now automatically rebuilding the solutio
 With this in place, when building a client side application with UI.Next, every time the files are changed, the update is directly propagated and the only step needed is to refresh the browser. 
 __Thanks to the watcher, the manual building step can be removed as it is triggered on file saved and developers only need to refresh the browser.__
 
-IMAGE
+A complete example can be found [here](https://github.com/Kimserey/SampleFakeWatcher).
+
+![example](https://1.bp.blogspot.com/-5WYRGXPHp7g/Vr_Mq6Y8MoI/AAAAAAAAAFM/gQMMHdeOzb0/s1600/watcher.gif)
+
 
 ## Conclusion
 
 Today the focus was on improving developer feedback loop. 
 We explored FAKE watcher to automate build of solution and JS files with WebSharper. 
 FAKE is a very powerful tool which offers a lot of possibility. 
-To find more complex examples of build scripts, you can refer [FAKE owns build script](https://github.com/fsharp/FAKE/blob/master/build.fsx) or the [FSharp.Data build script](https://github.com/fsharp/FSharp.Data/blob/master/build.fsx). As usual if you have any comments hit me on twitter [@Kimserey_Lam](https://twitter.com/kimserey_lam). 
+To find more complex examples of build scripts, you can refer [FAKE owns build script](https://github.com/fsharp/FAKE/blob/master/build.fsx) or the [FSharp.Data build script](https://github.com/fsharp/FSharp.Data/blob/master/build.fsx).
+As usual if you have any comments hit me on twitter [@Kimserey_Lam](https://twitter.com/kimserey_lam). 
 Hope you enjoyed reading this post as much as I enjoyed writing it. Thanks for reading!
