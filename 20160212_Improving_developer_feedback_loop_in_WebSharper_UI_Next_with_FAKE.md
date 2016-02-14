@@ -1,13 +1,13 @@
 # Improving developer feedback loop in WebSharper.UI.Next with FAKE
 
-In my previous posts I explained how to use WebSharper in different ways with Sitelet to build complete backend + frontend web app and with UI.Next to build reactive front end. 
+In my previous posts I explained how to use WebSharper in different ways with Sitelet to build complete backend + frontend web app and with UI.Next to build reactive frontend. 
 If you built the samples, you would have realised that for every changes, a compilation is required to build the JS files.
 Last week [@Tobias_Burger](https://twitter.com/toburger) [asked me](https://kimsereyblog.blogspot.co.uk/2016/01/architecture-for-web-app-built-in-f-and.html?showComment=1454496891390#c879113901600675581link) whether I knew a way to improve developer feedback loop when developing web app with WebSharper and that is the subject of this post - __Improving developer feedback loop in WebSharper.UI.Next with F#.__
 
 __What is a feedback loop?__
 
 In this post case, a feedback loop is referred as a way to propagate changes from the code to the UI and get a visual feedback from it. 
-Having fewer steps between writing and visualising results in faster feedbacks which indirectly improves developer experience. 
+Having fewer steps, between writing and visualising, results in faster feedbacks which indirectly improves developer experience. 
 A great example is - building a web app in JS. 
 For JS, saving the files is enough to propagate changes and only a refresh of the page is needed. 
 In contrast, an app with WebSharper requires the project to be recompiled when changes are made. Therefore, more actions are required before having a visual feedback.
@@ -42,24 +42,30 @@ The `Bundle` project type is used.
 Here are the steps taken by WebSharper to compile the JS files
 1. Project get compiled into a dll
 2. Dlls are used by WebSharper to produce 'WebSharper compiled' dlls containing metadata
-3. Depending on the project type JS files are created from the metadata contained within the dlls
+3. Depending on the project type, JS files are created from the metadata contained within the dlls
 
 Every time the code is updated, the process needs to be rerun.
 In other word, to propagate changes from the code to the UI, the project needs to be recompiled first, then recompiled with WebSharper and finally the browser needs to be refreshed to rerun the new JS.
 
 __How can we improve the development experience?__
 
-Compiling the project and refreshing the browser are disruptive to the development, the former being worse since it might take time to compile the project and to extract the JS files. Therefore a first step toward improvement of development experience would be to make the compilation lesser disruptive and that is what FAKE will be used for.
+Compiling the project and refreshing the browser are disruptive to the development, the former being worse since it might take time to compile the project and to extract the JS files. 
+Therefore a first step toward improvement of development experience would be to make the compilation less disruptive and that is what FAKE will be used for.
 
 ## Brief introduction to FAKE
 
-In development, every project has its own build workflows and specifications. There are times where it is preferable to `Clean + Build`, times where it is preferable to `Clean + Build + Run Tests`, some projects need to be deployed to Azure and some need to pushed to NuGet. [FAKE](http://fsharp.github.io/FAKE/) helps automating all these workflows through script. It provides a panoply of helpers which give support for FTP, Git, Azure, MSBuild and many more.
+In development, every project has its own build workflows and specifications. There are times where it is preferable to `Clean + Build`, times where it is preferable to `Clean + Build + Run Tests`, some projects need to be deployed to Azure and some need to pushed to NuGet. [FAKE](http://fsharp.github.io/FAKE/) helps automate all these workflows through script. It provides a panoply of helpers which give support for FTP, Git, Azure, MSBuild and many more.
 
-Taking the example of `Clean + Build + Run Tests`, each stage of the workflow is called a `Target` in FAKE. `Clean + Build + Run Tests` workflow will have three separate targets `Clean`, `Build` and `RunTests`. Targets aren't limited to a single workflow, they can't be reused and combined to create other workflows. For example with `Clean`, `Build` and `RunTests` it is possible to define two useful workflows: `Clean + Build` and `Clean + Build + RunTests`. A target is composed by a name and an action.
+Taking the example of `Clean + Build + Run Tests`, each stage of the workflow is called a `Target` in FAKE. `Clean + Build + Run Tests` workflow will have three separate targets `Clean`, `Build` and `RunTests`. Targets aren't limited to just a single workflow, they can be reused and combined to create other workflows. For example with `Clean`, `Build` and `RunTests` it is possible to define two useful workflows: `Clean + Build` and `Clean + Build + RunTests`.
+
+A target is composed by a name and an action.
 
 ```
 /// Creates a Target.
 val Target : name:string -> body:(unit -> unit) -> unit
+```
+
+```
 Target "Clean" (fun () -> trace "Cleaning folders...")
 Target "Build" (fun () -> trace "Building something...")
 Target "RunTests" (fun () -> trace "Running tests...")
@@ -79,7 +85,7 @@ The definition of a workflow is done using [the infix operator `(==>)`](https://
 ```
 
 Running a target is done by calling `RunTargetOrDefault targetName`.
-Lastly the full script must be run using `FAKE.exe` in the `\tools` folder. A target name can be provided as argument. If no argument is provided, FAKE will run the default given to `RunTargetOrDefault`.
+Lastly the full script must be ran using `FAKE.exe` in the `\tools` folder. A target name can be provided as argument. If no argument is provided, FAKE will run the default given to `RunTargetOrDefault`.
 
 ```
 packages\FAKE.4.20.0\tools\FAKE.exe build.fsx RunTests
@@ -89,7 +95,7 @@ __How can FAKE help in our task to improve feedback loop?__
 
 One of the issue was the constant need to build the solution to propagate changes. 
 It turns out that FAKE provides a file watcher helper which triggers an action every time the files watched are changed. 
-This is how FAKE can help in improving feedback loop - __FAKE can automate the build of the WebSharper project every time a files are changed.__
+This is how FAKE can help in improving feedback loop - __FAKE can automate the build of the WebSharper project every time a file is changed.__
 
 ## Improve feedback loop with FAKE file watcher
 
@@ -134,7 +140,7 @@ Packages/tools/FAKE.exe build.fsx Watcher
 
 After running the build script, FAKE is now automatically rebuilding the solution everytime the files are changed.
 With this in place, when building a client side application with UI.Next, every time the files are changed, the update is directly propagated and the only step needed is to refresh the browser. 
-__Thanks to the watcher, the manual building step can be removed as it is triggered on file saved and developers only need to refresh the browser.__
+__Thanks to the watcher, the manual building step can be removed as it is triggered on file saved and developers only need to refresh the browser to visualize changes.__
 
 A complete example can be found [here](https://github.com/Kimserey/SampleFakeWatcher).
 
@@ -145,7 +151,7 @@ A complete example can be found [here](https://github.com/Kimserey/SampleFakeWat
 
 Today the focus was on improving developer feedback loop. 
 We explored FAKE watcher to automate build of solution and JS files with WebSharper. 
-FAKE is a very powerful tool which offers a lot of possibility. 
+FAKE is a very powerful tool which offers a lot of possibilities. 
 To find more complex examples of build scripts, you can refer [FAKE owns build script](https://github.com/fsharp/FAKE/blob/master/build.fsx) or the [FSharp.Data build script](https://github.com/fsharp/FSharp.Data/blob/master/build.fsx).
 As usual if you have any comments hit me on twitter [@Kimserey_Lam](https://twitter.com/kimserey_lam). 
 Hope you enjoyed reading this post as much as I enjoyed writing it. Thanks for reading!
