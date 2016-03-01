@@ -1,6 +1,6 @@
 # Create an animated menu with WebSharper.UI.Next
 
-WebSharper.UI.Next exposes a set of functions to animate elements on the page. Today we will see how we can use this functions to create an animated menu with UI.Next.
+WebSharper.UI.Next exposes a set of functions to animate elements on the page. Today we will see how we can use these functions to create an animated menu with UI.Next.
 
 ![preview](https://3.bp.blogspot.com/-sw_pT3uZ0l4/VtQnaUiJBxI/AAAAAAAAAFk/MJ_vHzOgvsY/s320/menu.gif)
 
@@ -46,8 +46,8 @@ Trans allows us to create an animation on the width when the `div` is inserted i
 `Trans` exposes three functions `Trans.Change`, `Trans.Enter` and `Trans.Exit`.
 
 - `Trans.Change` animates the changes of value observed on the view given.
-- `Trans.Enter` animates the element when the element enter the scene.
-- `Trans.Exit` animates the element when the element exit the schene.
+- `Trans.Enter` animates the element when the element enters the scene.
+- `Trans.Exit` animates the element when the element exits the schene.
 - `Trans.Trivial` creates an empty transition.
 - `Trans.Create` is a shorthand for `TransTrivial() |> Trans.Change`.
 
@@ -161,7 +161,7 @@ This menu has three visible animations on a selection:
 And the opposite happens when going back:
 - The button slides back to its original position
 - The other buttons slide back in
-- The submenu dissappears
+- The submenu disappears
 
 We start first by defining a transition that we will use accross the whole menu.
 ```
@@ -218,7 +218,7 @@ type State = {
 ```
 
 The `state` defines the `opacity`, the `position Top/Left` represents the button position for example with `Position.Top`, `0` would be the `0px`, `1` would be `(1 * height)px`, etc..
-I have also added some helper functions to `hide`, `show`, `moveDown`, `select`, etc.. which simply set - increase - dicrease the value of the state.
+I have also added some helper functions to `hide`, `show`, `moveDown`, `select`, etc.. which simply set - increase - decrease the value of the state.
 
 Next we can create our button:
 
@@ -295,7 +295,7 @@ Attr.AnimatedStyle
 <| View.Map opacity x.State.View
 <| sprintf "%f"
 ```
-The button will dissapear when the `State.Opacity` turns to `0`.
+The button will disappear when the `State.Opacity` turns to `0`.
 
 ```
 Attr.AnimatedStyle
@@ -403,5 +403,4 @@ We then end up with a nice animated menu. The full source code is available here
 ## Conclusion
 
 Today we saw how to use WebSharper animation. We used simple building blocks given by WebSharper to make a nice animated menu.
-Much more could be done, we could define our own easing function and own interpolation but just by using simple elements, we manage to build something that I think looks quite nice.
 Hope you enjoyed reading this tutorial and like always if you have any comments, you can contact me here or on twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). Thanks for reading!
