@@ -8,6 +8,8 @@ Most of the site we visit on a daily basis have forms. `WebSharper.Forms` is a l
 brings composition of forms to the next level by making composition of forms, handling validation,
 handling submit and displaying error an easy task.
 
+`WebSharper.Forms` is available in alpha at the moment on nuget - [https://www.nuget.org/packages/WebSharper.Forms](https://www.nuget.org/packages/WebSharper.Forms).
+
 ## What is needed to build a form
 
 The form that we will build in this tutorial will handle:
