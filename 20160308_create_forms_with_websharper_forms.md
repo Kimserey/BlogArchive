@@ -86,7 +86,7 @@ By continuing the same way, `Form.Yield ""` and `Form.Yield 0`, we end up with:
 Form<(string * int), ((Var<string> -> Var<string> -> Var<int> -> 'a) -> 'a)>
 ```
 
-And it turns out that `string * int` is our inputs combined in a tuple that we receive in the `Form.MapAsync` as argument 
+And it turns out that `string * int` is our inputs combined in a tuple that we receive as argument in `Form.MapAsync`  
 and `Var<string> -> Var<string> -> Var<int>` is what we receive in `Form.Render` to render our form.
 Wonderful, it __seems__ to add up together!
 
