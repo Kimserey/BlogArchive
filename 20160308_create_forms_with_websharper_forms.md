@@ -1,6 +1,6 @@
 # Creating forms with WebSharper.Forms
 
-In previous posts, I have covered multiple aspects of how to use WebSharper to make nice webapps by using [animations](http://kimsereyblog.blogspot.co.uk/2016/03/create-animated-menu-with.html), 
+In my previous posts, I have covered multiple aspects of how to use WebSharper to make nice webapps by using [animations](http://kimsereyblog.blogspot.co.uk/2016/03/create-animated-menu-with.html), 
 by taping into [external JS libaries](http://kimsereyblog.blogspot.co.uk/2016/01/external-js-library-with-websharper-in-f.html) or by using the built in [router in UI.Next to make SPA](http://kimsereyblog.blogspot.co.uk/2015/08/single-page-app-with-websharper-uinext.html).
 Today I would like to cover another aspect which is essential for making useful webapps - __Forms__.
 
