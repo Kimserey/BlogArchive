@@ -1,7 +1,7 @@
 # Creating forms with WebSharper.Forms
 
-In my previous posts, I have covered multiple aspects of how to use WebSharper to make nice webapps by using [animations](http://kimsereyblog.blogspot.co.uk/2016/03/create-animated-menu-with.html), 
-by taping into [external JS libaries](http://kimsereyblog.blogspot.co.uk/2016/01/external-js-library-with-websharper-in-f.html) or by using the built in [router in UI.Next to make SPA](http://kimsereyblog.blogspot.co.uk/2015/08/single-page-app-with-websharper-uinext.html).
+In my previous posts, I have covered multiple aspects on how WebSharper can be used to make nice webapps by using [animations](http://kimsereyblog.blogspot.co.uk/2016/03/create-animated-menu-with.html), 
+by tapping into [external JS libaries](http://kimsereyblog.blogspot.co.uk/2016/01/external-js-library-with-websharper-in-f.html) or by using the built in [router in UI.Next to make SPA](http://kimsereyblog.blogspot.co.uk/2015/08/single-page-app-with-websharper-uinext.html).
 Today I would like to cover another aspect which is essential for making useful webapps - __Forms__.
 
 Most of the site we visit on a daily basis have forms. `WebSharper.Forms` is a library fully integrated with the reactive model of `UI.Next` which
@@ -20,17 +20,18 @@ The form that we will build in this tutorial will handle:
 
 ![preview](https://raw.githubusercontent.com/Kimserey/forms/master/form.gif)
 
-This are the requirements I gathered during my last project. I have a many forms but overall, they all require this four points and not more.
+This are the requirements I gathered during my last project. I have to deal with many forms but overall, 
+they all required this four points and nothing more.
 
 ## Composing with WebSharper.Forms
 
 All the forms that I built so far follow the same order of instructions:
 1. Calls `Form.Return`,
 2. Follows a bunch of apply (`<*>`) of `Form.Yield`,
-3. Pipes (`|>`) `Form.WithSubmit` to tell it that I want to submit something,
-4. Pipes some async function `Form.MapAsync` which are to be executed on submit,
-5. Pipes `Form.MapToResult` to handle the result of the async call,
-6. Pipes `Form.Render` which provides a way to transform the `Form` to a `Doc` which we can then embed in the page
+3. Pipes some `async` function `Form.MapAsync` which are to be executed on submit,
+4. Pipes `Form.MapToResult` to handle the result of the async call (4. and 5. can be combined with `MapToAsyncResult`),
+5. Pipes (`|>`) `Form.WithSubmit` to tell it that I want to submit something after a `button submit` click,
+6. Pipes `Form.Render` which provides a way to transform the `Form` to a `Doc` which we can then embed in the page.
 
 As an example, here is the full implementation of the form that we will use:
 
@@ -39,12 +40,12 @@ Form.Return (fun firstname lastname age -> firstname + " " + lastname, age)
 <*> (Form.Yield "" |> Validation.IsNotEmpty "First name is required.")
 <*> (Form.Yield "" |> Validation.IsNotEmpty "Last name is required.")
 <*> (Form.Yield 18)
-|> Form.WithSubmit
 |> Form.MapAsync(fun (displayName, number) -> sendToBackend displayName number)
 |> Form.MapToResult (fun res -> 
     match res with
     | Success s -> Success s
     | Result.Failure _ -> Result.Failure [ ErrorMessage.Create(customErrorId, "Backend failure") ])
+|> Form.WithSubmit
 |> Form.Render(fun name lastname age submit ->
     form [ fieldset [ div [ Doc.Input [] name ]
                         Doc.ShowErrorInline submit.View name
@@ -56,11 +57,16 @@ Form.Return (fun firstname lastname age -> firstname + " " + lastname, age)
 ```
 
 The first part of the form composed by the set of `Return <*> yield <*> yield <*> yield` is very powerful.
-It allows us to work directly with the input results in the function given in `Form.Return`. 
-Because we are working within the `Form`, the values given to the function in `Form.Return` are _always valid_.
-As we can see, validation on the inputs is done at the `Yield` level.
 
-Looking at the type, the first `Form.Return` has the following type:
+_If you want to read more about this type of composition, you can read this blog post from Tomas Petricek [http://tomasp.net/blog/applicative-functors.aspx/](http://tomasp.net/blog/applicative-functors.aspx/)._
+
+Basically, it allows us to work directly with the __input validated data__ in the function given in `Form.Return`. 
+Every interaction is done by composing `Form<_>` and we compose `Form<_>` elements.
+Since validation on the inputs is done at the `Form.Yield` level, the values given to the function in `Form.Return` are _always valid_ and we can safely work with the values.
+
+If our input is a `string` input, `Form.Yield ""` will return a `Form<string,_>` and within the function in `Form.Return` we can directly work with the `string` given by the `Form.Yield`.
+
+Now it is interesting to look at the type to see how the composition works, the first `Form.Return` has the following type:
 
 ```
 Form<'T, 'D -> 'D>
@@ -96,11 +102,30 @@ I might be stating the obvious but __the server should still perform a validatio
 
 Validation is handled during `Form.Yield` piped to `Validation.XX`.
 
+```
+<*> (Form.Yield "" |> Validation.IsNotEmpty "Last name is required.")
+```
+
 __What happens when data is invalid?__
 
 That's the amazing part, when data is invalid, the function in the `Form.Return` isn't executed.
-Instead a `Failure` is passed through and can be caught in the `Form.Render` to be displayed.
+Instead a `Failure` is passed through and can be caught in a `Form.MapResult` or directly in the `Form.Render` to be display the error.
 That is why we can safely assume that all the arguments in the `Form.Return` function are valid arguments and we can perform the action we want.
+
+### Mapping async function and result
+
+Most of the time when sending a form we want to perfom a network request.
+Those requests are usually `async request`. `Form.MapAsync` allows us to specify an `async` function to be executed when the form is submitted.
+This allows us to handle the result in `Form.MapToResult` without worrying about the `async` nature of the call.
+`Form.MapToResult` is piped to perform an action when the result of the `async` function is returned.
+
+```
+|> Form.MapAsync(fun (displayName, number) -> sendToBackend displayName number)
+|> Form.MapToResult (fun res -> 
+    match res with
+    | Success s -> Success s
+    | Result.Failure _ -> Result.Failure [ ErrorMessage.Create(customErrorId, "Backend failure") ])
+```
 
 ### Submitting data
 
@@ -118,17 +143,27 @@ If you are interested, you can find its definition [here](https://github.com/int
 
 The `View` can be used to display inline errors and errors returned from the `async call`.
 
-### Mapping async function and result
+_I place the submitter after the mapping otherwise you need to use `Form.TransmitView` to observe the error which occurs during the mapping.
+Also if you place the submitter after the `Form.Map` be sure to add at least one validation otherwise the `Form.Map` will be executed one time._
 
-Most of the time when sending a form we want to perfom a network request.
-Those requests are usually `async request`. `Form.MapAsync` allows us to specify an `async` function to be executed when the form is submitted.
-This allows us to handle the result in `Form.MapToResult` without worrying about the `async` nature of the call.
-`Form.MapToResult` is piped to perform an action when the result of the `async` function is returned.
+```
+|> Form.WithSubmit
+```
 
 ### Render
 
-Finally we render the form and transform it to a `Doc`. As we seen earlier, the arguments of the `Render` function are the `Var<_>` plus a `Submitter`.
+Finally we render the form and transform it to a `Doc`. As we seen earlier, the arguments of the `Form.Render` function are the `Var<_>`(s) plus a `Submitter`.
 We basically construct the form and call `.Trigger` on click.
+```
+|> Form.Render(fun name lastname age submit ->
+    form [ fieldset [ div [ Doc.Input [] name ]
+                        Doc.ShowErrorInline submit.View name
+                        div [ Doc.Input [] lastname ]
+                        Doc.ShowErrorInline submit.View lastname
+                        div [ Doc.IntInputUnchecked [] age ]
+                        Doc.Button "Send" [ attr.``type`` "submit" ] submit.Trigger 
+                        Doc.ShowCustomErrors submit.View ] ])
+```
 
 ## Some helpers
 
@@ -152,14 +187,16 @@ type Doc with
                             |> Doc.Concat) 
 ```
 
-`View.Through` will filter the errros which are only related to the `Var<_>` given. 
+`View.Through` will filter the errors which are only related to the `Var<_>` given. 
 I am using a `cutomErrorId` to filter the errors that I created myself.
+
+The full code source can be found here []().
 
 ## Conclusion
 
 At first `WebSharper.Forms` looks intimidating, especially when you are not familiar with the apply notation.
-But the concept of the `Form` is very powerful as it allows us to _hide_ behind the `Form` type and manipulate safe values to perform our actions.
-The only validation needed is the validation during the `Yield` stage. After that even the errors in the `async` is handled.
+But the concepts used in `WebSharper.Forms` is very powerful as it allows us to _hide_ behind the `Form<_>` type and manipulate safe values to perform our actions.
+The only validation needed is the validation during the `Yield` stage.
 After getting used to it, I found the use of `WebSharper.Forms` very beneficial as 
 it allowed me to rapidly build form flows and even after few weeks, 
 I can just have a glance at the code and directly understand what it is doing 
