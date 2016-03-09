@@ -143,8 +143,8 @@ If you are interested, you can find its definition [here](https://github.com/int
 
 The `View` can be used to display inline errors and errors returned from the `async call`.
 
-_I place the submitter after the mapping otherwise you need to use `Form.TransmitView` to observe the error which occurs during the mapping.
-Also if you place the submitter after the `Form.Map` be sure to add at least one validation otherwise the `Form.Map` will be executed one time._
+_I pipe the submit after the `Form.Map` otherwise you need to use `Form.TransmitView` to observe the error which occurs during the mapping.
+Also if you pipe the submit after the `Form.Map` be sure to add at least one validation otherwise the `Form.Map` will be executed one time on startup._
 
 ```
 |> Form.WithSubmit
