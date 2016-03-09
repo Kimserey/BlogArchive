@@ -113,6 +113,9 @@ Form<(string * int), ((Var<string> -> Var<string> -> Var<int> -> Submitter<Resul
 ```
 
 The `Submitter` type exposes a `Trigger` function which allows the form to be triggered and a `View` which observe the `Result<'T>` of the form.
+A `Submitter` is just a type hiding a `View.SnapshotOn` where `Trigger` triggers the snapshot of the current value of the form.
+If you are interested, you can find its definition [here](https://github.com/intellifactory/websharper.ui.next/blob/master/WebSharper.UI.Next/Reactive.fs#L423).
+
 The `View` can be used to display inline errors and errors returned from the `async call`.
 
 ### Mapping async function and result
