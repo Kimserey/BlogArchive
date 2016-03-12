@@ -88,8 +88,8 @@ The references `WebSharper.Compile.Assembly` and the `CompiledAssembly` are then
 `outputFile` generates the JS files related to the current compiled assembly.
 
 This is why, _at the moment_, compiling with WebSharper is a two step process:
-1. Compile with msbuild which makes a .dll
-2. Compile that .dll with `WebSharper.Compiler` which makes a `CompiledAssembly`
+ 1. Compile with msbuild which makes a .dll
+ 2. Compile that .dll with `WebSharper.Compiler` which makes a `CompiledAssembly`
 
 After we are done compiling and we have the compiled assembly, we can write the JS into files that we place in our root folder.
 
