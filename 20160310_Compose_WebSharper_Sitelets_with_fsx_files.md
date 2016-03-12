@@ -93,9 +93,6 @@ This is why, _at the moment_, compiling with WebSharper is a two step process:
 
 After we are done compiling and we have the compiled assembly, we can write the JS into files that we place in our root folder.
 
-### Dig into Warp compile method
-
-
 
 ## Bind everything in an Owin selfhost
 
