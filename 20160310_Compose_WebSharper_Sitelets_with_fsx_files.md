@@ -43,7 +43,7 @@ let compile (asm: System.Reflection.Assembly) =
 This function is used to compile a dynamic assembly which is exactly our case since we are handling a dynamic assembly (`FSI assembly`).
 From this method we extract a `CompiledAssembly` which exposes members we are interested in, like `ReadableJavaScript`, `CompressedJavaScript` and `Info`.
 
-```    
+```
 type CompiledAssembly =
 {
     ReadableJavaScript : string
@@ -56,7 +56,7 @@ type CompiledAssembly =
 The first part of `compile` is to get the references from the current assembly with `getRefs`.
 It does a bunch of recursive calls to get the full tree of references (references of references etc) by doing some clever filtering to avoid duplicated references.
 Then it passs those references to a `loader` which will transform it to a `WebSharper.Compiler.Assembly` (to not be confused by the `CompiledAssembly`).
-These references are then used to build the options `let opts = { FE.Options.Default with References = refs }` 
+These references are then used to build the options `let opts = { FE.Options.Default with References = refs }`
 needed to instantiate the `WebSharper.Compiler` `let compiler = FE.Prepare opts (eprintfn "%O")` which is then used to compile the current dynamic assembly.
 
 ```
@@ -87,12 +87,33 @@ The references `WebSharper.Compile.Assembly` and the `CompiledAssembly` are then
 
 `outputFile` generates the JS files related to the current compiled assembly.
 
-This is why, _at the moment_, compiling with WebSharper is a two step process:
+This is why, _at the moment_ (some rumor that it might become much faster in the near future), compiling with WebSharper is a two step process:
  1. Compile with msbuild which makes a .dll
  2. Compile that .dll with `WebSharper.Compiler` which makes a `CompiledAssembly`
 
-After we are done compiling and we have the compiled assembly, we can write the JS into files that we place in our root folder.
+## Combine .fsx and common library
 
+We know how to compile .fsx to WebSharper but we miss one requirement - __combine it with a common library__.
+
+To do that we can't directly use Warp because Warp only allow us to compile the current dynamic assembly. We need to combine the data contained in the current dynamic assembly (in the .fsx) with some common data contained in another assembly (common code) to build our sitelet.
+
+We do that by defining a page type.
+Page type will contains the route for which this page is accessible and the content of the page.
+
+```
+type Page = {
+    Title: string
+    Content: Doc
+    Route: string
+}
+```
+
+So here is the flow:
+
+ 1. Run the .fsx
+ 2. Extract from .fsx pages (specific pages) and metadata
+ 3. Build sitelet by combining common pages with specific pages
+ 4. Mount the sitelet on owin selfhost
 
 ## Bind everything in an Owin selfhost
 
