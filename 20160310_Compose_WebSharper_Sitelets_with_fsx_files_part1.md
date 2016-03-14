@@ -1,7 +1,7 @@
 # Compose WebSharper Sitelets with .fsx files
 
 Recently I had the requirement to build a webapp composed by .fsx files.
-We wanted to exploit this idea by building core functionalities which will rarely change and enhance it with disposable functionalities provided in .fsx files which were very likely to change.
+There will be core functionalities in the webapp which will rarely change and these functionalities will be enhanced with functionalities provided in .fsx files which were very likely to change.
 
 This post aims to give a better understanding of the steps required to compile a `WebSharper.Sitelet` by understanding how and when does the extraction of the JS files happens.
 It also aims to provide a solution to handling multiple versions of a webapp without having to branch the project.
