@@ -1,10 +1,12 @@
 # Compose WebSharper Sitelets with .fsx files
 
-Recently I had the requirement to build a webapp composed by .fsx files.
-There will be core functionalities in the webapp which will rarely change and these functionalities will be enhanced with functionalities provided in .fsx files which were very likely to change.
+Recently I had the requirement to build a webapp which needed to handle multiple customers. 
+The way we did it was to place pages into two buckets, __common__ and __bespoke__.
+__Common__ pages would refer to pages shared for all customers and __bespoke__ pages would refer to pages unique to each customers. 
+We achieved this by building a WebSharper sitelet composed by common pages contained in a library and bespoke pages contained in .fsx script files. .fsx files are the perfect fit for this scenario as we needed to be able to compile only a subset of it depending on the customer we were building the webapp for. Also .fsx files are self contained which make it even more appealing.
 
-This post aims to give a better understanding of the steps required to compile a `WebSharper.Sitelet` by understanding how and when does the extraction of the JS files happens.
-It also aims to provide a solution to handling multiple versions of a webapp without having to branch the project.
+In this post, we will see how we can build a sitelet composed by code taken from a library but also from .fsx files.
+At the same time, we will have a better understanding of the steps required to compile a `WebSharper.Sitelet` by understanding how and when does the extraction of the JS files happens.
 
 
 This post will be composed by 3 parts:
