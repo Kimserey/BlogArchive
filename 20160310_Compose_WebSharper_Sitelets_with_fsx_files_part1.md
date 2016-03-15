@@ -22,12 +22,26 @@ Having this requirement in hand, I started to search for a solution to compile F
 The following script is all the code required to bootup a server which serves a single page application returning hello world:
 ```
 open WebSharper
-open WebSharper.Html.Server
+open WebSharper.JavaScript
+open WebSharper.Sitelets
+open WebSharper.UI.Next
+open WebSharper.UI.Next.Html
+open WebSharper.UI.Next.Client
 
-do
-    Warp.CreateSPA (fun ctx -> [H1 [Text "Hello world!"]])
-    |> Warp.RunAndWaitForInput
-    |> ignore
+[<JavaScript>]
+module Client =
+    //Place your client code here
+    let main() =
+        JS.Alert "Hello"
+        Doc.Empty
+
+module Server =
+    let site =
+        Application.SinglePage (fun _-> 
+            Content.Page [ client <@ Client.main() @> ])
+
+
+do Warp.RunAndWaitForInput Server.site |> ignore
 ```
 
 __How does it work?__
