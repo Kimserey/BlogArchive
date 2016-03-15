@@ -28,12 +28,18 @@ open WebSharper.UI.Next
 open WebSharper.UI.Next.Html
 open WebSharper.UI.Next.Client
 
+module Remoting =
+    [<Rpc>]
+    let sayHello() = 
+        async.Return "Hello!"
+
 [<JavaScript>]
 module Client =
-    //Place your client code here
     let main() =
-        JS.Alert "Hello"
-        Doc.Empty
+        View.Const ()
+        |> View.MapAsync Remoting.sayHello
+        |> View.Map text
+        |> Doc.EmbedView
 
 module Server =
     let site =
