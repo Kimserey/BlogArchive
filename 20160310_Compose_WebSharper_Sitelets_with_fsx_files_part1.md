@@ -19,7 +19,7 @@ This post will be composed by 3 parts:
 Having this requirement in hand, I started to search for a solution to compile F# with `WebSharper.Compiler` and I found [`WebSharper.Warp`](https://github.com/intellifactory/websharper.warp).
 `Warp` allows us to boot a sitelet from an .fsx file and run the sitelet from the FSI. 
 
-The following script can be run in a .fsx, It boots up a SPA served on `localhost:9000`, with JS code and makes one call to a backend endpoint to get a `Hello!`. We basically get all the power of `WebSharper` to be run from FSI.
+The following script can be run in a .fsx. It boots up a SPA served on `localhost:9000`, with JS code and makes one call to a backend endpoint to get a `Hello!`. We basically get all the power of `WebSharper` to be run from FSI. It makes it easy to rapidly scribble some prototype and run a complete `WebSharper` webapp.
 ```
 #I "../packages/"
 #load "WebSharper.Warp/tools/reference-nover.fsx"
