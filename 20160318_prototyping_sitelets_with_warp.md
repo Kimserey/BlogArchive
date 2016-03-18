@@ -1,9 +1,9 @@
 # Prototyping Sitelets with WebSharper.Warp
 
 Scripting quick prototypes in WebSharper can sometime be troublesome. 
-If for each prototype, a new project has to be created or code needs to be commented/uncommented, it will soon be demotivating as too many steps are required to start new prototypes.
+If for each prototype, a new project has to be created or code needs to be commented/uncommented, it can become quite demotivating as too many steps are required.
 In F#, `.fsx` files are a great tool to script disposable code.
-Write some isolated functions, run on FSI and then throw the file.
+Write some isolated functions, run on FSI and then forget about it.
 
 With WebSharper, it is possible to __script a complete sitelets__ in `.fsx` files using `WebSharper.Warp` [https://github.com/intellifactory/websharper.warp](https://github.com/intellifactory/websharper.warp).
 
