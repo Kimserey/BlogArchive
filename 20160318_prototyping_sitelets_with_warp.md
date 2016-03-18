@@ -7,7 +7,7 @@ Write some isolated functions, run on FSI and then forget about it.
 
 With WebSharper, it is possible to __script a complete sitelets__ in `.fsx` files using `WebSharper.Warp` [https://github.com/intellifactory/websharper.warp](https://github.com/intellifactory/websharper.warp).
 
-In this post, I will show you how I setted up my project in order to use `Warp` efficiently to create sitelet prototypes.
+In this post, I will show you how you can setup a project in order to use `Warp` efficiently to create sitelet prototypes.
 Building with `.fsx` is a __huge__ advantage. It allows us to have multiple files containing completely isolated sitelets all within the same project.
 Therefore we can boot up easily through a one line command any sitelet to test it quickely which makes it ideal for prototyping.
 
