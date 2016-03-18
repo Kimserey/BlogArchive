@@ -1,6 +1,6 @@
 # Prototyping web app made easy with WebSharper.Warp
 
-Scripting quick prototypes in WebSharper can sometime be troublesome. 
+Scripting quick prototypes in WebSharper can sometimes be troublesome. 
 If for each prototype, a new project has to be created or code needs to be commented/uncommented, it can become quite demotivating as too many steps are required.
 In F#, `.fsx` files are a great tool to script disposable code.
 Write some isolated functions, run on FSI and then forget about it.
@@ -153,12 +153,10 @@ We now have all the ingredients to create powerful sitelet within a `.fsx` file:
 
 ## Benefits
 
-__But what's the benefits?__
-
 The major benefit is that it makes prototyping much easier. 
 When I started to use WebSharper, I used to create new projects each time I had to test something.
 
-It was slow and demotivating. I then just kept the same project and every time I had to test something, I would delete the previous code.
+It was slow and demotivating. I just kept the same project and every time I had to test something, I would delete the previous code.
 
 Now I don't do that anymore as with `WebSharper.Warp`, only one `.fsx` file needs to be created. It is easy and quick and you can be up and running a full sitelet in a matter of seconds.
 This makes prototyping much more enjoyable and combined with the build script, it is quick and easy to iterate.
