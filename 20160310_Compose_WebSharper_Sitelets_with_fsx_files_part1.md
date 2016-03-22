@@ -1,4 +1,4 @@
-# Compose WebSharper Sitelets with .fsx files
+# Explore how Warp works
 
 Recently I was required to build a webapp which needed to handle multiple customers. 
 The way we did it was to place pages into two buckets, __common__ and __bespoke__.
