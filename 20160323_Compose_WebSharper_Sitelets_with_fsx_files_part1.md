@@ -196,7 +196,7 @@ let outputFile root (asm: CompiledAssembly) =
     File.WriteAllText(dir +/ "WebSharper.EntryPoint.min.js", asm.CompressedJavaScript)
 ```
 
-This is why, _at the moment_ (some rumor that it might become much faster in the near future), compiling with WebSharper is a two step process:
+This is why, [_at the moment_](https://twitter.com/granicz/status/700367197986799617), compiling with WebSharper is a two step process:
  1. Compile with msbuild which makes a .dll
  2. Compile that .dll with `WebSharper.Compiler` which makes a `CompiledAssembly`
 
