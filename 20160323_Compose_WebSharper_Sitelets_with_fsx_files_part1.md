@@ -1,12 +1,12 @@
 # How WebSharper.Warp works behind the scene
 
-Lately I've been very happy about how `WebSharper.Warp` allowed me to interate quickly and without pain.
-Last week, I covered how we could use WebSharper.Warp to build quickly prototypes. [Check it out if you haven't read it yet](http://kimsereyblog.blogspot.co.uk/2016/03/prototyping-web-app-made-easy-with.html).
+Lately I've been very happy about how `WebSharper.Warp` allows me to iterate quickly and without pain.
+Last week, I covered how we could use WebSharper.Warp to build prototypes quickly. [Check it out if you haven't read it yet](http://kimsereyblog.blogspot.co.uk/2016/03/prototyping-web-app-made-easy-with.html).
 Today, I decided to explore how __WebSharper.Warp actually works behind the scene__.
 
 By looking at how `WebSharper.Warp` works, we will learn two things:
-    1. The process of compiling F# to WebSharper using `WebSharper.Compiler`
-    2. When does the JS files get created
+ 1. The process of compiling F# to WebSharper using `WebSharper.Compiler`
+ 2. When does the JS files get created
     
 ## Exploring WebSharper.Warp
 
