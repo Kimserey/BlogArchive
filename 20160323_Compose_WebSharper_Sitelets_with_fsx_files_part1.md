@@ -10,7 +10,7 @@ By looking at how `WebSharper.Warp` works, we will learn two things:
     
 ## Exploring WebSharper.Warp
 
-`Warp` is a library which allows us to boot a sitelet from an .fsx file and run the sitelet from the FSI. 
+`WebSharper.Warp` is a library which allows us to boot a sitelet from an .fsx file and run the sitelet from the FSI. 
 
 Here's a short example - if you want better explanation, [I covered it in last week post I made](http://kimsereyblog.blogspot.co.uk/2016/03/prototyping-web-app-made-easy-with.html).
 
@@ -57,11 +57,11 @@ It combines three steps:
  3. Serves a single endpoint.
 
 It also provides some helper functions to rapidly create sitelets.
-It is interesting to look at how `Warp` works as it is _almost the same_ code that runs during MSbuild when [unpacking scripts and content files](https://github.com/intellifactory/websharper/blob/master/src/compiler/WebSharper.Compiler/commands/UnpackCommand.fs).
+It is interesting to look at how `WebSharper.Warp` works as it is _almost the same_ code that runs during MSbuild when [unpacking scripts and content files](https://github.com/intellifactory/websharper/blob/master/src/compiler/WebSharper.Compiler/commands/UnpackCommand.fs).
 
 ### Using WebSharper.Compiler
 
-The main function in `Warp` is the `compile`. It is located in the `Compilation` module and uses `WebSharper.Compiler`.
+The main function in `WebSharper.Warp` is the `compile`. It is located in the `Compilation` module and uses `WebSharper.Compiler`.
 ```
 let compile (asm: System.Reflection.Assembly) =
     let loader = getLoader()
@@ -183,6 +183,6 @@ This is why, _at the moment_ (some rumor that it might become much faster in the
 
 ## Conclusion
 
-By understanding `Warp`, we got a better insight on the steps required by `WebSharper` to compile an assembly.
+By understanding `WebSharper.Warp`, we got a better insight on the steps required by `WebSharper` to compile an assembly.
 It also showed us how .fsx files could be compiled and translated to JS and at which moment were the JS files actually created. 
 Hope this helped you understand better the mystery behind `WebSharper.Warp`. Like always if you have any comments, hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). Thanks for reading!
