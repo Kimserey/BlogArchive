@@ -125,6 +125,25 @@ compiler.Compile(asm)
 /// Attempts to compile an expression potentially coming from a dynamic assembly.
 member Compile : quotation: Quotations.Expr * context: System.Reflection.Assembly * ?name: string -> option<CompiledAssembly>
 ```
+
+Here's a reminder of the full function:
+```
+let compile (asm: System.Reflection.Assembly) =
+    let loader = getLoader()
+    let refs = getRefs loader
+    let opts = { FE.Options.Default with References = refs }
+    let compiler = FE.Prepare opts (eprintfn "%O")
+    compiler.Compile(asm)
+    |> Option.map (fun asm ->
+        {
+            ReadableJavaScript = asm.ReadableJavaScript
+            CompressedJavaScript = asm.CompressedJavaScript
+            Info = asm.Info
+            References = refs
+        }
+    )
+```
+
 The next step is to write out the `ReadableJavaScript` and the `CompressedJavaScript` from the `CompiledAssembly`.
 The code which is in charge of that is located under the two functions `outputFiles` and `outputFile`.
 
