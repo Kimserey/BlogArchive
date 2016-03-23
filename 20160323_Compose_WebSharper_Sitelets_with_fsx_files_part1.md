@@ -61,7 +61,7 @@ It is interesting to look at how `WebSharper.Warp` works as it is _almost the sa
 
 ### Using WebSharper.Compiler
 
-The main function in `WebSharper.Warp` is the `compile`. It is located in the `Compilation` module and uses `WebSharper.Compiler`.
+The main function in `WebSharper.Warp` is the `compile` function. It is located in the `Compilation` module and uses `WebSharper.Compiler`.
 ```
 let compile (asm: System.Reflection.Assembly) =
     let loader = getLoader()
@@ -79,7 +79,7 @@ let compile (asm: System.Reflection.Assembly) =
     )
 ```
 
-This function is used to compile a dynamic assembly which is exactly our case since we are handling a dynamic assembly (`FSI assembly`).
+This function is used to compile a dynamic assembly which is exactly our case since we are handling a running in `FSI`.
 The output of `compile` is a `CompiledAssembly` which exposes intesting members like `ReadableJavaScript`, `CompressedJavaScript` and `Info`.
 
 ```
@@ -92,7 +92,7 @@ type CompiledAssembly =
 }
 ```
 
-The first part of `compile` is to get the references from the current assembly with `getRefs`.
+The first part of the code in the `compile` function is to get the references from the current assembly with `getRefs`.
 ```
 let loader = getLoader()
 let refs = getRefs loader
