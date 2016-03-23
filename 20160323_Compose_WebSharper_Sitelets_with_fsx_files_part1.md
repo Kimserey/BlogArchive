@@ -10,11 +10,11 @@ By looking at how `WebSharper.Warp` works, we will learn two things:
     
 ## Exploring WebSharper.Warp
 
-`WebSharper.Warp` is a library which allows us to boot a sitelet from an .fsx file and run the sitelet from the FSI. 
+`WebSharper.Warp` is a library which allows us to boot a sitelet from a `.fsx` file and run the sitelet from the FSI. 
 
-Here's a short example - if you want better explanation, [I covered it in last week post I made](http://kimsereyblog.blogspot.co.uk/2016/03/prototyping-web-app-made-easy-with.html).
+Here's a short example - if you want better explanation, [I covered it in last week post](http://kimsereyblog.blogspot.co.uk/2016/03/prototyping-web-app-made-easy-with.html).
 
-The following script can be run in a .fsx. It boots up a SPA served on `localhost:9000`, with JS code and makes one call to a backend endpoint to get a `Hello!`. We basically get all the power of `WebSharper` to be run from FSI. It makes it easy to rapidly scribble some prototype and run a complete `WebSharper` webapp.
+The following script can be run in a `.fsx`. It boots up a SPA served on `localhost:9000`, with JS code and makes one call to a backend endpoint to get a `Hello!`. We basically get all the power of `WebSharper` to be run from FSI. It makes it easy to rapidly scribble some prototype and run a complete `WebSharper` webapp.
 
 ```
 #I "../packages/"
