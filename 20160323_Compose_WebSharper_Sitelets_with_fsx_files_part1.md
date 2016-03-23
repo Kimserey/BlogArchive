@@ -1,27 +1,20 @@
-# Explore how Warp works
+# How WebSharper.Warp works behind the scene
 
-Recently I was required to build a webapp which needed to handle multiple customers. 
-The way we did it was to place pages into two buckets, __common__ and __bespoke__.
-__Common__ pages would refer to pages shared for all customers and __bespoke__ pages would refer to pages unique to each customer. 
-We achieved this by building a WebSharper sitelet composed by common pages contained in a library and bespoke pages contained in .fsx script files. .fsx files are the perfect fit for this scenario as we needed to be able to compile only a subset of it depending on the customer we were building the webapp for. Also .fsx files are self contained which makes them even more appealing.
+Lately I've been very happy about how `WebSharper.Warp` allowed me to interate quickly and without pain.
+Last week, I covered how we could use WebSharper.Warp to build quickly prototypes. [Check it out if you haven't read it yet](http://kimsereyblog.blogspot.co.uk/2016/03/prototyping-web-app-made-easy-with.html).
+Today, I decided to explore how __WebSharper.Warp actually works behind the scene__.
 
-In this post, we will see how we can build a sitelet composed by code taken from a library but also from .fsx files.
-At the same time, we will have a better understanding of the steps required to compile a `WebSharper.Sitelet` by understanding how and when does the extraction of the JS files happens.
+By looking at how `WebSharper.Warp` works, we will learn two things:
+    1. The process of compiling F# to WebSharper using `WebSharper.Compiler`
+    2. When does the JS files get created
+    
+## Exploring WebSharper.Warp
 
+`Warp` is a library which allows us to boot a sitelet from an .fsx file and run the sitelet from the FSI. 
 
-This post will be composed by 3 parts:
-  1. Understand how to call `WebSharper.Compiler` by having a look at `WebSharper.Warp`.
-  2. Using `FSharp.Compiler.Services` to compile .fsx files.
-  3. Use the result of the execution of the .fsx files to build a sitelet and host it on a `Owin` selfhost
-
-## Part 1 - Exploring WebSharper.Warp
-
-Having this requirement in hand, I started to search for a solution to compile F# with `WebSharper.Compiler` and I found [`WebSharper.Warp`](https://github.com/intellifactory/websharper.warp).
-`Warp` allows us to boot a sitelet from an .fsx file and run the sitelet from the FSI. 
+Here's a short example - if you want better explanation, [I covered it in last week post I made](http://kimsereyblog.blogspot.co.uk/2016/03/prototyping-web-app-made-easy-with.html).
 
 The following script can be run in a .fsx. It boots up a SPA served on `localhost:9000`, with JS code and makes one call to a backend endpoint to get a `Hello!`. We basically get all the power of `WebSharper` to be run from FSI. It makes it easy to rapidly scribble some prototype and run a complete `WebSharper` webapp.
-
-_In this sample, the packages were added using `Paket`. `Paket` is good when working with .fsx as it does not include the version of the libraries in the folder path. So your references won't break each time you update your packages._
 
 ```
 #I "../packages/"
@@ -190,7 +183,6 @@ This is why, _at the moment_ (some rumor that it might become much faster in the
 
 ## Conclusion
 
-This first part was an overview of `Warp`. By understanding `Warp`, we got a better insight on the steps required by `WebSharper` to compile an assembly.
+By understanding `Warp`, we got a better insight on the steps required by `WebSharper` to compile an assembly.
 It also showed us how .fsx files could be compiled and translated to JS and at which moment were the JS files actually created. 
-In the Part 2, we will see how we can use `FSharp.Compiler.Services` to directly compile a sitelet composed by .fsx files and extract in into a variable to be used in our webapp.
-Like always if you have any comments, hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). Thanks for reading!
+Hope this helped you understand better the mystery behind `WebSharper.Warp`. Like always if you have any comments, hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). Thanks for reading!
