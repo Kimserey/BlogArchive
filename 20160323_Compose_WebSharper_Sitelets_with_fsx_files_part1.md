@@ -145,7 +145,7 @@ let compile (asm: System.Reflection.Assembly) =
 ```
 
 The next step is to write out the `ReadableJavaScript` and the `CompressedJavaScript` from the `CompiledAssembly`.
-The code which is in charge of that is located under the two functions `outputFiles` and `outputFile`.
+The code which is in charge of that is located under the [two functions `outputFiles` and `outputFile`](https://github.com/intellifactory/websharper.warp/blob/master/WebSharper.Warp/Warp.fs#L160).
 
 ### Output the files
 
