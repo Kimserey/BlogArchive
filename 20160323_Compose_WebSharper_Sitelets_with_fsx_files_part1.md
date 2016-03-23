@@ -203,5 +203,5 @@ This is why, [_at the moment_](https://twitter.com/granicz/status/70036719798679
 ## Conclusion
 
 By understanding `WebSharper.Warp`, we got a better insight on the steps required by `WebSharper` to compile an assembly.
-It also showed us how .fsx files could be compiled and translated to JS and at which moment were the JS files actually created. 
+It also showed us how `.fsx` files could be compiled and translated to JS and at which moment were the JS files actually created. 
 Hope this helped you understand better the mystery behind `WebSharper.Warp`. Again if you are interested in `WebSharper.Warp`, [check out my last week post on how to quickly prototype with WebSharper.Warp](http://kimsereyblog.blogspot.co.uk/2016/03/prototyping-web-app-made-easy-with.html). If you have any comments, leave a message here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). Thanks for reading!
