@@ -50,7 +50,7 @@ do Warp.RunAndWaitForInput Server.site |> ignore
 
 __How does it work?__
 
-`Warp` is quite fascinating. All the code is contained in a single file [Warp.fs](https://github.com/intellifactory/websharper.warp/blob/master/WebSharper.Warp/Warp.fs).
+`WebSharper.Warp` is quite fascinating. All the code is contained in a single file [Warp.fs](https://github.com/intellifactory/websharper.warp/blob/master/WebSharper.Warp/Warp.fs).
 It combines three steps:
  1. Compiles the files to JS,
  2. Boots up a server
