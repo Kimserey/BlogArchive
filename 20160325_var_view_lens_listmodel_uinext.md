@@ -12,7 +12,7 @@ I really think that the process is as beneficial as the solution so today I will
 Instead of walking you through the final solution, I will describe the steps to the final solution.
 And as usual, [the code is available on GitHub](https://github.com/Kimserey/VarViewTest/tree/master/VarViewTest).
 
-Here's how I interated:
+Here's how I iterated:
  1. The wrong way - a mutable record - [link to code](https://github.com/Kimserey/VarViewTest/blob/master/VarViewTest/Book_Sample_v1.fsx)
  2. The right way - lensing into members - [link to code](https://github.com/Kimserey/VarViewTest/blob/master/VarViewTest/Book_Sample_v2_Lens.fsx)
  3. The optimised way - optimising with ListModel - [link to code](https://github.com/Kimserey/VarViewTest/blob/master/VarViewTest/Book_Sample_v3_ListModel.fsx)
