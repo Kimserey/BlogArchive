@@ -4,8 +4,8 @@ Last week I needed to make a __two way binding for a record with nested lists__.
 I needed to observe any changes on a record which also contained nested lists.
 This changes included member changes but also list changes like adding and removing items.
 
-It took me roughly a week to come out with a solution and it didn't come straight away.
-It was more of a battle and I iterated multiple time to get to the final stage.
+It took me roughly a week to come out with a solution. It didn't come straight away.
+It was more of a battle and I iterated multiple times to get to the final stage.
 I started with one solution then had a [conversation on WebSharper forum](http://websharper.com/question/81323/what-would-be-the-best-way-to-make-a-two-way-binding-on-a-record-from-a-list-of-list) with [@tarmil_](https://twitter.com/Tarmil_) and [@inchester23](https://twitter.com/inchester) and came out better solutions.
 
 I really think that the process is as beneficial as the solution so today I will like to take another approach for this blog post.
