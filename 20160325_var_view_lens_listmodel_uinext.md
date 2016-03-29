@@ -8,7 +8,7 @@ It took me roughly a week to come out with a solution. It didn't come straight a
 It was more of a battle and I iterated multiple times to get to the final stage.
 I started with one solution then had a [conversation on WebSharper forum](http://websharper.com/question/81323/what-would-be-the-best-way-to-make-a-two-way-binding-on-a-record-from-a-list-of-list) with [@tarmil_](https://twitter.com/Tarmil_) and [@inchester23](https://twitter.com/inchester) and came out better solutions.
 
-I think the process was as beneficial as the solution is. So today I will take another approach for this blog post and instead of presenting the final solution only, will walking you through all the steps I took to finally come up with the solution.
+I think the process was as beneficial as the solution is. So today I will take another approach for this blog post and instead of presenting the final solution only, I will walking you through all the steps I took to finally come up with the solution.
 And as usual, [the code is available on GitHub](https://github.com/Kimserey/VarViewTest/tree/master/VarViewTest).
 
 Here's how I iterated:
