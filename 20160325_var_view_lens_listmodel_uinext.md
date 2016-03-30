@@ -1,17 +1,17 @@
 # Var, View, Lens, ListModel in UI.Next
 
 Last week I needed to make a __two way binding for a record with nested lists__.
-I needed to observe any changes on a record which also contained nested lists.
-This changes included member changes but also list changes like adding and removing items.
+I needed to observe all changes on this record.
+This changes included normal members but also list changes like adding and removing items.
 
-It took me roughly a week to come out with a solution. It didn't come straight away.
-It was more of a battle and I iterated multiple times to get to the final stage.
-I started with one solution then had a [conversation on WebSharper forum](http://websharper.com/question/81323/what-would-be-the-best-way-to-make-a-two-way-binding-on-a-record-from-a-list-of-list) with [@tarmil_](https://twitter.com/Tarmil_) and [@inchester23](https://twitter.com/inchester) and came out better solutions.
+It took me a week to come out with a solution. It didn't come straight away.
+I had to iterate multiple times to get to the final solution.
+I started with something then had a [conversation on WebSharper forum](http://websharper.com/question/81323/what-would-be-the-best-way-to-make-a-two-way-binding-on-a-record-from-a-list-of-list) with [@tarmil_](https://twitter.com/Tarmil_) and [@inchester23](https://twitter.com/inchester) and came out with other better solutions.
 
-I think the process was as beneficial as the solution is. So today I will take another approach for this blog post and instead of presenting the final solution only, I will walking you through all the steps I took to finally come up with the solution.
+I think the process was as beneficial as the solution is. So today I will take another approach for this blog post and instead of presenting the final solution directly, I will walk you through all the steps I took to finally come up with the solution.
 And as usual, [the code is available on GitHub](https://github.com/Kimserey/VarViewTest/tree/master/VarViewTest).
 
-Here's how I iterated:
+Here are the steps I took:
  1. The wrong way - a mutable record - [link to code](https://github.com/Kimserey/VarViewTest/blob/master/VarViewTest/Book_Sample_v1.fsx)
  2. The right way - lensing into members - [link to code](https://github.com/Kimserey/VarViewTest/blob/master/VarViewTest/Book_Sample_v2_Lens.fsx)
  3. The optimised way - optimising with ListModel - [link to code](https://github.com/Kimserey/VarViewTest/blob/master/VarViewTest/Book_Sample_v3_ListModel.fsx)
