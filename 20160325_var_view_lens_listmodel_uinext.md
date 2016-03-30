@@ -1,17 +1,16 @@
 # Var, View, Lens, ListModel in UI.Next
 
-Last week I needed to make a __two way binding for a record with nested lists__.
-I needed to observe all changes on this record.
-This changes included normal members but also list changes like adding and removing items.
+Last week I needed to make a __two way binding for a record with nested lists__. 
+More precisely, I needed to observe all changes on this record.
+This changes included normal members but also lists and I needed to observe changes like adding and removing items.
 
-It took me a week to come out with a solution. It didn't come straight away.
-I had to iterate multiple times to get to the final solution.
-I started with something then had a [conversation on WebSharper forum](http://websharper.com/question/81323/what-would-be-the-best-way-to-make-a-two-way-binding-on-a-record-from-a-list-of-list) with [@tarmil_](https://twitter.com/Tarmil_) and [@inchester23](https://twitter.com/inchester) and came out with other better solutions.
+It took me a week to come out with a solution where I had to iterate multiple times to get to it.
+I started with something which was far from ideal then had a [conversation on WebSharper forum](http://websharper.com/question/81323/what-would-be-the-best-way-to-make-a-two-way-binding-on-a-record-from-a-list-of-list) with [@tarmil_](https://twitter.com/Tarmil_) and [@inchester23](https://twitter.com/inchester) and came out with other better solutions.
 
-I think the process was as beneficial as the solution is. So today I will take another approach for this blog post and instead of presenting the final solution directly, I will walk you through all the steps I took to finally come up with the solution.
+The process was as beneficial as the solution is. So today I will take another approach for this blog post and instead of presenting the final solution directly, I will walk you through all the steps I took to finally come up with the solution.
 And as usual, [the code is available on GitHub](https://github.com/Kimserey/VarViewTest/tree/master/VarViewTest).
 
-Here are the steps I took:
+Here are the steps:
  1. The wrong way - a mutable record - [link to code](https://github.com/Kimserey/VarViewTest/blob/master/VarViewTest/Book_Sample_v1.fsx)
  2. The right way - lensing into members - [link to code](https://github.com/Kimserey/VarViewTest/blob/master/VarViewTest/Book_Sample_v2_Lens.fsx)
  3. The optimised way - optimising with ListModel - [link to code](https://github.com/Kimserey/VarViewTest/blob/master/VarViewTest/Book_Sample_v3_ListModel.fsx)
@@ -39,13 +38,13 @@ A `Book` can have many `Page`s and each `Page` can have many `Comment`s.
 
 ## The wrong way - a mutable record
 
-It's quite trivial to observe variables with `var` and `view`.
+It's quite trivial to observe variables with `Var` and `View`.
 If you are not familiar with `UI.Next`, have a look at my previous blog post on [how to make a SPA with WebSharper](http://kimsereyblog.blogspot.co.uk/2015/08/single-page-app-with-websharper-uinext.html).
 
 __But how would you observe members of a record?__
 
-Well the first solution which came out was to make a __full mutable record__.
-So using the `Book`, we create a `ReactiveBook` with all the members as `Var<_>`.
+The first solution which came out was to make a __full mutable record__.
+Based on `Book`, we create a `ReactiveBook` with all the members as `Var<_>`.
 
 ```
     type Book = {
@@ -77,10 +76,13 @@ So using the `Book`, we create a `ReactiveBook` with all the members as `Var<_>`
     }
 ```
 
-Doing this we have a record where we can observe every member.
-First we need to combine all the views to make one single view for the `ReactiveBook`.
+By doing this, we can observe every member of the `ReactiveBook`.
+To be able to react to any change, we need to construct a view of this record.
+We do that by combining all the views of the member and make one single view for the `ReactiveBook`.
 
 ```
+let (<*>) f x = View.Apply f x
+
 type ReactiveComment with
     static member View comment: View<Comment> =
         View.Const (fun n c -> 
@@ -134,13 +136,13 @@ And like that when we change anything in `rvBook`, it will be reflected in the d
 
 __What is wrong with that?__
 
-Well although it works, what I did here is that I transformed a record to a totally mutable record.
-This feels kind of wrong doesn't it?
+Although it works, the error here is that I transformed a record to a totally mutable record and
+passing around `Var` is not the recommended approach. Also creating a duplicate record feels wrong.
 
-What I wanted from the beginning is to be able to create a `Var.Create Book` and just use that directly,
+What I wanted from the beginning was to be able to create a `Var.Create Book` and just use that directly.
 I didn't want to have to bother with a `ReactiveBook`.
 
-So I requested for some help and [@tarmil_](https://twitter.com/Tarmil_) pointed to me that there was a set functions exactly for my needs and that was the `Lenses`.
+So I requested for some help and [@tarmil_](https://twitter.com/Tarmil_) pointed to me that there was a set functions exactly for my needs called `Lenses`.
 
 >This is exactly the kind of situation you would use lensing for. The type IRef<'T> is an abstract class that is implemented by Var<'T>, but also returned by the Lens method which creates a bidirectional binding into another IRef<'T>
 
@@ -152,7 +154,7 @@ So let's take a look at `Lenses`.
 
 ### What are lenses?
 
-We already know that it is easy to observe variables.
+Let's review how we make a reactive variable with `Var` and `View`.
 
 ```
 let txt =
@@ -180,7 +182,7 @@ let r =
     Var.Create { Content = "" }
 ```
 
-Because record are immutable, if you want to react to changes in the `Content` member, you need to recreate the whole record.
+Because records are immutable, if you want to react to changes in the `Content` member, you need to recreate the whole record.
 
 ```
 Var.Set r { Content = "Hello world" }
@@ -199,12 +201,13 @@ The signature of `Lens` on `Var` is:
 IRef<'a>.Lens :: ('a -> 'b) -> ('a -> 'b -> 'a) -> IRef<'b>
 ```
 
-The first function `'a -> 'b` is used to select the member which we want to lens.
-And the second function `'a -> 'b -> 'a` is used to update the current record of type `'a` with the value set of type `'b`. The `Lens` returns a reactive variable of `'b` which is the type of the member we lens into.
+The first function `'a -> 'b` is used to select the member on which we want to lens.
+And the second function `'a -> 'b -> 'a` is used to update the current record of type `'a` with the value set of type `'b`. 
+The `Lens` returns a reactive variable of `'b` which is the type of the member we lens into.
 
-Since a `IRef<_>` is returned, we can lens another level and this will also return another `IRef<_>` and we can continue indefinitly like that.
+Since a `IRef<_>` is returned, we can lens another level and this will also return another `IRef<_>` and we can continue indefinitely like that.
 
-So if we wanted to have a reactive variable on `Comment.Content`, from the `Book` we can lens into a particular `Page` then lens into a particular `Comment` and get out a `IRef<string>`.
+So if we wanted to have a reactive variable on `Comment.Content`, from the `Book` I can lens into a particular `Page` then lens into a particular `Comment` and get out a `IRef<string>`.
 
  ### Change our model
  
@@ -287,7 +290,7 @@ and Comment = {
             (fun c cont -> { c with Content = cont })    
  ```
 
-And we can also throw away all the methods to create a `view`. Since we only deal with `book` __we now have successfuly reduced the number `Var`s to only one__.
+And we can also throw away all the methods to create a `view`. Since we only deal with `book` __we now have successfuly reduced the number `Var`s to only one and also remove the "reactive" copy of Book__.
 We started with a copy of the original record with all the members being `Var` and we now end up with only one `Var`.
 We eliminated a record full of Vars!
 
@@ -360,8 +363,8 @@ Wonderful! We now have a model that can be observed on any members including the
 
 ## Conclusion
 
-When I started programming, I used to be stressed over people reviewing my code. But after I passed that mental barrier, I rapidly understood that review from trusted entities is extremely beneficial for your software but even more beneficial for yourself.
+I hope this post showed the importance of getting people to review your code. When I started programming, I used to be stressed over people reviewing my code. But after I passed that mental barrier, I rapidly understood that reviews from trusted entities were extremely beneficial to write better software but also for me to improve.
 
 We started with an idea and a bad implementation. After few rounds of conversation with the guys working on `WebSharper`, we ended up with a very nice solution and we ended up with understanding much better some functionalities of `WebSharper`.
 
-We now know that we should restrict the number of `Var` that we use. Then when dealing with `list` we can use `ListModel`. Finally we know that we can use `Lenses` to observe members of records. Hope you enjoyed this post, if you have any comments, leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). Thanks for reading!
+We now know that we should restrict the number of `Var` that we use. Then when dealing with `list` we can use `ListModel`. Finally we know that we can use `Lenses` to observe members of records. All this thoughts would not have came up if I would have stopped at the first solution. Hope you enjoyed this post, if you have any comments, leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). Thanks for reading!
