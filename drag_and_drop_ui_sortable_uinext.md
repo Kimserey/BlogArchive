@@ -1,3 +1,55 @@
+# Drag and drop UI with Sortable.js in UI.Next
+
+Few weeks ago I covered how to use external JS libraries with WebSharper.
+I explained how we could integrate taginput which is a cool library that allows us to use tags in our webapp.
+Taginput was used with JQuery, so I showed you how to make extensions on WebSharper JQuery.
+Today I will demonstrate how we can use Sortable.js to add a nice drag and drop functonality to our webapp.
+Sortable.js does not require JQuery so we will not make extensions for it.
+
+## How does Sortable works?
+
+Sortable examples can be found [here](http://rubaxa.github.io/Sortable/).
+On top of allowing us to sort elements, it also provides drag and drop functionalities which are very handy to make nice webapps.
+
+In JS, all you need to do is create a list of elements (or a `div` containing other elements) use `Sortable`.
+```
+Sortable.create(myelement, { .. some options ... })
+```
+
+## Create a link from F# to Sortable
+
+As we saw earlier, the main function to call is `Sortable.create`.
+It takes an element and some options as parameter.
+
+Elements in WebSharper are translated with the type `Dom.Element`.
+The options will be held in a record type.
+
+We can now directly create a link:
+```
+[<JavaScript>]
+module Sortable =
+    
+    [<Direct "Sortable.create($el, $options)">]
+    let sortableJS (el: Dom.Element) options = X<unit>
+```
+
+We can then call `sortableJS` to make an element sortable.
+
+```
+on.AfterRender....]
+```
+
+We need to place the call to `sortableJS` in `on.afterRender` because the dom needs to be created before we call `Sortable.create`.
+
+__But what about the options?__
+
+If we just need to give the ability to sort a list, we would be done.
+But chances are that we need to do more, like do an action after sorting the list or drag and dropping into another list. 
+
+## Link Sortable options
+
+Sortable has many options, we see will how we can bind few options and from there you will be able to apply the same method to use other functionalities.
+
 We can see all the available options here. Let s review in order what we are interested in so that we can focus on binding this first.
 
 Group
@@ -42,7 +94,7 @@ When the callback is called it is passed an event which contains info about the 
 The interesting information are
 
 
-NewIndex
+- `NewIndex
 
 
 OldIndex
@@ -67,14 +119,16 @@ The item added
 
 Now one issue is that JS is case sensitive. Therefore we can't directly use record type with first lettet capital members.
 
-
 To make a manual binding, we can use NameAttribute.
 
-Example..
+```
+example
+```
+
+# Conclusion
 
 And that's it! That is all we need to bring this amazing library to use it with WebSharper in F#.
 
 Today we saw how to bind JS libraries. Also we saw how we could directly use our own record types to pass it to JS functions but we also saw how those record types could be used as well to directly deal with results of JS functions.
-
 
 Sortable is an amazing library which is easy to configure and allows to build interactive nice webapp. As always if you have any comments please leave it below or hit me on Twitter @Kimserey_Lam. Thanks for reading!
