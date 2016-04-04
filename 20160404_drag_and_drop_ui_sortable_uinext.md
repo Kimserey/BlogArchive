@@ -325,4 +325,4 @@ And that's it! That is all we need to bring this amazing library to use it with 
 
 Today we saw how to bind JS libraries. Also we saw how we could directly use our own record types to pass it to JS functions but we also saw how those record types could be used as well to directly deal with results of JS functions.
 
-Sortable is an amazing library which is easy to configure and allows to build interactive nice webapp. As always if you have any comments please leave it below or hit me on Twitter @Kimserey_Lam. Thanks for reading!
+Sortable is an amazing library which is easy to configure and allows to build interactive nice webapp. As always if you have any comments please leave it below or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). Thanks for reading!
