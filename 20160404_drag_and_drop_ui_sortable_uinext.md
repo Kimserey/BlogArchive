@@ -215,52 +215,109 @@ divAttr [ on.afterRender(fun el ->
           div [ text "Ee" ]
 ```
 
-OnAdd
+Next what we want is to handle all events when items are dropped or when items are sorted.
 
+## Handling events
 
-OnAdd is triggered when an item is added.
+Specifying callbacks to be called when events happen is done from the `options` as well.
+We can bind callbacks like `onAdd`, `onSort`, `onUpdate` from the `options`.
 
-OnSort
+Every callback takes an `event` as parameter.
+So each callback has a type of: `Event -> unit`.
 
+This `event` contains properties which are helpful to manage our lists.
 
-OnSort is triggered when the list is sorted. Take note that OnSort is also called when an item is added.
-
-OnAdd and OnSort take callbacks in their definition.
-
-
-When the callback is called it is passed an event which contains info about the list.
-
-The interesting information are
-
-
-- `NewIndex
-
-
-OldIndex
-
-
-From
-
-
-The origin list
-
-
-To
-
-
-The destination list
-
-
-Item
-
-
-The item added
-
-To make a manual binding, we can use NameAttribute.
+Here's the defnition of the `Event`:
 
 ```
-example
+SortableEvent = {
+  [<Name "item">]
+  Item: Dom.Element
+        
+  [<Name "from">]
+  From: Dom.Element
+        
+  [<Name "to">]
+  To: Dom.Element
+
+  [<Name "newIndex">]
+  NewIndex: int
+        
+  [<Name "oldIndex">]
+  OldIndex: int
+}
 ```
+
+It's straight forward, `Item` is the item being dropped, `From` is the list from where the item is from, `To` is the list destination, `NewIndex` is the index at which the item is dropped at and `OldIndex` was the index at which the item from dragged out from.
+
+Using this we can now define `OnAdd`:
+
+```
+[<Name "onAdd">]
+OnAdd: SortableEvent-> unit
+```
+And we can also add a helper method on `Sortable`:
+
+```
+static member SetOnAdd onAdd (x: Sortable) =
+  { x with OnAdd = onAdd }
+```
+
+With that we will be able to configure our `Sortable` record.
+
+And we are now done! We can now create our three lists and it should work the same way as the preview!
+
+```
+[<JavaScript>]
+module Client =
+    open Sortable
+    
+    let panel title body =
+        divAttr [ attr.``class`` "panel panel-default" ]
+                [ divAttr [ attr.``class`` "panel-heading" ] [ text title ]
+                  divAttr [ attr.``class`` "panel-body" ] [ body] ]
+
+    let main() =
+        divAttr [ attr.``class`` "row" ]
+                [ divAttr [ attr.``class`` "col-sm-4" ]
+                          [ panel
+                                "Workspace: droppable from ListA and ListB"
+                                (divAttr [ attr.style "min-height:100px;"
+                                           on.afterRender(fun el -> 
+                                             Sortable.Default
+                                             |> Sortable.SetGroup (Group.Create "workspace" Pull.Allow <| Put.AllowList [ "listA"; "listB" ])
+                                             |> Sortable.Create el) ]
+                                          []) ]
+                  
+                  divAttr [ attr.``class`` "col-sm-4" ]
+                          [ panel
+                                "ListA: draggable and sortable"
+                                (divAttr [ on.afterRender(fun el -> 
+                                             Sortable.Default
+                                             |> Sortable.AllowSort
+                                             |> Sortable.SetGroup (Group.Create "listA" Pull.Allow Put.Disallow)
+                                             |> Sortable.Create el) ]
+                                         [ div [ text "Aa" ]
+                                           div [ text "Bb" ]
+                                           div [ text "Cc" ]
+                                           div [ text "Dd" ]
+                                           div [ text "Ee" ] ]) ]
+                  
+                  divAttr [ attr.``class`` "col-sm-4" ]
+                          [ panel
+                                "ListB: draggable and cloned"
+                                (ulAttr [ on.afterRender(fun el -> 
+                                              Sortable.Default
+                                              |> Sortable.DisallowSort
+                                              |> Sortable.SetGroup (Group.Create "listB" Pull.Clone Put.Disallow)
+                                              |> Sortable.Create el) ]
+                                         [ li [ text "11" ]
+                                           li [ text "22" ]
+                                           li [ text "33" ]
+                                           li [ text "44" ]
+                                           li [ text "55" ] ]) ] ]
+```
+
 
 # Conclusion
 
