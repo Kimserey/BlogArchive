@@ -221,12 +221,9 @@ Next what we want is to handle all events when items are dropped or when items a
 
 Specifying callbacks to be called when events happen is done from the `options` as well.
 We can bind callbacks like `onAdd`, `onSort`, `onUpdate` from the `options`.
-
 Every callback takes an `event` as parameter.
 So each callback has a type of: `Event -> unit`.
-
 This `event` contains properties which are helpful to manage our lists.
-
 Here's the defnition of the `Event`:
 
 ```
