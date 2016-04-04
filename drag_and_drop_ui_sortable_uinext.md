@@ -9,7 +9,7 @@ Also, it does not require JQuery so we will not make extensions for it.
 
 Here is a preview of what we will be building:
 
-![image_preview](Sortabl://raw.githubusercontent.com/Kimserey/DragAndDropSortable/master/sortable.gif)
+![image_preview](https://raw.githubusercontent.com/Kimserey/DragAndDropSortable/master/sortable.gif)
 
 ## How does Sortable works in JS?
 
