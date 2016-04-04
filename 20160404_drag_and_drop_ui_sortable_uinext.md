@@ -1,6 +1,6 @@
 # Drag and drop UI with Sortable.js in UI.Next
 
-Few weeks ago I covered how to use external JS libraries with WebSharper.
+Few weeks ago I covered [how to use external JS libraries with WebSharper.](http://kimsereyblog.blogspot.co.uk/2016/01/external-js-library-with-websharper-in-f.html)
 I explained how we could integrate `taginput` which is a cool library that allows us to use tags in our webapp.
 It was used with JQuery and I showed you how to use it by making extensions on WebSharper JQuery.
 Today I will introduce another cool JS library - __Sortable__.
