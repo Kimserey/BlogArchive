@@ -17,7 +17,7 @@ You can find the full source code [here](https://github.com/Kimserey/DragAndDrop
 ## How does Sortable works in JS?
 
 Sortable examples can be found [here](http://rubaxa.github.io/Sortable/).
-On top of allowing us to sort elements, it also provides drag and drop functionalities which are very handy to make nice webapps.
+On top of allowing us to sort elements, it also provides drag and drop functionalities which are very handy to make interactive webapps.
 
 In JS, all you need to do is create a list of elements (or a `div` containing other elements) use `Sortable`.
 
