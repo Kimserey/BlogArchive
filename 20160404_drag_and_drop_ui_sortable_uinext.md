@@ -19,20 +19,20 @@ You can find the full source code [here](https://github.com/Kimserey/DragAndDrop
 Sortable examples can be found [here](http://rubaxa.github.io/Sortable/).
 On top of allowing us to sort elements, it also provides drag and drop functionalities which are very handy to make interactive webapps.
 
-In JS, all you need to do is create a list of elements (or a `div` containing other elements) use `Sortable`.
+In JS, all you need to do is to create a list of elements (`ul`, `ol` or `div` containing other elements) and pass it to the `create` function of `Sortable`.
 
 ```
 Sortable.create(myelement, { .. some options ... })
 ```
 
-And that's it, `myelement` is now a sortable list. Let's see how can we use that in `WebSharper`.
+And that's it. `myelement` is now a sortable list. Let's see how can we use that in `WebSharper`.
 
 ## Create a link from F# to Sortable
 
 As we saw earlier, the main function to call is `Sortable.create`.
 It takes an element and some options as parameter.
-Elements in WebSharper are translated with the type `Dom.Element`.
-The options will be held in a record type.
+Elements in `WebSharper` are translated with the type `Dom.Element`.
+The `options` will be held in a record type.
 We can now directly create a link:
 ```
 [<JavaScript>]
@@ -64,14 +64,22 @@ And as we saw in the preview, we will be making drag and drop in between
 
 ## Link Sortable options
 
-Sortable has many options and you can find most of them in the [readme](https://github.com/RubaXa/Sortable/blob/master/README.md), 
-We will see how we can bind few options and from there you will be able to apply the same method to use other functionalities.
-Let's review in order what we are interested in so that we can focus on binding this first.
+Sortable has many `options` and you can find most of them in the [readme](https://github.com/RubaXa/Sortable/blob/master/README.md), 
+We will see how we can bind few `options` and from there you will be able to apply the same method to use other functionalities.
 
-First we need to name our lists. We will name the droppable list `Workspace` and the drag and drop lists `ListA` and `ListB`.
-`Workspace` will be a place to drop item in.
-`ListA` will be a place to drag items from to drop into `Workspace`.
-Finally `ListB` will be a place to clone items from and drop into `Workspace`.
+The functionalities we are interested in are:
+    - Group
+    - Sort
+    - Animation
+    - OnXXX (OnAdd, OnSort, etc...)
+    
+### Group
+
+We need to identify our lists. 
+We will name the droppable list `Workspace` and the drag and drop lists `ListA` and `ListB`:
+ - `Workspace` will be a place to drop item in.
+ - `ListA` will be a place to drag items from to drop into `Workspace`.
+ - `ListB` will be a place to clone items from and drop into `Workspace`.
 
 `Sortable` has a first member called `group`.
 A `group` is defined by a `name` and a `pull` action and `put` action.
@@ -125,6 +133,14 @@ We can now create `group` simply by doing:
 ```
 Group.Create "Workspace" Pull.Disallow <| Put.AllowList [ "ListA"; "ListB" ]
 ```
+
+### Sort and animation
+
+Next we need to configure whether the list is sortable or not.
+This is done with `Sort`.
+It is useful when you want to restrict the list to only be draggable and droppable but not sortable.
+
+`Animation` just specify the duration of the drag and drop animations.
 
 So if we create our `option` record type, it would be:
 
@@ -196,13 +212,6 @@ type Sortable = {
                 | Put.AllowList list ->  list |> (String.concat "," >> sprintf "[%s]")
 ```
 
-
-Here we see another interesting option - `Sort`.
-It configure whether the list is sortable or not.
-It is useful when you want to restrict the list to only be draggable and droppable but not sortable.
-
-`Animation` just specify the duration of the drag and drop animations.
-
 We can then use this `Sortable` in an `on.afterRender` like so:
 
 ```
@@ -220,7 +229,7 @@ divAttr [ on.afterRender(fun el ->
 
 Next what we want is to handle all events when items are dropped or when items are sorted.
 
-## Handling events
+### Handling events
 
 Specifying callbacks to be called when events happen is done from the `options` as well.
 We can bind callbacks like `onAdd`, `onSort`, `onUpdate` from the `options`.
@@ -265,7 +274,11 @@ static member SetOnAdd onAdd (x: Sortable) =
 
 With that we will be able to configure our `Sortable` record.
 
-And we are now done! We can now create our three lists and it should work the same way as the preview!
+And we are now done! 
+
+## Use Sortable
+
+We can now create our three lists and it should work the same way as the preview!
 
 ```
 [<JavaScript>]
