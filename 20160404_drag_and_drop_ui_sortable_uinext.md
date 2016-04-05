@@ -5,8 +5,8 @@ I explained how we could integrate `taginput` which is a cool library that allow
 It was used with JQuery and I showed you how we could extended WebSharper JQuery and add `taginput` functionalities.
 
 Today I will show you how to use another cool JS library - __Sortable__.
-Sortable brings __drag - drop - sorting__ functonalities to webapps.
-Also, it does not require JQuery so we will not make extensions for it.
+Sortable brings __drag - drop - sorting__ functonalities.
+Also, it does not require JQuery which is good as we can see how to integrate libraries which don't depend on JQuery.
 
 Here is a preview of what we will be building:
 
