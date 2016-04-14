@@ -19,6 +19,8 @@ In this post we will address the following requirements:
 __The fastest way is to reference WebSharper in `Domain` libary and add `[<JavaScript>]` to the main module or to every types and functions.__
 __If you are not willing to do that, you might need to proxy the functions depending on your needs. We will see how.__
 
+[The full code sample is available on github](https://github.com/Kimserey/WsProxyExample).
+
 ## I want to use the record types defined in `Domain`
 
 If you just need to use the record types from `Domain`, you need to reference WebSharper and add `<WebSharperProject>Library</WebSharperProject>` to `fsproj`.
@@ -157,6 +159,8 @@ module Garden' =
 ```
 
 With that in place, you can call `runInGarden` and the `proxy` will be executed.
+
+[The full code sample is available on github](https://github.com/Kimserey/WsProxyExample).
 
 ## Conclusion
 
