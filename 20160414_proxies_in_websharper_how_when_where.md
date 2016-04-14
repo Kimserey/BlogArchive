@@ -3,17 +3,16 @@
 When I first started to play with WebSharper, everything was nice and clean.
 I was coding in my own world/sandbox/project whatever you want to call it.
 But the thing is that most of the time, we don't start from empty, blank project.
-What we do instead, is that we write code which integrate with an existing application.
-And if we are lucky enough, we work in a project with a backend written in F# with a `Domain` library containing all the application domain written in F# as well.
+What we do instead, is that we write code which integrates with an existing application.
+I was lucky enough to work on a project with a backend written in F# with a `Domain` library containing all the application domain written in F# as well.
 Being in this situation, the first think I tought of was:
 
 __Wouldn't it be amazing if I could use the `Domain` library directly in my webapp?__
 
-Well we can! And we will see how in this post.
-There are multiple scenarios when referencing libraries.
-In this post we will address the following requirements:
+Turns out it is absolutely possible! And we will see how in this post.
+There are multiple scenarios when referencing libraries and in this post we will address the following requirements:
  1. I want to __only__ use the record types defined in `Domain` library
- 2. I want to use the record types __and/or__ the functions attached to the record types in `Domain` library
+ 2. I want to use the record types with the functions attached to the record types from `Domain` library
  3. I want to use the functions from a module in `Domain` library
 
 __The fastest way is to reference WebSharper in `Domain` libary and add `[<JavaScript>]` to the main module or to every types and functions.__
@@ -23,8 +22,8 @@ __If you are not willing to do that, you might need to proxy the functions depen
 
 ## I want to use the record types defined in `Domain`
 
-If you just need to use the record types from `Domain`, you need to reference WebSharper and add `<WebSharperProject>Library</WebSharperProject>` to `fsproj`.
-This indicate to WebSharper that this project needs to be compiled to JS.
+If you just need to use the record types from `Domain`, you can reference WebSharper and add `<WebSharperProject>Library</WebSharperProject>` to `fsproj`.
+It indicates to WebSharper that this project needs to be compiled to JS.
 
 If you can't add WebSharper to the project and/or can't add the configuration to `fsproj`, you will need to `proxy` the record type.
 You can find the official documentation [here](https://github.com/intellifactory/websharper/blob/master/docs/Proxies.md).
@@ -44,7 +43,7 @@ type Dog' =
       Age: int }
 ```
 
-In this example I created a type `Dog'` which `proxies` the type in the `Domain` library.
+In this example, I created a type `Dog'` which `proxies` the type in the `Domain` library.
 Thanks to that, in your client code, you can handle a `Dog` instance even though it won't be compiled to JS.
 
 ```
@@ -59,7 +58,13 @@ module Client =
         text dog.Name
         |> Doc.RunById "main"
 ```
-We create a `Dog'` and then use `As` to cast it to a `Dog`. We can then call the members. 
+We create a `Dog'` and then use `As` to cast it to a `Dog`. 
+`As` is a very simple function which just take advantage of JS dynamic type to cast object. It is defined in `WebSharper.JavaScript.Pervasives`.
+```
+[<Inline "$x">]
+let As<'T> (x: obj) = X<'T>
+```
+Thanks to that, we can now then call the members. 
 
 __But what if `Dog` had some functions associated with it?__
 
@@ -166,7 +171,7 @@ With that in place, you can call `runInGarden` and the `proxy` will be executed.
 
 We have seen most of the possibilities on how to reference a F# library with WebSharper.
 The main question that I wanted to answer here was whether it was possible to reference a library which itself has no reference to WebSharper and still be able
-to use the type and functions defined in it. The answer is yes. You just need to `proxy` it. 
+to use the type and functions defined in it. The answer is yes.
 The advantage of `proxying` libraries is that you still use a set of familiar functions as those are your domain defined signatures.
-In fact, that's how WebSharper give access to the .NET libraries, by `proxying` most of the types. You can find all the proxy [under stdlib/WebSharper.Main/Proxy](https://github.com/intellifactory/websharper/tree/5c884e97fd3dba1102c10a85b171f672d0b3f637/src/stdlib/WebSharper.Main/Proxy).
-I hope this post helped in demystifying how we can make our own proxy to use our own libraries! If you have any comments leave it here or hit me on Twitter @Kimserey_Lam(https://twitter.com/Kimserey_Lam). See you next time!
+In fact, that's how WebSharper give access to the .NET libraries. You can find all the `proxies` [under stdlib/WebSharper.Main/Proxy here](https://github.com/intellifactory/websharper/tree/5c884e97fd3dba1102c10a85b171f672d0b3f637/src/stdlib/WebSharper.Main/Proxy).
+I hope this post helped in demystifying how we can make our own `proxy` to use our own libraries! If you have any comments leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
