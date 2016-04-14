@@ -11,12 +11,12 @@ __Wouldn't it be amazing if I could use the `Domain` library directly in my weba
 
 Turns out it is absolutely possible! And we will see how in this post.
 There are multiple scenarios when referencing libraries and in this post we will address the following requirements:
- 1. I want to __only__ use the record types defined in `Domain` library
+ 1. I want to use the record types defined in `Domain` library
  2. I want to use the record types with the functions attached to the record types from `Domain` library
  3. I want to use the functions from a module in `Domain` library
 
-__The fastest way is to reference WebSharper in `Domain` libary and add `[<JavaScript>]` to the main module or to every types and functions.__
-__If you are not willing to do that, you might need to proxy the functions depending on your needs. We will see how.__
+__The fastest way to use a library is to reference WebSharperand add `[<JavaScript>]` to the main module or to every types and functions.__
+__If you are not willing to do that, you will need to proxy the types and functions depending on your needs. We will see how.__
 
 [The full code sample is available on github](https://github.com/Kimserey/WsProxyExample).
 
