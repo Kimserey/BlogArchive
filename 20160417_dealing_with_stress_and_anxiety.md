@@ -58,11 +58,11 @@ In this post, I would like to share with you three points that I constantly remi
 These three points help me every day to keep improving my life and also improve the life of everyone interacting with me (or at least I would like to think so).
 
 Here are the three points:
-```
+
 1. Accept where I am now
 2. Find the right balance between improving my technical skills, my mind, and my physical condition
 3. Understand my feelings to see the positive aspects of the situations
-```
+
 
 All the information given in this post came from books and articles I read and also long hours of thoughts.
 Some of the most influential books I read were [How to win friends and influence people](http://www.amazon.co.uk/How-Win-Friends-Influence-People/dp/0091906814), [The chimp paradox](http://www.amazon.co.uk/Chimp-Paradox-Management-Programme-Confidence/dp/009193558X/ref=sr_1_1?s=books&ie=UTF8&qid=1460845736&sr=1-1&keywords=the+chimp+paradox), [The obstacle is the way](http://www.amazon.co.uk/Obstacle-Way-Ancient-Adversity-Advantage/dp/1781251495/ref=sr_1_1?s=books&ie=UTF8&qid=1460845755&sr=1-1&keywords=the+obstacle+is+the+way) and [The power of now](http://www.amazon.co.uk/The-Power-Now-Spiritual-Enlightenment/dp/0340733500).
