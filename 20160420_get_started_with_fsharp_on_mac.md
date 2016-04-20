@@ -7,7 +7,7 @@ Since I think it is the most straight forward way to have an environment setup t
 
 The steps are:
  1. Install brew
- 2. Install mono from brew (and add it to Path)
+ 2. Install mono from brew
  3. Install VSCode
  4. Install Ionide
  5. Write a .fsx script make everything works
