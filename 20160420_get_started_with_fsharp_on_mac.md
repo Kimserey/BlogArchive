@@ -1,6 +1,6 @@
 # Get started with F# on Mac with VSCode and Ionide
 
-Yesterday, a friend of mine asked me what was the easiest way to get started F#.
+Yesterday, a friend of mine asked me what was the easiest way to get started with F# on Mac.
 I pointed him to [http://fsharp.org/use/mac/](http://fsharp.org/use/mac/) which gives multiple options to install F# on Mac but it doesn't contain the option
 of using [VSCode](https://code.visualstudio.com/) with [Ionide](http://ionide.io/).
 Since I think it is the most straight forward way to have a environment setup to use of F# rapidly especially when someone wants to just have a quick look.
