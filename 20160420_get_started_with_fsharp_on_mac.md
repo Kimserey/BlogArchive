@@ -3,8 +3,7 @@
 Yesterday, a friend of mine asked me what was the easiest way to get started with F# on Mac.
 I pointed him to [http://fsharp.org/use/mac/](http://fsharp.org/use/mac/) which gives multiple options to install F# on Mac but it doesn't contain the option
 of using [VSCode](https://code.visualstudio.com/) with [Ionide](http://ionide.io/).
-Since I think it is the most straight forward way to have a environment setup to use of F# rapidly especially when someone wants to just have a quick look.
-So I decide to write a blog post to explain the step to take to complete an installation and have a full environment ready to get started with F# on Mac.
+Since I think it is the most straight forward way to have an environment setup to use of F# rapidly especially when someone wants to just have a quick look, I decide to write a blog post to go through the installation step by step.
 
 The steps are:
 1. Install brew
