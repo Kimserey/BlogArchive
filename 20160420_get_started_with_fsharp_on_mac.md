@@ -6,11 +6,11 @@ of using [VSCode](https://code.visualstudio.com/) with [Ionide](http://ionide.io
 Since I think it is the most straight forward way to have an environment setup to use of F# rapidly especially when someone wants to just have a quick look, I decide to write a blog post to go through the installation step by step.
 
 The steps are:
-1. Install brew
-2. Install mono from brew (and add it to Path)
-3. Install VSCode
-4. Install Ionide
-5. Write a .fsx script make everything works
+ 1. Install brew
+ 2. Install mono from brew (and add it to Path)
+ 3. Install VSCode
+ 4. Install Ionide
+ 5. Write a .fsx script make everything works
 
 ## 1. Install brew
 
