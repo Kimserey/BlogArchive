@@ -83,8 +83,10 @@ let helloWorld =
 printfn helloWorld
 ```
 
-Select the whole text and hit `CTRL + ENTER`.
+Select the whole text and hit `ALT + ENTER`.
 If everything is alright, this command will execute the highlighted code in the FSI.
+
+![fsi_code](https://1.bp.blogspot.com/-Mo6uhXQn0aA/Vxf9DcnTdtI/AAAAAAAAAGs/_Zfxedc07v4tmQwTnwAESiIXbjcNSNkJwCLcB/s1600/helloworldfsx.png)
 
 # Conclusion
 
