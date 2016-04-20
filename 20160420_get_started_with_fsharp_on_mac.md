@@ -91,5 +91,5 @@ If everything is alright, this command will execute the highlighted code in the 
 # Conclusion
 
 Today we saw a quick way to get started with F# scripts. As a starter I would suggest to look at an example from [@ScottWlaschin](https://twitter.com/ScottWlaschin) website [https://fsharpforfunandprofit.com/](https://fsharpforfunandprofit.com/). Have a look at the [tic tac toe example](https://fsharpforfunandprofit.com/posts/enterprise-tic-tac-toe/). 
-Coming from an OOP language, it was really helpfull for me.
+Coming from an OOP language, it was really helpful for me.
 If you have any issue, please let me know here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam)!
