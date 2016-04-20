@@ -49,8 +49,9 @@ After you installed `mono`, you should have access to `fsharpi`.
 [https://code.visualstudio.com/](https://code.visualstudio.com/)
 
 Install Visual studio code [https://code.visualstudio.com/](https://code.visualstudio.com/).
-Visual studio code allows developpers to write plugins against it.
-Thanks to the amazing work of [@k_cieslak](https://twitter.com/k_cieslak) we can use F# with VSCode using [Ionide](http://ionide.io/).
+Visual studio code is a code editor which also allows developpers to write plugins against it.
+Thanks to the amazing work of [@k_cieslak](https://twitter.com/k_cieslak), we can use F# with VSCode using [Ionide](http://ionide.io/).
+Ionide is a package suite which provides interaction with `FSI`, autocompletion, syntax highlighting and many more amazing things.
 
 ## 4. Install Ionide
 
@@ -69,7 +70,7 @@ ext install Ionide-fsharp
 
 ![ionide](https://3.bp.blogspot.com/-4AbVmTg0EW8/Vxf5gYrsSaI/AAAAAAAAAGE/e02IqTqaMxoiPYZ_2iRpzN-PtfYWuCWWQCKgB/s1600/ionide_install_on_vscode.png)
 
-Good that's it, you have all the necessary tools to write code in F# now.
+That's it, you have all the necessary tools to write code in F# now.
 
 ## 5. Write a .fsx script make everything works
 
