@@ -10,7 +10,7 @@ The steps are:
  2. Install mono from brew
  3. Install VSCode
  4. Install Ionide
- 5. Write a .fsx script make everything works
+ 5. Write a .fsx script
 
 ## 1. Install brew
 
@@ -72,7 +72,7 @@ ext install Ionide-fsharp
 
 That's it, you have all the necessary tools to write code in F# now.
 
-## 5. Write a .fsx script make everything works
+## 5. Write a .fsx script
 
 Now that you have all the stuff needed. Create a `.fsx` file and paste the following:
 
