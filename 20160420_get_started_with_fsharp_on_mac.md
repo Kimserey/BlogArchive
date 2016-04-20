@@ -24,14 +24,14 @@ To install `brew`, start a terminal and paste the following:
 
 ![brew](https://2.bp.blogspot.com/-MCdhqT2VVGE/Vxf5gXg719I/AAAAAAAAAGI/FmlU3mhjblQemL2FKIYjmXUDJLjaMeDdACLcB/s1600/brew.png)
 
-Homebrew is a package manager. We will use it to install mono.
+Homebrew is a package manager. We will use it to install `mono`.
 After executing the command, you should have access to `brew` from the terminal.
 
 ## 2. Install mono
 
 > Mono is an open source implementation of Microsoft's .NET Framework
 
-To install mono, start a terminal and paste the following:
+To install `mono`, start a terminal and paste the following:
 
 ```
 brew install mono
@@ -40,7 +40,9 @@ brew install mono
 ![mono](https://3.bp.blogspot.com/-EQP6-tULonI/Vxf5hk9yjpI/AAAAAAAAAGQ/pKmEGwdBzxoC_skP-otcXYga1WdZleDJgCKgB/s1600/mono.png)
 
 After you installed `mono`, you should have access to `fsharpi`.
-`fsharpi` is the fsharp interactive.
+`fsharpi` is the fsharp interactive also called `FSI`.
+
+![fsi](https://4.bp.blogspot.com/-qUlUJqwRKQw/Vxf7SokgA6I/AAAAAAAAAGg/fOfugxwQ-Ok_krBmfe5jMK1UeDAkSdvlwCLcB/s1600/fsharpi.png)
 
 ## 3. Install VSCode
 
