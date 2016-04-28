@@ -63,7 +63,7 @@ Because my `csv` has no header, when the frame gets loaded it has generic column
 Therefore I use `Frame.indexColsWith` to specify my own column keys.
 Then I collect all values and parse it to the correct type and then concatenate all values together in a single dataframe.
 
-##2. Label data in a new column
+## 2. Label data in a new column
 
 Adding a new column is very helpful. In my bank statement I have data like that:
 
@@ -254,7 +254,6 @@ November
 ```
 
 Nice isn't it?
-
 I have created other functions that I find useful and it is accessible from [my github here](https://github.com/Kimserey/DataExpenses/blob/master/London/Expenses.fsx).
 
 # Conclusion
