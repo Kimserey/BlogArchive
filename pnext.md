@@ -13,7 +13,7 @@ Although Deedle website contains very good tutorials, like the [Deedle in 10 min
 
 __So why would you need Deedle?__
 
-One of the reason why I think Deedle is interesting is that it makes the manipulate of data frame much more pleasant.
+One of the reason why I think Deedle is interesting is that it makes the manipulation of data frame much more pleasant.
 It is possible to goup by rows, and more importantly group on multiple levels.
 We can then work effectively on a certain level of the frame.
 It allows to change values from a row or values from a column easily.
