@@ -1,4 +1,4 @@
-# Manage your expenses with Deedle in FSharp
+# A primer on manipulating data frame with Deedle in FSharp
 
 The first time I encountered Deedle was from [@brandewinder](https://twitter.com/brandewinder) book [Machine learning projects for .NET developers](https://www.amazon.co.uk/Machine-Learning-Projects-Developers/dp/14302676740).
 Deedle is a library which facilitates the manipulation of data frames and data series.
@@ -27,9 +27,9 @@ I will explain some common operations and simple operations which will help to u
 
 1. Extract data from CSV and load into frame
 2. Label data in a new column
-3. Group data by date
-4. Group by label then by date and sum the amounts
-5. Group by using a value constructed from a key
+3. Group by
+4. Execute operation on grouped data frames
+5. Print the data frames
 
 When you will be done with this, you will be able to have a good understanding on how to use the library in your advantage to make more complex operations.
 Let's start by loading data from CSV.
@@ -136,7 +136,8 @@ let df =
 ```
 
 We use `AddColumn` to append a column to the current frame.
-We can give a title and we build this column by mapping all values per from the title column then taking the first value from the pair for the label and the second value for the category.
+`Frame.getCol` takes a column key and returns the whole column as a data series.
+We use the whole title column to build a label and category column by mapping over all values using `Series.mapValues`.
 
 Now we should get the following:
 
@@ -148,4 +149,113 @@ Date        Title                                           Amount  Label   Cate
 
 We successfuly categorised our data.
 
-## 3. Group data by date
+## 3. Group by
+
+The most common operation when dealing with data frame is to group data.
+For expenses it is always useful to get the frame grouped by month so that we can either display it nicely or calculate the sum of all the expenses for each month.
+
+```
+df
+|> Frame.filterRowValues(fun c -> c?Amount < 0.)
+|> Frame.groupRowsUsing(fun _ c -> c.GetAs<DateTime>("Date").Month)
+```
+
+By using `Frame.groupRowsUsing`, we can group by the result of a function.
+Here we get the date and extract the month of each date to group the frame on it.
+Since the data frame was previously indexed by a default id, we end up with a data frame with two identifiers:
+ - The month
+ - The default id
+ 
+```
+Month  Id   Date        Title                                           Amount  Label   Category
+1      288  2016-01-20  INT'L YYYYYYYYYY Amazon UK Retail AMAZON.CO.UK  -3.99   AMAZON  ONLINE
+1      287  2016-01-18  INT'L XXXXXXXXXX Amazon UK Marketpl             -3.99   AMAZON  ONLINE
+```
+
+We can also continue to group if we find something interesting.
+Here we have the category and grouping by category and then per month seems logical.
+
+```
+df
+|> Frame.filterRowValues(fun c -> c?Amount < 0.)
+|> Frame.groupRowsByString "Category"
+|> Frame.groupRowsUsing(fun _ c -> c.GetAs<DateTime>("Date").Month)
+```
+
+And now we end up with three identifiers.
+
+```
+Month  Category  Id   Date        Title                                           Amount  Label   Category
+1      ONLINE    288  2016-01-20  INT'L YYYYYYYYYY Amazon UK Retail AMAZON.CO.UK  -3.99   AMAZON  ONLINE
+1      ONLINE    287  2016-01-18  INT'L XXXXXXXXXX Amazon UK Marketpl             -3.99   AMAZON  ONLINE
+```
+
+## 4. Execute operation on grouped data frames
+
+Usually, we group data to execute operation on the groups.
+Calculate a sum, an average or just the total count of elements in each group.
+With Deedle data frame groups, we can also execute operations on grouped data frames.
+Even better we can target a particular level to apply an operation.
+Taking the previous example, we will do the following to have the sum of all category per month:
+
+```
+df
+|> Frame.filterRowValues(fun c -> c?Amount < 0.)
+|> Frame.groupRowsByString "Category"
+|> Frame.groupRowsUsing(fun _ c -> c.GetAs<DateTime>("Date").Month)
+|> Frame.mapRowKeys Pair.flatten3
+|> Frame.getNumericCols
+|> Series.mapValues (Stats.levelSum Pair.get1And2Of3)
+```
+After grouping the values, the row key becomes `int * (string * int)` which is `month * (category * default_id)`.
+We then map over all row keys and flatten it to `int * string * int` with `Pair.flatten3`.
+A data frame being compose of columns of different type, of we want to apply an operation like a sum we need to get only the columns which are numerics.
+We do that using `Frame.getNumericCols` and we can then apply the sum on a particular level.
+`Stats.levelSum Pair.get1And2Of3` means that we take the first key the `month` and the second key `category` and apply the sum to the values.
+We then get a frame with values sortes by date and compute the sum per categories.
+
+## 5. Print the data frames
+
+When grouping, we get a data frame with a second identifier.
+An interesting function to work with grouped data frame is `Frame.nest`.
+Taking a data frame indexed multiple time, `Frame.nest` will return a series with the first identifier as key and `nested data frame` as values.
+We can use that to `printfn` a nice formatted data frame.
+
+```
+df
+|> Frame.filterRowValues(fun c -> c?Amount < 0.)
+|> Frame.groupRowsUsing(fun _ c -> c.GetAs<DateTime>("Date").Month)
+|> Frame.nest
+|> Series.observations
+|> Seq.iter (fun (m, df) ->
+    printfn "%s" (monthToString m)
+    df
+    |> Frame.rows
+    |> Series.observations
+    |> Seq.iter (fun (_, s) -> 
+        printfn "  %s %50s %10.2f" 
+            (s.GetAs<DateTime>("Date").ToShortDateString()) 
+            (s.GetAs<string>("Title"))
+             s?Amount))
+```
+
+With this we get the following display:
+
+```
+October
+    28/10/2015              SOMETHING     -35.40
+    26/10/2015         SOMETHING ELSE     -24.03
+November
+    30/11/2015    SOMETHING SOMETHING    -73.43
+    02/11/2015        SOMETHING AGAIN    -192.50
+```
+
+Nice isn't it?
+
+I have created other functions that I find useful and it is accessible from [my github here](https://github.com/Kimserey/DataExpenses/blob/master/London/Expenses.fsx).
+
+# Conclusion
+
+Today we saw how to get started with Deedle by doing some very simple data frame manipulation.
+I hope you enjoyed reading this post as much I enjoyed writing it and as always, if you have any comments
+ feel free to leave those here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
