@@ -162,9 +162,7 @@ df
 
 By using `Frame.groupRowsUsing`, we can group by the result of a function.
 Here we get the date and extract the month of each date to group the frame on it.
-Since the data frame was previously indexed by a default id, we end up with a data frame with two identifiers:
- - The month
- - The default id
+Since the data frame was previously indexed by a default id, we end up with a data frame with two identifiers: the month and the default id.
  
 ```
 Month  Id   Date        Title                                           Amount  Label   Category
