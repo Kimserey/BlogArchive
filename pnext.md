@@ -23,7 +23,7 @@ And lastely it is possible to take out the data and plot it into a graph.
 I started to look at Deedle by making very basic operations.
 Even after reading all the information on Deedle website, it took me few hours to put together the operations so I wanted to share that with you so that hopefully you would not take as long as I did.
 In this post I played with my bank statements data.
-I will explain some common operations and simple operations which will help to understand how Deedle works:
+I will explain some common operations which will help to understand how Deedle works:
 
 1. Extract data from CSV and load into frame
 2. Label data in a new column
