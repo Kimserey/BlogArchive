@@ -170,7 +170,7 @@ Month  Id   Date        Title                                           Amount  
 1      287  2016-01-18  INT'L XXXXXXXXXX Amazon UK Marketpl             -3.99   AMAZON  ONLINE
 ```
 
-We can also continue to group if we find something interesting.
+We can also continue to group on another level if we have something interesting to group by again.
 Here we have the category and grouping by category and then per month seems logical.
 
 ```
