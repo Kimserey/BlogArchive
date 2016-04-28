@@ -213,7 +213,7 @@ We do that using `Frame.getNumericCols`. We then apply the sum on a particular l
 
 When grouping, we get a data frame with a second identifier.
 An interesting function to work with grouped data frame is `Frame.nest`.
-Taking a data frame indexed multiple time, `Frame.nest` will return a series with the first identifier as key and `nested data frame` as values.
+Taking a data frame indexed multiple times, `Frame.nest` will return a data series with the first identifier as key and the `nested data frame` as values.
 We can use that to `printfn` a nice formatted data frame.
 
 ```
