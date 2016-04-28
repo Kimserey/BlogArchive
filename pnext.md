@@ -206,7 +206,7 @@ df
 ```
 After grouping the values, the row key becomes `int * (string * int)` which is `month * (category * default_id)`.
 We then map over all row keys and flatten it to `int * string * int` with `Pair.flatten3`.
-A data frame being compose of columns of different type, of we want to apply an operation like a sum we need to get only the columns which are numerics.
+Because a data frame is composed by columns of different types, if we want to apply an operation like a sum we need to get only the columns which are numerics.
 We do that using `Frame.getNumericCols` and we can then apply the sum on a particular level.
 `Stats.levelSum Pair.get1And2Of3` means that we take the first key the `month` and the second key `category` and apply the sum to the values.
 We then get a frame with values sortes by date and compute the sum per categories.
