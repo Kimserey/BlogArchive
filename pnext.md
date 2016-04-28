@@ -14,10 +14,10 @@ Although Deedle website contains very good tutorials, like the [Deedle in 10 min
 __So why would you need Deedle?__
 
 One of the reason why I think Deedle is interesting is that it makes the manipulation of data frame much more pleasant.
-It is possible to goup by rows, and more importantly group on multiple levels.
-We can then work effectively on a certain level of the frame.
+With Deedle,it is possible to goup by rows and more importantly on multiple levels.
+It makes it possible to target a certain level of the frame (we will see more later).
 It allows to change values from a row or values from a column easily.
-It is also possible to drop and add columns which is very helpful to add label or category column.
+It is also possible to add or drop columns which is very helpful to add label or category column and dump useless columns.
 And lastely it is possible to take out the data and plot it into a graph.
 
 I started to look at Deedle by making very basic operations.
