@@ -73,7 +73,7 @@ Adding a new column is very helpful. In my bank statement I have data like that:
 ```
 
 All I really care is that it comes from Amazon. I don't really care that it has a reference of X or Y.
-So what I will is to add a fourth column which will contain a label which represents the store.
+So what I will do is to add a fourth column which will contain a label which represents the store.
 For the two records it will be Amazon.
 At the same time I want to have a fifth column which will represent the category.
 Amazon will be under `Online` which stands for online purchases.
