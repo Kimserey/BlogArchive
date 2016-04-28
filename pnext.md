@@ -193,7 +193,7 @@ Month  Category  Id   Date        Title                                         
 Usually, we group data to execute operation on the groups.
 Calculate a sum, an average or just the total count of elements in each group.
 With Deedle we can execute operations on grouped data frames and even better, we can target a particular level to apply an operation.
-Taking the previous example, we will do the following to have the sum of all category per month:
+Taking the previous example, we will get the sum of all category per month.
 
 ```
 df
