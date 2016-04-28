@@ -65,7 +65,7 @@ Then I collect all values and parse it to the correct type and then concatenate 
 
 ##2. Label data in a new column
 
-Adding new column is very helpful. In my bank statement I have data like that:
+Adding a new column is very helpful. In my bank statement I have data like that:
 
 ```
 2016-01-20,INT'L YYYYYYYYYY Amazon UK Retail AMAZON.CO.UK,-3.99
