@@ -209,6 +209,14 @@ We then map over all row keys and flatten it to `int * string * int` with `Pair.
 Because a data frame is composed by columns of different types, if we want to apply an operation like a sum, we need to get only the columns which are numerics.
 We do that using `Frame.getNumericCols`. We then apply the sum on a particular level by giving `Stats.levelSum Pair.get1And2Of3`. It means that we take the first key the `month` and the second key `category`. `Stats.LevelSum` applies the sum to the values of the same category.
 
+```
+Date     -> <missing>                                                            
+Category -> <missing>                                                           
+Amount   -> series [ (10, SweetAndSavoury) => -35.4; (10, Supermarket) => -24.03; ... ]
+```
+
+Date and Category being non numeric, their values is `missing`. For the amount, we get the sum for each combination `month * category`.
+
 ## 5. Print the data frames
 
 When grouping, we get a data frame with a second identifier.
