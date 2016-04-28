@@ -257,5 +257,6 @@ I have created other functions that I find useful and it is accessible from [my 
 # Conclusion
 
 Today we saw how to get started with Deedle by doing some very simple data frame manipulation.
+Extract the data from csv, add column to label the data, group the data, execute operation on the data frame and finally print the result nicely.
 I hope you enjoyed reading this post as much I enjoyed writing it and as always, if you have any comments
  feel free to leave those here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
