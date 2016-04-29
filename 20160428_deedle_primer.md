@@ -1,6 +1,6 @@
 # A primer on manipulating data frame with Deedle in FSharp
 
-The first time I encountered Deedle was from [@brandewinder](https://twitter.com/brandewinder) book [Machine learning projects for .NET developers](https://www.amazon.co.uk/Machine-Learning-Projects-Developers/dp/14302676740).
+The first time I encountered Deedle was from [@brandewinder](https://twitter.com/brandewinder)'s book [Machine learning projects for .NET developers](https://www.amazon.co.uk/Machine-Learning-Projects-Developers/dp/14302676740).
 Deedle is a library which facilitates the manipulation of data frames and data series.
 
 [http://bluemountaincapital.github.io/Deedle/](http://bluemountaincapital.github.io/Deedle/)
