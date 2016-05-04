@@ -1,6 +1,6 @@
 # Extract text from images in F# - OCR'ing my receipts!
 
-Last week [I talked about how I used Deedle to make some basic statistics on my expenses.]() 
+Last week [I talked about how I used Deedle to make some basic statistics on my expenses.](https://kimsereyblog.blogspot.co.uk/2016/04/a-primer-on-manipulating-data-frame.html) 
 Using my bank statements, I showed how to categorize, group, sum and sort expenses so that it would bring a better visibility to my expenses.
 Then I thought, actually I should go a level deeper. Instead of checking the transaction as a whole, It would be better to check on the prices of each items I purchased.
 Being so lazy, the idea of writing down every expenses was just not considerable. I needed a better way.
