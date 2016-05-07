@@ -95,11 +95,11 @@ let cleanImg imgStream =
 
 Here's the image before:
 
-![original](https://cdn.rawgit.com/Kimserey/OcrApp/master/original.jpeg)
+![original](https://4.bp.blogspot.com/-Nvs_9aFG7BM/Vy22UH1ItxI/AAAAAAAAAHI/IMJV9rYCXIgDUEGxjGf1LFg5NQJ-WHqXwCLcB/s320/original.jpeg)
 
 Here's the image after cleaning:
 
-![cleaned](https://cdn.rawgit.com/Kimserey/OcrApp/master/cleaned.jpeg)
+![cleaned](https://1.bp.blogspot.com/-4glzsODnQVM/Vy22U8ZKbzI/AAAAAAAAAHM/PHaX_rGgPE44J4WjZQ5zGxoZvBfBn1nEgCKgB/s320/cleaned.jpeg)
 
 Definitely not the best cleaning, a lot of configurations are available.
 I only used the default configuration.
