@@ -74,7 +74,11 @@ Install-Package FredsImageMagickScripts.TextCleaner
 ```
 
 `FredsImageMagickScripts` is a set of C# files which uses `ImageMagick`.
-It is simple to use
+So I've added a C# project to add the scripts which I then referenced into my F# project.
+
+![project](https://2.bp.blogspot.com/-8S0mxPS5cP0/Vy2ynbj0BLI/AAAAAAAAAG8/SH1Bjq1RrHo28k3nMCZMNfUbRSOTakZlgCKgB/s320/Screen%2BShot%2B2016-05-07%2Bat%2B10.13.23.png)
+
+Textcleaner is simple to use, all you need to do is instantiate a `TextCleanerScript` and pass it a `MagickImage`.
 
 ```
 let cleanImg imgStream =
@@ -97,7 +101,7 @@ Here's the image after cleaning:
 
 ![cleaned](https://cdn.rawgit.com/Kimserey/OcrApp/master/cleaned.jpeg)
 
-Definitly not the best cleaning, a lot of configurations are available.
+Definitely not the best cleaning, a lot of configurations are available.
 I only used the default configuration.
 Using the cleaning image, we can now pass it through Tesseract and extract the text with a much better mean confidence.
 
