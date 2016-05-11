@@ -44,5 +44,5 @@ Today we saw how we could deploy a webapp built with WebSharper easily.
 For webapps which handle a small amount of users, it seems very appropriate as it is easy and
 cost efficient to have a single VM hosting multiple selfhosted webapps on different endpoints.
 By showing you this I hope it completed the whole picture from developping to deploying webapps.
-Let me know if you deploy some amazing webapps! If you have any comments, hit me on Twitter [@Kimserey_Lam]().
+Let me know if you deploy some amazing webapps! If you have any comments, hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam).
 See you next time!
