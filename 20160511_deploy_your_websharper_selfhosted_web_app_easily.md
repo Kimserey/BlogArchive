@@ -1,29 +1,34 @@
-# Deploy your WebSharper selfhosted web app easily
+# Deploy your WebSharper selfhosted web app on Azure
 
-Last week I talked about how I used an OCR library to create a web app which reads text from an image.
-I explained the whole process of creating it but I didn't explain how I deployed it to Azure.
-I thought that since I asked myself the question, other developers might have wondered as well.
+Last week I talked about [how to read text from an image using a OCR library](https://kimsereyblog.blogspot.co.uk/2016/05/extract-text-from-images-in-f-ocring.html).
+I explained the whole process of creating the web app but I omitted to explain the deployment to Azure.
+So today I would like to fill this gap by showing you how I deployed the selfhosted web app on an Azure.
+This web app makes use of the `WebSharper selfhost template` which is composed by a `WebSharper sitelet` mounted on a `OWIN selfhost`. 
 
-__What are the steps to deploy a selfhost?__
+__What are the steps to deploy a web app on Azure?__
 
-Today I will explain the steps that I took to deploy [https://arche.cloudapp.net:9000](https://arche.cloudapp.net:9000)
+In order to make the web app available on internet, there are four steps to follow:
+1. Create default template `WebSharper client server selfhost`
+2. Bind to all interfaces
+3. Add urlacl (optional)
+4. Deploy to Azure
 
-## 1. Create default template websharper client server webhost
+## 1. Create default template Websharper client server selfhost
 
-Go on github find the new release of WebSharper and get the vsix.
+Go on github and find WebSharper's releases and get the latest `vsix` (Visual studio extensions).
 
 [https://github.com/intellifactory/websharper/releases](https://github.com/intellifactory/websharper/releases)
 
 ![where to get websharper wsix](https://4.bp.blogspot.com/-D8sPvjtYs78/VzQ2rLM0sHI/AAAAAAAAAIM/6o-XtdZTJZQcRYJflw_zGCxSnbRsTDZAwCLcB/s200/download_vsix.png)
 
-Install it and you will have access to all Websharper templates.
+Install it and you will have access to all Websharper templates from Visual studio.
 
-Create a default Selfhost client server application and run it.
-If everything works well you should have a running webapp.
+Create a default `Selfhost client server application` and run it.
+If everything works well you should have a running web app.
 
 ## 2. Bind to all interfaces
 
-When you created from the projet template, you should have an entrypoint which looks like this:
+If you created your projet from template, you should have an entry point which looks like this:
 
 ```
 module SelfHostedServer =
@@ -53,52 +58,51 @@ module SelfHostedServer =
         0
 ```
 
-This code will start a OWIN selfhost hosted on `http://localhost:9000/` if you don't provide any arguments while launching the `.exe`.
-It only binds to your localhost.
-In order to make it available, you must bind it to all interfaces.
+This code will start a `OWIN selfhost` hosted on `http://localhost:9000/`. If you don't provide any arguments while launching the `.exe`,
+it will only bind to your localhost.
+In order to make it available to all, you must bind it to all interfaces.
 To do so, replace `localhost` by `+`.
 ```
 let rootDirectory, url = "..", "http://+:9600/"
 ```
-Now of you try to run the webapp, it will crash unless you started visual studio as administrator.
-
-Either you can choose to always run as admin or you can reserve this url for your user account.
+Now if you try to run the web app, it will crash unless you ran it as an administrator.
+Either you can choose to always run as administrator or you can reserve this url for your user account.
 This can be done by adding a urlacl.
 
 ## 3. Add urlacl (optional)
+
+To add a urlacl, open a command prompt and execute the following commands:
 
 ```
 netsh http 
 add urlacl url="http://+:9600" user="username"
 ```
-To find what is your full username you can use `whoami` from the cmd prompt.
-And you can view your urlacl already added by typing `show urlacl`.
-
-Build your app and find the `.exe` in your `bin` folder and you should be able to run it and it should launch the webapp.
-At this point, we have the web app ready for deployment.
+To find what is your username you can use `whoami` from the command prompt.
+You can view your urlacl already added by typing `show urlacl`.
+After that you added the urlacl, when launching the `.exe`, it should not crash anymore.
+You are now ready to deploy the web app.
 
 ## 4. Deploy to Azure
 
-Go to the azure portal and select create VM.
+Go to the azure portal and create a VM.
 
 ![create vm on azure](https://2.bp.blogspot.com/-lzB8Yob4ZbM/VzQ7fui6XoI/AAAAAAAAAI0/lmn-LU682icjFX1MxVk80MbSSma4H7OmQCKgB/s1600/create_vm.png)
 
-Once created, RDP into the VM and copy the binaries into a folder and run the executable.
-
+Once created, RDP into the VM.
 At the moment in the Azure portal, the RDP button looks like this:
 
 ![rdp button](https://2.bp.blogspot.com/-_I2WKGGlQV0/VzQ7pSGi-lI/AAAAAAAAAIc/eWaRpQB_sEwsESFqreeREiH8xlxMv5iBACKgB/s200/Screen%2BShot%2B2016-05-12%2Bat%2B09.15.26.png)
 
-Copy the following file into a folder on your VM:
+Copy the following files into a folder on your VM and run the executable.
 
 ![binaries](https://3.bp.blogspot.com/-7A79NqUDGjQ/VzQ7sf3KR1I/AAAAAAAAAIg/GVmBCQvOr6cKVTPj87iEXf61OeiD7d9jQCKgB/s1600/file_copy.png)
 
 It should run without issue but __it will not be accessible from outside the VM yet__.
 
 We need to open the inbound port on your firewall to let others access this endpoint.
+Open the `Windows Firewall` setting window and click on Inbound Rules, New rule and add your endpoint.
 
 ![inbound port](https://3.bp.blogspot.com/-gLCSqup1A3g/VzQ7vQ_5LkI/AAAAAAAAAIk/HBrwUqXYDKgkznuUlzB55OQHSGbLxbI0QCKgB/s1600/inbound.png)
-![inbound port opening](https://4.bp.blogspot.com/-HKJonRQFoQE/VzQ8-iW1syI/AAAAAAAAAJA/oOScdedJa6I2uuC2almJd7D5lDu7CPsmwCLcB/s1600/firewall_ports.png)
 
 The last step is to tell Azure about your public endpoint. 
 This is set from the Azure portal, find the settings of your VM and add the endpoint `9600`.
