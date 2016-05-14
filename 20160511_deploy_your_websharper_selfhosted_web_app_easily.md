@@ -2,7 +2,7 @@
 
 Last week I talked about [how to read text from an image using a OCR library](https://kimsereyblog.blogspot.co.uk/2016/05/extract-text-from-images-in-f-ocring.html).
 I explained the whole process of creating the web app but I omitted to explain the deployment to Azure.
-So today I would like to fill this gap by showing you how I deployed the selfhosted web app on an Azure.
+So today I would like to fill this gap by showing you how I deployed the selfhosted web app on Azure.
 This web app makes use of the `WebSharper selfhost template` which is composed by a `WebSharper sitelet` mounted on a `OWIN selfhost`. 
 
 __What are the steps to deploy a web app on Azure?__
