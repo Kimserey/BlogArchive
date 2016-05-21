@@ -1,8 +1,6 @@
 # Understand the difference between Inline and Direct attributes in WebSharper
 
-In WebSharper, when we need to reference JS code in our web app, we define a placeholder function which will be replaced by our JS code during translation.
-
-The keywords to do that are `Direct` and `Inline`.
+In WebSharper, there are two keywords to bind JS code to our F# code - `Direct` and `Inline`.
 The documentation about the attributes can be found here [http://websharper.com/docs/translation](http://websharper.com/docs/translation).
 
 I have demonstrated the use of it in previous blog posts:
