@@ -1,4 +1,4 @@
-# Understand the difference between Inline and Direct attributes in WebSharper
+# Understand the difference between Direct and Inline attributes in WebSharper
 
 In WebSharper, there are two keywords to bind JS code to our F# code - `Direct` and `Inline`.
 The documentation about the attributes can be found here [http://websharper.com/docs/translation](http://websharper.com/docs/translation).
@@ -8,7 +8,7 @@ I have demonstrated the use of it in previous blog posts:
  - [Sort, drag and drop in UI Next with Sortable](https://kimsereyblog.blogspot.co.uk/2016/04/drag-and-drop-and-sortable-in-ui-next.html)
 
 Although the documentation has some explanation about it, I still feel like it is pretty vague. 
-So today I would like to give more explanation about the differences between `Inline` and `Direct`.
+So today I would like to give more explanation about the differences between `Direct` and `Inline`.
 
 This post is composed by three parts:
 
