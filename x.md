@@ -1,4 +1,4 @@
-# Understand the difference between Inline and Direct in WebSharper JS translation
+# Understand the difference between Inline and Direct attributes in WebSharper
 
 In WebSharper, in order to reference JS code in our web app we define a placeholder function which will be replaced by our JS code during translation.
 
