@@ -137,7 +137,7 @@ This would have been translated to
 ```
 window.location.GetHref()
 ```
-which is wrong since `location` doesn't have a member called `GetHref`. You would have had the following error `InlineVsDirect.js:17118 Uncaught TypeError: window.location.GetHref is not a function`.
+which is wrong since `location` doesn't have a member called `GetHref`. You would have had the following error `Uncaught TypeError: window.location.GetHref is not a function`.
 
 __In this sample we can't use `Direct`. The code has to be inlined therefore we must use `Inline`.__
 
