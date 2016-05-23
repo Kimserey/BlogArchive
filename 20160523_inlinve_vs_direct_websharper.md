@@ -44,6 +44,7 @@ var result = add(1,2)
 *_It's not really like that but this is close enough to understand._
 
 Here there are three import points to understand:
+
 1. `$` is used to bind the parameters, it is also possible to use `$0`, `$1`, etc... to get the parameters by index
 2. `X<_>` is a placeholder value, it is a simple compiler trick for the function to have the correct type returned
 3. `Direct` has placed the content in the __body of a function__ and have placed a `return` on the value
