@@ -92,7 +92,7 @@ The full web app project is available here:
 
 Launching the `index.html` should be enough to run the whole SPA.
 
-## 2. Build a Xamarin.Forms WebView and load your SPA
+## 2. Build a Xamarin.Forms WebView
 
 Now that we have a SPA, we need to configure a `WebView` and use it from an Android app.
 A web view is essentially a web browser running inside an app. It is defined in a portacle library in F#  and the Android app is defined in a C# project.
