@@ -1,4 +1,4 @@
-# Create a Android app with your WebSharper web app
+# Create a Android app from a WebSharper web app
 
 With WebSharper, it is easy and quick to build web apps in F#.
 If you followed my blog, you must have noticed that I regularly post about WebSharper functionalities.
