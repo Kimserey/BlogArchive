@@ -1,17 +1,17 @@
-# Create a Android app from a WebSharper web app
+# Transform your WebSharper web app into a Android mobile app with Xamarin.Forms WebView
 
-With WebSharper, it is easy and quick to build web apps in F#.
+With WebSharper, it is easy and quick to build Single Page Applications (SPA) in F#.
 If you followed my blog, you must have noticed that I regularly post about WebSharper functionalities.
-Building Single Page Application using F# is one of the reason why I started to look into WebSharper.
-Here is one of the first blog post I made on WebSharper:
+Building a SPA using F# is one of the reason why I started to look into WebSharper.
+It is also the subject of one of the first blog post I wrote.
 
 [https://kimsereyblog.blogspot.co.uk/2015/08/single-page-app-with-websharper-uinext.html](https://kimsereyblog.blogspot.co.uk/2015/08/single-page-app-with-websharper-uinext.html)
 
-Last week I covered how we could build a cross platform mobile app with Xamarin.Forms and I showed how we could deploy it to an Android VM using the Xamarin Android Player.
+Last week I covered how we could build a cross platform mobile app with Xamarin.Forms and I showed how to deploy it to an Android VM.
 
 [https://kimsereyblog.blogspot.co.uk/2016/05/setup-your-environment-to-build-android.html](https://kimsereyblog.blogspot.co.uk/2016/05/setup-your-environment-to-build-android.html)
 
-Today, I would like to show you how you can take your WebhSharper SPA and embed it into a Android app using Xamarin.Forms to quickly transform your web app to a mobile app.
+Today, I would like to show you how to embed a SPA built with WebSharper in F# into a Xamarin.Forms WebView to quickly transform your web app into a mobile app.
 
 This post is composed by three parts:
 
