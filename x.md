@@ -1,0 +1,1 @@
+EXPLAIN QUERY PLAN SELECT * FROM customers WHERE id = ‘’;
