@@ -9,7 +9,7 @@ This post is composed by six parts:
 
 1. Use the built in date functions
 2. Cast your string to integer with `CAST`
-3. Transpose a table using `CASE` and `GROUP BY`
+3. Transpose a table using `GROUP BY`, `CASE` and `Aggregate functions`
 4. Concatenate value with `||`
 5. Attach databases to `JOIN` on tables from different databases
 6. Improve the performance of your query with `EXPLAIN QUERY PLAN`
@@ -103,7 +103,7 @@ SELECT CAST (strftime('%m','2016-04-01') AS Integer);
 > 4
 ```
 
-##3. Transpose a table using `CASE` and `GROUP BY`
+##3. Transpose a table using `GROUP BY`, `CASE` and `Aggregate functions`
 
 In one the database I had to work, the value were stored in three columns `id`, `key` and `value`.
 This table gathers all the data sent from a form from our app.
@@ -115,18 +115,117 @@ Fields can be added or removed every day, depending on client requirements, so i
 Storing the values this way makes it difficult to query directly.
 What we need to do is to `transpose` the tabe.
 
-
+For example if you have a table like that:
 
 ```
+id  key     value
+--  ---     -----
+
+1   amount  10.0
+1   date    2016-03-01
+1   name    Kim
+2   amount  32.0
+2   date    2016-03-02
+2   name    Sam
+3   amount  12.5
+3   date    2016-03-03
+3   name    Tom
+```
+
+To work with this table we need to transpose it by taking the `key`s and transform it to columns.
+```
+id | key | value --> id | date | name | amount
+```
+
+In order to do that we need to `GROUP BY` the id.
+We can visualize the `GROUP BY` like so:
+```
+SELECT (some aggregate function) FROM forms GROUP BY id
+
+
+1
+    1   amount  10.0
+    1   date    2016-03-01
+    1   name    Kim
+
+2
+    2   amount  32.0
+    2   date    2016-03-02
+    2   name    Sam
+
+3
+    3   amount  12.5
+    3   date    2016-03-03
+    3   name    Tom
+```
+
+In the `SELECT` we then have access to each group.
+We need to use `Aggregate function` to extract a single value.
+[https://www.sqlite.org/lang_aggfunc.html](https://www.sqlite.org/lang_aggfunc.html)
+```
+avg(X)              - calculate the average
+count(X)            - count the number of non null values
+count(*)            - count the number of rows
+group_concat(X)     - concat the string values
+group_concat(X,Y)   - concat the string values using Y as seperator
+max(X)              - keep the max of all values
+min(X)              - keep the min of all values
+sum(X)              - sum all values (SQL implementation)
+total(X)            - sum all values (SQLite implementation)
+```
+
+We can use `max(...)` combined with `CASE` to select the correct value in the grouping for each column.
+`CASE` is the `if else` of `SQL`.
+For example to select to extrac the name as a column, we would do the following:
+```
+SELECT max(CASE WHEN key = 'name' THEN value END) as name FROM forms GROUP BY id;
+
+name
+----
+Kim
+Sam
+Tom
+```
+
+`CASE WHEN key = 'name' THEN value END` would take the `value` if the `key = 'name'` else it would return `NULL`.
+`max(...)` would then return the last non null value, in this example only the `name` would be a non null value.
+We then do the same for each column:
+```
 SELECT 
-    mp.id,
-    mp.user_id AS userId,
-    CAST (strftime('%Y', DATETIME(mp.storage_timestamp / 10000000 - 62135596800, 'unixepoch')) AS interger) AS year,
-    MAX(CASE WHEN mpv.key = 'nino' THEN mpv.value END) AS nino,
-    SUM(CASE WHEN mpv.key = 'support-duration-hours' THEN mpv.value END) AS 'support-hours',
-FROM metaform_postbacks mp
-JOIN metaform_postback_values mpv ON mp.id = mpv.id
-GROUP BY mp.id
+    id,
+    max(CASE WHEN key = 'name' THEN value END) AS name,
+    max(CASE WHEN key = 'date' THEN value END) AS date,
+    sum(CASE WHEN key = 'amount' THEN value END) AS amount
+FROM forms
+GROUP BY id
+
+id  name    date        amount
+--  ----    ----        -----
+1   Kim     2016-03-01  10.0
+2   Sam     2016-03-02  32.0
+3   Tom     2016-03-03  12.5
+```
+
+Nice, we transposed our table to a table that we can use now.
+After that it is easy to use this `SELECT` as a subselect to perform some other filtering.
+```
+SELECT
+    id,
+    name,
+    date,
+    amount
+FROM (SELECT 
+            id,
+            max(CASE WHEN key = 'name' THEN value END) AS name,
+            max(CASE WHEN key = 'date' THEN value END) AS date,
+            sum(CASE WHEN key = 'amount' THEN value END) AS amount
+      FROM forms
+      GROUP BY id)
+WHERE amount > 20
+
+id  name    date        amount
+--  ----    ----        -----
+2   Sam     2016-03-02  32.0
 ```
 
 ## 4. Concatenate value with `||`
