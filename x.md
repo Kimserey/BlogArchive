@@ -17,8 +17,6 @@ This post is composed by six parts:
 
 ## 1. Use the built in date functions
 
-### 1.1 strftime
-
 `strftime` is the main function, it takes a `format`, a `string` date and some `modifiers`.
 Here are the format extracted from [https://www.sqlite.org/lang_datefunc.html](https://www.sqlite.org/lang_datefunc.html).
 ```
