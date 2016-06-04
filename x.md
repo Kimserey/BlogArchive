@@ -176,7 +176,7 @@ total(X)            - sum all values (SQLite implementation)
 
 We can use `max(...)` combined with `CASE` to select the correct value in the grouping for each column.
 `CASE` is the `if else` of `SQL`.
-For example to select to extrac the name as a column, we would do the following:
+For example to select to extract the name as a column, we would do the following:
 ```
 SELECT max(CASE WHEN key = 'name' THEN value END) as name FROM forms GROUP BY id;
 
