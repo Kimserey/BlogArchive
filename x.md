@@ -1,8 +1,8 @@
-# SQLite functionalities
+# What I learnt with SQLite
 
 For the past few days, I have been writing a lot of `SQL` queries to query `SQLite` databases.
-I had to extract data for reporting from `SQLite` databases where `SELECT-FROM-WHERE` queries weren't enough.
-From that experience, I learnt few tricks that I am sure some of you will be interested in.
+I had to extract data for reporting purposes from `SQLite` databases where simple `SELECT-FROM-WHERE` queries weren't enough.
+From this experience, I learnt few tricks that I am sure some of you will be interested in.
 So today, I will list it all in this blog post.
 
 This post is composed by six parts:
@@ -14,10 +14,11 @@ This post is composed by six parts:
 5. Attach databases to `JOIN` on tables from different databases
 6. Improve the performance of your query with `EXPLAIN QUERY PLAN`
 
+_The parts aren't related with one another._
 
 ## 1. Use the built in date functions
 
-`strftime` is the main function, it takes a `format`, a `string` date and some `modifiers`.
+`strftime` is the main function for datetime manipulation. It takes a `format`, a `string` date and some `modifiers`.
 Here are the format extracted from [https://www.sqlite.org/lang_datefunc.html](https://www.sqlite.org/lang_datefunc.html).
 ```
 %d		day of month: 00
@@ -237,7 +238,7 @@ FROM (SELECT 'Hello' as hello, 'World' as world);
 
 ## 5. Attach databases to `JOIN` on tables from different databases
 
-If your query requires a `JOIN` between tables in different databases,
+If your query requires a `JOIN` between __tables in different databases__,
 you can use `attach 'second-database.db' as second;`.
 This will allow you to have access to the tables in `second-database.db`.
 
@@ -249,4 +250,31 @@ SELECT * FROM forms JOIN second.othertable as other ON other.id = forms.id
 
 ## 6. Improve the performance of your query with `EXPLAIN QUERY PLAN`
 
+[https://www.sqlite.org/eqp.html](https://www.sqlite.org/eqp.html)
+
+If your queries are slow, it is probably because your table isn't indexed correctly.
+In order to pinpoint the issue, you can use `EXPLAIN QUERY PLAN (your query)`.
+The result of this command will give you guidance on what to index in your table.
+
+Using the same table as 3. we can run `EXPLAIN QUERY PLAN` on some queries and see the result.
+```
+EXPLAIN QUERY PLAN SELECT * FROM forms WHERE id = 2;
+0|0|0|SCAN TABLE forms
+```
+
+`SCAN TABLE` is the worst result you can get.
+Since we querying on `id`, let's create an index on id.
+
+```
+CREATE INDEX IF NOT EXISTS idx_forms_id ON forms (id);
+
+EXPLAIN QUERY PLAN SELECT * FROM forms WHERE id = 2;
+0|0|0|SEARCH TABLE forms USING INDEX idx_forms_id (id=?)
+```
+
 # Conclusion
+
+SQLite has a lot of cool features, this is just the beginning. learning how to use these features
+Thanks to [@nbevans](https://twitter.com/nbevans) who showed me how to use some of these features.
+Hope you learnt something new today with this post and if you have any question, leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam).
+See you next time!
