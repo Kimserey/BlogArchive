@@ -1,4 +1,4 @@
-# What I learnt with SQLite
+# Nice features and tricks for SQLite
 
 For the past few days, I have been writing a lot of `SQL` queries to query `SQLite` databases.
 I had to extract data for reporting purposes from `SQLite` databases where simple `SELECT-FROM-WHERE` queries weren't enough.
