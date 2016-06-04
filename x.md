@@ -118,7 +118,6 @@ For example if you have a table like that:
 ```
 id  key     value
 --  ---     -----
-
 1   amount  10.0
 1   date    2016-03-01
 1   name    Kim
@@ -227,7 +226,27 @@ id  name    date        amount
 ```
 
 ## 4. Concatenate value with `||`
+
+If your table has columns that you need to concatenate into a single value, you can use `||`.
+```
+SELECT (hello || ' ' || world) AS mesasge 
+FROM (SELECT 'Hello' as hello, 'World' as world);
+
+> Hello World
+```
+
 ## 5. Attach databases to `JOIN` on tables from different databases
+
+If your query requires a `JOIN` between tables in different databases,
+you can use `attach 'second-database.db' as second;`.
+This will allow you to have access to the tables in `second-database.db`.
+
+```
+attach 'second-database.db' as second;
+
+SELECT * FROM forms JOIN second.othertable as other ON other.id = forms.id
+```
+
 ## 6. Improve the performance of your query with `EXPLAIN QUERY PLAN`
 
 # Conclusion
