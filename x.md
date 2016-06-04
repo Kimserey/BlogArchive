@@ -55,7 +55,7 @@ time(...)	   ->	strftime('%H:%M:%S', ...)
 datetime(...)   ->	strftime('%Y-%m-%d %H:%M:%S', ...)
 ```
 
-The `modifiers` are used to modify the date given.
+The `modifiers` are used to modify the date passed as argument.
 ```
 NNN days
 NNN hours
@@ -90,7 +90,7 @@ SELECT date(timestamp / 10000000 - 62135596800, 'unixepoch')
 
 ##2. Cast your string to integer with `CAST`
 
-When you handle your value as `string` it is sometime required to `cast` to `integer`.
+When you handle `string` values it is sometime required to `cast` those to `integer` (or to another type).
 For example when you get a month from a `date(...)`, it returns as a `string`.
 In order to perform a comparaison, it is necessary to `cast` it.
 
@@ -104,12 +104,12 @@ SELECT CAST (strftime('%m','2016-04-01') AS Integer);
 
 ##3. Transpose a table using `GROUP BY`, `CASE` and `Aggregate functions`
 
-In one the database I had to work, the value were stored in three columns `id`, `key` and `value`.
+In one the database I worked on, the values were stored in three columns `id`, `key` and `value`.
 This table gathers all the data sent from a form from our app.
 `id` is the identifier of the form, `key` is the key of the field and `value` is the value of the field.
 
-_If you are thinking why is the table designed this way, it is meant to handle the dynamic nature of the forms. 
-Fields can be added or removed every day, depending on client requirements, so it would not be possible to use the field `keys` as table columns._
+_The table is designed this way to handle the dynamic nature of the forms. 
+Fields can be added or removed every day, depending on client requirements, so it would not be possible to use the value of `keys` as table columns._
 
 Storing the values this way makes it difficult to query directly.
 What we need to do is to `transpose` the tabe.
@@ -157,8 +157,7 @@ SELECT (some aggregate function) FROM forms GROUP BY id
     3   name    Tom
 ```
 
-In the `SELECT` we then have access to each group.
-We need to use `Aggregate function` to extract a single value.
+In the `SELECT` we then have access to each group where we can use `Aggregate function` to extract a single value.
 [https://www.sqlite.org/lang_aggfunc.html](https://www.sqlite.org/lang_aggfunc.html)
 ```
 avg(X)              - calculate the average
@@ -186,8 +185,8 @@ Tom
 ```
 
 `CASE WHEN key = 'name' THEN value END` would take the `value` if the `key = 'name'` else it would return `NULL`.
-`max(...)` would then return the last non null value, in this example only the `name` would be a non null value.
-We then do the same for each column:
+`max(...)` returns the `max` value which is the value where the `key = name` since all other values are set to `NULL`.
+We then apply the same pattern for the other columns:
 ```
 SELECT 
     id,
@@ -226,7 +225,7 @@ id  name    date        amount
 2   Sam     2016-03-02  32.0
 ```
 
-## 4. Concatenate value with `||`
+## 4. Concatenate values with `||`
 
 If your table has columns that you need to concatenate into a single value, you can use `||`.
 ```
@@ -274,7 +273,8 @@ EXPLAIN QUERY PLAN SELECT * FROM forms WHERE id = 2;
 
 # Conclusion
 
-SQLite has a lot of cool features, this is just the beginning. learning how to use these features
-Thanks to [@nbevans](https://twitter.com/nbevans) who showed me how to use some of these features.
+SQLite has a lot of cool features and there are many more features that I haven't discovered yet.
+Thanks to [@nbevans](https://twitter.com/nbevans) for showing me how to use some of these features.
+Learning how to use these features really helped me to write better queries and ultimately helped in improving the performance of our system.
 Hope you learnt something new today with this post and if you have any question, leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam).
 See you next time!
