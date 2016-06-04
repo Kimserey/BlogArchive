@@ -1,11 +1,11 @@
 # SQLite functionalities
 
-For the past few days, I have been doing a lot of SQLite.
-I have to admit, I used to tell myself that I would never need SQL since a lot of ORMs are available.
-But at the end of the day it would be ridiculous to use an ORM to do some simple queries.
-After working few days writing queries against SQLite dbs, I got to say that I am very impressed. A lot of functionalities are available out of the box and writing SQL queries for SQLite isn't as bad as the world makes it look like.
+For the past few days, I have been writing a lot of `SQL` queries to query `SQLite` databases.
+I had to extract data for reporting from `SQLite` databases where `SELECT-FROM-WHERE` queries weren't enough.
+From that experience, I learnt few tricks that I am sure some of you will be interested in.
+So today, I will list it all in this blog post.
 
-So today, in order to keep a trace for future references, I will explain all the good things I've learnt so far with SQLite:
+This post is composed by six parts:
 
 1. Use the built in date functions
 2. Cast your string to integer with `CAST`
