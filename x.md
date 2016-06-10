@@ -82,7 +82,7 @@ The result should be the same as explained in #1.
 
 __So if you need to reference a resource served by your own server, pass a relative url and WebSharper will add the `link` tag for you in the head of your index.html.__
 
-### Side notes
+### Side note
 
 If you have embedded resources and you want it to be copied to the `\Content` folder along with the WebSharper generated files, you must add the attribute `assembly:System.Web.UI.WebResource("file name", "mime type");`
 This will tell WebSharper that you have an embedded resource and that you want it to be extracted and copied into the `\Content` folder.
