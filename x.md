@@ -1,4 +1,4 @@
-# Bundle your resources with WebSharper in SPA
+# Three ways to manage your resources for WebSharper SPA
 
 WebSharper official documentation can be found here [http://websharper.com/docs/resources](http://websharper.com/docs/resources).
 But the doc focus heavily on how referencing the resources work for `Sitelets`.
