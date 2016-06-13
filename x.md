@@ -109,6 +109,12 @@ module Resources =
 By doing that, the JS will be bundled inside your main JS `MyApp.js` and the CSS will be bundled into `MyApp.css` under the `\Content` folder.
 So if you have 100 JS files, WebSharper will bundle it automatically under the same `MyApp.js`.
 
+# Fast forward
+
+- Use `BaseResource` to add the correct `link` and `script` tags to the `head`
+- Use `assembly:System.Web.UI.WebResource` to copy embedded resources to the `\Content` folder
+- When the resources are embedded and you specify a requirement on a `BaseResource`, the JS and CSS is bundled in your own files
+
 # Conclusion
 
 WebSharper comes with a Bundling functionality out of the box. It is not advertise on the documentation but it is extremely usefull.
