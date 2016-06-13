@@ -117,7 +117,5 @@ So if you have 100 JS files, WebSharper will bundle it automatically under the s
 
 # Conclusion
 
-WebSharper comes with a Bundling functionality out of the box. It is not advertise on the documentation but it is extremely usefull.
-And managing dependy from a F# file is so much more appealing than having html tags cluttered in index.html.
-Let me know if this helped you, if you have any question leave a comment here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam).
+WebSharper comes with a bundling functionality out of the box. It is not advertise in the documentation but it is extremely usefull. Also, managing dependency from a F# file is so much more appealing than having html tags cluttered in index.html. I hope this helped you understand better how you can manage your resources and reference it in your SPA. Let me know if this helped you, if you have any question leave a comment here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam).
 See you next time!
