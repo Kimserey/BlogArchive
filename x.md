@@ -111,9 +111,9 @@ So if you have 100 JS files, WebSharper will bundle it automatically under the s
 
 # Fast forward
 
-- Use `BaseResource` to add the correct `link` and `script` tags to the `head`
-- Use `assembly:System.Web.UI.WebResource` to copy embedded resources to the `\Content` folder
-- When the resources are embedded and you specify a requirement on a `BaseResource`, the JS and CSS is bundled in your own files
+- Use `BaseResource` to add the correct `link` and `script` tags to the `head` (#1 - #2)
+- Use `assembly:System.Web.UI.WebResource` to copy embedded resources to the `\Content` folder (#2)
+- When the resources are embedded and you specify a requirement on a `BaseResource`, the JS and CSS are bundled in your own files (#3)
 
 # Conclusion
 
