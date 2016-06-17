@@ -17,7 +17,7 @@ So today, I will share the whole process of creating the UI framework. This post
     1. Build your UI framework with JS and SCSS
     2. Use Paket with GitHub dependency to keep your web app on the latest update of your UI framework
 
-## 1. Start with SCSS
+## 1. Build your UI framework with JS and SCSS
 
 An introduction to SCSS
 
