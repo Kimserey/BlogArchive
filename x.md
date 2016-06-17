@@ -92,7 +92,9 @@ This will match the following HTML:
 
 [https://github.com/Kimserey/SimpleUI/blob/master/scss/mixins/_transition.scss](https://github.com/Kimserey/SimpleUI/blob/master/scss/mixins/_transition.scss)
 
-Configure VS with Gulp.
+Configure Visual Code with Gulp.
+
+[https://code.visualstudio.com/Docs/languages/css#_automating-sassless-compilation](https://code.visualstudio.com/Docs/languages/css#_automating-sassless-compilation)
 
 ```
 npm install --save-dev gulp
