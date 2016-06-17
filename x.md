@@ -21,6 +21,77 @@ So today, I will share the whole process of creating the UI framework. This post
 
 An introduction to SCSS
 
+### Variables
+
+```
+$grey: #808080;
+
+...somewhere else...
+color: $grey;
+border-bottom: 1px solid $grey;
+```
+
+[https://github.com/Kimserey/SimpleUI/blob/master/scss/shared/_colors.scss](https://github.com/Kimserey/SimpleUI/blob/master/scss/shared/_colors.scss)
+
+### Nested style - Ampersand (&)
+
+```
+.card {
+    .card-list {
+        ...
+    }
+}
+```
+
+This will match the following HTML:
+```
+<div class="card">
+    <div class="card-list"></div>
+</div>
+```
+
+
+```
+.card {
+    &.active {
+        ...
+    }
+}
+```
+
+This will match the following HTML:
+```
+<div class="card">
+    <div class="card-list active"></div>
+</div>
+```
+
+### Imports
+
+```
+@import "components/amount";
+@import "components/card";
+@import "components/mask";
+@import "components/nav";
+@import "components/table";
+```
+
+[https://github.com/Kimserey/SimpleUI/blob/master/scss/SimpleUI.scss](https://github.com/Kimserey/SimpleUI/blob/master/scss/SimpleUI.scss)
+
+### Mixins
+
+```
+@mixin transition($args...) {
+  -webkit-transition: $args;
+  -moz-transition: $args;
+  -ms-transition: $args;
+  -o-transition: $args;
+  transition: $args;
+}
+```
+
+[https://github.com/Kimserey/SimpleUI/blob/master/scss/mixins/_transition.scss](https://github.com/Kimserey/SimpleUI/blob/master/scss/mixins/_transition.scss)
+
 Configure VS with Gulp.
 
 ```
