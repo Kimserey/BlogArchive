@@ -27,6 +27,7 @@ An introduction to SCSS
 $grey: #808080;
 
 ...somewhere else...
+
 color: $grey;
 border-bottom: 1px solid $grey;
 ```
