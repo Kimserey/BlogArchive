@@ -1,5 +1,22 @@
 # Keep your UI framework up to date for your WebSharper SPA with Paket GitHub dependencies
 
+Have you ever been guilty of referencing `Bootstrap` in your web app __just__ to use one feature (like the navbar for example)?
+I am.
+
+Hunting for the most full featured CSS/JS UI framework for hours.
+Referencing a huge framework just to use one or two features.
+`Bootstrap`, `Foundation`, `MUI` or `Materialize`, there are so many that it takes a lot of time to find the one that fits your needs.
+
+So few months back, I started to build a prototype to manage expenses and all I needed was a `navbar` and a `card` style.
+Because of bad habits, I directly started by hunting for a UI framework which would provide me beautiful cards.
+After few hours of search, I realised how time consuming that was and most importantly it would be very unlikely that I find something tailored for me.
+So I decided to do something that I should have done long ago - __Build my own tailored CSS/JS UI framework__.
+
+So today, I will share the whole process of creating the UI framework. This post is composed by two parts:
+    
+    1. Build your UI framework with JS and SCSS
+    2. Use Paket with GitHub dependency to keep your web app on the latest update of your UI framework
+
 ## 1. Start with SCSS
 
 An introduction to SCSS
@@ -54,7 +71,7 @@ In `\.vscode\tasks.json`
 
 [https://github.com/Kimserey/SimpleUI](https://github.com/Kimserey/SimpleUI)
 
-## 2. Use Paket with GitHub dependency to make a file dependency
+## 2. Use Paket with GitHub dependency to keep your web app on the latest update of your UI framework
 
 Some instruction to get running with Paket can be found here:
 [https://kimsereyblog.blogspot.co.uk/2016/01/quick-setup-with-paket-and-fsx-scripts.html](https://kimsereyblog.blogspot.co.uk/2016/01/quick-setup-with-paket-and-fsx-scripts.html)
@@ -114,3 +131,10 @@ The full code source can be found here:
 [https://github.com/Kimserey/SimpleUIWeb](https://github.com/Kimserey/SimpleUIWeb)
 
 # Conclusion
+
+If you are building something for yourself, come out with your own rules.
+Build your own layout, build your own components and even if it sucks at the beginning, as you persist, you will get a better sense of what has to be done.
+So if you only need few components, don't waste your time trying to find a gigantic framework, launch your editor and write your own.
+I promise you that in few hours you will have a complete UI framework tailored for your needs.
+Hope you enjoyed reading this post as much as I enjoyed writing it. If you have any comment, leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam).
+See you next time!
