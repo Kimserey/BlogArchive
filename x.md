@@ -19,9 +19,18 @@ So today, I will share the whole process of creating the UI framework. This post
 
 ## 1. Build your UI framework with JS and SCSS
 
-An introduction to SCSS
+To write this UI framework, I used JS and SCSS (SASS).
+I mainly used JS to write interaction, on click show or hide certain elements.
+I chose SCSS because it has a more natural way of writing style.
 
-### Variables
+The main benefits that SCSS or SASS bring me are the following:
+ 
+1. Variables
+2. Nested style
+3. Imports
+4. Mixins
+
+### 1.1 Variables
 
 ```
 $grey: #808080;
@@ -34,7 +43,7 @@ border-bottom: 1px solid $grey;
 
 [https://github.com/Kimserey/SimpleUI/blob/master/scss/shared/_colors.scss](https://github.com/Kimserey/SimpleUI/blob/master/scss/shared/_colors.scss)
 
-### Nested style - Ampersand (&)
+### 1.2 Nested style - Ampersand (&)
 
 ```
 .card {
@@ -67,7 +76,7 @@ This will match the following HTML:
 </div>
 ```
 
-### Imports
+### 1.3 Imports
 
 ```
 @import "components/amount";
@@ -79,7 +88,7 @@ This will match the following HTML:
 
 [https://github.com/Kimserey/SimpleUI/blob/master/scss/SimpleUI.scss](https://github.com/Kimserey/SimpleUI/blob/master/scss/SimpleUI.scss)
 
-### Mixins
+### 1.4 Mixins
 
 ```
 @mixin transition($args...) {
@@ -97,12 +106,16 @@ Configure Visual Code with Gulp.
 
 [https://code.visualstudio.com/Docs/languages/css#_automating-sassless-compilation](https://code.visualstudio.com/Docs/languages/css#_automating-sassless-compilation)
 
+Install `gulp` by executing the following commands:
+
 ```
 npm install --save-dev gulp
 npm install --save-dev gulp-sass
 npm install --save-dev gulp-minify-css
 npm install --save-dev gulp-uglify
 ```
+
+Create a gulp file in the root:
 
 ```
 var gulp = require('gulp');
@@ -125,7 +138,7 @@ gulp.task('default', function() {
 });
 ```
 
-In `\.vscode\tasks.json`
+In the `.vscode` folder, create a `tasks.json` file and add the following:
 
 ```
 {
@@ -142,6 +155,9 @@ In `\.vscode\tasks.json`
     ]
 }
 ```
+
+Now `CTRL` + `SHIFT` + `B` should launch the task and build the minified CSS and JS.
+
 
 [https://github.com/Kimserey/SimpleUI](https://github.com/Kimserey/SimpleUI)
 
