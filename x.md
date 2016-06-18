@@ -32,6 +32,9 @@ The main benefits that SCSS or SASS bring me are the following:
 
 ### 1.1 Variables
 
+You can declare variables. 
+These variables can then be used anywhere and assigned to any style.
+
 ```
 $grey: #808080;
 
@@ -40,10 +43,12 @@ $grey: #808080;
 color: $grey;
 border-bottom: 1px solid $grey;
 ```
-
-[https://github.com/Kimserey/SimpleUI/blob/master/scss/shared/_colors.scss](https://github.com/Kimserey/SimpleUI/blob/master/scss/shared/_colors.scss)
+Here's an example usage: [https://github.com/Kimserey/SimpleUI/blob/master/scss/shared/_colors.scss](https://github.com/Kimserey/SimpleUI/blob/master/scss/shared/_colors.scss)
 
 ### 1.2 Nested style - Ampersand (&)
+
+The creation of nested style is made more intuitive.
+The hiearchy of your classes is respected by the hierarchy defined defined by the HTML elements.
 
 ```
 .card {
@@ -60,6 +65,7 @@ This will match the following HTML:
 </div>
 ```
 
+`&` can be used within a class to reference to the parent. It is a clean way to define child classes.
 
 ```
 .card {
@@ -78,6 +84,9 @@ This will match the following HTML:
 
 ### 1.3 Imports
 
+You can separate your style into multiple file.
+`@import` lets you import partial files prefixed with an underscore `_`. 
+
 ```
 @import "components/amount";
 @import "components/card";
@@ -85,10 +94,11 @@ This will match the following HTML:
 @import "components/nav";
 @import "components/table";
 ```
-
-[https://github.com/Kimserey/SimpleUI/blob/master/scss/SimpleUI.scss](https://github.com/Kimserey/SimpleUI/blob/master/scss/SimpleUI.scss)
+Here's an example usage: [https://github.com/Kimserey/SimpleUI/blob/master/scss/SimpleUI.scss](https://github.com/Kimserey/SimpleUI/blob/master/scss/SimpleUI.scss)
 
 ### 1.4 Mixins
+
+You can create reusable functions which sets some styles using `@mixins` and `@include` to include them in your classes.
 
 ```
 @mixin transition($args...) {
@@ -98,15 +108,20 @@ This will match the following HTML:
   -o-transition: $args;
   transition: $args;
 }
+
+...somewhere else...
+
+@include transition(0.2s);
 ```
 
-[https://github.com/Kimserey/SimpleUI/blob/master/scss/mixins/_transition.scss](https://github.com/Kimserey/SimpleUI/blob/master/scss/mixins/_transition.scss)
+Here's an example usage: [https://github.com/Kimserey/SimpleUI/blob/master/scss/mixins/_transition.scss](https://github.com/Kimserey/SimpleUI/blob/master/scss/mixins/_transition.scss)
 
-Configure Visual Code with Gulp.
+### 1.5 Configure Visual Code with Gulp
 
-[https://code.visualstudio.com/Docs/languages/css#_automating-sassless-compilation](https://code.visualstudio.com/Docs/languages/css#_automating-sassless-compilation)
+SCSS needs to be translated to CSS.
+For that we can use `gulp` to create a task which will build the CSS then minify it and then minify our JS together in one operation.
 
-Install `gulp` by executing the following commands:
+First install `gulp` from `npm` by executing the following commands:
 
 ```
 npm install --save-dev gulp
@@ -115,12 +130,12 @@ npm install --save-dev gulp-minify-css
 npm install --save-dev gulp-uglify
 ```
 
-Create a gulp file in the root:
+Then create a `gulpfile.js` file in the root folder:
 
 ```
 var gulp = require('gulp');
 var sass = require('gulp-sass');
-var minifyCs = require('gulp-minify-css');
+var minifyCss = require('gulp-minify-css');
 var uglify = require('gulp-uglify');
 
 gulp.task('default', function() {
@@ -129,7 +144,7 @@ gulp.task('default', function() {
         .pipe(gulp.dest("./css"));
 
     gulp.src('./css/SimpleUI.css')
-        .pipe(sass())
+        .pipe(minifyCss())
         .pipe(gulp.dest('./dist/css'));
 
     gulp.src('./js/SimpleUI.js')
@@ -138,7 +153,12 @@ gulp.task('default', function() {
 });
 ```
 
-In the `.vscode` folder, create a `tasks.json` file and add the following:
+This task instructs `gulp` to take our main SCSS `SimpleUI.scss` and compile the CSS using the `sass` function.
+Then outputs the result in the `/css` folder.
+Then take the `SimpleUI.css` results and minifies it using the `minifyCss` function and place the result in the `dist` folder (short form for distribution).
+Then does the same for `SimpleUI.js`.
+
+Lastly what we need to do is create a `.vscode` folder, create a `tasks.json` file and add the following:
 
 ```
 {
@@ -158,8 +178,9 @@ In the `.vscode` folder, create a `tasks.json` file and add the following:
 
 Now `CTRL` + `SHIFT` + `B` should launch the task and build the minified CSS and JS.
 
+_Also the task should be accessible from `CTRL` + `SHIFT` + `P`, Run Tasks_.
 
-[https://github.com/Kimserey/SimpleUI](https://github.com/Kimserey/SimpleUI)
+The full `SimpleUI` source code can be found here: [https://github.com/Kimserey/SimpleUI](https://github.com/Kimserey/SimpleUI)
 
 ## 2. Use Paket with GitHub dependency to keep your web app on the latest update of your UI framework
 
