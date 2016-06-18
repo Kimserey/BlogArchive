@@ -182,27 +182,43 @@ _Also the task should be accessible from `CTRL` + `SHIFT` + `P`, Run Tasks_.
 
 The full `SimpleUI` source code can be found here: [https://github.com/Kimserey/SimpleUI](https://github.com/Kimserey/SimpleUI)
 
+Congratulation, you can now start to build your own JS/CSS framework!
+
 ## 2. Use Paket with GitHub dependency to keep your web app on the latest update of your UI framework
 
-Some instruction to get running with Paket can be found here:
-[https://kimsereyblog.blogspot.co.uk/2016/01/quick-setup-with-paket-and-fsx-scripts.html](https://kimsereyblog.blogspot.co.uk/2016/01/quick-setup-with-paket-and-fsx-scripts.html)
+Last week I talked about how WebSharper manages resources for SPA [https://kimsereyblog.blogspot.co.uk/2016/06/three-ways-to-manage-your-resources-for.html](https://kimsereyblog.blogspot.co.uk/2016/06/three-ways-to-manage-your-resources-for.html).
+I mentioned that the JS and CSS can be bundled together with the web app JS - __but in order to do that, you need to place your resources as embedded resources.__
 
-In paket.dependencies add:
+__So how do I embed the JS and CSS created ealier into my web app?__
+
+The best way I found was to:
+
+    1. Push your code into a GitHub repository
+    2. Use Paket GitHub dependency to add a dependency on your UI framework
+    3. Embed the paket files into your WebSharper project
+
+After you have pushed your git repo like mine [https://github.com/Kimserey/SimpleUI](https://github.com/Kimserey/SimpleUI),
+you can use Paket to add a dependency on a GitHub file.
+
+_If you haven't heard of Paket before, I made a small tutorial on how to get started with Paket [https://kimsereyblog.blogspot.co.uk/2016/01/quick-setup-with-paket-and-fsx-scripts.html](https://kimsereyblog.blogspot.co.uk/2016/01/quick-setup-with-paket-and-fsx-scripts.html)._
+
+To add a Paket GitHub file dependency, go to `paket.dependencies` under your root folder and add the following lines:
 
 ```
 github Kimserey/SimpleUI dist/css/SimpleUI.css
 github Kimserey/SimpleUI dist/js/SimpleUI.js
 ```
 
-Then run 
+Here's an example: [https://github.com/Kimserey/SimpleUIWeb/blob/master/paket.dependencies#L9](https://github.com/Kimserey/SimpleUIWeb/blob/master/paket.dependencies#L9)
+
+Then run the following command in your terminal:
+
 ```
 .paket\paket.exe update
 ```
 
-Add the 2 files as `Embedded resource`.
-
-Boot a WebSharper SPA and add the following:
-
+Excellent, you should now have your files added under a `paket-files` folder and you can then add the two files as `Embedded resource` in your WebSharper SPA project.
+Finally, add the resources with the `BaseResource` attribute and the `Require` attribute like followed: 
 ```
 namespace SimpleUIWeb
 
@@ -235,11 +251,9 @@ module Client =
         Console.Log "Started"
 ```
 
-Tutorial on how to manage resources with `BaseResource` and `Require attribute` can be found here:
-[https://kimsereyblog.blogspot.co.uk/2016/06/three-ways-to-manage-your-resources-for.html](https://kimsereyblog.blogspot.co.uk/2016/06/three-ways-to-manage-your-resources-for.html)
+_Tutorial on how to manage resources with `BaseResource` and `Require attribute` can be found here: [https://kimsereyblog.blogspot.co.uk/2016/06/three-ways-to-manage-your-resources-for.html](https://kimsereyblog.blogspot.co.uk/2016/06/three-ways-to-manage-your-resources-for.html)_
 
-The full code source can be found here:
-[https://github.com/Kimserey/SimpleUIWeb](https://github.com/Kimserey/SimpleUIWeb)
+The full code source can be found here: [https://github.com/Kimserey/SimpleUIWeb](https://github.com/Kimserey/SimpleUIWeb)
 
 # Conclusion
 
