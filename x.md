@@ -255,11 +255,16 @@ _Tutorial on how to manage resources with `BaseResource` and `Require attribute`
 
 The full code source can be found here: [https://github.com/Kimserey/SimpleUIWeb](https://github.com/Kimserey/SimpleUIWeb)
 
+That's it, we are done.
+No more excuses to not build your own UI framework!
+Now your project will always remain up to date with your latest release of your UI framework!
+
 # Conclusion
 
 If you are building something for yourself, come out with your own rules.
 Build your own layout, build your own components and even if it sucks at the beginning, as you persist, you will get a better sense of what has to be done.
-So if you only need few components, don't waste your time trying to find a gigantic framework, launch your editor and write your own.
+So if you only need few components, don't waste your time trying to find a gigantic framework, just write your own.
 I promise you that in few hours you will have a complete UI framework tailored for your needs.
+Combine that with the ease of creating SPA with WebSharper and Paket to always stay in sync with your latest release and you have a very good candidate for the best setup of the year to build SPA.
 Hope you enjoyed reading this post as much as I enjoyed writing it. If you have any comment, leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam).
 See you next time!
