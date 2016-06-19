@@ -47,7 +47,7 @@ Here's an example usage: [https://github.com/Kimserey/SimpleUI/blob/master/scss/
 ### 1.2 Nested style - Ampersand (&)
 
 The creation of nested style is made more intuitive.
-The hiearchy of your classes is respected by the hierarchy defined defined by the HTML elements.
+The hiearchy of your classes is respected by the hierarchy defined by your HTML elements.
 
 ```
 .card {
