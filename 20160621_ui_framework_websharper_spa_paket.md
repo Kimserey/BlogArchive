@@ -83,7 +83,7 @@ This will match the following HTML:
 
 ### 1.3 Imports
 
-You can separate your style into multiple file.
+You can separate your style into multiple files.
 `@import` lets you import partial files prefixed with an underscore `_`. 
 
 ```
@@ -97,7 +97,7 @@ Here's an example usage: [https://github.com/Kimserey/SimpleUI/blob/master/scss/
 
 ### 1.4 Mixins
 
-You can create reusable functions which sets some styles using `@mixins` and `@include` to include them in your classes.
+You can create reusable functions which set some styles using `@mixins` for the definition and `@include` to include them in your classes.
 
 ```
 @mixin transition($args...) {
@@ -118,7 +118,11 @@ Here's an example usage: [https://github.com/Kimserey/SimpleUI/blob/master/scss/
 ### 1.5 Configure Visual Code with Gulp
 
 SCSS needs to be translated to CSS.
-For that we can use `gulp` to create a task which will build the CSS then minify it and then minify our JS together in one operation.
+For that we can use `gulp` to create a Visual Code task which will build do three things:
+
+ 1. Translate SCSS to CSS
+ 2. Minify the CSS result and place it into the distribution folder `dist`
+ 3. Minify the JS and place it into the distribution folder `dist`
 
 First install `gulp` from `npm` by executing the following commands:
 
