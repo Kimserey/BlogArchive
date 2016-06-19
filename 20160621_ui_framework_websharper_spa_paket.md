@@ -118,7 +118,7 @@ Here's an example usage: [https://github.com/Kimserey/SimpleUI/blob/master/scss/
 ### 1.5 Configure Visual Code with Gulp
 
 SCSS needs to be translated to CSS.
-For that we can use `gulp` to create a Visual Code task which will build do three things:
+For that we can use `gulp` - a JS task runner - to create a Visual Code task which will execute three functions:
 
  1. Translate SCSS to CSS
  2. Minify the CSS result and place it into the distribution folder `dist`
@@ -156,7 +156,7 @@ gulp.task('default', function() {
 });
 ```
 
-The main function `.task(...)` defines the task which will be run as default.
+The main function `.task(...)` defines the task which will be run as default. Inside we execute the three functions describe earlier.
 
 ```
 gulp.src('./scss/SimpleUI.scss')
@@ -164,7 +164,7 @@ gulp.src('./scss/SimpleUI.scss')
     .pipe(gulp.dest("./css"));
 ```
 
-This task instructs `gulp` to take our main SCSS `SimpleUI.scss` and compile the CSS using the `sass` function.
+This function instructs `gulp` to take our main SCSS `SimpleUI.scss` and compile the CSS using the `sass` function.
 Then outputs the result in the `/css` folder.
 
 ```
@@ -173,7 +173,7 @@ gulp.src('./css/SimpleUI.css')
     .pipe(gulp.dest('./dist/css'));
 ```
 
-This task instructs `gulp` to take the `SimpleUI.css` results and minifies it using the `minifyCss` function and place the result in the `dist` folder (short form for distribution).
+This functions instructs `gulp` to take the `SimpleUI.css` results and minifies it using the `minifyCss` function and place the result in the `dist` folder (short form for distribution).
 
 Then the same process is done for the JS using the `uglify` function with `SimpleUI.js`.
 
