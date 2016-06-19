@@ -283,6 +283,6 @@ Now your project will always remain up to date with your latest release of your 
 Building a framework tailored to your needs, your own layout, your own components, your own interations and your own animations is a create way to improve and get a better sense of what can and has to be done.
 Of course, I am not promoting to reinvente the wheel but if you only need few components, don't waste your time trying to find a gigantic framework, just write your own.
 In few hours, you will have a complete UI framework tailored for your needs.
-Combine that with WebSharper to easily build SPA with F# and Paket to always stay in sync with your latest release and you have a very good candidate for the best setup to build SPA.
-Hope you enjoyed reading this post as much as I enjoyed writing it. If you have any comment, leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam).
+Combine that with WebSharper to easily build SPA with F# and Paket to always stay in sync with your latest releases and you have a very good candidate for the best setup to build SPA. Like always, you have any comment leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam).
+Hope you enjoyed reading this post as much as I enjoyed writing it. 
 See you next time!
