@@ -6,7 +6,7 @@ Hunting for the most full featured CSS/JS UI framework for hours.
 Referencing a huge framework just to use one or two features.
 `Bootstrap`, `Foundation`, `MUI` or `Materialize`, there are so many that it takes a lot of time to find the one that fits your needs.
 
-So few months back, I started to build a prototype to manage expenses and all I needed was a `navbar` and a `card` style.
+Few months back, I started to build a prototype to manage expenses and all I needed was a `navbar` and a `card` style.
 Because of bad habits, I directly started by hunting for a UI framework which would provide me beautiful cards.
 After few hours of search, I realised how time consuming that was and most importantly it would be very unlikely that I find something tailored for me.
 So I decided to do something that I should have done long ago - __Build my own tailored CSS/JS UI framework__.
