@@ -19,7 +19,7 @@ So today, I will share what I've learnt during the process of creating the JS/CS
 ## 1. Build your UI framework with JS and SCSS
 
 To write this UI framework, I used JS and SCSS (SASS).
-I mainly used JS to write interaction, on click show or hide certain elements.
+I won't talk about the JS part as I used it purely to handle on click events and show/hide certain elements.
 I chose SCSS because it has a more natural way of writing style.
 
 The main benefits that SCSS or SASS bring me are the following:
