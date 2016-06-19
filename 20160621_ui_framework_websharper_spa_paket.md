@@ -64,7 +64,7 @@ This will match the following HTML:
 </div>
 ```
 
-`&` can be used within a class to reference to the parent. It is a clean way to define child classes.
+`&` can be used within a class to reference the parent. It is a clean way to define child classes.
 
 ```
 .card {
