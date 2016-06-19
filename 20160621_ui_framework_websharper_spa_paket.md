@@ -156,10 +156,24 @@ gulp.task('default', function() {
 });
 ```
 
+```
+gulp.src('./scss/SimpleUI.scss')
+    .pipe(sass())
+    .pipe(gulp.dest("./css"));
+```
+
 This task instructs `gulp` to take our main SCSS `SimpleUI.scss` and compile the CSS using the `sass` function.
 Then outputs the result in the `/css` folder.
-Then take the `SimpleUI.css` results and minifies it using the `minifyCss` function and place the result in the `dist` folder (short form for distribution).
-Then does the same for `SimpleUI.js`.
+
+```
+gulp.src('./css/SimpleUI.css')
+    .pipe(minifyCss())
+    .pipe(gulp.dest('./dist/css'));
+```
+
+This task instructs `gulp` to take the `SimpleUI.css` results and minifies it using the `minifyCss` function and place the result in the `dist` folder (short form for distribution).
+
+Then the same process is done for the JS using the `uglify` function with `SimpleUI.js`.
 
 Lastly what we need to do is create a `.vscode` folder, create a `tasks.json` file and add the following:
 
