@@ -280,7 +280,7 @@ Now your project will always remain up to date with your latest release of your 
 
 # Conclusion
 
-Building something tailored to your needs, building your own layout, building your own components and your own interations is a create way to improve and get a better sense of what can and has to be done.
+Building a framework tailored to your needs, your own layout, your own components, your own interations and your own animations is a create way to improve and get a better sense of what can and has to be done.
 Of course, I am not promoting to reinvente the wheel but if you only need few components, don't waste your time trying to find a gigantic framework, just write your own.
 I promise you that in few hours you will have a complete UI framework tailored for your needs.
 Combine that with the ease of creating SPA with WebSharper and Paket to always stay in sync with your latest release and you have a very good candidate for the best setup of the year to build SPA.
