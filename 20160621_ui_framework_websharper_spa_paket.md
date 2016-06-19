@@ -173,7 +173,7 @@ gulp.src('./css/SimpleUI.css')
     .pipe(gulp.dest('./dist/css'));
 ```
 
-This functions instructs `gulp` to take the `SimpleUI.css` results and minifies it using the `minifyCss` function and place the result in the `dist` folder (short form for distribution).
+This functions instructs `gulp` to take the `SimpleUI.css` result and minifies it using the `minifyCss` function and place the result in the `dist` folder (short form for distribution).
 
 Then the same process is done for the JS using the `uglify` function with `SimpleUI.js`.
 
