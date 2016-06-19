@@ -1,7 +1,6 @@
 # Keep your UI framework up to date for your WebSharper SPA with Paket GitHub dependencies
 
 Have you ever been guilty of referencing `Bootstrap` in your web app __just__ to use one feature (like the navbar for example)?
-I am.
 
 Hunting for the most full featured CSS/JS UI framework for hours.
 Referencing a huge framework just to use one or two features.
