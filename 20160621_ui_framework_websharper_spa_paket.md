@@ -9,9 +9,9 @@ Referencing a huge framework just to use one or two features.
 Few months back, I started to build a prototype to manage expenses and all I needed was a `navbar` and a `card` style.
 Because of bad habits, I directly started to hunt for a UI framework which would provide me beautiful cards.
 After few hours of search, I realised how time consuming that was and most importantly how unlikely would it be for me to find something tailored for my needs.
-So I decided to do something that I should have done long ago - __Build my own tailored CSS/JS UI framework__.
+So I decided to do something that I should have done long ago - __Build my own tailored JS/CSS UI framework__.
 
-So today, I will share the whole process of creating the UI framework. This post is composed by two parts:
+So today, I will share what I've learnt during the process of creating the JS/CSS UI framework. This post is composed by two parts:
     
     1. Build your UI framework with JS and SCSS
     2. Use Paket with GitHub dependency to keep your web app on the latest update of your UI framework
