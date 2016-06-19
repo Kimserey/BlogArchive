@@ -22,7 +22,7 @@ To write this UI framework, I used JS and SCSS (SASS).
 I won't talk about the JS part as I used it purely to handle on click events and show/hide certain elements.
 I chose SCSS because it has a more natural way of defining CSS classes than directly writing in CSS.
 
-The main benefits that SCSS or SASS bring me are the following:
+The main benefits that SCSS or SASS gives me are the following:
  
 1. Variables
 2. Nested style
