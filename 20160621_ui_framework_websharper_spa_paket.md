@@ -156,6 +156,8 @@ gulp.task('default', function() {
 });
 ```
 
+The main function `.task(...)` defines the task which will be run as default.
+
 ```
 gulp.src('./scss/SimpleUI.scss')
     .pipe(sass())
