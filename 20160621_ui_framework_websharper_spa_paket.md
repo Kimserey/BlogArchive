@@ -20,7 +20,7 @@ So today, I will share what I've learnt during the process of creating the JS/CS
 
 To write this UI framework, I used JS and SCSS (SASS).
 I won't talk about the JS part as I used it purely to handle on click events and show/hide certain elements.
-I chose SCSS because it has a more natural way of writing style.
+I chose SCSS because it has a more natural way of defining CSS classes than directly writing in CSS.
 
 The main benefits that SCSS or SASS bring me are the following:
  
