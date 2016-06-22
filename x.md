@@ -1,4 +1,4 @@
-pivod
+pivot table
 
 window
 
