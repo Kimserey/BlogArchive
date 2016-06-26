@@ -34,7 +34,7 @@ The difference is that one returns `RowSeries` and the other one returns a `Seri
 I tend to ues `Frame.rows`. `Frame.rows` transform your frame into a `RowSeries<R, C>`. It is more practical as we don't need to care about the individual type of each `Series`.
 In fact there is a special type for `Series` where the content is of type `obj`; `ObjectSeries<K>` where `K` is the __key type__.
 
-The functionalities that I use the most are:
+Here are the functionalities I use the most with Frame.
 
 #### Frame.filterRowValues
 
