@@ -60,20 +60,35 @@ Fills all the missing values with the value provided.
 
 ```
 Frame.getCol
+Frame.getNumericCols
 
 ... example ..
 
 expenses
 |> Frame.getCol "Title"
+
+expenses
+|> Frame.getNumericCols
 ```
 
-Gets a particular column and returns a series.
+`getCol` gets a particular column and returns a series. `getNumericCols` gets all the numeric columns and drop all other columns.
+It has the advantage of making the whole frame content of type `float`.
 
- 
-Frame.rows
-Frame.getNumericCols -> will return all float columns
-Frame.groupRowsBy
 ```
+Frame.groupRowsByString
+Frame.groupRowsByUsing
+
+...example...
+
+expenses
+|> Frame.groupRowsByString "Category"
+
+expenses
+|> Frame.groupRowsUsing(fun _ c ->  monthToString (c.GetAs<DateTime>("Date").Month) + " " + string (c.GetAs<DateTime>("Date").Year))
+```
+
+`groupRowsByString` groups the frame by a column where the content is of type `string`.
+`groupRowsUsing` groups the frame using a predicate which takes as input the __row key__ and the row as a `ObjectSeries<C>` where `C` is the type of the __column key__.
 
 ### 1.2 Series
 
