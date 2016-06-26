@@ -7,8 +7,11 @@ Without any tools or libraries, it would be a pain to do these common operations
 
 `Deedle` is a library which simplifies data exploration by providing functions to execute common manipulation on dataframes and timeseries.
 
-As I already went through how to get started with `Deedle` in a previous tutorial [https://kimsereyblog.blogspot.co.uk/2016/04/a-primer-on-manipulating-data-frame.html](https://kimsereyblog.blogspot.co.uk/2016/04/a-primer-on-manipulating-data-frame.html),
-today I would like to show more functionalities of `Deedle` and how they can be used in a real life scenario.
+As I already went through how to get started with `Deedle` in a previous tutorial.
+
+[https://kimsereyblog.blogspot.co.uk/2016/04/a-primer-on-manipulating-data-frame.html](https://kimsereyblog.blogspot.co.uk/2016/04/a-primer-on-manipulating-data-frame.html).
+
+Today I would like to show more functionalities of `Deedle` and how they can be used in a real life scenario.
 
 This post is composed by three parts:
  1. A reminder on what is a Deedle Frame
