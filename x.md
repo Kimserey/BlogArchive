@@ -38,8 +38,41 @@ The functionalities that I use the most are:
 
 ```
 Frame.filterRowValues
+
+... example ...
+
+ expenses
+|> Frame.filterRowValues(fun c -> c.GetAs<string>("Category") = "Supermarket")
+```
+
+Takes a function as parameter which takes the row `ObjectSeries<C>`, where `C` is the column type, as input and filter all rows for which the function return true.
+
+```
 Frame.fillMissingWith
-Frame.mapRowValues
+
+... example ...
+
+expenses
+|> Frame.fillMissingWith 0.
+```
+
+Fills all the missing values with the value provided.
+
+```
+Frame.getCol
+
+... example ..
+
+expenses
+|> Frame.getCol "Title"
+```
+
+Gets a particular column and returns a series.
+
+ 
+Frame.rows
+Frame.getNumericCols -> will return all float columns
+Frame.groupRowsBy
 ```
 
 ### 1.2 Series
@@ -50,7 +83,13 @@ This is important to understand; frame type constraints to not include the type 
 As mentioned earlier, there is also `ObjectSeries<K>` where `K` is the type of the __key__ and all content is obj.
 `ObjectSeries` is returned when using `Frame.rows`.
 
+The functionalities that I use the most are:
 
+```
+Series.mapValues
+Series.observations
+Series.sortByKey
+```
 
 ## 2. Common statistical calculations
 
