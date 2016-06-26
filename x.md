@@ -62,7 +62,7 @@ Fills all the missing values with the value provided.
 Frame.getCol
 Frame.getNumericCols
 
-...example..
+...example...
 
 expenses
 |> Frame.getCol "Title"
