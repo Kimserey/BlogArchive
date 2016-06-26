@@ -88,12 +88,26 @@ This is important to understand; frame type constraints to not include the type 
 As mentioned earlier, there is also `ObjectSeries<K>` where `K` is the type of the __key__ and all content is obj.
 `ObjectSeries` is returned when using `Frame.rows`.
 
-The functionalities that I use the most are:
+Here are the functionalities I use the most with Series.
+
+#### Series.mapValues
 
 ```
-Series.mapValues
-Series.observations
-Series.sortByKey
+amounts
+|> Series.mapValues (fun amount -> Math.Abs amount) 
+```
+#### Series.dropMissing
+
+```
+amounts
+|> Series.dropMissing
+```
+
+#### Series.observations
+
+```
+amounts
+|> Series.observations
 ```
 
 ## 2. Common statistical calculations
