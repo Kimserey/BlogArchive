@@ -39,7 +39,7 @@ The functionalities that I use the most are:
 ```
 Frame.filterRowValues
 
-... example ...
+...example...
 
  expenses
 |> Frame.filterRowValues(fun c -> c.GetAs<string>("Category") = "Supermarket")
@@ -50,7 +50,7 @@ Takes a function as parameter which takes the row `ObjectSeries<C>`, where `C` i
 ```
 Frame.fillMissingWith
 
-... example ...
+...example...
 
 expenses
 |> Frame.fillMissingWith 0.
@@ -62,7 +62,7 @@ Fills all the missing values with the value provided.
 Frame.getCol
 Frame.getNumericCols
 
-... example ..
+...example..
 
 expenses
 |> Frame.getCol "Title"
