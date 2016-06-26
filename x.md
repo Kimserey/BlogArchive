@@ -32,7 +32,7 @@ Using the frame, you can get the rows in two ways `Frame.rows` and `Frame.getRow
 The difference is that one returns `RowSeries` and the other one returns a `Series<R, Series<C, T>>` where `T` is the type of your data.
 
 I tend to ues `Frame.rows`. `Frame.rows` transform your frame into a `RowSeries<R, C>`. It is more practical as we don't need to care about the individual type of each `Series`.
-In fact there is a special type for `Series` where the content is of type `obj`; `OjectSeries<K>` where `K` is the __key type__.
+In fact there is a special type for `Series` where the content is of type `obj`; `ObjectSeries<K>` where `K` is the __key type__.
 
 The functionalities that I use the most are:
 
