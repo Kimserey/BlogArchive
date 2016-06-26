@@ -36,34 +36,27 @@ In fact there is a special type for `Series` where the content is of type `obj`;
 
 The functionalities that I use the most are:
 
+#### Frame.filterRowValues
+
 ```
-Frame.filterRowValues
-
-...example...
-
  expenses
 |> Frame.filterRowValues(fun c -> c.GetAs<string>("Category") = "Supermarket")
 ```
 
 Takes a function as parameter which takes the row `ObjectSeries<C>`, where `C` is the column type, as input and filter all rows for which the function return true.
 
+#### Frame.fillMissingWith
+
 ```
-Frame.fillMissingWith
-
-...example...
-
 expenses
 |> Frame.fillMissingWith 0.
 ```
 
 Fills all the missing values with the value provided.
 
+#### Frame.getCol - Frame.getNumericCols
+
 ```
-Frame.getCol
-Frame.getNumericCols
-
-...example...
-
 expenses
 |> Frame.getCol "Title"
 
@@ -74,12 +67,9 @@ expenses
 `getCol` gets a particular column and returns a series. `getNumericCols` gets all the numeric columns and drop all other columns.
 It has the advantage of making the whole frame content of type `float`.
 
+#### Frame.groupRowsByString - Frame.groupRowsByUsing
+
 ```
-Frame.groupRowsByString
-Frame.groupRowsByUsing
-
-...example...
-
 expenses
 |> Frame.groupRowsByString "Category"
 
