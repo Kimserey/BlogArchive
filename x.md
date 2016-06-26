@@ -18,7 +18,7 @@ This post is composed by three parts:
 ## 1. A reminder on what is a Deedle Frame and Series
 
 Deedle works with the concept of dataframe and series.
-A dataframe is a table which can contain elements of different type (they are cast as `obj`).
+A dataframe is a table which can contain elements of different type (held as `obj`).
 
 ### 1.1 Frame
 
