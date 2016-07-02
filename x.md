@@ -21,7 +21,7 @@ I thought that the whole process was interesting so I would like to share with y
 
 1. The idea
 2. Use F# scripts to test your algorithm
-3. Create a the WebSharper project
+3. Create the WebSharper project
 4. Push to gitbub and make gh-pages
 
 
@@ -152,7 +152,7 @@ So I went ahead and created a WebSharper project.
 
 The code can be found here - [https://github.com/Kimserey/ResourcesSplit/blob/master/ResourcesSplit.Tests/Script.fsx](https://github.com/Kimserey/ResourcesSplit/blob/master/ResourcesSplit.Tests/Script.fsx)
 
-## 3. Create a the WebSharper project
+## 3. Create the WebSharper project
 
 
 ### 3.1 Domain
