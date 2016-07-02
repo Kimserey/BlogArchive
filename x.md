@@ -1,6 +1,6 @@
 # From idea to product with WebSharper in FSharp
 
-From time to time I get asked, __why do you use WebSharper?__
+From time to time I get asked, __Why do you use WebSharper?__
 A legitimate question as from the abundance of libraries, tools and frameworks available,
 one might think that `WebSharper + F#` is just another hippie stack.
 
