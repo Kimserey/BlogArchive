@@ -6,16 +6,23 @@ one might think that `WebSharper + F#` is just another hippie stack.
 
 My answer to the question is:
 
-__What matters isn't the tools that you use but the products that you built with those tools__
+__What matters isn't the tools that you use but the products that you build with those tools__
 
-So for me, WebSharper is one of the best solution right now to quickly get my ideas into useful products by allowing me to take my F# logic and 
-place it into a webapp and by providing me with a reactive framework `UI.Next` to write shorter and more understandable code.
+WebSharper allows me to take my F# logic and place it into a web application and give me a reactive framework  - `UI.Next` - to write shorter and more understandable code. That is the reason why I use it.
 
 So today, in order to backup what I just said above, I would like to share with you a small tool that I built few days ago.
 
 [http://www.kimsereylam.com/ResourcesSplit/](http://www.kimsereylam.com/ResourcesSplit/)
 
-The tool helps to partition players into 3 homogeneous teams based on the level of each player and the continent they live in.
+In case you are interested in the tool, it is for Marvel Champions of Contest, the mobile game. To stay generic, here's the problem:
+
+```
+An alliance is composed by a number of players. Each player has two characteristics, level and continent where she plays.
+All players must be distributed into 3 groups based on the following rules:
+
+ 1. All levels must be distributed as eavenly as possible. Important to have a balanced group.
+ 2. Each group must contain players of as many continent as possible. Important to have a group operating 24h per day,
+```
 
 I thought that the whole process was interesting so I would like to share with you:
 
