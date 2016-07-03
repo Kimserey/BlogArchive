@@ -17,9 +17,9 @@ So today, in order to backup what I just said above, I would like to share with 
 In case you are interested in the tool, it is for Marvel Champions of Contest, the mobile game. To stay generic, here's the problem:
 
 ```
-An alliance is composed by a players. 
-Each player has two characteristics: level and continent where they play.
-All players must be distributed into 3 groups based on the following rules:
+An alliance is composed by a players. Each player has two characteristics: level and continent where they play.
+
+Players must be distributed into 3 groups based on the following rules:
 
  1. All levels must be distributed as eavenly as possible. Important to have a balanced group.
  2. Each group must contain players of as many continent as possible. Important to have a group operating 24h per day,
