@@ -387,3 +387,11 @@ I wrote this post to show my process from taking an idea, fiddling with the algo
 It took three hours to transform the idea to a tool available for the whole world and using only free resources.
 I hope this showed how `WebSharper` can be used to bring idea to life quickly and also that it demonstrated the power of `WebSharper.UI.Next` to build reactive UI easily.
 Hope you enjoyed reading this post as much as I enjoyed writing it. If you have any questions, leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam)! See you next time!
+
+## Resources
+
+ - The tool: [[http://www.kimsereylam.com/ResourcesSplit/](http://www.kimsereylam.com/ResourcesSplit/)]([http://www.kimsereylam.com/ResourcesSplit/](http://www.kimsereylam.com/ResourcesSplit/))
+ - The source code: [https://github.com/Kimserey/ResourcesSplit](https://github.com/Kimserey/ResourcesSplit)
+ - Tutorial on Var, View, Lens, ListModel in UI.Next: [https://kimsereyblog.blogspot.co.uk/2016/03/var-view-lens-listmodel-in-uinext.html](https://kimsereyblog.blogspot.co.uk/2016/03/var-view-lens-listmodel-in-uinext.html)
+ - Single page application with WebSharper: [https://kimsereyblog.blogspot.co.uk/2015/08/single-page-app-with-websharper-uinext.html](https://kimsereyblog.blogspot.co.uk/2015/08/single-page-app-with-websharper-uinext.html)
+ - Quick prototype with WebSharper: [https://kimsereyblog.blogspot.co.uk/2016/03/prototyping-web-app-made-easy-with.html](https://kimsereyblog.blogspot.co.uk/2016/03/prototyping-web-app-made-easy-with.html)
