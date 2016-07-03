@@ -22,7 +22,7 @@ An alliance is composed by a players. Each player has two characteristics: level
 Players must be distributed into 3 groups based on the following rules:
 
  1. All levels must be distributed as eavenly as possible. Important to have a balanced group.
- 2. Each group must contain players of as many continent as possible. Important to have a group operating 24h per day,
+ 2. Each group must contain players of as many continents as possible. Important to have a group operating 24h per day,
 ```
 
 I thought that the whole process was interesting so I would like to share with you:
