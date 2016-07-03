@@ -37,7 +37,7 @@ I thought that the whole process was interesting so I would like to share with y
 
 Few days ago, I had the need to have a way to distribute players in __three groups__ for a game.
 Before that, it was done manually, Team captains will decide of the groups based on the level of players and continent were they stay.
-A good group would be a group where the level of the players is compensate each other and the continent repartition is diversified.
+A good group would be a group where the levels of the players compensate each other and the continent repartition is diversified.
 
 This scenario was clearly screaming for an algorithm as it was well defined and the steps were always done in the same order.
 
