@@ -4,7 +4,7 @@ From time to time I get asked, __Why do you use WebSharper?__
 A legitimate question as from the abundance of libraries, tools and frameworks available,
 one might think that `WebSharper + F#` is just another hippie stack.
 
-My answer to the question is:
+My answer to this question is:
 
 __What matters isn't the tools that you use but the products that you build with those tools__
 
@@ -300,8 +300,8 @@ divAttr
                 Doc.Select [ attr.style "width: 100px; margin: 0 5px;" ] string Continent.All (resources.LensInto (fun r -> r.Continent) (fun r c -> { r with Continent = c }) resource.Name)
         ])
         divAttr 
-        [] 
-        [ Doc.Input [ attr.placeholder "Enter new resource name"; attr.style "margin: 1em 1em 1em 0;" ] newName :> Doc 
+          [] 
+          [ Doc.Input [ attr.placeholder "Enter new resource name"; attr.style "margin: 1em 1em 1em 0;" ] newName :> Doc 
             Doc.Button "Add" [] (fun () -> resources.Add (Resource.Green newName.Value)) ] :> Doc ]
 |> Doc.RunById "resources"
 ```
@@ -390,7 +390,7 @@ Hope you enjoyed reading this post as much as I enjoyed writing it. If you have 
 
 ## Resources
 
- - The tool: [[http://www.kimsereylam.com/ResourcesSplit/](http://www.kimsereylam.com/ResourcesSplit/)]([http://www.kimsereylam.com/ResourcesSplit/](http://www.kimsereylam.com/ResourcesSplit/))
+ - The tool: [http://www.kimsereylam.com/ResourcesSplit/](http://www.kimsereylam.com/ResourcesSplit/)]([http://www.kimsereylam.com/ResourcesSplit/](http://www.kimsereylam.com/ResourcesSplit/))
  - The source code: [https://github.com/Kimserey/ResourcesSplit](https://github.com/Kimserey/ResourcesSplit)
  - Tutorial on Var, View, Lens, ListModel in UI.Next: [https://kimsereyblog.blogspot.co.uk/2016/03/var-view-lens-listmodel-in-uinext.html](https://kimsereyblog.blogspot.co.uk/2016/03/var-view-lens-listmodel-in-uinext.html)
  - Tutorial on Single page application with WebSharper: [https://kimsereyblog.blogspot.co.uk/2015/08/single-page-app-with-websharper-uinext.html](https://kimsereyblog.blogspot.co.uk/2015/08/single-page-app-with-websharper-uinext.html)
