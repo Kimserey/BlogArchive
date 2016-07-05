@@ -390,7 +390,7 @@ Hope you enjoyed reading this post as much as I enjoyed writing it. If you have 
 
 ## Resources
 
- - The tool: [http://www.kimsereylam.com/ResourcesSplit/](http://www.kimsereylam.com/ResourcesSplit/)]([http://www.kimsereylam.com/ResourcesSplit/](http://www.kimsereylam.com/ResourcesSplit/))
+ - The tool: [http://www.kimsereylam.com/ResourcesSplit/](http://www.kimsereylam.com/ResourcesSplit/)
  - The source code: [https://github.com/Kimserey/ResourcesSplit](https://github.com/Kimserey/ResourcesSplit)
  - Tutorial on Var, View, Lens, ListModel in UI.Next: [https://kimsereyblog.blogspot.co.uk/2016/03/var-view-lens-listmodel-in-uinext.html](https://kimsereyblog.blogspot.co.uk/2016/03/var-view-lens-listmodel-in-uinext.html)
  - Tutorial on Single page application with WebSharper: [https://kimsereyblog.blogspot.co.uk/2015/08/single-page-app-with-websharper-uinext.html](https://kimsereyblog.blogspot.co.uk/2015/08/single-page-app-with-websharper-uinext.html)
