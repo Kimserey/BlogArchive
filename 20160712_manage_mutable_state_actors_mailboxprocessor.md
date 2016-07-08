@@ -78,7 +78,7 @@ I defined the actor by stages:
 
 ### 2.1 The messages
 
-I needed to `Refresh` the dataframe and `Get` it.
+I need to `Refresh` the dataframe and `Get` it.
 
 ```
 type ExpenseMessage =
