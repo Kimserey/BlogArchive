@@ -108,10 +108,10 @@ Depending on which states it is in, it will behave differently when it receives 
 ### 2.3 The process
 
 
-
-let build dataDirectory =
+```
+let buildFrame() =
     Directory.GetFiles(dataDirectory,"*.csv")
-    |> ExpenseDataFrame.FromFile "debug"
+    |> ExpenseDataFrame.FromFiles
 
 let agent =
     let mailbox =
@@ -123,7 +123,7 @@ let agent =
                     match msg with
                     | Get replyChannel ->
 
-                        match state.DataFrameState with
+                        match msg with
                         | Ready expenses  ->
                             // The frame is ready, returns it and wait for next message
                             replyChannel.Reply expenses
@@ -131,28 +131,17 @@ let agent =
 
                         | NotReady ->
                             // The frame is not ready, builds the frame and returns the result and wait for next message
-                            let expenses = build state.DataDirectory
+                            let expenses = buildFrame() 
                             replyChannel.Reply expenses
-                            return! state 
-                                    |> State.BecomeReady expenses
-                                    |> loop
+                            return! Ready expenses
 
-                    | Refresh (Some newDir) ->
-                        // Refresh the frame using the directory provided and wait for the next message
-                        let expenses = build newDir
-                        return! state     
-                                |> State.SetDir newDir 
-                                |> State.BecomeReady expenses
-                                |> loop
-
-                    | Refresh None ->
-                        // Refresh the frame using the current directory set and wait for the next message
-                        let expenses = build state.DataDirectory
-                        return! state 
-                                |> State.BecomeReady expenses
-                                |> loop
+                    | Refresh ->
+                        // Refresh the frame and wait for the next message
+                        let expenses = buildFrame()
+                        return! Ready expenses
                 }
             loop State.Default)
+```
 
 ### 2.4 The api
 
@@ -167,7 +156,7 @@ let actor =
         ... mailbox code ...
 
     { Get     = fun () -> mailbox.PostAndReply Get
-      Refresh = fun () -> mailbox.Post         Refresh }
+      Refresh = fun () -> mailbox.Post Refresh }
 ```
 
 ## Conclusion
