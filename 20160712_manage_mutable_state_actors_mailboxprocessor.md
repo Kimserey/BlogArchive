@@ -6,8 +6,7 @@ This technique uses the `MailboxProcesser`, a simplified implementation of the [
 Here's the issue:
 
 I have a dataframe shared accross my whole application.
-The dataframe is constructed at bootup of the server.
-It is not scalable as to reconstruct the dataframe, a reboot is needed.
+The dataframe is constructed at bootup of the server which makes the application not scalable as to reconstruct the dataframe, a reboot is needed.
 The solution would be to provide a way to mutate the dataframe any time I needed to.
 But mutable state involves concurrency issues and that's where the `MailboxProcesser` comes to the rescue.
 
