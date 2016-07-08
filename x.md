@@ -67,33 +67,47 @@ Notice that the whole queuing process is completely abstracted from us. By using
 
 ## 2. Usage in my scenario
 
+I have a dataframe shared accross my whole application.
+The dataframe used to be immutable therefore only built one time on server bootup but I now need to update it on the fly.
+
+I defined the actor by stages:
+ 
+ 1. the messages
+ 2. the states
+ 3. the process
+ 4. the api
+
+### 2.1 The messages
+
+I needed to `Refresh` the dataframe and `Get` it.
+
 ```
 type ExpenseMessage =
     | Get of replyChannel: AsyncReplyChannel<ExpenseDataFrame>
-    | Refresh of dataDirectory: string option 
+    | Refresh 
+```
 
-type ExpenseAgent = {
-    Get: unit -> ExpenseDataFrame
-    Refresh: string option -> unit
-}
+`Get` takes a replyChannel argument, this will be provided by the `mailbox processor`.
+`Refresh` will be used to instruct the system to rebuild the dataframe.
 
-type State = {
-    DataDirectory: string
-    DataFrameState: DataFrameState
-} with
-    static member Default =
-        { DataDirectory = ""
-            DataFrameState = NotReady }
+### 2.2 The states
 
-    static member SetDir dir x =
-        { x with DataDirectory = dir }
+The benefit of an actor is that it is stateful.
+Since concurrency is abstracted away from the main function, it is easy to understand the flow and react properly to messages.
 
-    static member BecomeReady frame x =
-        { x with DataFrameState = Ready frame }
+My actor will have two states, `Ready` and `NotReady`.
 
-and DataFrameState =
-    | Ready of ExpenseDataFrame
-    | NotReady
+```
+DataFrameState =
+  | Ready of ExpenseDataFrame
+  | NotReady
+```
+
+Depending on which states it is in, it will behave differently when it receives a message.
+
+### 2.3 The process
+
+
 
 let build dataDirectory =
     Directory.GetFiles(dataDirectory,"*.csv")
@@ -140,8 +154,20 @@ let agent =
                 }
             loop State.Default)
 
-    { Get = fun () -> mailbox.PostAndReply Get
-      Refresh = fun dataDirectory -> mailbox.Post (Refresh dataDirectory) }
+### 2.4 The api
+
+```
+type Api = {
+    Get:     unit -> ExpenseDataFrame
+    Refresh: unit -> unit
+}
+
+let actor =
+    let mailbox =
+        ... mailbox code ...
+
+    { Get     = fun () -> mailbox.PostAndReply Get
+      Refresh = fun () -> mailbox.Post         Refresh }
 ```
 
 ## Conclusion
