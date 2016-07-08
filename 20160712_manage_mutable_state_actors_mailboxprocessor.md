@@ -26,7 +26,7 @@ Therefore the whole interactions with the recepient is __completely concurrent s
 
 _Althought the mailboxprocessor is a simplified version as it does not cross applications boundaries and does not survives reboot._
 
-This is how the overall structure of the mailbox processor look like:
+This is how the overall structure of the mailbox processor looks like:
 
 ```
 let actor =
@@ -59,7 +59,7 @@ The `Start` function of the `MailboxProcessor` takes a function as argument whic
   - do something with that message and `become` new state - done inside the function which handle the message and alter the state of the actor
   - ready to receive new message using new state - done by recursively looping back on `processMessage` with the new state
 
-The actor returned exposes method to post messages to the `mailbox`, `Post`, `PostAndReply` and there async equivalend.
+The actor returned exposes method to post messages to the `mailbox`, `Post`, `PostAndReply` and their async equivalent.
 The difference is that `Post` returns unit whereas `PostAndReply` gives a return channel that you can pass with the message itself to give the ability to the recepient to respond to the message.
 
 Notice that the whole queuing process is completely abstracted from us. By using `MailboxProcessor`, __we get thread safety on a function execution very easily__.
