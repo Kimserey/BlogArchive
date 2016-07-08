@@ -26,9 +26,8 @@ MailboxProcessor.Start(fun inbox ->
     let rec loop state =
         async {
             let! msg = inbox.Receive()
-            match msg
-            | SomeMessage -> return! loop (state |> become otherState)
-            ...
+            let newState = ``do something based on message`` msg
+            return! loop newState
         }
 loop initialState)
 ```
