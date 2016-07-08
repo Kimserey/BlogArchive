@@ -1,4 +1,4 @@
-# Manage mutable shared state using actors with the F# Mailbox processors
+# Manage mutable state using actors with a F# Mailbox processor
 
 Today I would like to share a technique that I use to maintain mutable shared state in my F# applications.
 This technique uses the `MailboxProcesser`, a simplified implementation of the [actor model](https://www.youtube.com/watch?v=7erJ1DV_Tlo) built into F#.
