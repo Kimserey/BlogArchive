@@ -149,7 +149,7 @@ let agent =
 
 ### 2.4 The api
 
-We could just use directely the `MailboxProcessor` and `Post` messages to it but it is best to not expose our infrastructure - the `MailboxProcessor`.
+We could just use directly the `MailboxProcessor` and `Post` messages to it but it is best to not expose our infrastructure - the `MailboxProcessor`.
 Someone sending messages doesn't need to know that a `AsyncReplyChannel<_>` is involved in a `Get`.
 To cater for that, we construct an `Api` which more abstract functions to interact with our agent.
 
