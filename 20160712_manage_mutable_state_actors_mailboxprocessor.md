@@ -184,5 +184,5 @@ See you next time!
 ## Resources
     
  - The code related to this post: [https://github.com/Kimserey/DataExpenses/blob/master/London.Core/ExpenseDataFrame.fs#L361](https://github.com/Kimserey/DataExpenses/blob/master/London.Core/ExpenseDataFrame.fs#L361)
- - Where my scenario come from: [https://kimsereyblog.blogspot.co.uk/2016/04/a-primer-on-manipulating-data-frame.html](https://kimsereyblog.blogspot.co.uk/2016/04/a-primer-on-manipulating-data-frame.html)
+ - Where my scenario comes from: [https://kimsereyblog.blogspot.co.uk/2016/04/a-primer-on-manipulating-data-frame.html](https://kimsereyblog.blogspot.co.uk/2016/04/a-primer-on-manipulating-data-frame.html)
  - More on dataframes with Deedle: [https://kimsereyblog.blogspot.co.uk/2016/04/a-primer-on-manipulating-data-frame.html](https://kimsereyblog.blogspot.co.uk/2016/04/a-primer-on-manipulating-data-frame.html)
