@@ -175,6 +175,7 @@ And we are done! We provided a completely thread safe solution for our issue.
 
 ## Conclusion
 
+The technique exposed in this tutorial is generic enough to be used in a lot of scenarios. A configuration global state is a very common one.
 `MailboxProcessor` being built into F#, it is one of the best way to handle shared mutable state in an F# application.
 Concurrency issues are always tricky so I rather leave it to the system to optimise for it as much as I can.
 I hope this tutorial was useful, let me know if you liked it. As always if you have any question leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam).
