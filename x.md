@@ -107,6 +107,11 @@ Depending on which states it is in, it will behave differently when it receives 
 
 ### 2.3 The process
 
+The process contains three paths:
+
+ - path 1: `Get` is received and the actor state is `Ready`, the expenses are returned through the `replyChannel` and the actor remains `Ready` and wait for the next message
+ - path 2: `Get` is received and the actor is `NotReady`, it builds the frame and returns the result through the `replyChannel` and becomes `Ready` and wait for the next message
+ - path 3: `Refresh` is received, not matter which state the actor is in, the frame is rebuilt and the actor becomes `Ready` with the new frame and wait for the next message
 
 ```
 let buildFrame() =
@@ -125,18 +130,18 @@ let agent =
 
                         match msg with
                         | Ready expenses  ->
-                            // The frame is ready, returns it and wait for next message
+                            // path 1
                             replyChannel.Reply expenses
                             return! loop state
 
                         | NotReady ->
-                            // The frame is not ready, builds the frame and returns the result and wait for next message
+                            // path 2
                             let expenses = buildFrame() 
                             replyChannel.Reply expenses
                             return! Ready expenses
 
                     | Refresh ->
-                        // Refresh the frame and wait for the next message
+                        // path 3
                         let expenses = buildFrame()
                         return! Ready expenses
                 }
@@ -145,12 +150,20 @@ let agent =
 
 ### 2.4 The api
 
+We could just use directely the `MailboxProcessor` and `Post` messages to it but it is best to not expose our infrastructure - the `MailboxProcessor`.
+Someone sending messages doesn't need to know that a `AsyncReplyChannel<_>` is involved in a `Get`.
+To cater for that, we construct an `Api` which more abstract functions to interact with our agent.
+
 ```
 type Api = {
     Get:     unit -> ExpenseDataFrame
     Refresh: unit -> unit
 }
+```
 
+And here would be the instantiation of the Api:
+
+```
 let actor =
     let mailbox =
         ... mailbox code ...
@@ -159,5 +172,17 @@ let actor =
       Refresh = fun () -> mailbox.Post Refresh }
 ```
 
+And we are done! We provided a completely thread safe solution for our issue.
+
 ## Conclusion
 
+`MailboxProcessor` being built into F#, it is one of the best way to handle shared mutable state in an F# application.
+Concurrency issues are always tricky so I rather leave it to the system to optimise for it as much as I can.
+I hope this tutorial was useful, let me know if you liked it. As always if you have any question leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam).
+See you next time!
+
+## Resources
+    
+    - The code related to this post: [https://github.com/Kimserey/DataExpenses/blob/master/London.Core/ExpenseDataFrame.fs#L361](https://github.com/Kimserey/DataExpenses/blob/master/London.Core/ExpenseDataFrame.fs#L361)
+    - Where my scenario come from: [https://kimsereyblog.blogspot.co.uk/2016/04/a-primer-on-manipulating-data-frame.html](https://kimsereyblog.blogspot.co.uk/2016/04/a-primer-on-manipulating-data-frame.html)
+    - More on dataframes with Deedle: [https://kimsereyblog.blogspot.co.uk/2016/04/a-primer-on-manipulating-data-frame.html](https://kimsereyblog.blogspot.co.uk/2016/04/a-primer-on-manipulating-data-frame.html)
