@@ -13,10 +13,10 @@ But mutable state involves concurrency issues and that's where the `MailboxProce
 __This is what the `MailboxProcesser` gives a thread safe way to perform operations on a shared object.__
 
 This post is composed by two parts:
- 1. Introduction of the `MailboxProcessor`
+ 1. `MailboxProcessor` introduction
  2. Usage in my scenario
 
-## 1. Introduction of the `MailboxProcessor`
+## 1. `MailboxProcessor` introduction
 
 `MailboxProcessor` can be seen a `mailbox`.
 It contains an `inbox` available to the recipient.
