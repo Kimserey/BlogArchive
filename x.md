@@ -202,7 +202,7 @@ Today we saw how we could customize the output directory of WebSharper files and
 Having a predictable and understandable output folder structure make things easier when you want to automate deployment.
 I hope you enjoyed this post as much as I enjoyed writting it, as usual if you have any question, leave it here on hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
 
-- Full code can be found [here](https://github.com/Kimserey/CleanOuputDirectory).
+- Full code can be found on GitHub: [https://github.com/Kimserey/CleanOuputDirectory](https://github.com/Kimserey/CleanOuputDirectory).
 - From idea to product with WebSharper: [https://kimsereyblog.blogspot.co.uk/2016/07/from-idea-to-product-with-websharper-in.html](https://kimsereyblog.blogspot.co.uk/2016/07/from-idea-to-product-with-websharper-in.html)
 - Transform your Websharper web app into an Android app: [https://kimsereyblog.blogspot.co.uk/2016/05/transform-your-websharper-web-app-into.html](https://kimsereyblog.blogspot.co.uk/2016/05/transform-your-websharper-web-app-into.html)
 - Extract text from images in F# - OCR’ing receipts: [https://kimsereyblog.blogspot.co.uk/2016/05/extract-text-from-images-in-f-ocring.html](https://kimsereyblog.blogspot.co.uk/2016/05/extract-text-from-images-in-f-ocring.html)
