@@ -170,6 +170,8 @@ And we done we now have cleaner output directories for our application. It gives
 ![debug](https://raw.githubusercontent.com/Kimserey/CleanOuputDirectory/master/img/bin-debug.png)
 ![httproot](https://raw.githubusercontent.com/Kimserey/CleanOuputDirectory/master/img/bin-debut-httproot.png)
 
+The project setup example can be found here [https://github.com/Kimserey/CleanOuputDirectory/blob/master/ClientServer/ClientServer.fsproj#L29](https://github.com/Kimserey/CleanOuputDirectory/blob/master/ClientServer/ClientServer.fsproj#L29).
+
 ## 2. Setup output folder for single page application
 
 For an SPA it is almost identical to a client-server application.
@@ -198,6 +200,8 @@ Great, we are done! Now all you have left to do is to setup some automated scrip
 ![bin](https://raw.githubusercontent.com/Kimserey/CleanOuputDirectory/master/img/spa-bin.png)
 ![debug](https://raw.githubusercontent.com/Kimserey/CleanOuputDirectory/master/img/spa-debug.png)
 ![root](https://raw.githubusercontent.com/Kimserey/CleanOuputDirectory/master/img/spa-httproot.png)
+
+The project setup can be found here [https://github.com/Kimserey/CleanOuputDirectory/blob/master/SPA/SPA.fsproj#L35](https://github.com/Kimserey/CleanOuputDirectory/blob/master/SPA/SPA.fsproj#L35).
 
 ## Conclusion
 
