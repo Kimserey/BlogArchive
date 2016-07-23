@@ -21,12 +21,12 @@ __Gradient descent__ is one of those. So today I will explain the steps which ne
 Today I would like to share how you can use __Gradient descent__ to approximate your spending pattern with a straight line.
 This post is composed by three parts:
 
-1. What is Gradient descent
+1. Why approximate to a straight line and what is Gradient descent
 2. Cost function and algorithm
 3. Apply to real life data with F#
 
 
-## 1. Why aprroximate to a straight line and what is Gradient descent
+## 1. Why approximate to a straight line and what is Gradient descent
 
 __Why do we go through all that trouble to get a straight line?__
 
@@ -58,16 +58,12 @@ __Gradient descent allows us to find `a` and `b` which minimize the cost functio
 
 The cost function is expressed by the following formula:
 
-E = SQUARE ROOT (SIGMA (y' - y)2) / n
+![https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/lse.png](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/lse.png)
 
 LSE calculates the `least squares estimate`:
  - `least squares` because it takes the square of each error. 
  - `error` because `y' - y` represents the difference between the estimated value and the real value.
 The square penalizes the error, the larger the difference is, the bigger the error will be.
-
-If we replace y' by our function, we will get:
-
-e = S(a * x + b - y)2 / n
 
 __Gradient descent__
 
@@ -85,21 +81,18 @@ This is the key secret of Gradient descent, it uses the slope to define its dire
 
 Using this two definitions, we can establish the following algorithm to converge to the minima (1):
 
-```
-a_next = a - alpha * de/da
-b_next = b - alpha * de/db
-```
+![algo](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/gd_algo.png)
 
 This is the core of Gradient descent, `de/da` and `de/db` are respectively the derivatives of the cost function in function of `a` and `b`.
 On each step, we calculate the derivatives and update `a` and `b`.
 
 With a bit of derivatives calculus, we can get `de/da` and `de/db`.
-This is basically a gof formula where `gof' = g'of * f'` where `g = x2 => g' = 2x` and `f = (a * x + b - y) => f'a = x | f'b = 1`.
 
-de/da = 2/n SIGMA x * (a * x + b - y)
-de/db = 2/n SIGMA (a * x + b - y)
+![derivatives](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/derivatives.png)
 
-__`a` and `b` usually appear as theta1 and thetha0, so I will call them respectively thetha0 and thetha1__.
+This is basically a `g.f` formula where `(g.f)' = g'.f * f'`.
+
+__`a` and `b` usually appear as theta1 and thetha0, so I will call them respectively thetha1 and thetha0__.
 
 `alpha` is the learning rate. It represents the step to take between each iterations.
 This constant is __very__ important as it directly affects the results.
@@ -201,7 +194,9 @@ By using the function returned by `createModel`, we can now visualize the best s
 
 Congratulation! You now know how Gradient descent work and you can now use it to minimize the cost function of a straight line which approximate supermarket expenses!
 
-Here the full `GradientDescent` module can be found here [https://github.com/Kimserey/DataExpenses/blob/master/London.Core/GradientDescent.fs](https://github.com/Kimserey/DataExpenses/blob/master/London.Core/GradientDescent.fs)
+- Here the full `GradientDescent` module can be found here [https://github.com/Kimserey/DataExpenses/blob/master/London.Core/GradientDescent.fs](https://github.com/Kimserey/DataExpenses/blob/master/London.Core/GradientDescent.fs).
+- The full test was coded from FSX and can be found here [https://github.com/Kimserey/DataExpenses/blob/master/London/Gradient_Descent.fsx](https://github.com/Kimserey/DataExpenses/blob/master/London/Gradient_Descent.fsx).
+- The plots were produced using Plotly, the full index.html page can be found here [https://github.com/Kimserey/DataExpenses/blob/master/London/index.html](https://github.com/Kimserey/DataExpenses/blob/master/London/index.html).
 
 ## Conclusion
 
