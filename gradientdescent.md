@@ -1,4 +1,4 @@
-# Approximate your spending pattern using Gradient descent in FSharp
+# Approximate your spending pattern using Gradient descent in F#
 
 The advantage of tracking your expenses is that you can compare each month and check if you saved more or less money than the previous month.
 Another interesting information is to __know how fast you are spending your money__.
@@ -62,15 +62,14 @@ The cost function is expressed by the following formula:
 
 E = SQUARE ROOT (SIGMA (y' - y)2) / n
 
-LSE calculates the `average squared error`:
+LSE calculates the `least squared error`:
+ - `least squared` because it takes the square of each error and apply a square root at the end. 
  - `error` because `y' - y` represents the difference between the estimated value and the real value.
- - `average` because it sums all the errors and divides the result by the number of value.
- - `squared` because it takes the square of each error and apply a square root at the end. 
 The square penalizes the error, the larger the difference is, the bigger the error will be.
 
 If we replace y' by our function, we will get:
 
-e = S(S(a * x + b - y)2 / n
+e = S(a * x + b - y)2 / n
 
 __Gradient descent__
 
@@ -102,13 +101,13 @@ This is basically a gof formula where `gof' = g'of * f'` where `g = x2 => g' = 2
 de/da = 2/n SIGMA x * (a * x + b - y)
 de/db = 2/n SIGMA (a * x + b - y)
 
-_`a` and `b` usually appear as theta1 and thetha0_.
+__`a` and `b` usually appear as theta1 and thetha0, so I will call them respectively thetha0 and thetha1__.
 
 `alpha` is the learning rate. It represents the step to take between each iterations.
 This constant is __very__ important as it directly affects the results.
 In order to find the `alpha` which suits your function, ry to see how big are the derivatives and compensate the alpha to reduce the step taken or increase it if too small.
 
-So we will iterate over the algorithm to get the perfect `a` and `b`.
+So we will iterate over the algorithm to get the perfect `thetha0` and `thetha1`.
 
 __When do we stop?__
 
@@ -118,6 +117,12 @@ Using a definite number is easy because you know how many iterations it will tak
 Wonderful, you now know everything about the gradient descent!
 
 ## 3. Apply to real life data with F#
+
+Before starting, we can already try to plot the cost function against `thetha0` and `thetha1` to get a better understanding of it.
+
+![cost_vs_thethas](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/cost_vs_thethas.png)
+
+Using this plot we can confirm our intuition that there is a mininma - around (6.3, 7.5) for an average cost error of 4.41 - for this set of data therefore it should be feasible to program Gradient descent to converge to it.
 
 Let's start first by defining the settings of the Gradient descent.
 
@@ -131,9 +136,7 @@ type Settings = {
 
 We have the learning rate `alpha`, the dataset a list of (x, y) and the number of iterations.
 
-From #2, we learnt that to compute Gradient descent we only need to calculate `a` and `b`.
-And to compute `a` and `b` we will iterate n time over the Gradient descent formula (1).
-
+From #2, we learnt that to compute Gradient descent we only need to calculate `thetha0` and `thetha1` by iterating n time over the Gradient descent formula (1).
 
 In the calculation of the thetha0 and thetha1, the only difference is the derivative calculation.
 Even within the derivative calculation, the only difference is the inner derivative.
@@ -173,82 +176,45 @@ let estimate settings =
 `List.scan` executes a `fold` and returns each iterations. 
 `estimate` will return the list of all thethas calculated on each iteration.
 
+Using the results of each iterations we can plot the cost against each iteration.
+
+![cost](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/cost.png)
+
+This plot allows us to see that we are heading to the right direction as after each iteration, the error is reduced dramatically until around the 8th iteration where it starts to be stable at approximatively 4.45.
+
+Lastely, in order to make this algorithm usable from everywhere, we create a `model` which will compute the correct `thethas` and return a function `Estimate` which will take a `x` and return an `estimated y`.
+
+```
+let createModel settings =
+    let interationSteps = estimate settings
+
+    match List.last interationSteps with
+    | thetha0::thetha1::_ ->
+        // returns a function which can be used to estimate y using the best thethas
+        fun  x -> thetha0 + thetha1 * x
+
+    | _ -> 
+        failwith "Failed to create model. Could not compute thethas."
 ```
 
-module GradientDescent =
+By using the function returned by `createModel`, we can now visualize the best straight line which approximate the supermarket data.
 
-    type Settings = {
-        LearningRate: float
-        Dataset: List<float * float>
-        Iterations: int
-    } with
-        static member Default dataset = { 
-            LearningRate = 0.006
-            Dataset = dataset
-            Iterations = 5000 
-        }
+![last](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/last_estimate.png)
 
-    type ModelResult = {
-        Estimate: float -> float
-        Cost: Cost
-        Thethas: float list
-        ThethaCalculationSteps: ThethaCalculationSteps
-    }
+Congratulation! You now know how Gradient descent work and you can now use it to minimize the cost function of a straight line which approximate supermarket expenses!
 
-    and ThethaCalculationSteps = ThethaCalculationSteps of float list list
-        with override x.ToString() = match x with ThethaCalculationSteps v -> sprintf "Thethas: %A" v
-
-    and Cost = Cost of float
-        with 
-            override x.ToString() = match x with Cost v -> sprintf "Cost: %.4f%%" v
-            
-            static member Value (Cost x) = x
-
-            static member Compute(data: List<float * float>, thethas: float list) =
-                match thethas with
-                | thetha0::thetha1::_ ->
-                    let sum = 
-                        [0..data.Length - 1] 
-                        |> List.map (fun i -> data.[i])
-                        |> List.map (fun (x, y) -> Math.Pow(thetha0 + thetha1 * x - y, 2.))
-                        |> List.sum
-
-                    Cost <| (1./float data.Length) * sum
-                | _ -> failwith "Could not compute cost function, thethas are not in correct format."
-
-    let nextThetha innerDerivative (settings: Settings) thetha =
-        let sum =
-            [0..settings.Dataset.Length - 1]
-            |> List.map (fun i -> settings.Dataset.[i])
-            |> List.map (fun (x, y) -> innerDerivative x y)
-            |> List.sum
-
-        thetha - settings.LearningRate * ((2./float settings.Dataset.Length) * sum)
-
-    let estimate settings =
-        [0..settings.Iterations - 1]
-        |> List.scan (fun thethas _ -> 
-            match thethas with
-            | thetha0::thetha1::_ ->
-                let thetha0 = nextThetha (fun x y -> thetha0 + thetha1 * x - y) settings thetha0
-                let thetha1 = nextThetha (fun x y -> (thetha0 + thetha1 * x - y) * x) settings thetha1
-                [ thetha0; thetha1 ]
-            | _ -> failwith "Could not compute next thethas, thethas are not in correct format.") [0.; 0.]
-
-    let createModel settings =
-        let interationSteps = estimate settings
-
-        match List.last interationSteps with
-        | thetha0::thetha1::_ as thethas->
-            { Estimate = fun  x -> thetha0 + thetha1 * x
-              Cost = Cost.Compute(settings.Dataset, thethas)
-              Thethas = thethas
-              ThethaCalculationSteps = ThethaCalculationSteps interationSteps }
-        | _ -> failwith "Failed to create model. Could not compute thethas."
-```
-
+Here the full `GradientDescent` module can be found here [https://github.com/Kimserey/DataExpenses/blob/master/London.Core/GradientDescent.fs](https://github.com/Kimserey/DataExpenses/blob/master/London.Core/GradientDescent.fs)
 
 ## Conclusion
 
+Today, we saw what Gradient descent was about.
+What we did was to start from a problem which was to approximate a non-linear function representing supermarket expenses to a straight line (first degree function).
+To do that, we used the `least square` to calculate the error and __programatically minimised it using Gradient descent__.
+We saw in details how to use Gradient descent to converge to a minima (or a maxima - by inversing the sign in the thetha iterations, we can converge to a maxima).
+Hope you enjoyed reading this post as much as I enjoyed writing it. As always if you have any comments, leave it here or hit me on Twitter [https://twitter.com/Kimserey_Lam](https://twitter.com/Kimserey_Lam).
+See you next time!
 
-## More to read
+## More posts you will like
+
+- A primer on manipulating dataframe with Deedle: [https://kimsereyblog.blogspot.co.uk/2016/04/a-primer-on-manipulating-data-frame.html](https://kimsereyblog.blogspot.co.uk/2016/04/a-primer-on-manipulating-data-frame.html)
+- Manipulating dataframe with Deedle Part 2: [https://kimsereyblog.blogspot.co.uk/2016/06/manipulating-data-frame-with-deedle-in.html](https://kimsereyblog.blogspot.co.uk/2016/06/manipulating-data-frame-with-deedle-in.html)
