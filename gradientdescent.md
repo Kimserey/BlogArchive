@@ -116,7 +116,7 @@ Using a definite number is easy because you know how many iterations it will tak
 
 Wonderful, you now know everything about the gradient descent!
 
-## 3. Apply to real life data with F#
+## 3. Apply to real life data with FSharp
 
 Before starting, we can already try to plot the cost function against `thetha0` and `thetha1` to get a better understanding of it.
 
