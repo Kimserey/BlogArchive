@@ -1,4 +1,4 @@
-# Approximate your spending pattern using Gradient descent in F#
+# Approximate your spending pattern using Gradient descent in FSharp
 
 The advantage of tracking your expenses is that you can compare each month and check if you saved more or less money than the previous month.
 Another interesting information is to __know how fast you are spending your money__.
@@ -26,16 +26,7 @@ This post is composed by three parts:
 3. Apply to real life data with F#
 
 
-## 1. What is Gradient descent
-
-The equation which governs straight lines is the following:
-
-```
-y = a * x + b
-```
-
-It is composed by a result value `y` which is expessed in fonction of a value `x` multiplied by a coefficient `a` and adding an offset value `b`.
-This is a definition of a straigh line.
+## 1. Why aprroximate to a straight line and what is Gradient descent
 
 __Why do we go through all that trouble to get a straight line?__
 
@@ -47,6 +38,13 @@ Therefore using this approximation can help us, when we are in the middle of the
 
 __What is Gradient descent?__
 
+The equation which governs straight lines is the following:
+
+```
+y = a * x + b
+```
+
+It is composed by a result value `y` which is expressed in fonction of a value `x` multiplied by a coefficient `a` and adding an offset value `b`.
 Our goal is to find `y = a * x + b`. In this equation the only unknown are the coefficients `a` and `b`.
 We could take any `a` and `b` but taking random values would not yield good result... or would it?
 Well __we can't know what is good and what is bad unless we have a way to measure it__.
