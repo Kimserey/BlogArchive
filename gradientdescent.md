@@ -49,7 +49,7 @@ Our goal is to find `y = a * x + b`. In this equation the only unknown are the c
 We could take any `a` and `b` but taking random values would not yield good result... or would it?
 Well __we can't know what is good and what is bad unless we have a way to measure it__.
 
-To estimate the error we will use the __Least square estimate__, we will call it the __cost function__.
+To estimate the error we will use the __Least squares estimate__, we will call it the __cost function__.
 Since the goal is to find the best approximation, it means that __we must minimize the cost function__ - this is what Gradient descent allows us to do.
 
 __Gradient descent allows us to find `a` and `b` which minimize the cost function, therefore gives the best estimate.__
@@ -60,8 +60,8 @@ The cost function is expressed by the following formula:
 
 E = SQUARE ROOT (SIGMA (y' - y)2) / n
 
-LSE calculates the `least squared error`:
- - `least squared` because it takes the square of each error and apply a square root at the end. 
+LSE calculates the `least squares estimate`:
+ - `least squares` because it takes the square of each error. 
  - `error` because `y' - y` represents the difference between the estimated value and the real value.
 The square penalizes the error, the larger the difference is, the bigger the error will be.
 
@@ -207,7 +207,7 @@ Here the full `GradientDescent` module can be found here [https://github.com/Kim
 
 Today, we saw what Gradient descent was about.
 What we did was to start from a problem which was to approximate a non-linear function representing supermarket expenses to a straight line (first degree function).
-To do that, we used the `least square` to calculate the error and __programatically minimised it using Gradient descent__.
+To do that, we used the `least squares` to calculate the error and __programatically minimised it using Gradient descent__.
 We saw in details how to use Gradient descent to converge to a minima (or a maxima - by inversing the sign in the thetha iterations, we can converge to a maxima).
 Hope you enjoyed reading this post as much as I enjoyed writing it. As always if you have any comments, leave it here or hit me on Twitter [https://twitter.com/Kimserey_Lam](https://twitter.com/Kimserey_Lam).
 See you next time!
