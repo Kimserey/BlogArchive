@@ -1,4 +1,4 @@
-# Approximate your spending pattern using Gradient descent in F#
+# Approximate your spending pattern using Gradient descent in FSharp
 
 The advantage of tracking your expenses is that you can compare each month and check if you saved more or less money than the previous month.
 Another interesting information is to __know how fast you are spending your money__.
