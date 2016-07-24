@@ -54,7 +54,7 @@ Since the goal is to find the best approximation, it means that __we must minimi
 
 __Gradient descent allows us to find `a` and `b` which minimize the cost function, therefore gives the best estimate.__
 
-## 2. Cost function and algorithmn
+## 2. Cost function and algorithm
 
 The cost function is expressed by the following formula:
 
@@ -141,7 +141,7 @@ let nextThetha innerDerivative (settings: Settings) thetha =
         |> List.map (fun (x, y) -> innerDerivative x y)
         |> List.sum
 
-    thetha - settings.LearningRate * ((1./float settings.Dataset.Length) * sum)
+    thetha - settings.LearningRate * ((2./float settings.Dataset.Length) * sum)
 ```
 
 And finally we can now iterate n number of time and calculate the thetas.
