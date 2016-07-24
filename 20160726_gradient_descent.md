@@ -209,5 +209,7 @@ See you next time!
 
 ## More posts you will like
 
+If you like this post and are interested in manipulating dataframes, take a look at my other posts about `Deedle` - a data manipulation library which is a piece of art to play with timeseries and dataframes.
+
 - A primer on manipulating dataframe with Deedle: [https://kimsereyblog.blogspot.co.uk/2016/04/a-primer-on-manipulating-data-frame.html](https://kimsereyblog.blogspot.co.uk/2016/04/a-primer-on-manipulating-data-frame.html)
 - Manipulating dataframe with Deedle Part 2: [https://kimsereyblog.blogspot.co.uk/2016/06/manipulating-data-frame-with-deedle-in.html](https://kimsereyblog.blogspot.co.uk/2016/06/manipulating-data-frame-with-deedle-in.html)
