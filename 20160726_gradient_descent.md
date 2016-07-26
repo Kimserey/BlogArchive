@@ -18,7 +18,7 @@ __Gradient descent__ is one of those. Here is a sample of Gradient descent itera
 
 ![approximation](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/approximation_animation.gif)
 
-Today I would like to share how you can use __Gradient descent__ to approximate your spending pattern with a straight line.
+Today I would like to share how you can use __Gradient descent__ to approximate your spending patterns.
 This post is composed by three parts:
 
 1. Why approximate to a straight line and what is Gradient descent
