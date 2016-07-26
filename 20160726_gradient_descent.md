@@ -65,11 +65,11 @@ The square penalizes the error, the larger the difference is, the bigger the err
 
 __Gradient descent__
 
-In order to find the best `a` and `b` tuple which minimises the cost function.
-We will apply Gradient descent.
+In order to find the best `a` and `b` which minimizes the cost function, we will apply Gradient descent.
 
 In simple scenarios like this supermarket expenses, Gradient descent is very efficient.
 It allows us to converge toward a minima by using the __derivatives of the cost function__.
+
 A derivative on a certain point of the function is the `slope` of the tangeant on that particular point.
 `Gradient` is another word for `slope`.
 
