@@ -28,8 +28,6 @@ This post is composed by three parts:
 
 ## 1. Why approximate to a straight line and what is Gradient descent
 
-__Why do we go through all that trouble to get a straight line?__
-
 As you see from the plot in the introduction, real life data like supermarket expenses aren't consistant.
 Therefore it is hard to make any estimation apart from visual estimation.
 What we want is to reduce that function to the most simplistic function __without having to much error__.
