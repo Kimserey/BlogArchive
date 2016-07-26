@@ -73,7 +73,7 @@ It allows us to converge toward a minima by using the __derivatives of the cost 
 A derivative on a certain point of the function is the `slope` of the tangeant on that particular point.
 `Gradient` is another word for `slope`.
 
-This is the key secret of Gradient descent, it uses the slope to define its direction:
+This is the key of Gradient descent, it uses the slope to define its direction:
  - When the slope is positive, the function is going upward therefore the minima is on the left 
  - When the slope is negative, the function is going downward therefore the minima is on the right
 
@@ -84,17 +84,17 @@ Using this two definitions, we can establish the following algorithm to converge
 This is the core of Gradient descent, `de/da` and `de/db` are respectively the derivatives of the cost function in function of `a` and `b`.
 On each step, we calculate the derivatives and update `a` and `b`.
 
-With a bit of derivatives calculus, we can get `de/da` and `de/db`.
+With a bit of calculus, we can get `de/da` and `de/db`.
 
 ![derivatives](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/derivatives.png)
 
 This is basically a `g.f` formula where `(g.f)' = g'.f * f'`.
 
-__`a` and `b` usually appear as theta1 and thetha0, so I will call them respectively thetha1 and thetha0__.
+__`a` and `b` usually appear as theta1 and thetha0, so I will call them thetha1 and thetha0__.
 
 `alpha` is the learning rate. It represents the step to take between each iterations.
 This constant is __very__ important as it directly affects the results.
-In order to find the `alpha` which suits your function, ry to see how big are the derivatives and compensate the alpha to reduce the step taken or increase it if too small.
+In order to find the `alpha` which suits your function, try to see how big are the derivatives and compensate with a smaller or bigger alpha to reduce the steps taken or increase it if too small.
 
 So we will iterate over the algorithm to get the perfect `thetha0` and `thetha1`.
 
