@@ -2,7 +2,7 @@
 
 The advantage of tracking your expenses is that you can compare each month and check if you saved more or less money than the previous month.
 Another interesting information is to __know how fast you are spending your money__.
-Checking how fast you spend your money can give you indication on whether you are likely to be out or within budget at the end of the month. 
+Checking how fast you spend your money gives you a hint on whether you are likely to be out or within budget at the end of the month. 
 
 The easiest way to check that is to plot the daily cumulated sum of your expenses and compare each month.
 I have been doing this for the past few months and it worked pretty well but I realised that the cumulated sum is not always nice to look at. It looks like incremental steps which is not so pleasing to the eye.
