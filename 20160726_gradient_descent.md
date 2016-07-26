@@ -6,7 +6,7 @@ Checking how fast you spend your money gives you a hint on whether you are likel
 
 The easiest way to check that is to plot the daily cumulated sum of your expenses and compare each month.
 I have been doing this for the past few months and it worked pretty well but I realised that the cumulated sum is not always nice to look at. It looks like incremental steps which is not so pleasing to the eye.
-Staring at more than incremental steps curves looks quite messy.
+As soon as you have more than three cumulated sum plotted on the same graph, it becomes messy and hard to see.
 
 __The goal is to be able to be able to understand your financial situation in a glance, without having to spend more than one second a the plot.__
 
