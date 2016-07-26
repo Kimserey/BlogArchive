@@ -278,9 +278,10 @@ module GradientDescent =
 ## Conclusion
 
 Today, we saw what Gradient descent was about.
-What we did was to start from a problem which was to approximate a non-linear function representing supermarket expenses to a straight line (first degree function).
-To do that, we used the `least squares` to calculate the error and __programatically minimised it using Gradient descent__.
+What we did was to start from a problem which was to approximate a non-linear function representing supermarket expenses by reducing it to a linear function (straight line).
+To do that, we used as the cost function the `least squares estimate` and __programatically minimized it using Gradient descent__.
 We saw in details how to use Gradient descent to converge to a minima (or a maxima - by inversing the sign in the thetha iterations, we can converge to a maxima).
+Gradient descent is a very simple algorithm, there are multiple variant and more complex things your can do with it but I wanted to show that it can be used simply for approximation like we did in this post.
 Hope you enjoyed reading this post as much as I enjoyed writing it. As always if you have any comments, leave it here or hit me on Twitter [https://twitter.com/Kimserey_Lam](https://twitter.com/Kimserey_Lam).
 See you next time!
 
