@@ -114,7 +114,7 @@ Before starting, we can already try to plot the cost function against `thetha0` 
 
 _If you are confused by why the error range from 0 to 15, I squareroot-ed the the sum of squares of the error to get the average error._
 
-Using this plot we can confirm our intuition that there is a mininma - around (6.3, 7.5) for an average cost error of 4.41 - for this set of data therefore it should be feasible to program Gradient descent to converge to it.
+Using this plot we can confirm that there is a mininma - around (6.3, 7.5) for an average cost error of 4.41 - therefore it should be feasible to program Gradient descent to converge to it.
 
 Let's start first by defining the settings of the Gradient descent.
 
@@ -128,9 +128,9 @@ type Settings = {
 
 We have the learning rate `alpha`, the dataset a list of (x, y) and the number of iterations.
 
-From #2, we learnt that to compute Gradient descent we only need to calculate `thetha0` and `thetha1` by iterating n time over the Gradient descent formula (1).
+From #2, we learnt that to compute Gradient descent we only need to calculate `thetha0` and `thetha1` by iterating `n` time over the Gradient descent formula (1).
 
-In the calculation of the thetha0 and thetha1, the only difference is the derivative calculation.
+In the calculation of the `thetha0` and `thetha1`, the only difference is the derivative calculation.
 Even within the derivative calculation, the only difference is the inner derivative.
 Knowing that we can define a generic function to calculate the next theta.
 
@@ -145,7 +145,7 @@ let nextThetha innerDerivative (settings: Settings) thetha =
     thetha - settings.LearningRate * ((2./float settings.Dataset.Length) * sum)
 ```
 
-And finally we can now iterate n number of time and calculate the thetas.
+Finally we can iterate `n` number of times and calculate the thetas.
 
 ```
 let estimate settings =
@@ -165,14 +165,14 @@ let estimate settings =
         | _ -> failwith "Could not compute next thethas, thethas are not in correct format.") [0.; 0.]
 ```
 
-`List.scan` executes a `fold` and returns each iterations. 
-`estimate` will return the list of all thethas calculated on each iteration.
+_`List.scan` executes a `fold` and returns each iterations._
+_`estimate` will return the list of all thethas calculated on each iteration._
 
 Using the results of each iterations we can plot the cost against each iteration.
 
 ![cost](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/cost.png)
 
-This plot allows us to see that we are heading to the right direction as after each iteration, the error is reduced dramatically until around the 8th iteration where it starts to be stable at approximatively 4.45.
+This cost function plot shows that we are heading to the right direction as after each iteration, the error is reduced dramatically until around the 8th iteration where it stabilizes at approximatively 4.45.
 
 Lastely, in order to make this algorithm usable from everywhere, we create a `model` which will compute the correct `thethas` and return a function `Estimate` which will take a `x` and return an `estimated y`.
 
