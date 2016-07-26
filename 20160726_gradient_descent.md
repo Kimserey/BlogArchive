@@ -112,6 +112,8 @@ Before starting, we can already try to plot the cost function against `thetha0` 
 
 ![cost_vs_thethas](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/cost_vs_thethas.png)
 
+__If you are confused by why the error range from 0 to 10, I squareroot-ed the the sum of squares of the error to get the average error.__ 
+
 Using this plot we can confirm our intuition that there is a mininma - around (6.3, 7.5) for an average cost error of 4.41 - for this set of data therefore it should be feasible to program Gradient descent to converge to it.
 
 Let's start first by defining the settings of the Gradient descent.
