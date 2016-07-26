@@ -45,7 +45,7 @@ y = a * x + b
 It is composed by a result value `y` which is expressed in fonction of a value `x` multiplied by a coefficient `a` and adding an offset value `b`.
 Our goal is to find `y = a * x + b`. In this equation the only unknown are the coefficients `a` and `b`.
 We could take any `a` and `b` but taking random values would not yield good result... or would it?
-Well __we can't know what is good and what is bad unless we have a way to measure it__.
+Well __we can't know what is good or bad unless we have a way to measure it__.
 
 To estimate the error we will use the __Least squares estimate__, we will call it the __cost function__.
 Since the goal is to find the best approximation, it means that __we must minimize the cost function__ - this is what Gradient descent allows us to do.
