@@ -10,7 +10,7 @@ As soon as you have more than three cumulated sum plotted on the same graph, it 
 
 __The goal is to be able to be able to understand your financial situation in a glance, without having to spend more than one second a the plot.__
 
-This is were having straight lines is more practical.
+This is were having straight lines can be more practical.
 Straight lines are much more pleasing to the eye than incremental steps so it would be much nicer if I could transform supermarket expenses montly curves to straight lines but __how do I transform points to a straight line?__
 
 Lucky me there are plenty of algorithms to build approximation for straight lines. 
