@@ -102,6 +102,7 @@ __When do we stop?__
 
 What worked for me was to set a definite number of iterations.
 Using a definite number is easy because you know how many iterations it will take to reach the result therefore you don't risk to be stuck in an infinite loop.
+Obviously not all functions require the same number of iterations, but overall my supermarket expenses are "almost" the same every month therefore I could find a correct number of iterations.
 
 Wonderful, you now know everything about the gradient descent!
 
