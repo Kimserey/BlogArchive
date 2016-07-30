@@ -5,7 +5,10 @@ It is built using a F# typeprovider therefore gives typesafety for templating.
 
 _If you never used WebSharper or WebSharper.UI.Next before, I published a tutorial few months ago on how WebSharper works and how you can use it to create SPA's - [https://kimsereyblog.blogspot.co.uk/2015/08/single-page-app-with-websharper-uinext.html](https://kimsereyblog.blogspot.co.uk/2015/08/single-page-app-with-websharper-uinext.html)_
 
-In this post I will explain some of the functionalities of WebSharper.UI.Next template and give example of how they can be used. This post will be compose by six parts:
+WebSharper official documentation can be found here [https://github.com/intellifactory/websharper.ui.next/blob/master/docs/Templates.md](https://github.com/intellifactory/websharper.ui.next/blob/master/docs/Templates.md).
+
+In this post I will explain some of the functionalities of WebSharper.UI.Next template and give specific examples to showcase how they can be used. 
+This post will be compose by five parts:
 
 ```
  1. Get started with templates
@@ -14,6 +17,8 @@ In this post I will explain some of the functionalities of WebSharper.UI.Next te
  4. On click event
  5. Value bindings
 ```
+
+__All the code here can be found on GitHub - [https://github.com/Kimserey/WSTemplate/blob/master/WSTemplate/Client.fs](https://github.com/Kimserey/WSTemplate/blob/master/WSTemplate/Client.fs)__
 
 ## 1. Get started with templates
 
@@ -255,4 +260,21 @@ Value2.Doc(
 ) |> Doc.RunById "main"
 ```
 
+`Text` is bound to a reactive View, when the button is clicked, the `Var` is set to `Clicked!` which propagate the changes to the `View` and to the html doc.
+
 ## Conclusion
+
+There are times where defining HTML templates is quicker than composing elements with `WebSharper.UI.Next.Html` combinators.
+WebSharper provides both solutions where both are typesafe.
+UI.Next template is a powerful tool with a small amount of features, it handles majority of the scenarios.
+Hope you enjoyed reading this post as much as I enjoyed writing it.
+As always, if you have any comments leave it here or hit me on Twitter [https://twitter.com/Kimserey_Lam](https://twitter.com/Kimserey_Lam).
+
+# More posts you will like
+
+If you like reading about WebSharper, I published other extremely interesting topics:
+
+- Understand WebSharper `Var`, `View`, `Lens`: [https://kimsereyblog.blogspot.co.uk/2016/03/var-view-lens-listmodel-in-uinext.html](https://kimsereyblog.blogspot.co.uk/2016/03/var-view-lens-listmodel-in-uinext.html)
+- Prototyping WebSharper webapp with `Warp`: [https://kimsereyblog.blogspot.co.uk/2016/03/prototyping-web-app-made-easy-with.html](https://kimsereyblog.blogspot.co.uk/2016/03/prototyping-web-app-made-easy-with.html)
+- Create an animated menu with WebSharper: [https://kimsereyblog.blogspot.co.uk/2016/03/create-animated-menu-with.html](https://kimsereyblog.blogspot.co.uk/2016/03/create-animated-menu-with.html)
+- Tutorial on how to create an SPA with WebSharper and WebSharper.UI.Next: [https://kimsereyblog.blogspot.co.uk/2015/08/single-page-app-with-websharper-uinext.html](https://kimsereyblog.blogspot.co.uk/2015/08/single-page-app-with-websharper-uinext.html)
