@@ -1,4 +1,4 @@
-# Create reusable HTML componants for your WebSharper webapp UI Next template
+# Create HTML componants for your WebSharper webapp with UI Next template
 
 WebSharper.UI.Next comes with a simple template engine which can be used to build `doc` elements.
 It is built using a F# typeprovider therefore gives typesafety for templating.
