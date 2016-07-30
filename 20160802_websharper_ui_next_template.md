@@ -18,7 +18,7 @@ This post will be compose by five parts:
  5. Value bindings
 ```
 
-__All the code here can be found on GitHub - [https://github.com/Kimserey/WSTemplate/blob/master/WSTemplate/Client.fs](https://github.com/Kimserey/WSTemplate/blob/master/WSTemplate/Client.fs)__
+__The complete code can be found on GitHub - [https://github.com/Kimserey/WSTemplate/blob/master/WSTemplate/Client.fs](https://github.com/Kimserey/WSTemplate/blob/master/WSTemplate/Client.fs)__
 
 ## 1. Get started with templates
 
@@ -261,6 +261,8 @@ Value2.Doc(
 ```
 
 `Text` is bound to a reactive View, when the button is clicked, the `Var` is set to `Clicked!` which propagate the changes to the `View` and to the html doc.
+
+__The complete code can be found on GitHub - [https://github.com/Kimserey/WSTemplate/blob/master/WSTemplate/Client.fs](https://github.com/Kimserey/WSTemplate/blob/master/WSTemplate/Client.fs)__
 
 ## Conclusion
 
