@@ -3,6 +3,8 @@
 WebSharper.UI.Next comes with a simple template engine which can be used to build `doc` elements.
 It is built using a F# typeprovider therefore gives typesafety for templating.
 
+_If you never used WebSharper or WebSharper.UI.Next before, I published a tutorial few months ago on how WebSharper works and how you can use it to create SPA's - [https://kimsereyblog.blogspot.co.uk/2015/08/single-page-app-with-websharper-uinext.html](https://kimsereyblog.blogspot.co.uk/2015/08/single-page-app-with-websharper-uinext.html)_
+
 In this post I will explain some of the functionalities of WebSharper.UI.Next template and give example of how they can be used. This post will be compose by six parts:
 
 ```
@@ -70,7 +72,9 @@ Using this as template, you can then define the following:
 
 ```
 type List = Templating.Template<"list.html">
+```
 
+```
 let main =
     List.Doc(Links = [ 
         li [ text "Hello 1" ]
@@ -90,8 +94,12 @@ A typical example is when there is no parent to the element you need to replace 
 <!--description.html-->
 <h1>Some title</h1>
 <div data-replace="Content"></div>
+```
 
 ```
+type Description = Templating.Template<"templates\description.html">
+```
+
 ```
 let main =
     Description.Doc(Content = [ 
@@ -110,6 +118,7 @@ Sub templates can be defined usng `data-children-template` or `data-template`.
 `data-children-template` means that the content of the elements will be available as sub template.
 
 ```
+<!--list-group.html-->
 <div class="list-group">
     <a href="#" class="list-group-item" data-hole="FirstBody" data-children-template="Item">
         <h4 class="list-group-item-heading">${Title}</h4>
@@ -124,7 +133,9 @@ Here we define a template composed by the child elements given by the first anch
 
 ```
 type ListGroup = Templating.Template<"list-group.html">
+```
 
+```
 let main =
     ListGroup.Doc(
         FirstBody = [ ListGroup.Item.Doc(Title = "First") ],
@@ -138,6 +149,7 @@ And alternative way to define sub template is `data-template`.
 `data-template` means that the element itself plus the child elements will be available as sub template.
 
 ```
+<!--list-group-2.html-->
 <div class="list-group" data-hole="List">
     <a href="#" class="list-group-item" data-template="ListItem">
         <div>Some content</div>
@@ -153,7 +165,9 @@ We also defined a hole `List` where we will insert the list items.
 
 ```
 type ListGroup2 = Templating.Template<"templates\list-group-2.html">
+```
 
+```
 ListGroup2.Doc(
     [
         ListGroup2.ListItem.Doc()
@@ -184,14 +198,61 @@ The `data-event-click` provides a typesafe way to define callbacks. The `Send` f
 
 ## 5. Value bindings
 
-Lastely string can be bound to the templae via simple markup.
+Lastely string can be bound to the templae via simple markups.
+Static string can be inserted using `${Value}` and dynamic string (reactive variable views) can be inserted using `$!{Value}`. 
+
+_For more details on Views, I posted a more in depth tutorial about `Views` - [https://kimsereyblog.blogspot.co.uk/2016/03/var-view-lens-listmodel-in-uinext.html](https://kimsereyblog.blogspot.co.uk/2016/03/var-view-lens-listmodel-in-uinext.html)_
 
 ### 5.1 ${Value}
 
-Pass string value to the template.
+`${Value}` is used to pass string values to the template.
+It can be used on attribute values or text content.
+
+```
+<!--value.html-->
+<a href="${Href}" class="list-group-item ${ExtraCls}">
+    <h4 class="list-group-item-heading">${Title}</h4>
+    <p class="list-group-item-text">${Text}</p>
+</a>
+```
+
+For example, here we use it to set the `href` attribute and to add an extra css class.
+We also use it to set the title and text content.
+
+```
+type Value = Templating.Template<"templates\\value.html">
+```
+
+```
+Value.Doc(
+    Href = "#",
+    ExtraCls = "test",
+    Title = "Title",
+    Text = "Content"
+) |> Doc.RunById "main"
+```
 
 ### 5.2 $!{Value}
 
-Pass reactive Views to the template.
+`$!{Value}` is used to pass reactive Views to the template.
+
+```
+<!--value-2.html-->
+<div>$!{Text}</div>
+<button data-event-click="OnClick">Click</button>
+```
+
+```
+type Value2 = Templating.Template<"templates\\value-2.html">
+```
+
+```
+let text = Var.Create "Not clicked"
+
+Value2.Doc(
+    Text = text.View,
+    OnClick = fun _ _ -> Var.Set text "Clicked!"
+) |> Doc.RunById "main"
+```
 
 ## Conclusion
