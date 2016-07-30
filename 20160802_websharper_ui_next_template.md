@@ -102,7 +102,7 @@ A typical example is when there is no parent to the element you need to replace 
 ```
 
 ```
-type Description = Templating.Template<"templates\description.html">
+type Description = Templating.Template<"description.html">
 ```
 
 ```
@@ -169,7 +169,7 @@ For example here we defined two templates `ListItem` and `ActiveListItem` which 
 We also defined a hole `List` where we will insert the list items.
 
 ```
-type ListGroup2 = Templating.Template<"templates\list-group-2.html">
+type ListGroup2 = Templating.Template<"list-group-2.html">
 ```
 
 ```
@@ -189,6 +189,10 @@ It can be placed on any element to handle click events.
 
 ```
 <button class="btn btn-block btn-lg btn-success" data-event-click="Send">Send</button>
+```
+
+```
+type Button = Templating.Template<"button.html">
 ```
 
 ```
@@ -225,7 +229,7 @@ For example, here we use it to set the `href` attribute and to add an extra css 
 We also use it to set the title and text content.
 
 ```
-type Value = Templating.Template<"templates\\value.html">
+type Value = Templating.Template<"value.html">
 ```
 
 ```
@@ -248,7 +252,7 @@ Value.Doc(
 ```
 
 ```
-type Value2 = Templating.Template<"templates\\value-2.html">
+type Value2 = Templating.Template<"value-2.html">
 ```
 
 ```
