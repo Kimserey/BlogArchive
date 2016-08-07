@@ -1,4 +1,4 @@
-# Undertand Xamarin Forms data bindings in FSharp
+# Undertand Xamarin Forms data bindings in F#
 
 In Xamarin.Forms, interacting with buttons, labels, lists and all other controls is done via data bindings.
 Data bindings is one of the core component of the MVVM pattern (model - view - viewmodel). 
@@ -7,11 +7,11 @@ It provides a way to isolate model - view - viewmodel and therefore allows them 
 There is a very good tutorial on the Xamarin website about data bindings [https://developer.xamarin.com/guides/xamarin-forms/xaml/xaml-basics/data_binding_basics/](https://developer.xamarin.com/guides/xamarin-forms/xaml/xaml-basics/data_binding_basics/).
 In Xamarin.Forms, everything that can be done in XAML can be coded in C# which means that __we can code everything in F#__.
 
-The problem with coding the view in F# is that we can easily to mix the views and viewmodels since there is no visible separation.
-Whereas with XAML, it is obvious that the XAML file is the view and the code linked to the view is the viewmodel, there a visible (language) and physical (files) separation.
-But this can be achieved from the code by understanding how to keep views isolated from viewmodels and vice versa.
+When coding the whole view, it is easy to get mixed up between views and viewmodels.
+There is no visible separation compared to using XAML, it is obvious that the XAML file is the view and the code linked to the view is the viewmodel.
+There a visible (language) and physical (file) separation.
 
-Today I would like to show you how you can use __data bindings to remove any dependencies between views and viewmodels__ while build Xamarin.Forms application in F#.
+So today I would like to show you how you can use __data bindings to remove any dependencies between views and viewmodels__ while build Xamarin.Forms application in F#.
 
 ```
 1. Data bindings
