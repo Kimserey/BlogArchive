@@ -1,4 +1,4 @@
-# Undertand Xamarin Forms data bindings in F#
+# Undertand Xamarin Forms data bindings in FSharp
 
 In Xamarin.Forms, interacting with buttons, labels, lists and all other controls is done via data bindings.
 Data bindings is one of the core component of the MVVM pattern (model - view - viewmodel). 
