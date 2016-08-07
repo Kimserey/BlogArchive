@@ -111,6 +111,10 @@ We also write to the Application output via `Debug.WriteLine` just to check if e
 
 When we run the application we can see the default text appearing on the layout but when we change the entry, the label doesn't change.
 If we check the application log, we can see that the value is correctly set on the viewmodel.
+Typing `Hello world...` in the entry result in the following log:
+
+![label and entry](https://raw.githubusercontent.com/Kimserey/XamarinFormsBindings/master/label_entry.png)
+![logs](https://raw.githubusercontent.com/Kimserey/XamarinFormsBindings/master/Label%20_entry_log.png)
 
 __The binding of the entry property sets the underlying property but the label `binding isn't notified` that the underlying value `has changed`.__
 
@@ -177,8 +181,8 @@ type MyPageViewModel() =
     member self.List 
         with get() = 
             [ { Name = "Greg"; Age = 29 }
-                { Name = "Tom"; Age = 29 }
-                { Name = "Sam"; Age = 29 } ]
+              { Name = "Tom"; Age = 29 }
+              { Name = "Sam"; Age = 29 } ]
 ```
 
 In order to display the list, a data template must be used.
@@ -225,6 +229,9 @@ type MyPage(viewmodel: obj) as self =
 ```
 
 __Notice that when I implemented my own ViewCell, I specified the bindings within the Cell type therefore there was no need to specify the bindings via `listView.ItemTemplate.SetBinding`__.
+Here the result:
+
+![listview custom template](https://raw.githubusercontent.com/Kimserey/XamarinFormsBindings/master/ListView.png)
 
 ### Dynamic lists
 
@@ -335,6 +342,8 @@ Let's see how they can be used.
 __Trick: to access the list held in the parent viewmodel,__
 __I am passing the parent viewmodel `MyPageViewModel` to the child viewmodels `PersonViewModel`.__
 __That way I can acess the list from the child and remove item from the list.__
+
+![listvie with button](https://raw.githubusercontent.com/Kimserey/XamarinFormsBindings/master/listview_button.png)
 
 ## 3. Commands
 
