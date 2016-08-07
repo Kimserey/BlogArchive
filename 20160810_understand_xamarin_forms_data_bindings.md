@@ -158,6 +158,8 @@ type MyPageViewModel() =
 
 And now we get __a two way binding on the text property which updates the views and gets updated by the entry___.
 
+![working label](https://raw.githubusercontent.com/Kimserey/XamarinFormsBindings/master/label_entry_working.png)
+
 ## 2. ListView and Observable collections
 
 To display lists, Xamarin.Forms provides a `ListView` which derives from the abstract class `ItemsView` which provides bindable property `ItemSources`.
