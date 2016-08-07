@@ -9,7 +9,6 @@ In Xamarin.Forms, everything that can be done in XAML can be coded in C# which m
 
 When coding the whole view, it is easy to get mixed up between views and viewmodels.
 There is no visible separation compared to using XAML where it is obvious that the XAML file is the view and the code linked to the view is the viewmodel.
-There a visible (language) and physical (file) separation.
 
 So today I would like to show you how you can use __data bindings to remove any dependencies between views and viewmodels__ while build Xamarin.Forms application in F#.
 
