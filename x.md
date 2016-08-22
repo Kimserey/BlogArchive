@@ -1,4 +1,4 @@
-# Setup SSL with Cloudflare
+# Get your domain name and setup SSL with Cloudflare
 
 Few weeks ago I explained how to setup a static page and host it on Github for free using github pages.
 Have a look at it if you missed it [https://kimsereyblog.blogspot.co.uk/2016/07/from-idea-to-product-with-websharper-in.html](https://kimsereyblog.blogspot.co.uk/2016/07/from-idea-to-product-with-websharper-in.html).
