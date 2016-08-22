@@ -1,4 +1,4 @@
-# Get a domain name and setup SSL for your website with CloudFlare
+# Setup SSL with Cloudflare
 
 Few weeks ago I explained how to setup a static page and host it on Github for free using github pages.
 Have a look at it if you missed it [https://kimsereyblog.blogspot.co.uk/2016/07/from-idea-to-product-with-websharper-in.html](https://kimsereyblog.blogspot.co.uk/2016/07/from-idea-to-product-with-websharper-in.html).
@@ -46,9 +46,11 @@ Different registrar propose domain names at different price so it is worth it to
 I usually get mine from Namecheap [https://www.namecheap.com/](https://www.namecheap.com/) as so far I've got the best price from there.
 There's also GoDaddy [https://uk.godaddy.com/](https://uk.godaddy.com/) even Google is now starting on the registrar business [https://domains.google.com](https://domains.google.com).
 
+![domains](https://github.com/Kimserey/BlogArchive/blob/master/img/20160823_domain_name_ssl_cloudflare/domains.png?raw=true)
+
 Anyway choose the cheapest, they mostly differs in the services provided like hosting or guaranty... But I never used one of their services so I won't be able to give opinions on that I just go where it is the cheapest.
 
-![domain]()
+![domain](https://github.com/Kimserey/BlogArchive/blob/master/img/20160823_domain_name_ssl_cloudflare/domain.png?raw=true)
 
 Now once you see your domain under the dashboard, head over to CloudFlare and create an account.
 
@@ -69,11 +71,11 @@ Now once you created your account and scan your DNS records for your domain name
 __This is because you need to use CloudFlare DNS servers for your domain.__
 Go to the DNS configuration page by clicking on the icon.
 
-![icon](icon)
+![icon](https://github.com/Kimserey/BlogArchive/blob/master/img/20160823_domain_name_ssl_cloudflare/dns_icon.png?raw=true)
 
 And find the server names:
 
-![server_name](server name)
+![server_name](https://github.com/Kimserey/BlogArchive/blob/master/img/20160823_domain_name_ssl_cloudflare/dns_ns.png?raw=true)
 
 ```
 rihana.ns.cloudflare.com
@@ -85,11 +87,11 @@ _Those were attributed by CloudFlare. If not I would have written rihanna with 2
 Ok once you got the name go back to your domain registrar and find the DNS page.
 For me with Namecheap it is directly in Domain List.
 
-![servername registrar](server)
+![servername registrar](https://github.com/Kimserey/BlogArchive/blob/master/img/20160823_domain_name_ssl_cloudflare/namecheap_dns_ns.png?raw=true)
 
 Once you've done this modification just wait for a while and go back to CloudFlare, your status should be changed to `Active`!
 
-![active](active)
+![active](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20160823_domain_name_ssl_cloudflare/cf_active.png)
 
 ## 4. Configure the DNS and setup the SSL
 
@@ -109,7 +111,7 @@ PING kimsereylam.com (104.28.26.6): 56 data bytes
 You can then setup your `A record` to direct the root (you can use `@` as the name to specify that you want to map the root - naked domain) to the IP.
 For example for me it would be:
 
-![a_record](a record)
+![a_record](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20160823_domain_name_ssl_cloudflare/a_record.png)
 
 This will mean that when someone navigates to `kimsereylam.com`, they will be visiting `104.28.26.6` which is what I want.
 Now sometime people navigate to `www.kimsereylam.com`.
@@ -117,14 +119,14 @@ In order to handle that we need to configure a CNAME.
 A CNAME is an alias, in this case `www` will be the alias of `kimsereylam.com` the root.
 It can be configured this way:
 
-![cname]()
+![cname](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20160823_domain_name_ssl_cloudflare/c_record.png)
 
 Great that's it, once you are done with that, just wait a while. The process can take up to 24 hours to take effect.
 For me it took an hour.
 
 Make sure all the status are orange and not grey - grey means inactive.
 
-![active]()
+![active](https://github.com/Kimserey/BlogArchive/blob/master/img/20160823_domain_name_ssl_cloudflare/record_active.png?raw=true)
 
 After an hour you should be able to navigate to `kimsereylam.com` and `www.kimsereylam.com`.
 
@@ -147,14 +149,16 @@ So go to the crypto section and select SSL => FULL.
 Full SSL means that your connection is encrypted between visitor and CloudFlare.
 And it will also verify that the server has a SSL - but it does not perform validity check.
 
-![ssl](ssl)
+![ssl](https://github.com/Kimserey/BlogArchive/blob/master/img/20160823_domain_name_ssl_cloudflare/ssl.png?raw=true)
 
 Next you need to make your users who visit your HTTP pages be redirected to your HTTPS pages.
 To do that go to the page rules.
+Click on __Create Page Rule__ and add an `Always use HTTPS` page rule for your domain name with a wildcard to capture any url.
 
-![pagerule_icon]()
+![pagerule_icon](https://github.com/Kimserey/BlogArchive/blob/master/img/20160823_domain_name_ssl_cloudflare/page_rule.png?raw=true)
 
-Click on __Create Page Rule__ and add an `Always use HTTPS` page rule for your domain name with a wildcard to capture any url and that's it!
+![pagerule](https://github.com/Kimserey/BlogArchive/blob/master/img/20160823_domain_name_ssl_cloudflare/use_https.png?raw=true)
+
 Just wait a while and you should be able to visit your site under SSL!
 
 # Conclusion
