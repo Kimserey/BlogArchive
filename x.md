@@ -172,6 +172,7 @@ See you next time!
 
 # Other post you will like!
 
+- My website! - [https://www.kimsereylam.com/](https://www.kimsereylam.com/)
 - From idea to product with WebSharper - [https://kimsereyblog.blogspot.co.uk/2016/07/from-idea-to-product-with-websharper-in.html](https://kimsereyblog.blogspot.co.uk/2016/07/from-idea-to-product-with-websharper-in.html)
 - Deploy your webapp to Azure VM - [https://kimsereyblog.blogspot.co.uk/2016/05/deploy-your-websharper-webapp-on-azure.html](https://kimsereyblog.blogspot.co.uk/2016/05/deploy-your-websharper-webapp-on-azure.html)
 - HTML template with WebSharper - [https://kimsereyblog.blogspot.co.uk/2016/08/create-html-componants-for-your.html](https://kimsereyblog.blogspot.co.uk/2016/08/create-html-componants-for-your.html)
