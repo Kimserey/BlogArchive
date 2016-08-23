@@ -163,7 +163,7 @@ Just wait a while and you should be able to visit your site under SSL!
 
 # Conclusion
 
-All this steps can seem overwhelming. When it is the first time buying a domain and setting up DNS records, it can be very tedious but if you 
+When it is the first time buying a domain and setting up DNS records, it can be very tedious but if you 
 understand every step and why are this step necessary, the process is easier to remember since you know that every step is mandatory.
 Today I showed how you can buy a domain name from a registrar and serve it over SSL for free with CloudFlare.
 CloudFlare also proposes lot more services like minification of CSS/JS and also a CDN.
