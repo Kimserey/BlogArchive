@@ -135,10 +135,9 @@ After an hour you should be able to navigate to `kimsereylam.com` and `www.kimse
 ### Reminder on SSL
 
 SSL is protocol which provides privacy and data integrity between client and server. It also provides a way to verify that the server is genuine.
-The privary and data integrity using encryption.
-There are two keys involved in the process a symmetric key and a asymmetric key (private help by server / public distributated in SSL).
-The public key is distributed with the SSL cert.
-The client uses it to encrypt a symmetric key which is then decrypted by the server and then by client and server to encrypt the whole communication.
+The privary and data integrity is achieve via encryption.
+There are two encryption keys involved in the process, a symmetric key and a asymmetric key (private held by the server and public key distributated in SSL).
+The client uses the public key (the one in the SSL cert) to encrypt a symmetric key which is then decrypted by the server (using its private key) and from then on, client and server uses the symmetric key to encrypt all message in the communication.
 This is interesting because even the message containing the symmetric key can then be intercepted but since it is encrypted using the public key from the SSL, only the server can decrypt it.
 
 
