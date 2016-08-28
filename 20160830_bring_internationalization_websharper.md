@@ -1,10 +1,9 @@
 # Bring internationalization (i18n) to your WebSharper webapps in FSharp
 
-When working on webapps which need to be used by international clients, it is important to provide i18n.
-I18n is the process of developing applications web/desktop/mobile which provide an easy way to change language and culture to be localized to different markets.
-Google translate is not enough to provide a safe and complete translation and adptation to different culures/markets.
-For example, the English market has a different language, date format and number format than the French market.
-Integrating i18n would mean providing a way to switch between English and French and therefore changed the texts of the webapp from English to French and also respect date and number formats.
+When working on webapps which need to be used by international clients, it is important to provide internationalization (i18n).
+I18n is the process of developing web/desktop/mobile applications which provide an easy way to change language and culture to be localized to different markets.
+For example, English and French markets have different language, date format and number format.
+The webapp needs to provide a way to switch texts and respect date and number formats.
 
 So today I will show you how you can bring i18n to your WebSharper webapp. This post is composed by three parts
 
@@ -12,15 +11,17 @@ So today I will show you how you can bring i18n to your WebSharper webapp. This 
 2. WebSharper bindings to work with F#
 3. Example
 
+Here is a preview:
+
 ![preview](https://raw.githubusercontent.com/Kimserey/InternationalizationSample/master/i18n.gif)
 
 ## 1. JS libraries
 
-There are three parts that needs to be replaced in order to provide i18n.
+There are three parts that needs to be configurable in order to provide i18n.
  
-  - the language, all text needs to be translated.
-  - the date format, in some places, the days is after before the months
-  - the number format, some places use dot `.` and others comma `,` to separate decimals
+  - the language, all text needs to be translated
+  - the date format, in some places, the days is after before the months - also days and months need to be translated
+  - the number format, some places use dot `.` and others comma `,` to separate decimals - also currencies need to be translated
 
 To provide translation, we will be using i18next [http://i18next.com/](http://i18next.com/) together with the JQuery plugin [https://github.com/i18next/jquery-i18next](https://github.com/i18next/jquery-i18next).
 For date format, we will be using Momentjs [http://momentjs.com/](http://momentjs.com/).
@@ -102,6 +103,11 @@ We then initialize `i18nextJquery`, the jquery plugin, and after initialized it 
 
 ### Momentjs
 
+To use the localization of momentjs, we need to reference momentjs with the locales.
+```
+<script src="bower_components/moment/min/moment-with-locales.min.js"></script>
+```
+
 To use MomentJs, you only need to use `moment(value)` to transform a JS date to a moment date and use `format()` to format it to a human readable value.
 ```
 moment(value).format(format);
@@ -113,6 +119,11 @@ moment.locale(language);
 ```
 
 ### Numeraljs
+
+To use the localization of numeraljs, we need to reference the languages.
+```
+<script src="bower_components/numeral/min/languages.min.js"></script>
+```
 
 NumeralJs works the same way as moment.
 ```
@@ -148,7 +159,7 @@ The following will be the translate call for momentJS:
 translate({
     el: $(this),
     value:  function(data) { return data.translateDate; },
-    format: function(data) { return data.translateDateFormat || "YYYY-MM-DD"; },
+    format: function(data) { return data.translateFormat || "YYYY-MM-DD"; },
     execute: function(value, format) {
         return moment(value).format(format);
     }
@@ -160,7 +171,7 @@ and the following will be the translate call for numeralJS:
 translate({
     el: $(this),
     value:  function(data) { return data.translateNumeric; },
-    format: function(data) { return data.translateNumericFormat || "0,0.00"; },
+    format: function(data) { return data.translateFormat || "0,0.00"; },
     execute: function(value, format) {
         return numeral(value).format(format);
     }
@@ -190,7 +201,7 @@ i18next.changeLanguage(culture, function(err, t) {
         translate({
             el: $(this),
             value:  function(data) { return data.translateDate; },
-            format: function(data) { return data.translateDateFormat || "YYYY-MM-DD"; },
+            format: function(data) { return data.translateFormat || "YYYY-MM-DD"; },
             execute: function(value, format) {
                 return moment(value).format(format);
             }
@@ -202,7 +213,7 @@ i18next.changeLanguage(culture, function(err, t) {
         translate({
             el: $(this),
             value:  function(data) { return data.translateNumeric; },
-            format: function(data) { return data.translateNumericFormat || "0,0.00"; },
+            format: function(data) { return data.translateFormat || "0,0.00"; },
             execute: function(value, format) {
                 return numeral(value).format(format);
             }
@@ -304,7 +315,7 @@ type Localizer =
                 translate({
                     el: $(this),
                     value:  function(data) { return data.translateDate; },
-                    format: function(data) { return data.translateDateFormat || "YYYY-MM-DD"; },
+                    format: function(data) { return data.translateFormat || "YYYY-MM-DD"; },
                     execute: function(value, format) {
                         return moment(value).format(format);
                     }
@@ -316,7 +327,7 @@ type Localizer =
                 translate({
                     el: $(this),
                     value:  function(data) { return data.translateNumeric; },
-                    format: function(data) { return data.translateNumericFormat || "0,0.00"; },
+                    format: function(data) { return data.translateFormat || "0,0.00"; },
                     execute: function(value, format) {
                         return numeral(value).format(format);
                     }
@@ -340,8 +351,8 @@ Let's now see how we can use it in an example. We start first by creating a WebS
 Then we can define our templates in `localizer-tpl.html` [https://github.com/Kimserey/InternationalizationSample/blob/master/InternationalizationSample/localizer-tpl.html](https://github.com/Kimserey/InternationalizationSample/blob/master/InternationalizationSample/localizer-tpl.html).
 ```
 <span data-template="Text" data-translate="${Text}"></span>
-<span data-template="Date" data-translate-date="${date}" data-translate-date-format="${format}"></span>
-<span data-template="Number" data-translate-numeric="${number}" data-translate-numeric-format="${format}"></span>
+<span data-template="Date" data-translate-date="${date}" data-translate-format="${format}"></span>
+<span data-template="Number" data-translate-numeric="${number}" data-translate-format="${format}"></span>
 ```
 Using this templates, we can now construct the elements in a typesafe way and we don't need to bother anymore about the special fields.
 Also we need to add the scripts references in the `index.html`.
