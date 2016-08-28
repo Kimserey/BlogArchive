@@ -463,6 +463,8 @@ And that's it we are done, we now have localization for text language, date and 
 
 ![preview](https://raw.githubusercontent.com/Kimserey/InternationalizationSample/master/i18n.gif)
 
+The full source code of the sample is available here [https://github.com/Kimserey/InternationalizationSample](https://github.com/Kimserey/InternationalizationSample).
+
 # Conclusion
 
 Today we saw how we could bring i18n in our WebSharper webapp in F#.
@@ -477,3 +479,4 @@ As always, if you have comments leave it here or hit me on Twitter [@Kimserey_La
  - Understand how to create WebSharper templates - [https://kimsereyblog.blogspot.co.uk/2016/08/create-html-componants-for-your.html](https://kimsereyblog.blogspot.co.uk/2016/08/create-html-componants-for-your.html)
  - Create a small webapp with WebSharper UI.Next - [https://kimsereyblog.blogspot.co.uk/2016/07/from-idea-to-product-with-websharper-in.html](https://kimsereyblog.blogspot.co.uk/2016/07/from-idea-to-product-with-websharper-in.html)
  - Understand the difference between Direct and Inline - [https://kimsereyblog.blogspot.co.uk/2016/05/understand-difference-between-direct.html](https://kimsereyblog.blogspot.co.uk/2016/05/understand-difference-between-direct.html)
+ - The full source code of the sample is available here - [https://github.com/Kimserey/InternationalizationSample](https://github.com/Kimserey/InternationalizationSample).
