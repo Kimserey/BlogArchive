@@ -39,9 +39,9 @@ Here is a simple example:
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js" ></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next/3.4.1/i18next.min.js" ></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-i18next/0.0.14/i18next-jquery.min.js" ></script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/i18next/i18next.js"></script>
+    <script src="bower_components/jquery-i18next/jquery-i18next.js"></script>
   </head>
 
   <body>
@@ -80,7 +80,7 @@ Here is a simple example:
 A configuration is passed to `i18next.init` with default language and the resources containing the languages and translations.
 ```
 {
-  en: {
+  "en-GB": {
     translation: {
       div: {
         text: 'Hello!'
@@ -345,6 +345,29 @@ Then we can define our templates in `localizer-tpl.html` [https://github.com/Kim
 ```
 Using this templates, we can now construct the elements in a typesafe way and we don't need to bother anymore about the special fields.
 Also we need to add the scripts references in the `index.html`.
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="Content/InternationalizationSample.css" />
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/i18next/i18next.js"></script>
+    <script src="bower_components/jquery-i18next/jquery-i18next.js"></script>
+    <script src="bower_components/moment/min/moment-with-locales.min.js"></script>
+    <script src="bower_components/numeral/min/numeral.min.js"></script>
+    <script src="bower_components/numeral/min/languages.min.js"></script>
+</head>
+<body style="margin: 5em">
+    <div id="text-test"></div>
+    <div id="date-test"></div>
+    <div id="number-test"></div>
+    <div id="main"></div>
+    <script type="text/javascript" src="Content/InternationalizationSample.js"></script>
+</body>
+</html>
+```
 
 And here's a full sample which shows how to use the `Localizer` [https://github.com/Kimserey/InternationalizationSample/blob/master/InternationalizationSample/Client.fs](https://github.com/Kimserey/InternationalizationSample/blob/master/InternationalizationSample/Client.fs):
 ```
