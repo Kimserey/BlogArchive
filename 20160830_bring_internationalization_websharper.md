@@ -12,6 +12,8 @@ So today I will show you how you can bring i18n to your WebSharper webapp. This 
 2. WebSharper bindings to work with F#
 3. Example
 
+![preview](https://raw.githubusercontent.com/Kimserey/InternationalizationSample/master/i18n.gif)
+
 ## 1. JS libraries
 
 There are three parts that needs to be replaced in order to provide i18n.
@@ -326,30 +328,88 @@ type Localizer =
 ```
 
 We follow the same way we used the JS.
-By creating an initialize function and a changelanguage which binds directly to the JS equivalent.
+By creating an initialize function and a change language which binds directly to the JS equivalent.
 
-
-```
-<span data-template="Text" data-translate="${Text}"></span>
-<span data-template="Date" data-translate-date="${date}" data-translate-date-format="${format}"></span>
-<span data-template="Number" data-translate-numeric="${number}" data-translate-numeric-format="${format}"></span>
-```
-
-Using this templates, we can now construct the elements in a typesafe way and we don't need to bother anymore about the special fields.
+Notice the notation `New` and `=>` employed `lg.Name => New [ "translation" => lg.Translation ]`. 
+`New` is used to create a `JS object` and `=>` is used to create a property so we can use it together like so: `New [ "propOne" => propOne ; "propTwo"  => propTwo ]`.
 
 ## 3. Usage example
 
 Let's now see how we can use it in an example. We start first by creating a WebSharper SPA and add a `Localizer` fs.
 
-Then we can define our templates in `localizer-tpl.html`.
-
+Then we can define our templates in `localizer-tpl.html` [https://github.com/Kimserey/InternationalizationSample/blob/master/InternationalizationSample/localizer-tpl.html](https://github.com/Kimserey/InternationalizationSample/blob/master/InternationalizationSample/localizer-tpl.html).
+```
+<span data-template="Text" data-translate="${Text}"></span>
+<span data-template="Date" data-translate-date="${date}" data-translate-date-format="${format}"></span>
+<span data-template="Number" data-translate-numeric="${number}" data-translate-numeric-format="${format}"></span>
+```
+Using this templates, we can now construct the elements in a typesafe way and we don't need to bother anymore about the special fields.
 Also we need to add the scripts references in the `index.html`.
 
+And here's a full sample which shows how to use the `Localizer` [https://github.com/Kimserey/InternationalizationSample/blob/master/InternationalizationSample/Client.fs](https://github.com/Kimserey/InternationalizationSample/blob/master/InternationalizationSample/Client.fs):
+```
+namespace InternationalizationSample
 
-Lastely we can add some code which will allow us to switch languages.
+open System
+open WebSharper
+open WebSharper.JavaScript
+open WebSharper.JQuery
+open WebSharper.UI.Next
+open WebSharper.UI.Next.Client
+open WebSharper.UI.Next.Html
 
+[<JavaScript>]
+module Client =    
+    type LocalizerTpl = Templating.Template<"localizer-tpl.html">
+
+    (**
+        Provide languages translation
+    **)
+    let languages =
+        [
+            { Name = "en-GB"
+              Translation = { Div = { Text = "Hello!" } } }
+
+            { Name = "fr"
+              Translation = { Div =  { Text = "Bonjour!" } } }
+        ]
+
+
+    let makeTranslationButton code =
+        Doc.Button code
+            [ attr.style "margin: 1em" ] 
+            (fun () -> Localizer.Localize(code))
+
+    let main =
+
+        LocalizerTpl.Text.Doc("Div.Text")
+        |> Doc.RunById "text-test"
+
+        LocalizerTpl.Date.Doc(
+            date = DateTime.Now.ToString(),
+            format = "dddd, MMMM Do YYYY, h:mm:ss a"
+        )
+        |> Doc.RunById "date-test"
+        
+        LocalizerTpl.Number.Doc(
+            number = "100000000.02",
+            format = "$0,0.0"
+        )
+        |> Doc.RunById "number-test"
+
+
+        divAttr 
+            [ on.afterRender(fun e -> 
+                Localizer.Init languages
+                Localizer.Localize("en-gb")
+              ) ]
+            [ makeTranslationButton "en-gb"; makeTranslationButton "fr" ]
+        |> Doc.RunById "main"
+```
 
 And that's it we are done, we now have localization for text language, date and number in our webapp!
+
+![preview](https://raw.githubusercontent.com/Kimserey/InternationalizationSample/master/i18n.gif)
 
 # Conclusion
 
