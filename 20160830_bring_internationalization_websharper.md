@@ -226,9 +226,9 @@ i18next.changeLanguage(culture, function(err, t) {
 
 We also defined special jquery attributes which hold original values and format and we use those attributes to access the elements using jquery.
 
-    - `data-translate-date`
-    - `data-translate-numeric`
-    - `data-translate-format`
+    - data-translate-date
+    - data-translate-numeric
+    - data-translate-format
 
 Now that we are done with the process in JS, let's see how we can bind it with WebSharper to make it available in F#.
 
