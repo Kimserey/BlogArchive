@@ -152,7 +152,7 @@ var translate = function (translator) {
     $el.text(translator.execute(value, format));
 };
 ```
-The translator provides the jquery element, it provides the underlying value, `moment date` or `numeral number` non formated and lastely an `execute` function which translate the value.
+The translator provides the jquery element, it provides the underlying value, `moment date` or `numeral number` non formatted, a format defining the format of the data and an `execute` function which translate the value.
 
 The following will be the translate call for momentJS:
 ```
@@ -178,25 +178,27 @@ translate({
 });
 ```
 
-To summarize, in order to provide accurate translation, when changing language, we need to set the language for i18next, momentjs and numeraljs.
-And after the language changed, we can apply the translations.
+To summarize, in order to provide accurate translation, when changing language, we need to:
+ 1. set the language for i18next, momentjs and numeraljs.
+ 2. apply the translations using our translate method and the `localize` method added by jquery.
 
 So we will have something like that:
 ```
 var $culture = ... some culture ...
 
-//Sets Momentjs language
+// 1 - Sets Momentjs language
 moment.locale($culture);
 
-//Sets numeraljs language
+// 1- Sets numeraljs language
 numeral.language($culture);
 
-//Sets i18next language
+// 1 - Sets i18next language
 i18next.changeLanguage(culture, function(err, t) { 
-    //Translates text JQuery
+    
+    // 2 - Translates text JQuery
     $('body').localize();
 
-    //Translates dates Momentjs
+    // 2- Translates dates Momentjs
     $('[data-translate-date]').each(function() {
         translate({
             el: $(this),
@@ -208,7 +210,7 @@ i18next.changeLanguage(culture, function(err, t) {
         });
     });
         
-    //Translates numbers Numeraljs
+    // 2- Translates numbers Numeraljs
     $('[data-translate-numeric]').each(function() {
         translate({
             el: $(this),
@@ -222,15 +224,20 @@ i18next.changeLanguage(culture, function(err, t) {
 });
 ```
 
-We also defined special jquery attributes `data-translate-date`, `data-translate-date-format`, `data-translate-numeric`, `data-translate-numeric-format`, which will hold original values for date and number and we use those attributes to access the elements using jquery.
-Next instead of having to remember to add the specifix tags, we can create a template for the localized fields.
+We also defined special jquery attributes which hold original values and format and we use those attributes to access the elements using jquery.
+
+    - `data-translate-date`
+    - `data-translate-numeric`
+    - `data-translate-format`
+
+Now that we are done with the process in JS, let's see how we can bind it with WebSharper to make it available in F#.
 
 ## 2. WebSharper bindings to work with F#
 
-We have defined a good process in JS to translate our text dates and numbers.
+We have defined a good process in JS to translate our text, dates and numbers.
 Now we need to provide the translations.
-
-We will do that from WebSharper. The benefit for doing this in F# is that we can build a __typesafe__ model which contains all the translations.
+We will do that from WebSharper. 
+The benefit for doing this in F# is that we can build a __typesafe__ model which contains all the translations.
 So let's define the translation model.
 
 ```
@@ -246,7 +253,11 @@ and Div = {
 }
 ```
 
-After that we can create the WebSharper bindings.
+We create a `Language` type which will hold the language name and translation.
+The translation will contain all our translation accessible by path.
+For example, to access `Text` here we will reference `Div.Text`.
+
+We can now create the WebSharper bindings:
 
 ```
 [<JavaScript>]
@@ -338,17 +349,20 @@ type Localizer =
     static member Localize(language: string) = X<unit>
 ```
 
-We follow the same way we used the JS.
-By creating an initialize function and a change language which binds directly to the JS equivalent.
+We follow the same way we used in JS. 
+We create an `initialize` function and a `changeLanguage` which binds directly to the JS equivalent.
 
 Notice the notation `New` and `=>` employed `lg.Name => New [ "translation" => lg.Translation ]`. 
 `New` is used to create a `JS object` and `=>` is used to create a property so we can use it together like so: `New [ "propOne" => propOne ; "propTwo"  => propTwo ]`.
 
+Now that we have the bindings, we can use it in a sample.
+
 ## 3. Usage example
 
-Let's now see how we can use it in an example. We start first by creating a WebSharper SPA and add a `Localizer` fs.
+Let's now see how we can use it in an example. 
+The full source code of the sample is available here [https://github.com/Kimserey/InternationalizationSample](https://github.com/Kimserey/InternationalizationSample).
 
-Then we can define our templates in `localizer-tpl.html` [https://github.com/Kimserey/InternationalizationSample/blob/master/InternationalizationSample/localizer-tpl.html](https://github.com/Kimserey/InternationalizationSample/blob/master/InternationalizationSample/localizer-tpl.html).
+To make our task easier, we can define our templates in `localizer-tpl.html` [https://github.com/Kimserey/InternationalizationSample/blob/master/InternationalizationSample/localizer-tpl.html](https://github.com/Kimserey/InternationalizationSample/blob/master/InternationalizationSample/localizer-tpl.html).
 ```
 <span data-template="Text" data-translate="${Text}"></span>
 <span data-template="Date" data-translate-date="${date}" data-translate-format="${format}"></span>
@@ -441,16 +455,20 @@ module Client =
         |> Doc.RunById "main"
 ```
 
+We start by defining our `languages` and its translations.
+Then we create a text, a date and a currency formatted number which will be translated.
+And finally by using two buttons, one targetted to English and the other one French, we allow the user to translate the content of the website.
+
 And that's it we are done, we now have localization for text language, date and number in our webapp!
 
 ![preview](https://raw.githubusercontent.com/Kimserey/InternationalizationSample/master/i18n.gif)
 
 # Conclusion
 
-Today we saw how we could support i18n in our WebSharper webapp in F#.
-I never saw much tutorial and emphisis on how important it is but we must always remember that not everyone speak or read English and the internet is accessible for everyone.
-A webapp allowing user to change languages and cultures will always be better placed than a webapp allowing only English.
-We should strive to make our webapp accessbile for everyone without language barriers.
+Today we saw how we could bring i18n in our WebSharper webapp in F#.
+I didn't see many tutorials on how to bring i18n to webapps so I wanted to share a way to do it.
+Localization is very important when you need target different markets in different countries.
+It is always better to be able to localize and it will also make your webapp more attractive than a Google translated webapp!
 Hope you enjoyed reading this post as much as I enjoyed writing it!
 As always, if you have comments leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
 
