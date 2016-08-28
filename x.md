@@ -209,4 +209,134 @@ i18next.changeLanguage(culture, function(err, t) {
 });
 ```
 
+We also defined special jquery attributes `data-translate-date`, `data-translate-date-format`, `data-translate-numeric`, `data-translate-numeric-format`, which will hold original values for date and number and we use those attributes to access the elements using jquery.
+Next instead of having to remember to add the specifix tags, we can create a template for the localized fields.
+
 ## 2. WebSharper bindings to work with F#
+
+We have defined a good process in JS to translate our text dates and numbers.
+Now we need to provide the translations.
+
+We will do that from WebSharper. The benefit for doing this in F# is that we can build a __typesafe__ model which contains all the translations.
+So let's define the translation model.
+
+```
+type Language = {
+    Name: string
+    Translation: Translation
+}
+and Translation = {
+    Div: Div
+}
+and Div = {
+    Text: string
+}
+```
+
+After that we can create the WebSharper bindings.
+
+```
+[<JavaScript>]
+type Localizer =
+
+    [<Direct """
+        i18next.init({
+            resources: $resources
+        }, function(err, t) {
+            if(err) {
+                console.error("Some unhandled errors occured while initiating i18next.");
+            }
+
+            jqueryI18next.init(i18next, $, {
+                selectorAttr: 'data-translate'
+            });
+        });
+    """>]
+    static member _Init (resources: obj) = X<unit>
+
+    static member Init languages =
+        let resources = 
+            languages
+            |> List.map (fun lg -> lg.Name => New [ "translation" => lg.Translation ])
+            |> New
+
+        Localizer._Init resources
+    
+    [<Direct """
+        var isNull = function(key) {
+            return !key || typeof key === 'undefined' || key === false;
+        };
+
+        var translate = function (translator) {
+            var $el = translator.el;
+            var data = $el.data();
+
+            var value = translator.value(data);
+            if(isNull(value)) return;
+
+            var format = translator.format(data);
+            if(isNull(format)) return;
+
+            $el.text(translator.execute(value, format));
+        };
+
+        //Sets Momentjs language
+        moment.locale($language);
+
+        //Sets numeraljs language
+        numeral.language($language);
+
+        //Sets i18next language
+        i18next.changeLanguage($language, function(err, t) {
+            if(err) {
+                console.error("Some unhandled errors occured while changing i18next language to " + $language + ".");
+                return;
+            }
+
+
+            //Translates text JQuery
+            $('body').localize();
+                
+            //Translates dates Momentjs
+            $('[data-translate-date]').each(function() {
+                translate({
+                    el: $(this),
+                    value:  function(data) { return data.translateDate; },
+                    format: function(data) { return data.translateDateFormat || "YYYY-MM-DD"; },
+                    execute: function(value, format) {
+                        return moment(value).format(format);
+                    }
+                });
+            });
+                
+            //Translates numbers Numeraljs
+            $('[data-translate-numeric]').each(function() {
+                translate({
+                    el: $(this),
+                    value:  function(data) { return data.translateNumeric; },
+                    format: function(data) { return data.translateNumericFormat || "0,0.00"; },
+                    execute: function(value, format) {
+                        return numeral(value).format(format);
+                    }
+                });
+            })
+        });
+    """>]
+    static member Localize(language: string) = X<unit>
+```
+
+We follow the same way we used the JS.
+By creating an initialize function and a changelanguage which binds directly to the JS equivalent.
+
+
+```
+<span data-template="Text" data-translate="${Text}"></span>
+<span data-template="Date" data-translate-date="${date}" data-translate-date-format="${format}"></span>
+<span data-template="Number" data-translate-numeric="${number}" data-translate-numeric-format="${format}"></span>
+```
+
+Using this templates, we can now construct the elements in a typesafe way and we don't need to bother anymore about the special fields.
+
+## 3. Usage example
+
+Let's now see how we can use it in an example
