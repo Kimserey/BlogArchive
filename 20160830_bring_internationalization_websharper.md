@@ -1,4 +1,4 @@
-# Bring internationalization (i18n) to your WebSharper webapps in F#
+# Bring internationalization (i18n) to your WebSharper webapps in FSharp
 
 When working on webapps which need to be used by international clients, it is important to provide i18n.
 I18n is the process of developing applications web/desktop/mobile which provide an easy way to change language and culture to be localized to different markets.
