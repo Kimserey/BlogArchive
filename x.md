@@ -339,4 +339,29 @@ Using this templates, we can now construct the elements in a typesafe way and we
 
 ## 3. Usage example
 
-Let's now see how we can use it in an example
+Let's now see how we can use it in an example. We start first by creating a WebSharper SPA and add a `Localizer` fs.
+
+Then we can define our templates in `localizer-tpl.html`.
+
+Also we need to add the scripts references in the `index.html`.
+
+
+Lastely we can add some code which will allow us to switch languages.
+
+
+And that's it we are done, we now have localization for text language, date and number in our webapp!
+
+# Conclusion
+
+Today we saw how we could support i18n in our WebSharper webapp in F#.
+I never saw much tutorial and emphisis on how important it is but we must always remember that not everyone speak or read English and the internet is accessible for everyone.
+A webapp allowing user to change languages and cultures will always be better placed than a webapp allowing only English.
+We should strive to make our webapp accessbile for everyone without language barriers.
+Hope you enjoyed reading this post as much as I enjoyed writing it!
+As always, if you have comments leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
+
+# Other post you will like!
+
+ - Understand how to create WebSharper templates - [https://kimsereyblog.blogspot.co.uk/2016/08/create-html-componants-for-your.html](https://kimsereyblog.blogspot.co.uk/2016/08/create-html-componants-for-your.html)
+ - Create a small webapp with WebSharper UI.Next - [https://kimsereyblog.blogspot.co.uk/2016/07/from-idea-to-product-with-websharper-in.html](https://kimsereyblog.blogspot.co.uk/2016/07/from-idea-to-product-with-websharper-in.html)
+ - Understand the difference between Direct and Inline - [https://kimsereyblog.blogspot.co.uk/2016/05/understand-difference-between-direct.html](https://kimsereyblog.blogspot.co.uk/2016/05/understand-difference-between-direct.html)
