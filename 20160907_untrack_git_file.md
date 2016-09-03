@@ -103,5 +103,6 @@ h hello
 ## Conclusion
 
 Today we saw how we could untrack a file previously pushed on a git repository.
-Hope you enjoyed reading this post as much as I enjoyed writing it, if you have any comments leave it here or hit me on Twitter [@Kimserey_Lam]().
+This was useful for me as I previously held a config file in my repository and
+Hope you enjoyed reading this post as much as I enjoyed writing it, if you have any comments leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/kimserey_lam).
 See you next time!
