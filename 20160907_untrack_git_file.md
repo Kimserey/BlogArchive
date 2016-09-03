@@ -63,7 +63,7 @@ Once you push that, __`test` will be removed from the repository but your local 
 
 Now let's say we have another scenario where we actually __do not want to remove the file from the repository__.
 
-To do that you can use the following:
+To do that we can do the following:
 
 ```
 > git update-index --assume-unchanged test
