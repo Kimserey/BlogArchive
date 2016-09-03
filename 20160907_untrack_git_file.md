@@ -6,8 +6,8 @@ So took me a while to wrap my head around the process and today I would like to 
 So this post will be very quick, composed by two parts:
 
  1. Scenario
- 2 `git rm --cached`
- 3 `git update-index --assume-unchanged`
+ 2. `git rm --cached`
+ 3. `git update-index --assume-unchanged`
 
 ## 1. Scenario
 
