@@ -23,6 +23,8 @@ Now I wanted to untrack the file from the repository.
 
 ## 2. `git rm --cached`
 
+My first option is to __remove the file from the git repository.__
+
 ```
 > git rm --cached test
 > git commit -m "remove test"
