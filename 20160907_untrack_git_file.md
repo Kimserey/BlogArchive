@@ -23,15 +23,11 @@ Now I wanted to untrack the file from the repository.
 
 ## 2. `git rm --cached`
 
-Here's the commands I used:
-
 ```
 > git rm --cached test
 > git commit -m "remove test"
 > git push
 ```
-
-So let's see the commands in order.
 
 `rm` is used to remove a file from the index (The index is where the staged changes are held).
 It would be the same as manually deleting the file and then staging `git add .` the deletion.
