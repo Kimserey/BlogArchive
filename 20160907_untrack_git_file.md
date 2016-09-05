@@ -1,9 +1,9 @@
 # Untrack a file previously pushed with Git
 
 Last week I had to untrack a file previously pushed on a git repository and I wasn't sure on how to do it.
-So took me a while to wrap my head around the process and today I would like to share that so that it is documented here.
+Took me a while to wrap my head around the process so today I would like to share that in order to have it documented here.
 
-So this post will be very quick, composed by two parts:
+This post will be composed by two parts:
 
  1. Scenario
  2. `git rm --cached`
