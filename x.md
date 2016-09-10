@@ -43,4 +43,4 @@ The app does not get published instantly, so just wait a few hours and that's it
 Conclusion
 
 Today we saw how we could take a completed application and publish it to Google play store. I hope you could get a sense of what has to be done to publish. The process isn't difficult and it takes just few minutes to complete if you already have an icon and a banner for yout page in the store.
-Hope you enjoyed reading this post as much as I enjoyed writing it, as always if you have any question leaveit here or hit me on Twitter [@Kimserey_Lam](). See you next time!
+Hope you enjoyed reading this post as much as I enjoyed writing it, as always if you have any question leaveit here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
