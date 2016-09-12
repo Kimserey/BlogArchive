@@ -5,7 +5,7 @@ How many steps are involved?
 How much does it cost? 
 What information is required?
 
-Few weeks ago I asked myself those questions. To answer those, I decided to publish an app on Google play store.
+Few weeks ago I asked myself these questions and to answer it, I decided to publish an app on Google play store.
 Last week I completed a simple application and pushed it under alpha release on the Play store so today I would like to share what I did so that you will know how to do it too.
 
 This post is composed by three parts:
@@ -55,17 +55,28 @@ keytool -list -keystore baskee.keystore
 Now that we have the keystore, we can use it to sign our APK.
 To do that, start by building your app in Release config.
 
+![release](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/release.png)
 
 Then head to Tools > Android > Publish.
 
+![publish](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/publish.png)
 
-Select the keystore created previously, put the password you set while creating the keystore and specify which key to use with the password for that key (that is the second password you used).
+Select the keystore created previously, enter the password you set while creating the keystore and specify which key to use by entering its alias together
+with the password of the key (the second password you have entered previously).
 
+![publish screen](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/publish_screen.png)
 
 
 In this process, VS will compile under Release configuration, sign the apk using the key held in the keystore and finally align the apk.
-Aligning the apk is a process mandatory before publishing in the play store.
-This process will create an aligned apk. The aligned apk is the one that we will upload to the store.
+The result is a file named:
+
+```
+com.kimserey.baskee-Aligned.apk
+```
+
+_Aligning the apk is a process mandatory before publishing in the play store._
+
+Now that you have the aligned APK you can move to the next step - Create a Google Play developer account.
 
 ## 2. Google account
 
