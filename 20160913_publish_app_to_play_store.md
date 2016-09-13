@@ -85,19 +85,49 @@ Now head to the Google play developer console [https://play.google.com/apps/publ
 ![google play process](https://github.com/Kimserey/BlogArchive/blob/master/img/ggplay.png?raw=true)
 
 Here you will need to _pay 25 dollars_ to activate your account.
-Once you have the account you can `Add a new application` and load an APK but you will not be able to publish it yet.
+
+Once that you have activated your account, you should be able to access the portal.
+
+![portal](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/portal.png)
+
+From there, you can `Add a new application` and load an APK but you will not be able to publish it yet.
 You need to first provide few more details before having the possibility to publish it.
 
 ## 3. Publish your app
 
-After your apk is loaded before being able to push the app, some documents need to be provided and some information need to be completed.
-You need to provide a high resolution icon 512x512 (the icon which will be displayed in the store) and a feature graphic (the image which will appear at the top of the store).
-You also need to provide a description and a tag line and complete some other details like agreeing ....
-Provide screenshots.
+After your APK is loaded before being able to push the app, some documents need to be provided and some information need to be completed.
+
+The three sections to answer are:
+
+ - Store Listing, provides information for the store listing of your app
+ - Content rate, evaluates the age rating of the app
+ - Pricing & distribution, provides information on the prices of the app, advertisement and distribution
+
+Content rate and Pricing & distribution are straight forward, there are just questions to answer and consent to give.
+Probably the one which will take the most time if you don't have it yet are the information for the Store listing, especially the high resolution icon adn the feature graphic.
+
+The high resolution icon 512x512 is the icon which will be displayed in the store.
+Here's __Baskee__ icon:
+
+![icon](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/icon_highres.png)
+
+The feature graphic is the image which will appear at the top of the store.
+Here's the feature graphic of __Baskee__:
+
+![feature_graphic](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/feature_graphic.png)
+
+You will also need to provide screenshots:
+
+![screenshots](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/screenshots.png)
+
 Once you've done that you should be able to click publish.
-The app does not get published instantly, so just wait a few hours and that's it! Congratulation you have deployed an app on Google play store!
+The app does not get published instantly, so just wait a few hours and that's it! 
+
+__Congratulation you have deployed an app on Google play store!__
 
 ## Conclusion
 
-Today we saw how we could take a completed application and publish it to Google play store. I hope you could get a sense of what has to be done to publish. The process isn't difficult and it takes just few minutes to complete if you already have an icon and a banner for yout page in the store.
+Today we saw how we could take a completed application and publish it to Google play store. 
+I hope you could get a sense of what has to be done to publish. 
+The process isn't difficult and it takes just few minutes to complete if you already have an icon and a banner for the store listing.
 Hope you enjoyed reading this post as much as I enjoyed writing it, as always if you have any question leaveit here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
