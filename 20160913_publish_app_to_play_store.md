@@ -125,6 +125,8 @@ The app does not get published instantly, so just wait a few hours and that's it
 
 __Congratulation you have deployed an app on Google play store!__
 
+![play store](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/play_store.png)
+
 ## Conclusion
 
 Today we saw how we could take a completed application and publish it to Google play store. 
