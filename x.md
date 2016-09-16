@@ -143,3 +143,4 @@ See you next time!
 
 - Have you ever wondered what is required to publish an Android app on Google Play store? Here are the steps - [https://kimsereyblog.blogspot.co.uk/2016/09/publish-your-android-app-to-google-play.html](https://kimsereyblog.blogspot.co.uk/2016/09/publish-your-android-app-to-google-play.html)
 - Transform your WebSharper web app into an Android app - [https://kimsereyblog.blogspot.co.uk/2016/05/transform-your-websharper-web-app-into.html](https://kimsereyblog.blogspot.co.uk/2016/05/transform-your-websharper-web-app-into.html)
+- Nice features and tricks with SQLite - [https://kimsereyblog.blogspot.co.uk/2016/06/nice-features-and-tricks-with-sqlite.html](https://kimsereyblog.blogspot.co.uk/2016/06/nice-features-and-tricks-with-sqlite.html)
