@@ -131,6 +131,42 @@ Knowing that, we can use absolute layout to compose more sophisticated screens b
 
 Relative layout is used, as it names indicate it, to place a view in relation to something else - either another view or the parent view.
 
+Here is a simple example of a relative layout.
+
+```
+let layout =
+    let layout = new RelativeLayout()
+
+    let box = new BoxView(BackgroundColor = Color.Blue)
+    layout.Children.Add(
+        box,
+        Constraint.RelativeToParent(fun parent -> parent.X),
+        Constraint.RelativeToParent(fun parent -> parent.Y),
+        Constraint.RelativeToParent(fun parent -> (parent.Width * 25.) / 100.),
+        Constraint.RelativeToParent(fun parent -> (parent.Height * 25.) / 100.)
+    )
+
+    let box2 = new BoxView(BackgroundColor = Color.Fuchsia)
+    layout.Children.Add(
+        box2,
+        Constraint.RelativeToView(box, fun parent view -> view.X + view.Width),
+        Constraint.RelativeToView(box, fun parent view -> view.Y + view.Height),
+        Constraint.RelativeToParent(fun parent -> (parent.Width * 25.) / 100.),
+        Constraint.RelativeToParent(fun parent -> (parent.Height * 25.) / 100.)
+    )
+
+    layout
+```
+
+`box` is placed relative to its parent (the page itself) using `Constraint.RelativeToParent` where we define X, Y, width and height.
+And `box2` is placed relative to `box` for its X and Y with `Constraint.RelativeToView` and relative to its parent for width and height.
+
+![relative](https://github.com/Kimserey/XamarinFormsDefaultLayoutSample/blob/master/img/relative_2.png?raw=true)
+
+Relative layout is useful when we need to place element precisely on the screen.
+
+__All the samples are available on my GitHub repository [https://github.com/Kimserey/XamarinFormsDefaultLayoutSample](https://github.com/Kimserey/XamarinFormsDefaultLayoutSample)__.
+
 ## Conclusion
 
 When I first started to use Xamarin.Forms, it took me a while to understand that Absolute layout in Xamarin is not the same as Absolute positioning in HTML/CSS.
