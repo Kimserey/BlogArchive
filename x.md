@@ -9,8 +9,10 @@ On the other hand, `absolute layout` and `relative layout` isn't that straight f
 So today, we will see how and when we can use `absolute layout` and/or `relative layout` in our advantage.
 This post is composed by two parts:
 
+```
  1. Absolute layout
  2. Relative layout
+```
 
  ## 1. Absolute layout
 
