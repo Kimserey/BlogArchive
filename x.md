@@ -1,4 +1,3 @@
-
 # Absolute layout and relative layout Xamarin forms
 
 In Xamarin Forms, __layouts__ are used to position elements in the page.
@@ -131,3 +130,16 @@ Knowing that, we can use absolute layout to compose more sophisticated screens b
 ## 2. Relative layout
 
 Relative layout is used, as it names indicate it, to place a view in relation to something else - either another view or the parent view.
+
+## Conclusion
+
+When I first started to use Xamarin.Forms, it took me a while to understand that Absolute layout in Xamarin is not the same as Absolute positioning in HTML/CSS.
+After understanding that, I started to look into how it really worked rather than assuming how it worked and this post basically describe what I have learnt.
+In my opinion, Absolute layout is very useful for proportional layouts. It's extremely useful to separate the screen in two sections and it is what I always use it for.
+I hope this post helped to demystify Absolute layout and Relative layout let me know if you have any question by leaving a comment here on hit me on Twitter [https://twitter.com/Kimserey_Lam](https://twitter.com/Kimserey_Lam).
+See you next time!
+
+## Other posts you will like!
+
+- Have you ever wondered what is required to publish an Android app on Google Play store? Here are the steps - [https://kimsereyblog.blogspot.co.uk/2016/09/publish-your-android-app-to-google-play.html](https://kimsereyblog.blogspot.co.uk/2016/09/publish-your-android-app-to-google-play.html)
+- Transform your WebSharper web app into an Android app - [https://kimsereyblog.blogspot.co.uk/2016/05/transform-your-websharper-web-app-into.html](https://kimsereyblog.blogspot.co.uk/2016/05/transform-your-websharper-web-app-into.html)
