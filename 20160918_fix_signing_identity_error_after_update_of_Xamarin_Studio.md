@@ -20,9 +20,12 @@ The error said was the following:
 I had to do some googling and lookaround the settings to get that sorted which took me about half to an hour.
 Today I would like to share that with you so that you won't need to do the search that I did.
 
-The steps to fix this are the following: 
+The steps to fix this are the following:
+
+``` 
  1. Update Xcode to latest
  2. Add an apple account to Xcode and check the iOS development setting
+```
 
  ## 1. Update Xcode to latest
 
