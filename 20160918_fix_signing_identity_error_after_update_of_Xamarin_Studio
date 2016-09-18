@@ -1,5 +1,13 @@
 # Fix signing identity error after update of Xamarin Studio
 
+This post will explain how to fix the errors appearing in Xamarin Studio after recent update:
+
+```
+The version of Xamarin.iOS requires the iOS 10.0SDK when the managed linker is disabled.
+
+Error executing task Codesign: Required property 'Sigingkey' not set.
+```
+
 I recently started to play with Xamarin.iOS and am still at the beginner level - I don't know anything about developping apps on iOS.
 But so far I have been able to play around and deploy to the xcode simulator until yesterday.
 
