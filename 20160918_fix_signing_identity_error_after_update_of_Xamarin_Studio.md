@@ -53,4 +53,6 @@ So first head to XCode > Preferences > Accounts > + to add account > View detail
 
 Once you restart Xamarin Studio and recompile, you should be able to publish to the simultator again.
 
+## Done
+
 Happy coding!
