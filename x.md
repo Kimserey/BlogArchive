@@ -9,6 +9,7 @@ Today I would like to show you how we can use some of these basic views to build
 Here's a preview of the Accordion view:
 
 ![accordion](https://raw.githubusercontent.com/Kimserey/AccordionView/master/img/accordion.gif)
+
 Full source code available on GitHub - [https://github.com/Kimserey/AccordionView](https://github.com/Kimserey/AccordionView)
 
 This post will be composed of four steps:
@@ -87,120 +88,246 @@ The accordion expandable section is the item portion which contains a header and
 
 For example, in the image above, we can see `November` section being retracted and when expanded, display a list of dates with prices.
 
- ```
- 	public class AccordionSectionView : StackLayout
-	{
-		private bool _isExpended = false;
-		private StackLayout _content = new StackLayout { HeightRequest = 0 };
-		private Color _headerColor = Color.FromHex("0067B7");
-		private ImageSource _arrowRight = ImageSource.FromFile("ic_keyboard_arrow_right_white_24dp.png");
-		private ImageSource _arrowDown = ImageSource.FromFile("ic_keyboard_arrow_down_white_24dp.png");
-		private AbsoluteLayout _header = new AbsoluteLayout();
-		private Image _headerIcon = new Image { VerticalOptions = LayoutOptions.Center };
-		private Label _headerTitle = new Label { TextColor = Color.White, VerticalTextAlignment = TextAlignment.Center, HeightRequest = 50 };
-		private DataTemplate _template;
+__Where do we start?__
 
-		public static readonly BindableProperty ItemsSourceProperty =
-			BindableProperty.Create(
-				propertyName: "ItemsSource",
-				returnType: typeof(IList),
-				declaringType: typeof(AccordionSectionView),
-				defaultValue: default(IList),
-				propertyChanged: AccordionSectionView.PopulateList);
+First thing to do is to figure out which are the bindable properties.
+In order to figure this, I ask myself, __which property of the model will be needed to construct the view?__ and the answer to that usually are the bindable properties.
+Here the section needs a `title` and a `list` of items which will be used to construct the content. 
 
-		public IList ItemsSource
-		{
-			get { return (IList)GetValue(ItemsSourceProperty); }
-			set { SetValue(ItemsSourceProperty, value); }
-		}
+The whole section can be defined as a `StackLayout` as it is basically stacking views in a vertical fashion.
+For the `content`, I will also use a `StackLayout` so that everything will be visible. _This will cause performance issue if you list is potentially infinite, so you might want to use something else if it doesn't suit your needs._
 
-		public static readonly BindableProperty TitleProperty =
-			BindableProperty.Create(
-				propertyName: "Title",
-				returnType: typeof(string),
-				declaringType: typeof(AccordionSectionView),
-				propertyChanged: AccordionSectionView.ChangeTitle);
+With that in mind, we can write the following:
 
-		public string Title
-		{
-			get { return (string)GetValue(TitleProperty); }
-			set { SetValue(TitleProperty, value); }
-		}
+```
+public class AccordionSectionView: StackLayout
+{
+    private Label _headerTitle = new Label { TextColor = Color.White, VerticalTextAlignment = TextAlignment.Center, HeightRequest = 50 };
+    private StackLayout _content = new StackLayout { HeightRequest = 0 };
+    private DataTemplate _template;
 
-		public AccordionSectionView(DataTemplate itemTemplate, ScrollView parent)
-		{
-			_template = itemTemplate;
-			_headerTitle.BackgroundColor = _headerColor;
-			_headerIcon.Source = _arrowRight;
-			_header.BackgroundColor = _headerColor;
+    public static readonly BindableProperty ItemsSourceProperty =
+        BindableProperty.Create(
+            propertyName: "ItemsSource",
+            returnType: typeof(IList),
+            declaringType: typeof(AccordionSectionView),
+            defaultValue: default(IList),
+            propertyChanged: AccordionSectionView.PopulateList);
 
-			_header.Children.Add(_headerIcon, new Rectangle(0, 1, .1, 1), AbsoluteLayoutFlags.All);
-			_header.Children.Add(_headerTitle, new Rectangle(1, 1, .9, 1), AbsoluteLayoutFlags.All);
+    public IList ItemsSource
+    {
+        get { return (IList)GetValue(ItemsSourceProperty); }
+        set { SetValue(ItemsSourceProperty, value); }
+    }
 
-			this.Spacing = 0;
-			this.Children.Add(_header);
-			this.Children.Add(_content);
+    public static readonly BindableProperty TitleProperty =
+        BindableProperty.Create(
+            propertyName: "Title",
+            returnType: typeof(string),
+            declaringType: typeof(AccordionSectionView),
+            propertyChanged: AccordionSectionView.ChangeTitle);
 
-			_header.GestureRecognizers.Add(
-				new TapGestureRecognizer
-				{
-					Command = new Command(async () =>
-					{
-						if (_isExpended)
-						{
-							_headerIcon.Source = _arrowRight;
-							_content.HeightRequest = 0;
-							_content.IsVisible = false;
-							_isExpended = false;
-						}
-						else
-						{
-							_headerIcon.Source = _arrowDown;
-							_content.HeightRequest = _content.Children.Count * 50;
-							_content.IsVisible = true;
-							_isExpended = true;
+    public string Title
+    {
+        get { return (string)GetValue(TitleProperty); }
+        set { SetValue(TitleProperty, value); }
+    }
 
-							// Scroll top by the current Y position of the section
-							if (parent.Parent is VisualElement)
-							{
-								await parent.ScrollToAsync(0, this.Y, true);
-							}
-						}
-					})
-				}
-			);
-		}
+    public AccordionSectionView(DataTemplate itemTemplate, ScrollView parent)
+    {
+        _template = itemTemplate;
+        this.Spacing = 0;
+        this.Children.Add(_headerTitle);
+        this.Children.Add(_content);
+    }
 
-		void ChangeTitle()
-		{
-			_headerTitle.Text = this.Title;
-		}
+    void ChangeTitle()
+    {
+        _headerTitle.Text = this.Title;
+    }
 
-		void PopulateList()
-		{
-			_content.Children.Clear();
+    void PopulateList()
+    {
+        _content.Children.Clear();
 
-			foreach (object item in this.ItemsSource)
-			{
-				var template = (View)_template.CreateContent();
-				template.BindingContext = item;
-				_content.Children.Add(template);
-			}
-		}
+        foreach (object item in this.ItemsSource)
+        {
+            var template = (View)_template.CreateContent();
+            template.BindingContext = item;
+            _content.Children.Add(template);
+        }
+    }
 
-		static void ChangeTitle(BindableObject bindable, object oldValue, object newValue)
-		{
-			if (oldValue == newValue) return;
-			((AccordionSectionView)bindable).ChangeTitle();
-		}
+    static void ChangeTitle(BindableObject bindable, object oldValue, object newValue)
+    {
+        if (oldValue == newValue) return;
+        ((AccordionSectionView)bindable).ChangeTitle();
+    }
 
-		static void PopulateList(BindableObject bindable, object oldValue, object newValue)
-		{
-			if (oldValue == newValue) return;
-			((AccordionSectionView)bindable).PopulateList();
-		}
-	}
- ```
+    static void PopulateList(BindableObject bindable, object oldValue, object newValue)
+    {
+        if (oldValue == newValue) return;
+        ((AccordionSectionView)bindable).PopulateList();
+    }
+}
+```
+
+We created two `BindableProperty` and defined the `headerTitle` and the `content`.
+Also we are taking a `DataTemplate` as constructor parameter to create template for the items in `content`.
+
+```
+var template = (View)_template.CreateContent();
+template.BindingContext = item;
+_content.Children.Add(template);
+```
+
+Now if you run this you will see the headers but __nothing happens when you click on the headers.__
+
+### 2.2 Handle gesture
+
+In order to handle tap gesture on the header, we need to add a `GestureRecognizer` to the header.
+This is done using `GestureRecognizers.Add(new TapGestureRecognizer(...))`.
+
+We need to add the following code in the constructor of the view:
+
+```
+_headerTitle.GestureRecognizers.Add(
+    new TapGestureRecognizer
+    {
+        Command = new Command(async () =>
+        {
+            if (_isExpanded)
+            {
+                _content.HeightRequest = 0;
+                _content.IsVisible = false;
+                _isExpanded = false;
+            }
+            else
+            {
+                _content.HeightRequest = _content.Children.Count * 50;
+                _content.IsVisible = true;
+                _isExpanded = true;
+
+                // Scroll top by the current Y position of the section
+                if (parent.Parent is VisualElement)
+                {
+                    await parent.ScrollToAsync(0, this.Y, true);
+                }
+            }
+        })
+    }
+);
+```
+
+I have added state indicator `_isExpanded`.
+`When the section is already expanded`, it means that we want to `hide the section` therefore we `set the height to zero` and we `make the content invisible`.
+`When the section is retracted`, it means that we want to `show the section` therefore we `set back the height` and `make the content visible` and also `scroll the element to the top by scrolling using the current Y position`.
+
+_Scrolling using Y will bring the section as close as possible to the top._
+
+### 2.3 Full Accordion expandable section
+
+Here is the full accordion section discribed above.
+
+```
+public class AccordionSectionView: StackLayout
+{
+    private Label _headerTitle = new Label { VerticalTextAlignment = TextAlignment.Center, HeightRequest = 50 };
+    private StackLayout _content = new StackLayout { HeightRequest = 0 };
+    private DataTemplate _template;
+
+    public static readonly BindableProperty ItemsSourceProperty =
+        BindableProperty.Create(
+            propertyName: "ItemsSource",
+            returnType: typeof(IList),
+            declaringType: typeof(AccordionSectionView),
+            defaultValue: default(IList),
+            propertyChanged: AccordionSectionView.PopulateList);
+
+    public IList ItemsSource
+    {
+        get { return (IList)GetValue(ItemsSourceProperty); }
+        set { SetValue(ItemsSourceProperty, value); }
+    }
+
+    public static readonly BindableProperty TitleProperty =
+        BindableProperty.Create(
+            propertyName: "Title",
+            returnType: typeof(string),
+            declaringType: typeof(AccordionSectionView),
+            propertyChanged: AccordionSectionView.ChangeTitle);
+
+    public string Title
+    {
+        get { return (string)GetValue(TitleProperty); }
+        set { SetValue(TitleProperty, value); }
+    }
+
+    public AccordionSectionView(DataTemplate itemTemplate, ScrollView parent)
+    {
+        _template = itemTemplate;
+        this.Spacing = 0;
+        this.Children.Add(_headerTitle);
+        this.Children.Add(_content);
+
+        _headerTitle.GestureRecognizers.Add(
+            new TapGestureRecognizer
+            {
+                Command = new Command(async () =>
+                {
+                    if (_isExpanded)
+                    {
+                        _content.HeightRequest = 0;
+                        _content.IsVisible = false;
+                        _isExpanded = false;
+                    }
+                    else
+                    {
+                        _content.HeightRequest = _content.Children.Count * 50;
+                        _content.IsVisible = true;
+                        _isExpanded = true;
+
+                        // Scroll top by the current Y position of the section
+                        if (parent.Parent is VisualElement)
+                        {
+                            await parent.ScrollToAsync(0, this.Y, true);
+                        }
+                    }
+                })
+            }
+        );
+    }
+
+    void ChangeTitle()
+    {
+        _headerTitle.Text = this.Title;
+    }
+
+    void PopulateList()
+    {
+        _content.Children.Clear();
+
+        foreach (object item in this.ItemsSource)
+        {
+            var template = (View)_template.CreateContent();
+            template.BindingContext = item;
+            _content.Children.Add(template);
+        }
+    }
+
+    static void ChangeTitle(BindableObject bindable, object oldValue, object newValue)
+    {
+        if (oldValue == newValue) return;
+        ((AccordionSectionView)bindable).ChangeTitle();
+    }
+
+    static void PopulateList(BindableObject bindable, object oldValue, object newValue)
+    {
+        if (oldValue == newValue) return;
+        ((AccordionSectionView)bindable).PopulateList();
+    }
+}
+```
 
 ## 3. Define the accordion view
 
