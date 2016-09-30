@@ -10,7 +10,7 @@ Here's a preview of the Accordion view:
 
 ![accordion](https://raw.githubusercontent.com/Kimserey/AccordionView/master/img/accordion.gif)
 
-Full source code available on GitHub - [https://github.com/Kimserey/AccordionView](https://github.com/Kimserey/AccordionView)
+Full source code available on GitHub - [https://github.com/Kimserey/AccordionView/blob/master/Accordion/AccordionView.cs](https://github.com/Kimserey/AccordionView/blob/master/Accordion/AccordionView.cs)
 
 This post will be composed of four steps:
 
@@ -563,7 +563,7 @@ public class App : Application
 
 _For simplicity, I removed the style of the header and the icons but you will find it in the GitHub source code._
 
-Full source code available on GitHub - [https://github.com/Kimserey/AccordionView](https://github.com/Kimserey/AccordionView)
+Full source code available on GitHub - [https://github.com/Kimserey/AccordionView/blob/master/Accordion/AccordionView.cs](https://github.com/Kimserey/AccordionView/blob/master/Accordion/AccordionView.cs)
 
 # Conclusion
 
