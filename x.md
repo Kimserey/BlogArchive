@@ -79,6 +79,14 @@ Our accordion view will be built of two parts:
 
  We will start here by the expandable section.
 
+ ### 2.1 The Accordion expandable section
+
+The accordion expandable section is the item portion which contains a header and a list and can be expanded or retracted.
+
+![expand](https://github.com/Kimserey/AccordionView/blob/master/img/accordion_section.png?raw=true)
+
+For example, in the image above, we can see `November` section being retracted and when expanded, display a list of dates with prices.
+
  ```
  	public class AccordionSectionView : StackLayout
 	{
