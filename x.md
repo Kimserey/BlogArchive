@@ -6,6 +6,10 @@ Xamarin.Forms has a lot of layouts and views to structure pages like grid, table
 
 Today I would like to show you how we can use some of these basic views to build an __Accordion view__.
 
+Here's a preview of the Accordion view:
+
+![accordion](https://raw.githubusercontent.com/Kimserey/AccordionView/master/img/accordion.gif)
+
 This post will be composed of four steps:
 
  1. Create your own bindings
