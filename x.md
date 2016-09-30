@@ -331,6 +331,12 @@ public class AccordionSectionView: StackLayout
 
 ## 3. Define the accordion view
 
+Now that we have the Accordion section, all we need is to implement the Accordion view itself.
+Since we might have sections with total height exceeding the size of the screen, we will use a `ScrollView`. 
+
+For the Accordion view, we ask the same question, __wwhich property of the model will be needed to construct the view?__
+Here we will only need a list which will contain all the sections.
+
 ```
 public class AccordionView : ScrollView
 {
@@ -380,7 +386,25 @@ public class AccordionView : ScrollView
 }
 ```
 
-## 4. Usage sample
+Internally we define a `Template` which creates an `AccordionSectionView`.
+
+```
+this.Template = new DataTemplate(() => (object)(new AccordionSectionView(itemTemplate, this)));
+```
+
+Since the binding context will be a list of sections, during population of the list, we set the binding context of the template to the section given.
+
+```
+var template = (View)this.Template.CreateContent();
+template.BindingContext = item;
+_layout.Children.Add(template);
+```
+
+And that's it now we have the whole __Accordion view__.
+
+### 3.1 Default template for item
+
+Just to make things easier, we can define a default template for the item display.
 
 ```
 public class DefaultTemplate : AbsoluteLayout
@@ -398,6 +422,11 @@ public class DefaultTemplate : AbsoluteLayout
     }
 }
 ```
+
+## 4. Usage sample
+
+Let's see how we can use it in a sample.
+First we define a model:
 
 ```
 public class ShoppingCart
@@ -417,6 +446,8 @@ public class ViewModel
     public IEnumerable<Section> List { get; set; }
 }
 ```
+
+Then all we need to do is use the `AccordionView` and pass the `DefaultTemplate` and set the binding context.
 
 ```
 public class AccordionViewPage : ContentPage
@@ -530,9 +561,18 @@ public class App : Application
 }
 ```
 
+_For simplicity, I removed the style of the header and the icons but you will find it in the GitHub source code._
+
 Full source code available on GitHub - [https://github.com/Kimserey/AccordionView](https://github.com/Kimserey/AccordionView)
 
 # Conclusion
+
+Today we saw how we could use the basic views from Xamarin.Forms and build a reusable Accordion view.
+In the process we learnt how to make our own bindable properties and how we could set delegates to be triggered when properties change.
+We also discovered one of the animation, scrolling, available in Xamarin.Forms.
+I hope you enjoyed reading this post as much as I enjoyed writing it.
+If you have any question, leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam).
+See you next time!
 
 # Other post you will like!
 
