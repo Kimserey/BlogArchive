@@ -1,4 +1,3 @@
-
 # How to make a splash screen with Xamarin.Android
 
 The first time I had to implement a splash screen for a Xamarin.Android app, I was completely lost.
@@ -13,6 +12,8 @@ This post is composed by 3 parts.
  2. Implement the splash screen
  3. Use the splas screen
 ```
+
+A full sample is available on my GitHub [https://github.com/Kimserey/FileFoldersXamarin/tree/master](https://github.com/Kimserey/FileFoldersXamarin/tree/master).
 
 ## 1. What's a splash screen
 
@@ -141,5 +142,6 @@ See you next time!
 
 - Publish an Android app to Play store - [https://kimsereyblog.blogspot.co.uk/2016/09/publish-your-android-app-to-google-play.html](https://kimsereyblog.blogspot.co.uk/2016/09/publish-your-android-app-to-google-play.html)
 - Build an accordion view in Xamarin.Forms - [https://kimsereyblog.blogspot.co.uk/2016/10/build-accordion-view-in-xamarinforms.html](https://kimsereyblog.blogspot.co.uk/2016/10/build-accordion-view-in-xamarinforms.html)
+- Understand absolute and relative layout in Xamarin.Forms - [https://kimsereyblog.blogspot.co.uk/2016/09/absolute-layout-and-relative-layout.html](https://kimsereyblog.blogspot.co.uk/2016/09/absolute-layout-and-relative-layout.html)
 - Understand data bindings in Xamarin.Forms - [https://kimsereyblog.blogspot.co.uk/2016/08/understand-xamarin-forms-data-bindings.html](https://kimsereyblog.blogspot.co.uk/2016/08/understand-xamarin-forms-data-bindings.html)
 - Use webview to transform website to Android app - [https://kimsereyblog.blogspot.co.uk/2016/05/transform-your-websharper-web-app-into.html](https://kimsereyblog.blogspot.co.uk/2016/05/transform-your-websharper-web-app-into.html)
