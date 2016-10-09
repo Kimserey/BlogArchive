@@ -22,20 +22,22 @@ It represents the amount of pixels which fit in the screen.
 
 The higher the better but __a second aspect equally important has too be taken in consideration - the screen dimension__.
 
-Two devices with the same resolution but different screen size will not have the same display.
-For a similar resolution, the bigger the screen, the bigger the pixel size will be - it would be as if we stretch the screen which makes each pixel look bigger.
+Two devices with the same resolution but different screen sizes will not have the same display.
+For a similar resolution, the bigger the screen, the bigger the pixel size will be - it would be as if we stretch the screen which makes each pixels look bigger.
 
-To take the screen dimension into account, another measure was created - DPI or PPI - pixel per inch.
+To take the screen dimension into account, another measure was created - DPI or PPI - density per pixel also called pixel per inch.
 
 ## 2. DPI / PPI - pixels per inch
 
-DPI and PPI represents the same thing except DPI can be confused with printers DPI so let's talk about PPI - Pixel per inch. 
+DPI and PPI represent the same thing except - pixel per inch. 
 This unit helps to measure the size of a pixel.
 It is an indicative of how many pixels can be found in one inch.
 
 So the higher the density, the more pixels can be pushed into one inch.
 
-This means that if we were to construct elements using pixels (__px__) as unit of measure, 
+__How does density affect the display?__
+
+If we were to construct elements using pixels (__px__) as unit of measure, 
 the elements will appear smaller on high density devices - because many pixels are available per inch - and larger on low density devices - because not a lot of pixels are available per inch.
 
 But if we had to cater for that in the code of the Android app, it would be a nightmare so that's where __DP__ - density-independent pixel - came from.
