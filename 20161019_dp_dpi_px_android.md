@@ -20,7 +20,7 @@ Pixels is the most granular unit of measure.
 When talking about resolution 1920x1080, 2560x1440, etc..
 It represents the amount of pixels which fit in the screen.
 
-The higher the better but a second aspect has too be taken in consideration - the size of the screen.
+The higher the better but __a second aspect equally important has too be taken in consideration - the screen dimension__.
 
 Two devices with the same resolution but different screen sizes won't look the same.
 In fact for a similar resolution, the bigger the screen, the bigger the pixel size will be - imagine it as if you stretch the small screen, 
