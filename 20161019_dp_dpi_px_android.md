@@ -72,6 +72,8 @@ The formula behind it is the following:
 
 ```
 px = (screen dpi / 160) * dp
+px = dp * (dpi/160)
+px = dp * ratio
 ```
 
 The formula says that `to calculate the pixels, normalize the screen density (dpi/160) and time the density-independent pixels`.
@@ -90,7 +92,7 @@ dp = px * K
 ```
 
 And that's where DP came from, __DP is PX time a constant K which varies depending on the screen density and ensure a consistant measure accross any screen and resolution__.
-By using that we can have a unit of measure consitant accross all density where `1 dp` in `mdpi` is equal to `1 dp` in `xhdpi` or in `xxxhdpi`.
+By using that we can have a unit of measure consitant accross all density where `1 dp` in `mdpi` is equal to `1 dp` in `xhdpi` or in `xxxhdpi` and at the moment of translating `dp` to `px`, the formula is applied where `px = dp * ratio`.
 
 # Conclusion
 
