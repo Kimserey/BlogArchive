@@ -22,11 +22,10 @@ It represents the amount of pixels which fit in the screen.
 
 The higher the better but __a second aspect equally important has too be taken in consideration - the screen dimension__.
 
-Two devices with the same resolution but different screen sizes won't look the same.
-In fact for a similar resolution, the bigger the screen, the bigger the pixel size will be - imagine it as if you stretch the small screen, 
-resolution is the same but screen is bigger.
+Two devices with the same resolution but different screen size will not have the same display.
+For a similar resolution, the bigger the screen, the bigger the pixel size will be - it would be as if we stretch the screen which makes each pixel look bigger.
 
-To take that into account, another measure was created - DPI or PPI - Pixel per inch.
+To take the screen dimension into account, another measure was created - DPI or PPI - pixel per inch.
 
 ## 2. DPI / PPI - pixels per inch
 
