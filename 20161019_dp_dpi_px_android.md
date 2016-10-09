@@ -11,7 +11,7 @@ This post is composed by three parts:
 ```
  1. PX - pixels
  2. DPI / PPI - pixels per inch
- 3. DP - density-independent pixels
+ 3. DP - density-independent pixel
 ```
 
 ## 1. PX - pixels
@@ -42,11 +42,11 @@ the elements will appear smaller on high density devices - because many pixels a
 
 If we had to cater for that in the code of the Android app, it would be a nightmare so that's where __DP__ - density-independent pixel - came from.
 
-## 3. DP - density-independent pixels
+## 3. DP - density-independent pixel
 
 DP is the density-independent pixel unit.
-__Independent pixel__ because the unit of measure is __independent__ of the density.
-Whether the density is high or low, the elements on the screen will have approximatively the same size.
+__Independent pixel__ because the unit of measure is __independent of the density__, it is independent of the screen dimension and resolution.
+__Whether the density is high or low, the elements on the screen will have approximatively the same size/look__.
 
 This is even more important as for example for margins and paddings as we want to keep margins and paddings indifferent from the screen density.
 
