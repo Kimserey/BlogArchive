@@ -17,7 +17,7 @@ This post is composed by three parts:
 ## 1. PX - pixels
 
 Pixels is the most granular unit of measure.
-When talking about resolution 1920x1080, 2540x1440, etc..
+When talking about resolution 1920x1080, 2560x1440, etc..
 It represents the amount of pixels which fit in the screen.
 
 The higher the better but a second aspect has too be taken in consideration - the size of the screen.
