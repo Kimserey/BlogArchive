@@ -37,7 +37,7 @@ So the higher the density, the more pixels can be pushed into one inch.
 
 __How does density affect the display?__
 
-If we were to construct elements using pixels (__px__) as unit of measure, 
+If we were to construct elements using pixels, 
 the elements will appear smaller on high density devices - because many pixels are available per inch - and larger on low density devices - because not a lot of pixels are available per inch.
 
 But if we had to cater for that in the code of the Android app, it would be a nightmare so that's where __DP__ - density-independent pixel - came from.
