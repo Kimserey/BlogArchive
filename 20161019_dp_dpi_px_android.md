@@ -48,13 +48,13 @@ DP is the density-independent pixel unit.
 __Independent pixel__ because the unit of measure is __independent of the density__, it is independent of the screen dimension and resolution.
 __Whether the density is high or low, the elements on the screen will have approximatively the same size/look__.
 
-This is even more important as for example for margins and paddings as we want to keep margins and paddings indifferent from the screen density.
+This is very important for measures of margins and paddings as we want margins and paddings to always be consistant.
 
 __But how does it work? How is the unit independent of the screen density?__
 
 In order to create a unit of measure independent of the density, Android has defined multiple buckets - mdpi / hdpi / xhdpi / xxhdpi / xxxhdpi.
 
-Each buckets represent a certain amount of DPI and has been given a label ranging from mdpi - the lowest resolution with the lowest density - up to xxxhdpi - the highest resolution with the highest density.
+Each buckets represent a certain amount of DPI and have been given a label ranging from mdpi - the lowest resolution with the lowest density - up to xxxhdpi - the highest resolution with the highest density.
 
 | Resolution | DPI | ratio|
 |---------|:---:|-----:|
@@ -90,6 +90,7 @@ dp = px * K
 ```
 
 And that's where DP came from, __DP is PX time a constant K which varies depending on the screen density and ensure a consistant measure accross any screen and resolution__.
+By using that we can have a unit of measure consitant accross all density where `1 dp` in `mdpi` is equal to `1 dp` in `xhdpi` or in `xxxhdpi`.
 
 # Conclusion
 
