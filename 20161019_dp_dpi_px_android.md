@@ -10,7 +10,7 @@ This post is composed by three parts:
  
 ```
  1. PX - pixels
- 2. DPI / PPI - pixers per inch
+ 2. DPI / PPI - pixels per inch
  3. DP - density-independent pixels
 ```
 
