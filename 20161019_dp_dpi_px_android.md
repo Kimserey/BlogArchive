@@ -1,16 +1,16 @@
 # What does DP, DPI, PPI and PX represent in Android?
 
 I've been playing with Xamarin Android for a while now and one thing that disturbed me when I started was the units of measure.
-What is the difference between DP, DPI, PPI and PX in Android?
+__What is the difference between DP, DPI, PPI and PX in Android?__
 
 I found my answers in the [Material design guide](https://material.google.com/layout/units-measurements.html)
-but today I would like to share my undertanding on the differences.
+and today I would like to share my undertanding of the differences and bring a different explanation which hopefully will help you get a better understanding.
 
 This post is composed by three parts:
  
 ```
  1. PX - pixels
- 2. DPI / PPI - pixerls per inch
+ 2. DPI / PPI - pixers per inch
  3. DP - density-independent pixels
 ```
 
@@ -28,7 +28,7 @@ resolution is the same but screen is bigger.
 
 To take that into account, another measure was created - DPI or PPI - Pixel per inch.
 
-## 2. DPI / PPI - pixerls per inch
+## 2. DPI / PPI - pixels per inch
 
 DPI and PPI represents the same thing except DPI can be confused with printers DPI so let's talk about PPI - Pixel per inch. 
 This unit helps to measure the size of a pixel.
