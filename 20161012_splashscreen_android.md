@@ -17,18 +17,14 @@ A full sample is available on my GitHub [https://github.com/Kimserey/FileFolders
 
 ## 1. What's a splash screen
 
-A splash screen is a loading screen. It is the first screen which shows up when the application launch and while it is loading.
-Xamarin.Forms application do take few seconds before being loaded, therefore it is important to provide a splash screen.
+A splash screen is a screen shown to the user while the application is loading in the background.
+Xamarin.Forms applications take few seconds before being completely loaded, therefore it is important to provide a splash screen to indicate to the user that the app is launching.
 
-Here's an example of a splash screen I created for an app that I am building - Baskee:
+Here's an example of a splash screen:
+![splash](https://raw.githubusercontent.com/Kimserey/FileFoldersXamarin/master/FileFolders/splash.gif)
 
-![splash](https://raw.githubusercontent.com/Kimserey/FileFoldersXamarin/master/splash.png)
-
-It will be displayed until the app gets fully loaded.
-
-A splash screen is nothing more than a activity with a display.
-It has to be quick in order to show something to the user therefore the preferred way - which is the one demonstrated by Xamarin - 
-is to __have a drawable image loaded as the background style of the main launching activity__.
+In Android, a splash screen is nothing more than a activity with an image as background.
+It has to be quick therefore the preferred way - which is the one demonstrated by Xamarin - is to __have a drawable image loaded as the background style of the main launching activity__.
 
 Let's see how it works.
 
