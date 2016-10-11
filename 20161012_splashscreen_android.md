@@ -21,6 +21,7 @@ A splash screen is a screen shown to the user while the application is loading i
 Xamarin.Forms applications take few seconds before being completely loaded, therefore it is important to provide a splash screen to indicate to the user that the app is launching.
 
 Here's an example of a splash screen:
+
 ![splash](https://raw.githubusercontent.com/Kimserey/FileFoldersXamarin/master/FileFolders/splash.gif)
 
 In Android, a splash screen is nothing more than a activity with an image as background.
