@@ -103,7 +103,7 @@ See you next time!
 
 # Other post you will like
 
-- Make a splash screen in Xamarin.Android - []()
+- Make a splash screen in Xamarin.Android - [https://kimsereyblog.blogspot.co.uk/2016/10/how-to-make-splash-screen-with.html](https://kimsereyblog.blogspot.co.uk/2016/10/how-to-make-splash-screen-with.html)
 - Make an accordion view in Xamarin.Forms - [https://kimsereyblog.blogspot.co.uk/2016/10/build-accordion-view-in-xamarinforms.html](https://kimsereyblog.blogspot.co.uk/2016/10/build-accordion-view-in-xamarinforms.html)
 - Understand the primary features of GIMP - [https://kimsereyblog.blogspot.co.uk/2016/09/gimps-primary-features.html](https://kimsereyblog.blogspot.co.uk/2016/09/gimps-primary-features.html)
 - Absolute layout in Xamarin.Forms - [https://kimsereyblog.blogspot.co.uk/2016/09/absolute-layout-and-relative-layout.html](https://kimsereyblog.blogspot.co.uk/2016/09/absolute-layout-and-relative-layout.html)
