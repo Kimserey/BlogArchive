@@ -255,7 +255,7 @@ Today we saw how we could define custom renderer for our Xamarin.Forms project.
 We saw how the custom renderer can be used to access the canvas of an Android view and draw shapes in it.
 This is the first part to understand how we can have the necessary blocks to draw our line chart which we will see in the next week!
 Hope you enjoyed this post as much as I enjoyed writing it. 
-As usual don't forget to follow me on Twitter [@Kimserey_Lam]() and stay tuned for next week Part 2! See you next time!
+As usual don't forget to follow me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam) and stay tuned for next week Part 2! See you next time!
 
 # Other post you will like!
 
