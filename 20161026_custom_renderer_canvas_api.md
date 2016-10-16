@@ -138,8 +138,8 @@ When `OnDraw` is called, we get the property from the view by using the `this.El
 I need to call `ToAndroid` because the color is a `Xamarin.Forms.Color` and needs to be transformed to an `Android.Graphics.Color`.
 
 __Note:__
-Not all renderers call `OnDraw`. Some renderer do not trigger `OnDraw` because they do not need to draw anything.
-If for any reason you need to provoke an `OnDraw` on those, you can set the `SetWillNotDraw(true)` method.
+Not all renderers call `OnDraw`. Some renderers do not trigger `OnDraw` because they do not need to draw anything.
+If for any reasons you need to provoke an `OnDraw` on those, you can set the `SetWillNotDraw(true)` method.
 
 ### 1.3 Hardware acceleration
 
