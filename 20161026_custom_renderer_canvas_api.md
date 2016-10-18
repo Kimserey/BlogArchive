@@ -259,7 +259,7 @@ As usual don't forget to follow me on Twitter [@Kimserey_Lam](https://twitter.co
 
 # Other post you will like!
 
-- What does DP, DPI, PPI and PX represent in Android - []()
+- What does DP, DPI, PPI and PX represent in Android - [https://kimsereyblog.blogspot.co.uk/2016/10/what-does-dp-dpi-ppi-and-px-represent.html](https://kimsereyblog.blogspot.co.uk/2016/10/what-does-dp-dpi-ppi-and-px-represent.html)
 - Make a splash screen in Xamarin.Android - [https://kimsereyblog.blogspot.co.uk/2016/10/how-to-make-splash-screen-with.html](https://kimsereyblog.blogspot.co.uk/2016/10/how-to-make-splash-screen-with.html)
 - Make an accordion view in Xamarin.Forms - [https://kimsereyblog.blogspot.co.uk/2016/10/build-accordion-view-in-xamarinforms.html](https://kimsereyblog.blogspot.co.uk/2016/10/build-accordion-view-in-xamarinforms.html)
 - Absolute layout in Xamarin.Forms - [https://kimsereyblog.blogspot.co.uk/2016/09/absolute-layout-and-relative-layout.html](https://kimsereyblog.blogspot.co.uk/2016/09/absolute-layout-and-relative-layout.html)
