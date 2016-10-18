@@ -1,3 +1,10 @@
+# Audacity config to enhance voice
+
+1. Noise reduction - Select empty noise and apply reduction to the whole track
+2. Equalizer Add bass boost / Add treble boost
+3. Normalize
+4. Change tempo 20x
+
 # Random notes from Machine Learning Projects for .NET Developers
 
 Using distance to build a classifier, nearest neighbour classifier.
