@@ -1,4 +1,4 @@
-# Xamarin.Android app instantly closing with error
+# Xamarin.Android app instantly closing with error after deployment
 
 Last week I had an issue suddenly after updating Xamarin.Android and downloading the latest Android sdk 24.
 
@@ -37,7 +37,7 @@ You can also set it from `right click on project > Options > General > Target fr
 # Conclusion
 
 Remember to use `adb logcat` to check the issue and make sure you are targeting the correct version of Android.
-As usual if you have any comments leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam).
+Hope this post was helpful for you! As usual if you have any comments leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam).
 
 # Other post you will like!
 
