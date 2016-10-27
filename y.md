@@ -34,6 +34,8 @@ After setting it to false all went well again.
 
 You can also set it from `right click on project > Options > General > Target framework > Select your framework`.
 
+![menu](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161111_crash/target.png)
+
 # Conclusion
 
 Remember to use `adb logcat` to check the issue and make sure you are targeting the correct version of Android.
