@@ -25,7 +25,7 @@ It was that it couldn't find `ApiLevel_24` but my manifest was configured as fol
 
 The problem was that my VM was running API 23, the app was configured to target API 23 but somehow, when the app ran it was looking for API 24 which caused it to crash.
 
-## 2. The fix
+## 2. Fixing the issue
 
 __The problem was in the csproj file.__
 
