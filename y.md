@@ -4,7 +4,7 @@ Last week I had an issue suddenly after updating Xamarin.Android and downloading
 
 __My application kept closing instantely after being deployed showing the following error:__
 
-![img]()
+![img](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161111_crash/crash.png)
 
 I looked online and all I found was answers which recommended to uninstall the app either through the Android settings or using `adb uninstall <package name>`, clean and rebuild __but
 nothing did it__. It was still crashing.
@@ -37,7 +37,7 @@ You can also set it from `right click on project > Options > General > Target fr
 # Conclusion
 
 Remember to use `adb logcat` to check the issue and make sure you are targeting the correct version of Android.
-As usual if you have any comments leave it here or hit me on Twitter [@Kimserey_Lam]().
+As usual if you have any comments leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam).
 
 # Other post you will like!
 
