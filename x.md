@@ -164,3 +164,112 @@ Let's move to the next piece to draw __the axis and labels__.
 
 ## 2. Draw axis and labels
 
+Let's start first by drawing the axis.
+It's pretty easy since we have the boundaries, for example the Y axis just extends from top to bottom and I let you guess how X axis is defined.
+
+```
+// Draws X and Y axis lines
+paint.Reset();
+paint.StrokeWidth = axisStrokeWidth;
+paint.Color = lineColor;
+canvas.DrawLine(
+    plotBoundaries.Left,
+    plotBoundaries.Bottom,
+    plotBoundaries.Right,
+    plotBoundaries.Bottom,
+    paint);
+canvas.DrawLine(
+    plotBoundaries.Left,
+    plotBoundaries.Top,
+    plotBoundaries.Left,
+    plotBoundaries.Bottom,
+    paint);
+```
+
+Next the labels, in order to place the labels correctly, we need to go through each of the items and calculate the pixel `y` value.
+By pixel value I mean the value which will be used to be displayed on screen.
+
+In order to find the pixel value we use a formula:
+
+```
+var pixelValue = realValue * plotHeight / verticalMaxValue
+```
+
+Where does this formula comes from? Well it comes from what we learn in college - the cross formula - or something like that... I guess...
+Anyway this formula respect the proportions. It basically says `since I know that plotHeight (in px) ~= verticalMaxValue (in real units), how much pixel does the realValue (in real units) takes?`
+And the responce is `you take the realValue times it by the plotHeight and divide by the verticalMaxValue`.
+
+We also want to know the `x` pixel position.
+We calculate that with the following formula:
+
+```
+var x = verticalSection.Width * (index + 0.5f);
+```
+
+Since every x labels will be placed in the middle of the section, we half the section `* 0.5f` and since the index starts at 0, it is always `index + 0.5f`.
+
+Alright knowing that, we can iterate over all the items and construct a `points` list which will contain all the value normalized.
+
+```
+//// Calculates all the data coordinates
+var points = new List<Tuple<float, float, string, double>>();
+foreach (var l in items.Select((l, index) => Tuple.Create(l.X, l.Y, index)))
+{
+    var x = verticalSection.Width * (l.Item3 + 0.5f);
+    var y = (float)l.Item2 * plotHeight / horizontalSection.Max;
+
+    points.Add(
+        Tuple.Create(
+            x + plotBoundaries.Left,
+            plotBoundaries.Bottom - y,
+            l.Item1,
+            l.Item2
+        ));
+}
+```
+
+Nice now let's draw X axis and Y axis.
+
+```
+// Draws X axis labels
+paint.Reset();
+paint.TextAlign = Paint.Align.Center;
+paint.TextSize = labelTextSize;
+foreach (var l in items.Select((GraphData l, int index) => Tuple.Create(l.X, index)))
+{
+    var x = verticalSection.Width * (l.Item2 + 0.5f) + plotBoundaries.Left;
+
+    paint.Color = lineColor;
+
+    canvas.DrawText(
+        text: l.Item1,
+        x: x,
+        y: plotBoundaries.Bottom + paint.TextSize + xAxisLabelOffset,
+        paint: paint);
+}
+
+// Draw Y axis labels
+// The 1.5f * density on y is a hack to get the label aligned vertically.
+// It will need adjustements if the font size changes.
+paint.Reset();
+paint.TextAlign = Paint.Align.Right;
+paint.TextSize = labelTextSize;
+paint.Color = lineColor;
+for (int i = 0; i < horizontalSection.Count; i++)
+{
+    var y = plotBoundaries.Bottom - horizontalSection.Width * i;
+
+    canvas.DrawText(
+        text: (i * sectionHeight).ToString(),
+        x: plotBoundaries.Left - yAxisLabelOffset,
+        y: y - (paint.Ascent() / 2f + 1.5f * density),
+        paint: paint);
+}
+```
+
+And here's the result!
+
+![]()
+
+Woohoo nice!! Well done we got an empty plot now! That looks good to me.
+
