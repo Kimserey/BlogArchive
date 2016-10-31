@@ -1,6 +1,6 @@
 # Build your own Line chart for Xamarin.Forms with Custom renderers (Part 2)
 
-Last week we saw how we could use custom renderers with boxview to draw via the canvas api ()[].
+Last week we saw how we could use custom renderers with boxview to draw via the canvas api (https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for.html)[https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for.html].
 
 Today I will go through the steps to draw a line chart supporting markers.
 The line chart is very simple and has only one objective, give a rough indication of the current trend of the data displayed.
@@ -50,11 +50,11 @@ Also every lines, axis, labels and markers will be drawn using the boundaries as
 
 As it is easier to understand with a picture here is a picture:
 
-![]()
+![https://raw.githubusercontent.com/Kimserey/GraphTest.Droid2/master/img/blog/part1.png](https://raw.githubusercontent.com/Kimserey/GraphTest.Droid2/master/img/blog/part1.png)
 
 I have all my padding saved into an `options` object.
-I have shown how you can access properties from the Xamarin.Forms view in my previous blog post - [](),
-that's where I get the options from, if you want to see the full code please refer to my github ()[]. 
+I have shown how you can access properties from the Xamarin.Forms view in my previous blog post - [https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for.html](https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for.html),
+that's where I get the options from, if you want to see the full code please refer to my github (https://github.com/Kimserey/GraphTest.Droid2/blob/master/Droid/GraphViewRenderer.cs)[https://github.com/Kimserey/GraphTest.Droid2/blob/master/Droid/GraphViewRenderer.cs]. 
 
 `Left` will be the padding left plus the text size and plus some small offset for the text to not be right next to the axis.
 
@@ -154,7 +154,7 @@ for (int i = horizontalSection.Count - 1; i >= 0; i = i - 2)
 }
 ```
 
-![]()
+![https://raw.githubusercontent.com/Kimserey/GraphTest.Droid2/master/img/blog/part2.png](https://raw.githubusercontent.com/Kimserey/GraphTest.Droid2/master/img/blog/part2.png)
 
 Woohoo nice! That looks like something at least.
 We can already imagine our chart on top of that drawing!
@@ -268,7 +268,7 @@ for (int i = 0; i < horizontalSection.Count; i++)
 
 And here's the result!
 
-![]()
+![https://raw.githubusercontent.com/Kimserey/GraphTest.Droid2/master/img/blog/part3.png](https://raw.githubusercontent.com/Kimserey/GraphTest.Droid2/master/img/blog/part3.png)
 
 Woohoo nice!! Well done we got an empty plot now! That looks good to me.
 What's missing? The line and markers of course!
@@ -352,10 +352,10 @@ for (int i = 0; i < points.Count; i++)
 It's basically the same code but with a small offset.
 And BOOM! We are done! Well done you created a line chart for your Xamarin.Android app.
 
-![]()
+![https://raw.githubusercontent.com/Kimserey/GraphTest.Droid2/master/img/blog/part3_2.png](https://raw.githubusercontent.com/Kimserey/GraphTest.Droid2/master/img/blog/part3_2.png)
 
 _I have added touch gesture handling in my example but have not describe it in the tutorial,_
-_if you are interested have a look at the code on my GitHub ;) []()._
+_if you are interested have a look at the code on my GitHub ;) [https://github.com/Kimserey/GraphTest.Droid2/blob/master/Droid/GraphViewRenderer.cs](https://github.com/Kimserey/GraphTest.Droid2/blob/master/Droid/GraphViewRenderer.cs)._
 
 # Conclusion
 
