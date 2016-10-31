@@ -1,6 +1,6 @@
 # Build your own Line chart for Xamarin.Forms with Custom renderers (Part 2)
 
-Last week we saw how we could use custom renderers with boxview to draw via the canvas api (https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for.html)[https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for.html].
+Last week we saw how we could use custom renderers with boxview to draw via the canvas api [https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for.html](https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for.html).
 
 Today I will go through the steps to draw a line chart supporting markers.
 The line chart is very simple and has only one objective, give a rough indication of the current trend of the data displayed.
