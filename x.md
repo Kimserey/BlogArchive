@@ -1,69 +1,166 @@
-Line PART 2
+# Build your own Line chart for Xamarin.Forms with Custom renderers (Part 2)
 
-Last week we saw how we could use custom renderers with boxview to draw via the canvas api.
+Last week we saw how we could use custom renderers with boxview to draw via the canvas api ()[].
 
 Today I will go through the steps to draw a line chart supporting markers.
 The line chart is very simple and has only one objective, give a rough indication of the current trend of the data displayed.
 
-Picture
+![]()
 
-Because the chart is so simple, it is very easy for users to understand what is going on and understand the type of interaction available.
-Here only a simple touch on points is supported.
-
-This post is composed by two parts:
-
-1. Calculation of the measurements
-2. Draw with canvas
+In order to draw the chart, we will divide the chart in four layer which we will draw one by one.
+Therefore this post will be composed by the four layers.
 
 1. Draw background and bands
 2. Draw axis and labels
 3. Draw lines
 4. Draw markers
 
-1. Calculcation of measurements
 
-In order to have a good graph, we need one that is responsive. Responsive in the sense that depending on the height and width offered to draw the graph, it will draw it properly within the boundaries. Another important point is that it needs to be density independant. This is achieved using dp instead of px as unit if measure. If you arent familiar with that you can refer to my previous blog post.
+## 1. Draw background and bands
 
-So let's start first by calculating all the measurements.
+We can see the canvas as a painting canvas.
+When we draw something and then draw something on top of that, the last thing drawn will hide the previous one - just like as if you are painting something on top of something else.
+Therefore the first thing we need to draw is the background.
 
-Image here draw
+```
+// Draws background
+paint.Color = Color.ParseColor("#2CBCEB");
+canvas.DrawRect(new Rect(0, 0, this.Width, this.Height), paint);
+```
 
-First we need the boundaries of the graph.
+`this.Width` and `this.Height` return respectively the view width and height.
 
-Graph axis
-Left
-Padding + text size + text padding
+Next we draw the bands.
 
-Right
-Padding
+In order to get the bands, we first need to know __the boundaries of the graph__.
+So I defined a class called PlotBoundaries:
 
-Top
-Padding
+```
+class PlotBoundaries
+{
+    public float Left { get; set; }
+    public float Right { get; set; }
+    public float Top { get; set; }
+    public float Bottom { get; set; }
+}
+```
 
-Bottom
-Padding + text height
+`Left`, `Right`, `Top` and `Bottom` represent the X axis start, X axis end, Y axis start and Y axis end of the chart.
+It will be used to place the chart in the view.
+Also every lines, axis, labels and markers will be drawn using the boundaries as reference.
 
-Having that we can then calculate height in device
+As it is easier to understand with a picture here is a picture:
 
-Bottom - top
+![]()
 
-Remember 0.0 is on the top left corner.
+I have all my padding saved into an `options` object.
+I have shown how you can access properties from the Xamarin.Forms view in my previous blog post - [](),
+that's where I get the options from, if you want to see the full code please refer to my github ()[]. 
 
-We want to have 4 sections therefore we want to be able to divide the graph in four
+`Left` will be the padding left plus the text size and plus some small offset for the text to not be right next to the axis.
 
-So we take the highest value, divide by four > round up > time 4 and you get the closest highest number which can be divided by four.
+```
+Left = options.Padding.Left * density + paint.MeasureText(ceilingValue.ToString()) + yAxisLabelOffset
+```
 
-Now that we have the boudary and thr sections we can now draw the bands.
+`Right` will be the width minus the right padding.
 
-One we drew the band, we can draw the axes as well.
+```
+Right = this.Width - options.Padding.Right * density
+```
 
-Align the text middle and draw at the middle of each section
+`Top` will be the top padding.
 
-1. Overall padding
-2. Text height
-3. Text length
+```
+Top = options.Padding.Top * density,
+```
 
-2. Draw with canvas
+And lastly `Bottom` will be the height minus bottom padding and minus the paint text size and minus a small offset again.
 
-As we saw in the previous post, canvas exposes some draw methods.
-The chart being composed by lines, circles for the points and rectangles for the background, we will only be using DrawLine DrawCircle and DrawRect.
+```
+Bottom = this.Height - options.Padding.Bottom * density - paint.TextSize - xAxisLabelOffset
+```
+
+So the full code then becomes:
+
+```
+var plotBoundaries = new PlotBoundaries
+{
+    Left = options.Padding.Left * density + paint.MeasureText(ceilingValue.ToString()) + yAxisLabelOffset,
+    Right = this.Width - options.Padding.Right * density,
+    Top = options.Padding.Top * density,
+    Bottom = this.Height - options.Padding.Bottom * density - paint.TextSize - xAxisLabelOffset
+};
+```
+Using the boundaries we can also deduce the width and height of the plot:
+
+```
+var plotWidth = plotBoundaries.Right - plotBoundaries.Left;
+var plotHeight = plotBoundaries.Bottom - plotBoundaries.Top;
+```
+
+Now that we have the boundaries, we need more information about the vertical sections.
+Therefore I created a section class:
+
+```
+class Section
+{
+    public int Count { get; set; }
+    public float Width { get; set; }
+    public float Max { get; set; }
+}
+```
+`Count` is the number of section displayed on the graph, `Width` is the width of a section and `Max` is the overall maximum value of the Y axis.
+
+```
+var verticalSection = new Section
+{
+    Width = plotWidth / items.Count(),
+    Count = items.Count()
+};
+```
+There are as many vertical section as there are items and the width of each section is just the plotWidth divided by the number of items.
+
+```
+var sectionCount = 4;
+var ceilingValue = Math.Ceiling(items.Max(i => i.Y) / 50.0) * 50.0;
+
+var horizontalSection = new Section
+{
+    Max = (float)ceilingValue,
+    Count = sectionCount,
+    Width = plotHeight / sectionCount
+};
+```
+
+In order to have a graph that renders nicely on a defined number of sections, the maximum value must be calculated by rounding up to the closest 50.
+I have set the number of section to 4 as I know that for any type of view in my usage, 4 sections is the nicest display.
+
+Using that we can now draw the horizontal bands:
+
+```
+// Draws horizontal bands
+paint.Reset();
+paint.Color = bandsColor;
+for (int i = horizontalSection.Count - 1; i >= 0; i = i - 2)
+{
+    var y = plotBoundaries.Bottom - horizontalSection.Width * i;
+
+    canvas.DrawRect(
+        left: plotBoundaries.Left,
+        top: y - horizontalSection.Width,
+        right: plotBoundaries.Right,
+        bottom: y,
+        paint: paint);
+}
+```
+
+![]()
+
+Woohoo nice! That looks like something at least.
+We can already imagine our chart on top of that drawing!
+
+Let's move to the next piece to draw __the axis and labels__.
+
+## 2. Draw axis and labels
+
