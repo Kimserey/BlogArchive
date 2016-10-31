@@ -5,7 +5,7 @@ Last week we saw how we could use custom renderers with boxview to draw via the 
 Today I will go through the steps to draw a line chart supporting markers.
 The line chart is very simple and has only one objective, give a rough indication of the current trend of the data displayed.
 
-![]()
+![chart](https://raw.githubusercontent.com/Kimserey/GraphTest.Droid2/master/img/chartgif.gif)
 
 In order to draw the chart, we will divide the chart in four layer which we will draw one by one.
 Therefore this post will be composed by the three layers.
