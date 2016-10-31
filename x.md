@@ -8,12 +8,11 @@ The line chart is very simple and has only one objective, give a rough indicatio
 ![]()
 
 In order to draw the chart, we will divide the chart in four layer which we will draw one by one.
-Therefore this post will be composed by the four layers.
+Therefore this post will be composed by the three layers.
 
 1. Draw background and bands
 2. Draw axis and labels
-3. Draw lines
-4. Draw markers
+3. Draw lines and markers
 
 
 ## 1. Draw background and bands
@@ -272,4 +271,96 @@ And here's the result!
 ![]()
 
 Woohoo nice!! Well done we got an empty plot now! That looks good to me.
+What's missing? The line and markers of course!
 
+## 3. Draw lines and markers
+
+In order to draw the lines, we simply iterate over all the points and link the points using `canvas.DrawLine` and at the intersection we draw the markers by using `canvas.DrawCircle`.
+
+```
+//// Draws main line
+paint.Reset();
+paint.StrokeWidth = lineStrokeWidth;
+paint.Color = lineColor;
+for (int i = 0; i < points.Count; i++)
+{
+    if (i < points.Count - 1)
+        canvas.DrawLine(
+            points[i].Item1,
+            points[i].Item2,
+            points[i + 1].Item1,
+            points[i + 1].Item2,
+            paint);
+
+    canvas.DrawCircle(
+        cx: points[i].Item1,
+        cy: points[i].Item2,
+        radius: markerDefaultRadius,
+        paint: paint);
+}
+```
+
+![]()
+
+That looks good but because we are cool people, we will add some dimension to the line!
+So let's add a shadow line behind it.
+
+```
+//// Draws line shadow
+paint.Reset();
+paint.StrokeWidth = lineStrokeWidth;
+paint.Color = lineShadowColor;
+for (int i = 0; i < points.Count; i++)
+{
+    if (i < points.Count - 1)
+        canvas.DrawLine(
+                points[i].Item1,
+                points[i].Item2 + 2f * density,
+                points[i + 1].Item1,
+                points[i + 1].Item2 + 2f * density,
+                paint);
+
+    canvas.DrawCircle(
+        cx: points[i].Item1,
+        cy: points[i].Item2 + 2f * density,
+        radius: markerDefaultRadius,
+        paint: paint);
+}
+
+//// Draws main line
+paint.Reset();
+paint.StrokeWidth = lineStrokeWidth;
+paint.Color = lineColor;
+for (int i = 0; i < points.Count; i++)
+{
+    if (i < points.Count - 1)
+        canvas.DrawLine(
+            points[i].Item1,
+            points[i].Item2,
+            points[i + 1].Item1,
+            points[i + 1].Item2,
+            paint);
+
+    canvas.DrawCircle(
+        cx: points[i].Item1,
+        cy: points[i].Item2,
+        radius: markerDefaultRadius,
+        paint: paint);
+}
+```
+
+It's basically the same code but with a small offset.
+And BOOM! We are done! Well done you created a line chart for your Xamarin.Android app.
+
+![]()
+
+_I have added touch gesture handling in my example but have not describe it in the tutorial,_
+_if you are interested have a look at the code on my GitHub ;) []()._
+
+# Conclusion
+
+Today we saw the PART 2 of how to draw a line chart for Xamarin.Android and Xamarin.Forms.
+We looked at a way to draw the layer of canvas one by one and saw how to compose the chart.
+I hope you enjoyed this small series and if you did let me know by leaving a comment or
+hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam)!
+See you next time!
