@@ -364,3 +364,11 @@ We looked at a way to draw the layer of canvas one by one and saw how to compose
 I hope you enjoyed this small series and if you did let me know by leaving a comment or
 hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam)!
 See you next time!
+
+# Other post you will like!
+
+- Build your own Line chart for Xamarin.Forms with Custom renderers (Part 1) - [https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for.html](https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for.html)
+- What does DP, DPI, PPI and PX represent in Android - [https://kimsereyblog.blogspot.co.uk/2016/10/what-does-dp-dpi-ppi-and-px-represent.html](https://kimsereyblog.blogspot.co.uk/2016/10/what-does-dp-dpi-ppi-and-px-represent.html)
+- Make a splash screen in Xamarin.Android - [https://kimsereyblog.blogspot.co.uk/2016/10/how-to-make-splash-screen-with.html](https://kimsereyblog.blogspot.co.uk/2016/10/how-to-make-splash-screen-with.html)
+- Make an accordion view in Xamarin.Forms - [https://kimsereyblog.blogspot.co.uk/2016/10/build-accordion-view-in-xamarinforms.html](https://kimsereyblog.blogspot.co.uk/2016/10/build-accordion-view-in-xamarinforms.html)
+- Absolute layout in Xamarin.Forms - [https://kimsereyblog.blogspot.co.uk/2016/09/absolute-layout-and-relative-layout.html](https://kimsereyblog.blogspot.co.uk/2016/09/absolute-layout-and-relative-layout.html)
