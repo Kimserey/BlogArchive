@@ -48,7 +48,7 @@ class PlotBoundaries
 It will be used to place the chart in the view.
 Also every lines, axis, labels and markers will be drawn using the boundaries as reference.
 
-As it is easier to understand with a picture here is a picture:
+As it is easier to understand with a picture here is a picture of the empty plot:
 
 ![https://raw.githubusercontent.com/Kimserey/GraphTest.Droid2/master/img/blog/photo.png](https://raw.githubusercontent.com/Kimserey/GraphTest.Droid2/master/img/blog/photo.png)
 
