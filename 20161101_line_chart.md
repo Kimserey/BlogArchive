@@ -268,7 +268,7 @@ for (int i = 0; i < horizontalSection.Count; i++)
 
 And here's the result!
 
-![https://raw.githubusercontent.com/Kimserey/GraphTest.Droid2/master/img/blog/part3.png](https://raw.githubusercontent.com/Kimserey/GraphTest.Droid2/master/img/blog/part3.png)
+![https://raw.githubusercontent.com/Kimserey/GraphTest.Droid2/master/img/blog/part2.png](https://raw.githubusercontent.com/Kimserey/GraphTest.Droid2/master/img/blog/part2.png)
 
 Woohoo nice!! Well done we got an empty plot now! That looks good to me.
 What's missing? The line and markers of course!
@@ -300,7 +300,7 @@ for (int i = 0; i < points.Count; i++)
 }
 ```
 
-![]()
+![https://raw.githubusercontent.com/Kimserey/GraphTest.Droid2/master/img/blog/part3.png](https://raw.githubusercontent.com/Kimserey/GraphTest.Droid2/master/img/blog/part3.png)
 
 That looks good but because we are cool people, we will add some dimension to the line!
 So let's add a shadow line behind it.
