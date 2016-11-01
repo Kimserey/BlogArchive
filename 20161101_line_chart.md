@@ -50,7 +50,7 @@ Also every lines, axis, labels and markers will be drawn using the boundaries as
 
 As it is easier to understand with a picture here is a picture:
 
-![https://raw.githubusercontent.com/Kimserey/GraphTest.Droid2/master/img/blog/part1.png](https://raw.githubusercontent.com/Kimserey/GraphTest.Droid2/master/img/blog/part1.png)
+![https://raw.githubusercontent.com/Kimserey/GraphTest.Droid2/master/img/blog/photo.png](https://raw.githubusercontent.com/Kimserey/GraphTest.Droid2/master/img/blog/photo.png)
 
 I have all my padding saved into an `options` object.
 I have shown how you can access properties from the Xamarin.Forms view in my previous blog post - [https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for.html](https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for.html),
@@ -154,7 +154,7 @@ for (int i = horizontalSection.Count - 1; i >= 0; i = i - 2)
 }
 ```
 
-![https://raw.githubusercontent.com/Kimserey/GraphTest.Droid2/master/img/blog/part2.png](https://raw.githubusercontent.com/Kimserey/GraphTest.Droid2/master/img/blog/part2.png)
+![https://raw.githubusercontent.com/Kimserey/GraphTest.Droid2/master/img/blog/part1.png](https://raw.githubusercontent.com/Kimserey/GraphTest.Droid2/master/img/blog/part1.png)
 
 Woohoo nice! That looks like something at least.
 We can already imagine our chart on top of that drawing!
