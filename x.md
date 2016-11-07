@@ -1,5 +1,5 @@
 Use Android snackbar for your Xamarin Android project from Xamarin Forms
- 
+
 In order to provide notifications Android has introduced the Snackbar api. You might have noticed some usage of it for example when we close a tab in chrome we get the notification that the tab was closed.
 
 This is the snackbar. Today we will see how to use the snack bar api with Xamarin Android and how we can call it from our Xamarin Forms project.
@@ -36,4 +36,21 @@ Now to use the snackbar from XamarinForms, we need to call it from a service whi
 
 3.
 
-We define an interface
+We define an interface INotification which will expose a function to send a notification to the user when events like add update or delete happen.
+
+Notify(message, duration)
+NotifyWithAction(message, duration, actionTitle, action)
+
+And we can now implement that in our Android application where we place the service and call the snackbar api like how we described in 2.
+
+Now that we have the service implemented, we can use it in our Xamarin.Forms.
+
+And we are done!
+We now have a simple notification service which prompt a non obstructive notification, simple and clean, couldn't ask for more.
+
+Conclusion
+
+Today we saw how we can leverage the snackbar api introduced in Lolippop to give notifications to the user in a sleak non obstrusive way. I used the snackbar for all sort of notification due to its non obstrusive nature, it gives a way for the user to revert back an unwanted action and at the same time does not disturb user when the action was intended.
+I hope you like this post, if you have any comment leave it here or hit me on Twitter [@Kimserey_Lam](). See you next time!
+
+Other post you will like!
