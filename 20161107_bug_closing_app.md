@@ -25,6 +25,17 @@ It was that it couldn't find `ApiLevel_24` but my manifest was configured as fol
 
 The problem was that my VM was running API 23, the app was configured to target API 23 but somehow, when the app ran it was looking for API 24 which caused it to crash.
 
+__Notes:__
+
+It's always useful to be able to output the logs to a text file.
+If you want to do that, you can use the following command:
+
+```
+adb logcat -t 500 *:E > logs.txt
+```
+
+`-t 500` would take the last 500 lines and `*:E` would filter the log with a priority of `E: Error`. Finally it will pipe it to a `logs.txt`.
+
 ## 2. Fixing the issue
 
 __The problem was in the csproj file.__
@@ -43,3 +54,8 @@ Hope this post was helpful for you! As usual if you have any comments leave it h
 
 # Other post you will like!
 
+- Build your own Line Chart for Xamarin.Forms (Part 2) - [https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for_31.html](https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for_31.html)
+- Build your own Line chart for Xamarin.Forms (Part 1) - [https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for.html](https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for.html)
+- What does DP, DPI, PPI and PX represent in Android - [https://kimsereyblog.blogspot.co.uk/2016/10/what-does-dp-dpi-ppi-and-px-represent.html](https://kimsereyblog.blogspot.co.uk/2016/10/what-does-dp-dpi-ppi-and-px-represent.html)
+- Make a splash screen in Xamarin.Android - [https://kimsereyblog.blogspot.co.uk/2016/10/how-to-make-splash-screen-with.html](https://kimsereyblog.blogspot.co.uk/2016/10/how-to-make-splash-screen-with.html)
+- Make an accordion view in Xamarin.Forms - [https://kimsereyblog.blogspot.co.uk/2016/10/build-accordion-view-in-xamarinforms.html](https://kimsereyblog.blogspot.co.uk/2016/10/build-accordion-view-in-xamarinforms.html)
