@@ -4,6 +4,10 @@ Last week I had an issue suddenly after updating Xamarin.Android and downloading
 
 __My application kept closing instantely after being deployed showing the following error:__
 
+```
+Unfortunately, [App name] has stopped.
+```
+
 ![img](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161111_crash/crash.png)
 
 I looked online and all I found was answers which recommended to uninstall the app either through the Android settings or using `adb uninstall <package name>`, clean and rebuild __but
