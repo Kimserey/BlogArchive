@@ -1,5 +1,6 @@
 Use Android snackbar for your Xamarin Android project from Xamarin Forms
 
+
 In order to provide notifications Android has introduced the Snackbar api. You might have noticed some usage of it for example when we close a tab in chrome we get the notification that the tab was closed.
 
 This is the snackbar. Today we will see how to use the snack bar api with Xamarin Android and how we can call it from our Xamarin Forms project.
