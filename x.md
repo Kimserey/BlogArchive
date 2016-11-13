@@ -50,6 +50,8 @@ The third problem is __knowing the bigger picture__. How much do you spend month
 Many more problems are solved by Baskee but those three were the driving moto of Baskee.
 And I believe Baskee has accomplish its part of the deal!
 
+[Get Baskee here](https://play.google.com/store/apps/details?id=com.kimserey.baskee&hl=en_GB)
+
 ## 3. Is Baskee free?
 
 Yes! It is 100% free. I started to build it as an application useful for me but I knew it will be useful for others who care about how much they pay and if they are getting the cheapest price at the supermarket.
@@ -79,6 +81,9 @@ If you want to start F#, I have few tutorials on my blog. Feel free to have a lo
 ## 6. If you had one advice for new developers to start what would it be?
 
 If you have an idea, dont be afraid to bring it to the world. Don't listen to what other peoplw say about technology stacks, as long as you know what to do and have a vision, any tools that you can use to bring this vision to life is a good tool. I bielieve a good developer is a do-er, a developer who makes thing happen. So whether you want to build for whichever platform, with whichever language and framework don't really matter as long as your product is sound!
+
+
+[Get Baskee here](https://play.google.com/store/apps/details?id=com.kimserey.baskee&hl=en_GB)
 
 # Conclusion
 
