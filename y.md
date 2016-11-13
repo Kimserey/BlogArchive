@@ -21,7 +21,7 @@ You might be running two different ADB and the versions collide.
 
 ## 2. Solution
 
-Verify that in  
+Verify the ADB version used by Xamarin:
 
 ```
 About Xamarin > Show details > Android SDK: [PATH]
@@ -33,8 +33,9 @@ Make sure the PATH is the same as the one referenced in Genymotion.
 Genymotion > Settings > ADB > Use custom Android SDK tools > Put PATH in Android SDK
 ```
 
-This means that the adb used by Xamarin Studio to perform all deployment will be the same as the daemon used by the VM.
-If you see the error above it's probably because the PATHs are different.
+This means that the adb used by Xamarin Studio to perform all deployment commands will be the same as the daemon used by the VM.
+
+If you see the error `adb server version (32) doesn't match this client (36)` it's probably because the PATHs are different.
 
 Once you have set the same path, your app should deploy properly.
 
