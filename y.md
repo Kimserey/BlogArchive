@@ -5,10 +5,10 @@ This was caused by two different versions of ADB being installed on the machine.
 One installed during Xamarin installation and another one installed separately.
 
 The solution was to set the ADB path in the options of Genymotion.
+I thought all was good but turns out there was another issue.
 
 ## 1. Problem
 
-I thought all was good but turns out there was another issue.
 When running `adb shell`, I had the following error in bash:
 
 ```
@@ -17,9 +17,9 @@ adb server is out of date killing...
 
 ## 2. Solution
 
-Again the problem was due to my machine having 2 adb versions and the path in `$PATH` was the wrong one.
-In order to check this I looked at the path `echo $PATH` and saw that the path was incorrect.
-My path in `~/.bash_profile` which is the script executed on each start of bash therefore I went ahead and changed it:
+Again the problem was due to my machine having two adb versions and the adb location in $PATH was the wrong one. 
+In order to check verify that, I ran echo $PATH and saw that the path was incorrect. 
+In order to rectify that, I modified the `~/.bash_profile` which is the script executed on each start of bash by removing the wrong path and adding the correct one.
 
 ```
 vim ~/.bash_profile
