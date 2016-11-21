@@ -4,8 +4,6 @@ Few days ago, I released my first Android app __Baskee__ built with __Xamarin__ 
 
 [https://play.google.com/store/apps/details?id=com.kimserey.baskee&hl=en_GB](https://play.google.com/store/apps/details?id=com.kimserey.baskee&hl=en_GB).
 
-or here
-
 [https://www.kimsereylam.com/baskee](https://www.kimsereylam.com/baskee)
 
 ![baskee store preview](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161121/store_preview.png)
