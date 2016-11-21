@@ -31,6 +31,9 @@ That's where I knew I had to create Baskee which will help me save all the price
 
 Now when I go to the supermarket, I open Baskee and directly check based on what I paid in the past, if an item is overpriced or not. Baskee clears all my doubts and allows me to make the best decision.
 
+
+[Get Baskee here](https://play.google.com/store/apps/details?id=com.kimserey.baskee&hl=en_GB)
+
 ## 2. What is the problem Baskee solves?
 
 __Baskee solves problems gravitating toward groceries shopping.__
@@ -51,6 +54,7 @@ The third problem is __knowing the bigger picture__. How much do you spend month
 Many more problems are solved by Baskee but those three were the driving moto of Baskee.
 And I believe Baskee has accomplish its part of the deal!
 
+
 [Get Baskee here](https://play.google.com/store/apps/details?id=com.kimserey.baskee&hl=en_GB)
 
 ## 3. Is Baskee free?
@@ -62,11 +66,17 @@ How long did the development take
 The development of Baskee took about four months. I worked on it on my spare time as I am a full time developer employed in UK.
 The four months include all the process from design (brainstorm/draft), to development (code/test) to release and promotion (website/art).
 
+
+[Get Baskee here](https://play.google.com/store/apps/details?id=com.kimserey.baskee&hl=en_GB)
+
 ## 4. How many people worked on it?
 
 Baskee was built from the ground up by myself only, a one man team. I love building product and I believe all developers should try out to build a complete product and deliver it.
 I concieved every piece, drew the design, coded the app, created all graphic arts and handled all releases.
 It takes time, efforts, consistency and perseverance to start from nothing and end up with a full working product but those values are extremely rewarding.
+
+
+[Get Baskee here](https://play.google.com/store/apps/details?id=com.kimserey.baskee&hl=en_GB)
 
 ## 5. What stack is it built on?
 
@@ -78,6 +88,9 @@ It allows to code in a known language like C#.
 For me I choose to use F# because I am working full time on F# and I really love it.
 The code end up being very clean and small, very readable and maintainable.
 If you want to start F#, I have few tutorials on my blog. Feel free to have a look!
+
+
+[Get Baskee here](https://play.google.com/store/apps/details?id=com.kimserey.baskee&hl=en_GB)
 
 ## 6. If you had one advice for new developers to start what would it be?
 
