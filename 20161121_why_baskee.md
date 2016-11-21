@@ -1,6 +1,6 @@
 # Why I created Baskee
 
-Few days ago, I released my first Android app __Baskee__ built with __Xamarin__ and __F#__. You can get it here 
+Few days ago, I released my first Android app __Baskee__ built with __Xamarin__ and __F#__.
 ![baskee store preview](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161121/store_preview.png)
 
 [https://www.kimsereylam.com/baskee](https://www.kimsereylam.com/baskee)
