@@ -1,12 +1,9 @@
-# Baskee
+# Why I created Baskee
 
 Few days ago, I released my first Android app __Baskee__ built with __Xamarin__ and __F#__. You can get it here 
-
-[https://play.google.com/store/apps/details?id=com.kimserey.baskee&hl=en_GB](https://play.google.com/store/apps/details?id=com.kimserey.baskee&hl=en_GB).
+![baskee store preview](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161121/store_preview.png)
 
 [https://www.kimsereylam.com/baskee](https://www.kimsereylam.com/baskee)
-
-![baskee store preview](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161121/store_preview.png)
 
 In this post, I would like to share with you the most common questions my friends asked me and I hope it will help you
 understand better why Baskee is useful for you!
