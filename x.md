@@ -8,7 +8,7 @@ or here
 
 [https://www.kimsereylam.com/baskee](https://www.kimsereylam.com/baskee)
 
-![baskee store preview]()
+![baskee store preview](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161121/store_preview.png)
 
 In this post, I would like to share with you the most common questions my friends asked me and I hope it will help you
 understand better why Baskee is useful for you!
