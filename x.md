@@ -29,7 +29,7 @@ Another important point is that when the user uninstall the application, all the
 ## 2. Public and private external folders
 
 The external folder is a folder accessible by anyone.
-It can be mounted on a computer and any files is publicly available. Also any app with EXTERNA_STORAGE read access will be able to access these files.
+It can be mounted on a computer and any files is publicly available. Also any app with EXTERNAL_STORAGE read access will be able to access these files.
 
 There are two type of external folders, `public` and `private`.
 The difference beeing that `private` files will get deleted when your app is uninstall.
