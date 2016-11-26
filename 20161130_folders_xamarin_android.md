@@ -9,7 +9,7 @@ This post is composed 3 parts:
 ```
 1. Internal folder
 2. Public and private external folders
-3. Access folders from Xamarin.Forms.
+3. Access folder paths from Xamarin.Forms
 ```
 
 ## 1. Internal folder
