@@ -23,6 +23,11 @@ You can get it using the following:
 Android.App.Application.Context.FilesDir.AbsolutePath
 ```
 
+The path looks something like that:
+```
+/data/user/0/com.kimserey.myapp/files
+```
+
 Use this storage to store document specific to your application which will not be accessible from else where.
 Another important point is that when the user uninstall the application, all the data within that folder will be removed.
 
@@ -40,11 +45,21 @@ The public external folder can be accessed using:
 ```
 Android.OS.Environment.ExternalStorageDirectory.AbsolutePath
 ```
+The public external folder path path looks something like that:
+```
+/storage/emulated/0/
+```
 
 And the private external folder can be accessed using:
 ```
 Application.Context.GetExternalFilesDir(null).AbsolutePath
 ```
+The private external folder path looks something like that:
+```
+/storage/emulated/0/Android/data/com.kimserey.myapp/files
+```
+
+Note that the private folder is almost similar to the internal folder path apart from the fact 
 
 ## 3. Access folder paths from Xamarin.Forms
 
