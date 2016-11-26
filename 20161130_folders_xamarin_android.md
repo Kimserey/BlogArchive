@@ -2,7 +2,7 @@
 
 When using Xamarin.Forms and Xamarin.Android, chances are that you had at one point of time to access a local file.
 Whether it is an image or a text file or even a local sqlite database, accessing a file from a Xamarin.Android project can be confusing.
-Today I will show you how you can get the absolute path of the different folders available in Xamarin.Android and we will see how we can access the folder from Xamarin.Forms.
+Today I will show you how you can get the absolute path of the different folders available in Xamarin.Android and we will see how we can get the paths from Xamarin.Forms.
 
 This post is composed 3 parts:
 
