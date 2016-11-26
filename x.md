@@ -45,3 +45,72 @@ And the private external folder can be accessed using:
 ```
 Application.Context.GetExternalFilesDir(null).AbsolutePath
 ```
+
+## 3. Access folder paths from Xamarin.Forms
+
+To access folder paths from Xamarin.Forms we will need to create a service and get it through the dependency service.
+
+To do that we can create an interface IPathService in the Xamarin Forms project.
+
+```
+public interface IPathService 
+{
+    string InternalFolder { get; }
+    string PublicExternalFolder { get; }
+    string PrivateExternalFolder { get; }
+}
+```
+
+And in the Android project we can add the implementation and add the dependency on the assembly level.
+
+```
+[assembly: Dependency(typeof(MyApp.PathService))]
+namespace MyApp
+{
+    public class PathService: IPathService
+    {
+        public string InternalFolder
+        {
+            get 
+            { 
+                return Android.App.Application.Context.FilesDir.AbsolutePath;
+            }
+        }
+
+        public string PublicExternalFolder
+        { 
+            get
+            {
+                return Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
+            }
+        }
+
+        public string PrivateExternalFolder
+        {
+            get 
+            {
+                return Application.Context.GetExternalFilesDir(null).AbsolutePath; 
+            }
+        }
+    }
+}
+```
+
+We can then access the path from anywhere in our app using `DependencySerivce.Get<IPathService>().InternalFolder`.
+
+# Conclusion
+
+Today we learnt the different type of folder available in Android. Internal vs external and public external vs private external.
+Use internal folder if you want everything to be only contained in your app and prevent other apps from messing with your content. Use external to save file which are not application lifecycle threatening, photos taken from your app our good example. Bear in mind that any content stored in external folders can be removed by the user, even the external storage might not be always available.
+I hope this clear up the differences! 
+Thanks for reading my post, if you have any questions leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). 
+Oh and don't forget to support me by checking out my app [Baskee](https://www.kimsereylam.com/baskee). See you next time!
+
+# Other post you will like!
+
+- Why I built Baskee? - [https://kimsereyblog.blogspot.co.uk/2016/11/why-i-created-baskee.html](https://kimsereyblog.blogspot.co.uk/2016/11/why-i-created-baskee.html)
+- Use the Snackbar API with Xamarin.Forms - [https://kimsereyblog.blogspot.co.uk/2016/11/how-to-use-snackbar-api-in.html](https://kimsereyblog.blogspot.co.uk/2016/11/how-to-use-snackbar-api-in.html)
+- Build your own Line Chart for Xamarin.Forms (Part 2) - [https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for_31.html](https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for_31.html)
+- Build your own Line chart for Xamarin.Forms (Part 1) - [https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for.html](https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for.html)
+- Make a splash screen in Xamarin.Android - [https://kimsereyblog.blogspot.co.uk/2016/10/how-to-make-splash-screen-with.html](https://kimsereyblog.blogspot.co.uk/2016/10/how-to-make-splash-screen-with.html)
+- Make an accordion view in Xamarin.Forms - [https://kimsereyblog.blogspot.co.uk/2016/10/build-accordion-view-in-xamarinforms.html](https://kimsereyblog.blogspot.co.uk/2016/10/build-accordion-view-in-xamarinforms.html)
