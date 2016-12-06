@@ -144,7 +144,7 @@ Thanks to this trick, we can now await and execute something after the file is p
 Today we saw how we can transform a pick activity to an awaitable task which can be used from a service in Xamarin.Forms projects. Using TaskCompletionSource together with event to transform event/callback codes to Task is a very nice trick to know. If you have any question, leave it here or hit on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
 
 # Support me
-Support me by downloading my app [BASKEE](https://www.kimsereylam.com/baskee). Thank you!
+[Support me by downloading my app BASKEE](https://www.kimsereylam.com/baskee). Thank you!
 
 ![baskee](https://raw.githubusercontent.com/Kimserey/kimserey.github.io/master/img/readme/baskee_screenshots.png)
 
