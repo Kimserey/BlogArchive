@@ -23,7 +23,7 @@ When it has one it should not be bolded.
 
 Also when right click on the layer, Add alpha channel should be grayed out.
 
-
+![https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/4-menu.png](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/4-menu.png)
 
 Having an alpha channel allows us to add transparancy to our image.
 By deleting things on the image, we will be able to see underneath.
