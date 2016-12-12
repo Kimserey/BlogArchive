@@ -7,10 +7,24 @@ Today I would like to share an explanation on what the alpha channel is and show
 
 The channels tab can be seen from the Layers view.
 There are 4 channels, Red, Green, Blue and Alpha.
+
+![https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/1-channels.png](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/1-channels.png)
+
 The alpha channel is used for transparancy.
 Transparancy means that when you export to .png, the transparent parts of your image will show whatever is underneath. This is very useful for apps icons or images for web design.
 
-When your layer has an alpha channel, its name should be bolded. Also when right click on the layer, Add alpha channel should be grayed out.
+When your layer does not have an alpha channel, its name should be bolded. 
+
+![https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/2-bold.png](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/2-bold.png)
+
+When it has one it should not be bolded. 
+
+![https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/3-alpha.png](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/3-alpha.png)
+
+Also when right click on the layer, Add alpha channel should be grayed out.
+
+
+
 Having an alpha channel allows us to add transparancy to our image.
 By deleting things on the image, we will be able to see underneath.
 
@@ -22,7 +36,7 @@ First create some text using the Text tool.
 Next click on the text layer and select Alpha to selection.
 It means that you will be selecting all colors that aren't transparent in your current layer - which is just your text.
 
-Now go to Selection > Grow and grow the selection by few pixels.
+Now go to `Selection > Grow` and grow the selection by few pixels.
 This grows the text selection to the number of pixel requested.
 
 Then create a new layer by clicking on the layer icon from the Layers view and paint the selection.
