@@ -51,6 +51,7 @@ Today we saw how to add an alpha channel if our image doesn't have one and we sa
 Hope you like this quick GIMP tutorial! Don't forget to follow me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
 
 # Support me
+[Support me by visting my website](https://www.kimsereylam.com). Thank you!
 [Support me by downloading my app BASKEE](https://www.kimsereylam.com/baskee). Thank you!
 
 ![baskee](https://raw.githubusercontent.com/Kimserey/kimserey.github.io/master/img/readme/baskee_screenshots.png)
