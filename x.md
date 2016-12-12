@@ -1,7 +1,6 @@
-
 # GIMP - Alpha channel, what is it?
 
-Few months ago I made a first introduction to GIMP - []() - the post was oriented toward the toolbox and what features were available.
+Few months ago I made a first introduction to GIMP - [https://kimsereyblog.blogspot.co.uk/2016/09/gimps-primary-features.html](https://kimsereyblog.blogspot.co.uk/2016/09/gimps-primary-features.html) - the post was oriented toward the toolbox and what features were available.
 Today I would like to share an explanation on what the alpha channel is and show you how you can outline text using the alpha channel.
 
 ## 1. What is the alpha channel
@@ -44,7 +43,7 @@ Hope you like this quick GIMP tutorial! Don't forget to follow me on Twitter [@K
 
 # Other posts you will like
 
-- Activity to awaitable task - []()
+- Activity to awaitable task - [https://kimsereyblog.blogspot.co.uk/2016/12/transform-operation-from-xamarinandroid.html](https://kimsereyblog.blogspot.co.uk/2016/12/transform-operation-from-xamarinandroid.html)
 - Why I built Baskee? - [https://kimsereyblog.blogspot.co.uk/2016/11/why-i-created-baskee.html](https://kimsereyblog.blogspot.co.uk/2016/11/why-i-created-baskee.html)
 - Understand the difference between Internal and External folder storage in Xamarin.Android - [https://kimsereyblog.blogspot.co.uk/2016/11/differences-between-internal-and.html](https://kimsereyblog.blogspot.co.uk/2016/11/differences-between-internal-and.html)
 - Use the Snackbar API with Xamarin.Forms - [https://kimsereyblog.blogspot.co.uk/2016/11/how-to-use-snackbar-api-in.html](https://kimsereyblog.blogspot.co.uk/2016/11/how-to-use-snackbar-api-in.html)
