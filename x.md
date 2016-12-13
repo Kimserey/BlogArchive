@@ -35,7 +35,7 @@ Some elements already come with alpha channel, like Text. We will see next how w
 First create some text using the Text tool.
 Next click on the text layer and select Alpha to selection.
 It means that you will be selecting all colors that aren't transparent in your current layer - which is just your text.
-
+ 
 Now go to `Selection > Grow` and grow the selection by few pixels.
 This grows the text selection to the number of pixel requested.
 
