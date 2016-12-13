@@ -33,16 +33,31 @@ Some elements already come with alpha channel, like Text. We will see next how w
 ## 2. Add outline to text
 
 First create some text using the Text tool.
+
+![https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/5-text.png](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/5-text.png)
+![https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/6-text2.png](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/6-text2.png)
+
 Next click on the text layer and select Alpha to selection.
+
+![https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/7-alphaselection.png](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/7-alphaselection.png)
+
 It means that you will be selecting all colors that aren't transparent in your current layer - which is just your text.
- 
+
 Now go to `Selection > Grow` and grow the selection by few pixels.
+
+![https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/8-grow.png](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/8-grow.png)
+
 This grows the text selection to the number of pixel requested.
+
+![https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/10-growselection.png](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/10-growselection.png)
 
 Then create a new layer by clicking on the layer icon from the Layers view and paint the selection.
 
+![https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/11-paintgrow.png](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/11-paintgrow.png)
+
 You can now place the text layer on top of the outline layer and we're done!
 
+![https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/13-helloworld.png](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/13-helloworld.png)
 
 # Conclusion
 
