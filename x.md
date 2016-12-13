@@ -34,7 +34,6 @@ Some elements already come with alpha channel, like Text. We will see next how w
 
 First create some text using the Text tool.
 
-![https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/5-text.png](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/5-text.png)
 ![https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/6-text2.png](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161215_gimp/6-text2.png)
 
 Next click on the text layer and select Alpha to selection.
