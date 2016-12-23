@@ -91,6 +91,8 @@ And that's it. The config should look like that:
 
 Now when running the WebSharper selfhost, we should see the log output in the console.
 
+![https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161223_logs/console.png](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161223_logs/console.png)
+
 ## 3. Define a File target
 
 We can also define a file target to get logs output saved into a file.
@@ -119,7 +121,9 @@ Here are the few I set:
 
  No when running the Websharper selfhost, we should see the logs output in the file.
 
- ## 4. Live display with SSE
+![https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161223_logs/file.png](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161223_logs/file.png)
+
+## 4. Live display with SSE
 
 We are almost done as we can now visualize the log in direct from the `Console` and we have it stored in `daily Files`.
 
@@ -139,7 +143,7 @@ _This idea actually came from my friend [@nbevans](https://twitter.com/nbevans) 
 
 In order to create the endpoint we will leverage the custom targets from NLog together with HTTP __SSE (server-send events)__.
 
-### 3.1 Custom target
+### 4.1 Custom target
 
 Our custom target will be named `HttpSSELogTarget`.
 
@@ -195,7 +199,7 @@ type HttpSSELogTarget() =
 Now every time a log will be routed, it will be appended in the internal mailbox state.
 Next we need to implement the SSE protocol ([https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events)).
 
-### 3.2 SSE
+### 4.2 SSE
 
 __Client side__
 
@@ -262,7 +266,71 @@ Content.Custom(
 The body section extracts all the unread messages from the `HttpLogAgent` defined in (3.1) and write those in the body with a prefix `data:` and a suffix `\n\n` which means end of message.
 This is defined in the SSE protocol.
 
-So our sitelet will require 2 endpoints: 
+For the SSE to work we will will need 2 endpoints on our sitelet: 
 1. the html page
 2. the event-stream
 
+```
+type Endpoint =
+| [<EndPoint "GET /">] Home
+| [<EndPoint "GET /logs">] Logs
+| [<EndPoint "GET /logevents">] LogEvents
+```
+
+And here is the full sitelet definition:
+
+```
+type MainTemplate = Templating.Template<"Main.html">
+
+let sitelet = 
+    Application.MultiPage(fun ctx endpoint -> 
+        let logger = LogManager.GetCurrentClassLogger()
+
+        match endpoint with
+        | Home -> 
+            logger.Trace "Home"
+            Content.Page(MainTemplate.Doc("Home", [ client <@ Home.page() @> ]))
+            
+        | Logs ->
+            logger.Trace "Logs"
+            Content.Page(MainTemplate.Doc( "Logs", [ client <@ Logs.page() @> ]))
+
+        | LogEvents ->
+            logger.Trace "Log events"
+
+            Content.Custom(
+                Status = Http.Status.Ok,
+                Headers = 
+                    [ 
+                        Http.Header.Custom "Content-type" "text/event-stream" 
+                        Http.Header.Custom "Cache-control" "no-cache" 
+                        Http.Header.Custom "Connection" "keep-alive" 
+                    ],
+                WriteBody = 
+                    (fun stream ->
+                        let msgs = Logger.HttpLogAgent.PostAndReply(Logger.MessageLog.GetUnread)
+                        use writer = new StreamWriter(stream)
+                            
+                        for msg in msgs do
+                            writer.WriteLine("data:" + msg + "\n\n")
+                    )
+                )
+    )
+```
+
+And that's it! Now if we boot the sitelet and navigate to `/logs`, we should have a live stream of logs.
+
+![https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161223_logs/http.png](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161223_logs/http.png)
+
+# Conclusion
+
+Today we saw how we could output logs in Console, Files and in a live stream for WebSharper application using NLog targets and custom targets.
+Hope you enjoyed this post as much as I enjoyed writing it.
+If you have any questions, leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam).
+Merry Christmas and see you next time!
+
+# Other post you will like
+
+-
+-
+-
