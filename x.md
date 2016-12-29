@@ -1,2 +1,1 @@
-
-1
+Add fontawesome to XF
