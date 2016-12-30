@@ -85,7 +85,7 @@ var fileO = '\xf0f6';
 
 var icon = new IconLabel
 {
-    Margin = new Thickness(0, 2, 0, 0),
+    Margin = 2,
     Text = fileO.ToString()
 };
 ```
