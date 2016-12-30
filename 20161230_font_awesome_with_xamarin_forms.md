@@ -85,7 +85,7 @@ var fileO = '\xf0f6';
 
 var icon = new IconLabel
 {
-    Margin = 2,
+    Margin = new Thickness(0, 2, 0, 0),
     Text = fileO.ToString()
 };
 ```
@@ -93,8 +93,29 @@ var icon = new IconLabel
 Notice `\xf0f6` is the unicode character found for `file-o` in the cheatsheet.
 Now if we run our application, we should be able to see the icons display! Victory!
 
+![https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161230_fontawesome_xamarinforms/screenshot.png](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20161230_fontawesome_xamarinforms/screenshot.png)
+
+[Full source code available here - https://github.com/Kimserey/CustomFonts](https://github.com/Kimserey/CustomFonts)
+
 # Conclusion
 
-Today we saw how we could use Font Awesome icon font in our Android application using Xamarin.Forms. Using fonts is a very easy way to get icons on your app with the correct color and size since the text color and font size is directly supported by Xamarin.Forms. Hope you liked this post, if you have any questions leave it here or hit me on Twitter [@Kimserey_Lam](). See you next time!
+Today we saw how we could use Font Awesome icon font in our Android application using Xamarin.Forms. Using fonts is a very easy way to get icons on your app with the correct color and size since the text color and font size is directly supported by Xamarin.Forms. Hope you liked this post, if you have any questions leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
 
 # Other you will like
+
+- Transform an activity asynchronous event to an awaitable task for Xamarin.Forms services - [http://kimsereyblog.blogspot.com/2016/12/transform-operation-from-xamarinandroid.html](http://kimsereyblog.blogspot.com/2016/12/transform-operation-from-xamarinandroid.html)
+- Understand the difference between Internal and External folder storage in Xamarin.Android - [https://kimsereyblog.blogspot.co.uk/2016/11/differences-between-internal-and.html](https://kimsereyblog.blogspot.co.uk/2016/11/differences-between-internal-and.html)
+- Use the Snackbar API with Xamarin.Forms - [https://kimsereyblog.blogspot.co.uk/2016/11/how-to-use-snackbar-api-in.html](https://kimsereyblog.blogspot.co.uk/2016/11/how-to-use-snackbar-api-in.html)
+- Build your own Line Chart for Xamarin.Forms (Part 2) - [https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for_31.html](https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for_31.html)
+- Build your own Line chart for Xamarin.Forms (Part 1) - [https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for.html](https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for.html)
+
+# Support me
+[Support me by visting my website](https://www.kimsereylam.com). Thank you!
+
+[Support me by downloading my app BASKEE](https://www.kimsereylam.com/baskee). Thank you!
+
+![baskee](https://raw.githubusercontent.com/Kimserey/kimserey.github.io/master/img/readme/baskee_screenshots.png)
+
+[Support me by downloading my app EXPENSE KING](https://www.kimsereylam.com/expenseking). Thank you!
+
+![expense king](https://raw.githubusercontent.com/Kimserey/kimserey.github.io/master/img/readme/expenseking_screenshots.png)
