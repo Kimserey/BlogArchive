@@ -36,4 +36,28 @@ Now we can inject the service and retrieve the dbPath and we can instantiate a S
 
 ## 3. Use Sqlite in Xamarin.Forms
 
-We have
+We already have the package installed and we have a dependency service giving us access to sqlite.
+
+All we need to do now is to create tables and create the sql queries.
+
+SqliteNet works using Attributes, the main one are
+. Table to specify that the type is a table and have with a particular name, 
+. Column same as table but for columns
+. Indexed
+. NotNull
+. PrimaryKey
+. AutoIncrement
+. Colate Nocase?
+
+With that we can now define our table:
+'''
+'''
+We can create the table using the CreateTable generic function and insert an element with Insert
+
+And finally we can query with Find or Query or DeferreredQuery.
+
+And that's all we need to get Sqlite working in Xamarin.Forms!
+
+# Conclusion
+
+Today we learnt how to use Sqlite from Xamarin.Forms project. Sqlite being present in all mobiles, it is a very convenient way to store data or even temporary cache data locally on device. Hope you like this post! If you have any comments leave it here or hit me on Twitter @Kimserey_Lam. See you next time!
