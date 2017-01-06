@@ -7,7 +7,7 @@ In this post, I will show how we can use Sqlite from Xamarin.Forms in an Android
 1. Get Sqlite.net
 2. Dependency service and database path
 3. Use Sqlite from Xamarin.Forms
-
+ 
 ## 1. Get Sqlite
 
 The library that I always use is SQLite.net-pcl from ...
