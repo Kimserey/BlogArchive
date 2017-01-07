@@ -105,7 +105,7 @@ adb pull data/data/com.kimserey.sqlitetest/files/test.db
 
 And that's all we need to get Sqlite working in Xamarin.Forms!
 
-[Source code available here - ](https://github.com/Kimserey/SqliteTest)
+Source code available here - [https://github.com/Kimserey/SqliteTest)](https://github.com/Kimserey/SqliteTest)
 
 # Conclusion
 
