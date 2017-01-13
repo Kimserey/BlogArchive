@@ -94,11 +94,5 @@ Today we saw how we could use FontAwesome with Xamarin.iOS and exploit the same 
 
 # Support me
 [Support me by visting my website](https://www.kimsereylam.com). Thank you!
-
 [Support me by downloading my app BASKEE](https://www.kimsereylam.com/baskee). Thank you!
-
-![baskee](https://raw.githubusercontent.com/Kimserey/kimserey.github.io/master/img/readme/baskee_screenshots.png)
-
 [Support me by downloading my app EXPENSE KING](https://www.kimsereylam.com/expenseking). Thank you!
-
-![expense king](https://raw.githubusercontent.com/Kimserey/kimserey.github.io/master/img/readme/expenseking_screenshots.png)
