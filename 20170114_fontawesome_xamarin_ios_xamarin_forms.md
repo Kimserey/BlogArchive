@@ -51,18 +51,19 @@ As usual, don't forget the assembly ExportRenderer attribute to declare the rend
 FromName expects the font name. A trick to find it is to place the following code in the AppDelegate.cs and find the name of the font in the list of fonts displayed:
 
 ```
-        private void ListFontName()
-        {
-            var fontNames = UIFont
-                .FamilyNames
-                .SelectMany(fn => UIFont.FontNamesForFamilyName(fn).Select(font => new Tuple<string, string>(fn, font)))
-                .OrderBy(i => i.Item1)
-                .ThenBy(i => i.Item2);
+private void ListFontName()
+{
+    var fontNames = UIFont
+        .FamilyNames
+        .SelectMany(fn => UIFont.FontNamesForFamilyName(fn).Select(font => new Tuple<string, string>(fn, font)))
+        .OrderBy(i => i.Item1)
+        .ThenBy(i => i.Item2);
 
-            foreach (Tuple<string, string> font in fontNames)
-            {
-                Debug.WriteLine(string.Format("Font: {0}/{1}", font.Item1, font.Item2));
-            }        }
+    foreach (Tuple<string, string> font in fontNames)
+    {
+        Debug.WriteLine(string.Format("Font: {0}/{1}", font.Item1, font.Item2));
+    }        
+}
 ```
 
 If your font isn't in the list, it means something went wrong in your import.
@@ -77,7 +78,7 @@ And that's it!
 
 # Conclusion
 
-Today we saw how we could use FontAwesome with Xamarin.iOS and exploit the same code as we built when making the FontAwesome for Droid blog post. We can see how we could leverage the power of Xamarin.Forms when it comes to coding a solution which will run on multiple platforms. Hope you liked this post! If you have any questions, leave it here or hit me on Twitter [@Kimserey_Lam](). See you next time!
+Today we saw how we could use FontAwesome with Xamarin.iOS and exploit the same code as we built when making the FontAwesome for Droid blog post. We can see how we could leverage the power of Xamarin.Forms when it comes to coding a solution which will run on multiple platforms. Hope you liked this post! If you have any questions, leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
 
 # Other posts you will like
 
