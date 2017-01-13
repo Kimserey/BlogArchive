@@ -76,6 +76,8 @@ This is the true benefit of Xamarin.Forms. Cross platform code where we can tap 
 
 And that's it!
 
+[Full source code available here](https://github.com/Kimserey/FontTest/tree/master/iOS)
+
 # Conclusion
 
 Today we saw how we could use FontAwesome with Xamarin.iOS and exploit the same code as we built when making the FontAwesome for Droid blog post. We can see how we could leverage the power of Xamarin.Forms when it comes to coding a solution which will run on multiple platforms. Hope you liked this post! If you have any questions, leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
