@@ -3,9 +3,10 @@
 Few weeks ago I explained how we could use FontAwesome from our Droid project link. Following the same idea, today I will explain how we can use FontAwesome on an iOS app with Xamarin.Forms.
 
 This post is composed by three parts:
-1. Import of font into iOS project
-2. Define custom renderer
-3. Use from Xamarin.Forms
+
+ 1. Import of font into iOS project
+ 2. Define custom renderer
+ 3. Use from Xamarin.Forms
 
 ## 1. Import of font into iOS project
 
