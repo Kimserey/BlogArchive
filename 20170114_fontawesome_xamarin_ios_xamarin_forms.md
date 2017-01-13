@@ -93,6 +93,8 @@ Today we saw how we could use FontAwesome with Xamarin.iOS and exploit the same 
 - Build your own Line chart for Xamarin.Forms (Part 1) - [https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for.html](https://kimsereyblog.blogspot.co.uk/2016/10/build-your-own-line-chart-for.html)
 
 # Support me
-[Support me by visting my website](https://www.kimsereylam.com). Thank you!
-[Support me by downloading my app BASKEE](https://www.kimsereylam.com/baskee). Thank you!
-[Support me by downloading my app EXPENSE KING](https://www.kimsereylam.com/expenseking). Thank you!
+[Support me by visting my website](https://www.kimsereylam.com) Thank you!
+
+[Support me by downloading my app BASKEE](https://www.kimsereylam.com/baskee) Thank you!
+
+[Support me by downloading my app EXPENSE KING](https://www.kimsereylam.com/expenseking) Thank you!
