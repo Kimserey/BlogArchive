@@ -17,8 +17,9 @@ Once you have done this, the font should be available to use.
 ## 2. Define custom renderer
 
 Similarly to the Droid project, we need to create a custom renderer and overwrite the following function:
+
 ```
- OnElementPropertyChanged()
+ OnElementPropertyChanged(...)
 ```
 
 This function is called by Xamarin when the properties of the element change. For example when the text is changed or the color is changed, the function will be called.
@@ -28,17 +29,16 @@ Xamarin.Android and Xamarin.iOS seem to behave differently in regards to text pr
 In this function we will then set the font with our imported font.
 
 ```
-    public class IconRenderer : LabelRenderer
+public class IconRenderer : LabelRenderer
+{
+    protected override void OnElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        protected override void OnElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            base.OnElementPropertyChanged(sender, e);
+        base.OnElementPropertyChanged(sender, e);
 
-            if (Control != null)
-                Control.Font = UIFont.FromName("FontAwesome", 18);
-        }
-    }  
-
+        if (Control != null)
+            Control.Font = UIFont.FromName("FontAwesome", 18);
+    }
+}  
 ```
 First we do a safety check in case the Control is null then we set the Font property of the UIText using UIFont.FromName and passing the font name and the font size.
 
