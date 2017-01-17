@@ -55,4 +55,4 @@ Today we saw how we could create a splash screen in iOS. By creating a splash sc
 
 # Other posts you will like
 
-# Support me!
+# Support me! 
