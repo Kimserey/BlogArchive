@@ -1,6 +1,6 @@
 # Create a Splash screen for your Xamarin.iOS app to be use with Xamarin.Forms project
 
-Few weeks ago I explained how we can create a splash screen for Android. Xamarin.Forms takes few seconds to load at each start so it is important to provide a feedback to the user when they click on our icon. The splash screen answers that by providing a way to show a loading screen. Today we will see how we can setup a simple splashscreen with an image centered and with a text label.
+Few weeks ago I explained how we can [create a splash screen for Android](https://kimsereyblog.blogspot.co.uk/2016/10/how-to-make-splash-screen-with.html). Xamarin.Forms takes few seconds to load at each start so it is important to provide a feedback to the user when they click on our icon. The splash screen answers that by providing a way to show a loading screen. Today we will see how we can setup a simple splashscreen with an image centered and with a text label.
 
 This post will be composed by 3 parts:
 
@@ -51,7 +51,7 @@ And that's it, now that we have all constraints set, when changing screen size, 
 
 # Conclusion
 
-Today we saw how we could create a splash screen in iOS. By creating a splash screen, we also explored how the storyboard editor works with constraints and how we can make a responsive layout. Hope you enjoyed this post! As always, if you have any question leave it here or hit me on Twitter [@Kimserey_Lam](). See you next time!
+Today we saw how we could create a splash screen in iOS. By creating a splash screen, we also explored how the storyboard editor works with constraints and how we can make a responsive layout. Hope you enjoyed this post! As always, if you have any question leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
 
 # Other posts you will like
 
