@@ -42,10 +42,11 @@ In 1 we placed the splash screen elements on the layout. In 2 we understood how 
 
 There are multiple ways to set constraints which yield the same result. Here I will show one way.
 
-First set the left and right constrain on the image. 
-Next we fix the distance of the image from the center of the screen height. This together with the left and right allows the layout to know exactly where to position and resize the image. 
+First set the width and height of the image.
+Next fix the distance of the image from the center of the screen height. 
+This together with the left and right allows the layout to know exactly where to position and resize the image. 
 
-Next we move to the label and set it's width and height and we drag the top constraint and fix it to the bottom of the image. Lastly we set its center from the center width of the layout. Those constraints will allow the layout to know exactly where the label must be placed.
+Next we move to the label and set the width and height, the top to the bottom of the image (to keep the same distance among screen sizes between the top image and the label) and lastely set the center of the label to the center width of the screen. Those constraints will allow the layout to know exactly where the label must be placed.
 
 And that's it, now that we have all constraints set, when changing screen size, the layout should be able to re arrange the elements.  
 
