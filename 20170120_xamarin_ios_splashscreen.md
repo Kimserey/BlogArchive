@@ -76,4 +76,23 @@ Today we saw how we could create a splash screen in iOS. By creating a splash sc
 
 # Other posts you will like
 
+- Use FontAwesome from Xamarin.iOS - [https://kimsereyblog.blogspot.co.uk/2017/01/use-fontawesome-on-your-xamarinios-app.html](https://kimsereyblog.blogspot.co.uk/2017/01/use-fontawesome-on-your-xamarinios-app.html)
+- Get started with SQLite in Xamarin.Forms - [https://kimsereyblog.blogspot.co.uk/2017/01/get-started-with-sqlite-in-from.html](https://kimsereyblog.blogspot.co.uk/2017/01/get-started-with-sqlite-in-from.html)
+- Use Font awesome from your Xamarin.Android app - [https://kimsereyblog.blogspot.co.uk/2016/12/use-font-awesome-from-your-xamarinforms.html](https://kimsereyblog.blogspot.co.uk/2016/12/use-font-awesome-from-your-xamarinforms.html)
+- Transform an activity asynchronous event to an awaitable task for Xamarin.Forms services - [http://kimsereyblog.blogspot.com/2016/12/transform-operation-from-xamarinandroid.html](http://kimsereyblog.blogspot.com/2016/12/transform-operation-from-xamarinandroid.html)
+- Understand the difference between Internal and External folder storage in Xamarin.Android - [https://kimsereyblog.blogspot.co.uk/2016/11/differences-between-internal-and.html](https://kimsereyblog.blogspot.co.uk/2016/11/differences-between-internal-and.html)
+- Use the Snackbar API with Xamarin.Forms - [https://kimsereyblog.blogspot.co.uk/2016/11/how-to-use-snackbar-api-in.html](https://kimsereyblog.blogspot.co.uk/2016/11/how-to-use-snackbar-api-in.html)
+
 # Support me! 
+
+[Support me by visting my website](https://www.kimsereylam.com). Thank you!
+
+[Support me by downloading my app BASKEE](https://www.kimsereylam.com/baskee). Thank you!
+
+![baskee](https://raw.githubusercontent.com/Kimserey/kimserey.github.io/master/img/readme/baskee_screenshots.png)
+
+[Support me by downloading my app EXPENSE KING](https://www.kimsereylam.com/expenseking). Thank you!
+
+![expense king](https://raw.githubusercontent.com/Kimserey/kimserey.github.io/master/img/readme/expenseking_screenshots.png)
+
+[Support me by downloading my app RECIPE KEEPER](https://www.kimsereylam.com/recipekeeper). Thank you!
