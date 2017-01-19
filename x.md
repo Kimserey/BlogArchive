@@ -22,9 +22,9 @@ This looks good but if we change the device view, we can see that the layout doe
 
 When you first select your element, it becomes surrounded by rounds which can be used to resize the element. If you click a second time, it then becomes surrounded by T and have a square in the middle. Those are the tools to set the layout constraints.
 
- - The T on the bottom and right are used to set a constraint on width and height or ratio.
- - The side square are used to set a constraint on the distance between the side and another element of the layout or the boundary of layout or middle of width or middle of height.
- - The square in the middle is used to set a constraint on the middle of the element against other elements or layout properties (like the side ones)
+ - The `I` on the bottom and right are used to set a constraint on width and height or ratio.
+ - The side `T` are used to set a constraint on the distance between the side and another element of the layout or the boundary of layout or middle of width or middle of height.
+ - The middle `square` is used to set a constraint on the middle of the element against other elements or layout properties (like the side ones)
 
 To set a constraint, drag or click on one of the tools. 
 
