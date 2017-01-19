@@ -48,6 +48,8 @@ This together with the left and right allows the layout to know exactly where to
 
 Next we move to the label and set the width and height, the top to the bottom of the image (to keep the same distance among screen sizes between the top image and the label) and lastely set the center of the label to the center width of the screen. Those constraints will allow the layout to know exactly where the label must be placed.
 
+Layout constrains are also visibile from the properties>layout menu.
+
 And that's it, now that we have all constraints set, when changing screen size, the layout should be able to re arrange the elements.  
 
 # Conclusion
