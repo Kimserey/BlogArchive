@@ -23,6 +23,7 @@ Open the storyboard and the storyboard editor should appear. Our splash screen w
 This looks good but if we change the device view, we can see that the layout doesn't readjust itself. What we need is layout contraints.
 
 ![view](https://github.com/Kimserey/BlogArchive/blob/master/img/20170120_splashscreen_ios/viewtype.png?raw=true)
+
 ![not_adjusted](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170120_splashscreen_ios/not_adjusted_splash.png)
 
 ##2. Understand layout constraints
@@ -46,6 +47,7 @@ __Re-position element__
 After we set the constraints, when we change the view we can see that the layout doesn't change. But the difference is when we click on an element, if we have set the constraints properly, we should see a dashed area on the layout which represents the position of the element when the constraints are applied. If we see this, we can click on the top right square icon which is the button to re arrange the layout and the element should be re adjusted properly.
 
 ![button](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170120_splashscreen_ios/adjust_button.png)
+
 ![adjust](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170120_splashscreen_ios/adjust.png)
 
 ## 3. Layout the splash screen
