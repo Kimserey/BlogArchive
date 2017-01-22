@@ -6,7 +6,7 @@ Authentication is an important part of any Web applications. Today I will explai
 1. What is needed for authentication
 2. Password encryption and storage
 3. JWT token
-4. OWIN auth middleware
+4. OWIN auth middleware and WebSharper OWIN selfhost
 5. Glue it all together
 ```
 
@@ -116,7 +116,7 @@ Decode performs all the necessary signature verification. It will throw an excep
 
 So now that we know how Jwt work, we will see how we can use it to authenticate user and for the communication between client and server.
 
-# 4. OWIN auth middleware
+# 4. OWIN auth middleware and WebSharper OWIN selfhost
 
 Our Web app will be served by a WebSharper sitelet self-hosted using OWIN.
 To authenticate, we will create a JWT middleware.
@@ -144,3 +144,109 @@ Now that we have the auth middleware, we can place it before the sitelet.
 ```
 
 Every call except token will go through the authentication and when passing a valid token, the middleware below (here our sitelet) will have access to the principal and `IsAuthenticated` will return true.
+So this middleware allows us to authenticate the user and to request for a token.
+
+All we need to do now is to glue it all together
+
+# 5. Glue it all together
+
+In the previous sections we did the following:
+
+```
+1. Created a user accounts registry with password stored
+2. Created a JWT middleware
+```
+
+Now what we need to do is to have simple register page and a simple login page.
+Once we login, we will receive the token which we can either store in cookie or in token storage.
+
+__WebSharper RPC__
+
+One of the best feature of WebSharper is `RPC` which allows us to call server functions from the clientside code and let WebSharper handle all the serialization/deserialization in the background.
+But since are authentication is token based, we need to add the token in the header. To do so we can replace the default remoting module:
+
+```
+[<JavaScript>]
+module Remoting =
+    open WebSharper.JavaScript
+
+    let private originalProvider = WebSharper.Remoting.AjaxProvider
+
+    let getToken() =
+        ... get token from storage ...
+
+    type CustomXhrProvider () =
+        member this.AddHeaders(headers) =
+            getToken()
+            |> Option.iter (fun token -> JS.Set headers "Authorization" <| sprintf "Bearer %s" token)
+            headers
+
+        interface WebSharper.Remoting.IAjaxProvider with
+            member this.Async url headers data ok err =
+                originalProvider.Async url (this.AddHeaders headers) data ok err
+            member this.Sync url headers data =
+                originalProvider.Sync url (this.AddHeaders headers) data
+            
+    let installBearer() =
+        WebSharper.Remoting.AjaxProvider <- CustomXhrProvider()
+```
+
+__Ajax call__
+
+Another way to make request is true JQuery.Ajax so in order to add the token, we create an Ajax helper:
+
+```
+[<JavaScript>]
+module AjaxHelper =
+
+    type AjaxResult =
+    | Success of result: obj
+    | Error of errorMessage: string
+
+    type AjaxOptions = {
+        Url:         string
+        RequestType: RequestType
+        Headers:     (string * string) [] option
+        Data:        obj option
+        ContentType: string option
+    } 
+    with 
+        static member GET =
+            { RequestType = RequestType.GET;   Url = ""; Headers = None; Data = None; ContentType = Some "application/json" }
+        
+        static member POST =
+            { AjaxOptions.GET with RequestType = RequestType.POST }
+    
+    let httpRequest options =
+        async {
+            try
+                let! result = 
+                    Async.FromContinuations
+                    <| fun (ok, ko, _) ->
+                        let settings = JQuery.AjaxSettings(
+                                        Url = options.Url,
+                                        Type = options.RequestType,
+                                        DataType = JQuery.DataType.Json,
+                                        Success = (fun (result, _, _) ->
+                                                    ok result),
+                                        Error = (fun (jqXHR, _, _) ->
+                                                    ko (System.Exception(string jqXHR.Status)))
+                                        )
+                        options.ContentType |> Option.iter (fun c -> settings.ContentType <- c)
+                        options.Headers     |> Option.iter (fun h -> settings.Headers <- (new Object<string>(h)))
+                        options.Data        |> Option.iter (fun d -> settings.Data <- d)
+                        JQuery.Ajax(settings) |> ignore
+                return AjaxResult.Success result
+            with ex -> 
+                Console.Log <| ex.JS.ToString()
+                return AjaxResult.Error ex.Message
+        }
+```
+
+So let's build the registration and login now:
+
+
+Congratulation! We build together a full end to end authentication story. There are more to do, like renew token for example for the JWT and for password we must allow reset password but I hope this helped you understand better what pieces are required to build an auth and use it from a WebSharper selfhost application.
+
+# Conclusion
+
