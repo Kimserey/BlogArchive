@@ -667,131 +667,133 @@ Finally we build the page and add a `Service` with `getToken` which executes an 
 _The form inputs are filled up using `Lenses`, if you aren't familiar with lenses, you can check my previous blog post [https://kimsereyblog.blogspot.co.uk/2016/03/var-view-lens-listmodel-in-uinext.html](https://kimsereyblog.blogspot.co.uk/2016/03/var-view-lens-listmodel-in-uinext.html)._
 
 ```
-    [<JavaScript>]
-    module Client =
-        open WebSharper.UI.Next.Client
-        open WebSharper.JavaScript
-        open WebSharper.JQuery
-        open AjaxHelper
+[<JavaScript>]
+module Client =
+    open WebSharper.UI.Next.Client
+    open WebSharper.JavaScript
+    open WebSharper.JQuery
+    open AjaxHelper
+    
+    module Service =
         
-        module Service =
-            
-            type GetTokenResult =
-                | Success of token: string
-                | Failure of msg: string
-            
-            let getToken (cred: Credentials) =
-                async {
-                    let! result = 
-                        httpRequest 
-                            { AjaxOptions.POST 
-                                with 
-                                    Url = "token"
-                                    DataType = JQuery.DataType.Text
-                                    Data = Some <| box (JSON.Stringify cred) }
-                    match result with
-                    | AjaxResult.Success res ->
-                        let token = string res
-                        return GetTokenResult.Success token
-                    | AjaxResult.Error err ->
-                        return Failure "Failed to get token"
-                }
+        type GetTokenResult =
+            | Success of token: string
+            | Failure of msg: string
+        
+        let getToken (cred: Credentials) =
+            async {
+                let! result = 
+                    httpRequest 
+                        { AjaxOptions.POST 
+                            with 
+                                Url = "token"
+                                DataType = JQuery.DataType.Text
+                                Data = Some <| box (JSON.Stringify cred) }
+                match result with
+                | AjaxResult.Success res ->
+                    let token = string res
+                    return GetTokenResult.Success token
+                | AjaxResult.Error err ->
+                    return Failure "Failed to get token"
+            }
 
 
-        type Message =
-            | Success of string
-            | Failure of string
-            | Empty
-            with
-                static member Embbed (x: View<Message>) = 
-                    x |> Doc.BindView (
-                        function 
-                        | Success str -> divAttr [ attr.``class`` "alert alert-success" ] [ text str ] :> Doc
-                        | Failure str -> divAttr [ attr.``class`` "alert alert-danger" ] [ text str ] :> Doc
-                        | Empty -> Doc.Empty)
+    type Message =
+        | Success of string
+        | Failure of string
+        | Empty
+        with
+            static member Embbed (x: View<Message>) = 
+                x |> Doc.BindView (
+                    function 
+                    | Success str -> divAttr [ attr.``class`` "alert alert-success" ] [ text str ] :> Doc
+                    | Failure str -> divAttr [ attr.``class`` "alert alert-danger" ] [ text str ] :> Doc
+                    | Empty -> Doc.Empty)
 
-        let register () =
-            let registerMessage = 
-                Var.Create Empty
+    let register () =
+        let registerMessage = 
+            Var.Create Empty
 
-            let data = 
-                Var.Create 
-                    { UserId = ""
-                      Password = ""
-                      Fullname = ""
-                      Email = ""
-                      Claims = [] } 
-            
-            
-            form
-                [ h3 [ text "Register" ]
-                  registerMessage.View |> Message.Embbed
-                  Doc.Input [ attr.``class`` "form-control my-3"; attr.placeholder "UserId" ] (data.Lens (fun x -> x.UserId) (fun x n -> { x with UserId = n }))
-                  Doc.Input [ attr.``class`` "form-control my-3"; attr.placeholder "Password"; attr.``type`` "password" ] (data.Lens (fun x -> x.Password) (fun x n -> { x with Password = n }))
-                  Doc.Input [ attr.``class`` "form-control my-3"; attr.placeholder "Fullname" ] (data.Lens (fun x -> x.Fullname) (fun x n -> { x with Fullname = n }))
-                  Doc.Input [ attr.``class`` "form-control my-3"; attr.placeholder "Email"; attr.``type`` "email" ] (data.Lens (fun x -> x.Email) (fun x n -> { x with Email = n }))
-                  Doc.Input [ attr.``class`` "form-control my-3"; attr.placeholder "Claims comma separated" ] (data.Lens (fun x -> x.Claims |> String.concat ",") (fun x n -> { x with Claims = n.Split(',') |> Array.map (fun str -> str.Trim()) |> Array.toList })) 
-                  Doc.Button "Create"
-                    [ attr.``class`` "btn btn-primary"; attr.``type`` "submit" ] 
-                    (fun () -> 
-                        async {
-                            let! result = Rpc.createAccount data.Value
-                            if result then 
-                                registerMessage.Value <- Success "Successfuly created user."
-                            else
-                                registerMessage.Value <- Failure "Failed to create user."
-                        } |> Async.StartImmediate) :> Doc ]
+        let data = 
+            Var.Create 
+                { UserId = ""
+                    Password = ""
+                    Fullname = ""
+                    Email = ""
+                    Claims = [] } 
+        
+        
+        form
+            [ h3 [ text "Register" ]
+                registerMessage.View |> Message.Embbed
+                Doc.Input [ attr.``class`` "form-control my-3"; attr.placeholder "UserId" ] (data.Lens (fun x -> x.UserId) (fun x n -> { x with UserId = n }))
+                Doc.Input [ attr.``class`` "form-control my-3"; attr.placeholder "Password"; attr.``type`` "password" ] (data.Lens (fun x -> x.Password) (fun x n -> { x with Password = n }))
+                Doc.Input [ attr.``class`` "form-control my-3"; attr.placeholder "Fullname" ] (data.Lens (fun x -> x.Fullname) (fun x n -> { x with Fullname = n }))
+                Doc.Input [ attr.``class`` "form-control my-3"; attr.placeholder "Email"; attr.``type`` "email" ] (data.Lens (fun x -> x.Email) (fun x n -> { x with Email = n }))
+                Doc.Input [ attr.``class`` "form-control my-3"; attr.placeholder "Claims comma separated" ] (data.Lens (fun x -> x.Claims |> String.concat ",") (fun x n -> { x with Claims = n.Split(',') |> Array.map (fun str -> str.Trim()) |> Array.toList })) 
+                Doc.Button "Create"
+                [ attr.``class`` "btn btn-primary"; attr.``type`` "submit" ] 
+                (fun () -> 
+                    async {
+                        let! result = Rpc.createAccount data.Value
+                        if result then 
+                            registerMessage.Value <- Success "Successfuly created user."
+                        else
+                            registerMessage.Value <- Failure "Failed to create user."
+                    } |> Async.StartImmediate) :> Doc ]
 
-        open Service
+    open Service
 
-        let login (navigator: PageNavigator) =
-            let message =  
-                Var.Create Message.Empty
+    let login (navigator: PageNavigator) =
+        let message =  
+            Var.Create Message.Empty
 
-            let cred = 
-                Var.Create 
-                    { UserId = ""
-                      Password = "" }
-                    
-            form
-                [ h3 [ text "Log in" ]
-                  message.View |> Message.Embbed
-                  Doc.Input [ attr.``class`` "form-control my-3"; attr.placeholder "UserId" ] (cred.Lens (fun x -> x.UserId) (fun x n -> { x with UserId = n }))
-                  Doc.Input [ attr.``class`` "form-control my-3"; attr.placeholder "Password"; attr.``type`` "password" ] (cred.Lens (fun x -> x.Password) (fun x n -> { x with Password = n }))
-                  Doc.Button 
-                    "Log In" 
-                    [ attr.``class`` "btn btn-primary"; attr.style "submit" ] 
-                    (fun () -> 
-                        async {
-                            let! token = Service.getToken cred.Value
-                            match token with
-                            | GetTokenResult.Success token ->
-                                TokenStorage.set token
-                                navigator.GoHome()
-                            | GetTokenResult.Failure _ ->
-                                message.Value <- Message.Failure "Log in failed."
-                        } |> Async.StartImmediate) ]
+        let cred = 
+            Var.Create 
+                { UserId = ""
+                    Password = "" }
+                
+        form
+            [ h3 [ text "Log in" ]
+                message.View |> Message.Embbed
+                Doc.Input [ attr.``class`` "form-control my-3"; attr.placeholder "UserId" ] (cred.Lens (fun x -> x.UserId) (fun x n -> { x with UserId = n }))
+                Doc.Input [ attr.``class`` "form-control my-3"; attr.placeholder "Password"; attr.``type`` "password" ] (cred.Lens (fun x -> x.Password) (fun x n -> { x with Password = n }))
+                Doc.Button 
+                "Log In" 
+                [ attr.``class`` "btn btn-primary"; attr.style "submit" ] 
+                (fun () -> 
+                    async {
+                        let! token = Service.getToken cred.Value
+                        match token with
+                        | GetTokenResult.Success token ->
+                            TokenStorage.set token
+                            navigator.GoHome()
+                        | GetTokenResult.Failure _ ->
+                            message.Value <- Message.Failure "Log in failed."
+                    } |> Async.StartImmediate) ]
 
-        let page (navigator: PageNavigator) =
-            divAttr
-                [ attr.``class`` "container" ]
-                [ divAttr
-                    [ attr.``class`` "row" ]
-                    [ divAttr  
-                        [ attr.``class`` "col-sm-6" ]
+    let page (navigator: PageNavigator) =
+        divAttr
+            [ attr.``class`` "container" ]
+            [ divAttr
+                [ attr.``class`` "row" ]
+                [ divAttr  
+                    [ attr.``class`` "col-sm-6" ]
+                    [ divAttr
+                        [ attr.``class`` "card my-3" ]
                         [ divAttr
-                            [ attr.``class`` "card my-3" ]
-                            [ divAttr
-                                [ attr.``class`` "card-block" ]
-                                [ login navigator ] ] ]
-                      divAttr  
-                        [ attr.``class`` "col-sm-6" ]
+                            [ attr.``class`` "card-block" ]
+                            [ login navigator ] ] ]
+                    divAttr  
+                    [ attr.``class`` "col-sm-6" ]
+                    [ divAttr
+                        [ attr.``class`` "card my-3" ]
                         [ divAttr
-                            [ attr.``class`` "card my-3" ]
-                            [ divAttr
-                                [ attr.``class`` "card-block" ]
-                                [ register() ] ] ] ] ]
+                            [ attr.``class`` "card-block" ]
+                            [ register() ] ] ] ] ]
 ```
+
+[All the source code is available on my GitHub - https://github.com/Kimserey/JwtWebSharperSitelet](https://github.com/Kimserey/JwtWebSharperSitelet)
 
 Congratulation! We build together a full end to end authentication story. There are more to do, like renew token for example for the JWT and for password we must allow reset password but I hope this helped you understand better what pieces are required to build an auth and use it from a WebSharper selfhost application.
 
