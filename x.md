@@ -20,11 +20,43 @@ Lastly we will see how both glued together provide a reliable authentication sto
 # 2. Password encryption and storage
 ## 2.1 Storage
 
-To store data I will be using Sqlite via Sqlite net pcl. If you need.  tutorial on Sqlite have a look at my previous post (link).
+To store data I will be using Sqlite via Sqlite net pcl. If you need a [tutorial on Sqlite have a look at my previous post](https://kimsereyblog.blogspot.co.uk/2017/01/get-started-with-sqlite-in-from.html).
 We first start by defining the table users which will be stored in user_accounts.db.
 The users table will contain all the user identity information.
 
 ```
+[<Table("user_accounts"); CLIMutable>]
+type UserAccount =
+    {
+        [<Column "id"; PrimaryKey; Collation "nocase">]
+        Id: string
+        
+        [<Column("full_name")>]
+        FullName: string
+        
+        [<Column("email")>]
+        Email: string
+        
+        [<Column("password")>]
+        Password: string
+        
+        [<Column "passwordtimestamp">]                          
+        PasswordTimestamp : DateTime
+        
+        [<Column("enabled")>]
+        Enabled:bool
+        
+        [<Column("creation_date")>]
+        CreationDate: DateTime
+
+        [<Column("claims")>]
+        Claims: string
+    }
+
+let getConnection (database: string) =
+    let conn = new SQLiteConnection(database)
+    conn.CreateTable<UserAccount>() |> ignore
+    conn
 ```
 
 The password will also be stored but we __must encrypt it before storing it__.
@@ -37,14 +69,20 @@ In the event of data breach, someone may have access to your db. This could be c
 
 __Salt?__
 
-We will use a hashing algorithm via System.Security.Cryptography.Rfc2898DeriveBytes (PBKDF2) which produces a key given a password and a salt and a number of iterations.
+We will use a hashing algorithm via `System.Security.Cryptography.Rfc2898DeriveBytes` (`PBKDF2`: Password based key derivation function 2) which produces a key given a `password` and a `salt` and a number of `iterations`.
 
-But It is not as simple as just hashing plain password. Because some users use simple common passwords, attackers use rainbow tables which are files containing all the common password with the hashed value. If we simply hash a password, if the password is simple like "Rock123" there is chance for it to be in the rainbow table therefore if attackers have the hashed password, a simple search will match the decrypted password.
+```
+open System.Security.Cryptography
 
-The answer to tha is to use a salt. A salt is a piece that we append to the password in order to make the final hash different than the hash which would have been generated without salt.
-The purpose of the salt is to make the hashed password not retrievable from common password in rainbow tables.
+let pbkdf2 = new Rfc2898DeriveBytes(password, saltSize, iterations)
+```
 
-Algorithm
+But It is not as simple as just hashing plain password. Some users use simple passwords which make it easy for attackers to crack by using rainbow tables. Rainbow tables are files containing all the common password together with the hashed value. If we simply hash a password, if the password is simple like `Rock123` there is chance for it to be retrievable in a rainbow table.
+
+The answer to that is to use a `salt`. __A salt is a random set of bytes that we append to the password in order to make the final hash different than the hash which would have been generated without it__.
+The purpose of the salt is to make the hashed password not retrievable in rainbow tables even for simple password.
+
+__Algorithm__
 
 We wil create a cryptography utility with two functions. 
 
