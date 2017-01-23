@@ -1,4 +1,4 @@
-# Authentication for WebSharper sitelet with Jwt token.
+# Authentication for WebSharper sitelet with Jwt token in F#.
 
 Authentication is an important part of any Web applications. Today I will explain how we can create the essential modules required to authenticate a user. This post will be composed by four parts:
 
