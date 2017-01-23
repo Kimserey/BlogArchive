@@ -324,11 +324,7 @@ So now that we know how Jwt work, we will see how we can use it to authenticate 
 
 # 4. OWIN auth middleware and WebSharper OWIN selfhost
 
-Our Web app will be served by a WebSharper sitelet self-hosted using OWIN.
-To authenticate, we will create a JWT middleware.
-
-The auth middleware inherit from '' which is a base class from project Katana.
-
+Our Web app will be served by a WebSharper sitelet self-hosted using OWIN. To authenticate, we will create a JWT middleware.
 The important functions are:
 
  - `AuthenticateCoreAsync`
