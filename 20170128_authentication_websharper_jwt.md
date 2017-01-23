@@ -805,3 +805,26 @@ In this post, we saw how to create a end to end authentication story with user c
 We also learnt how JWT works thoroughly. __Some people will tell you "don't implement your own auth because you will fail" and use this as an excuse to not learn anything about authentication or how to implement it. Don't be one of them. Learn everything you can and especially learn what type of attacks your webapp is vulnerable to.__ 
 There are still more to do like refresh token or implement a 2 factor auth (2FA). But I hope this helped you start your project and getting the base authentication setup. Hope you liked this post, if you have any comment leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam).
 See you next time!
+
+# Other posts you will like !
+
+- Setup logs for your WebSharper webapp - [https://kimsereyblog.blogspot.co.uk/2016/12/output-logs-in-console-file-and-live.html](https://kimsereyblog.blogspot.co.uk/2016/12/output-logs-in-console-file-and-live.html)
+- Understand sqlite with Xamarin - [https://kimsereyblog.blogspot.co.uk/2017/01/get-started-with-sqlite-in-from.html](https://kimsereyblog.blogspot.co.uk/2017/01/get-started-with-sqlite-in-from.html)
+- Understand Var, View and Lens in WebSharper - [https://kimsereyblog.blogspot.co.uk/2016/03/var-view-lens-listmodel-in-uinext.html](https://kimsereyblog.blogspot.co.uk/2016/03/var-view-lens-listmodel-in-uinext.html)
+- Bring i18n to your WebSharper webapp - [https://kimsereyblog.blogspot.co.uk/2016/08/bring-internationalization-i18n-to-your.html](https://kimsereyblog.blogspot.co.uk/2016/08/bring-internationalization-i18n-to-your.html)
+- Create HTML components in WebSharper - [https://kimsereyblog.blogspot.co.uk/2016/08/create-html-componants-for-your.html](https://kimsereyblog.blogspot.co.uk/2016/08/create-html-componants-for-your.html)
+- Setup a nice output folder for your WebSharper Owin selfhost project - [https://kimsereyblog.blogspot.co.uk/2016/07/how-to-setup-nice-output-folder-for.html](https://kimsereyblog.blogspot.co.uk/2016/07/how-to-setup-nice-output-folder-for.html)
+
+# Support me! 
+
+[Support me by visting my website](https://www.kimsereylam.com). Thank you!
+
+[Support me by downloading my app BASKEE](https://www.kimsereylam.com/baskee). Thank you!
+
+![baskee](https://raw.githubusercontent.com/Kimserey/kimserey.github.io/master/img/readme/baskee_screenshots.png)
+
+[Support me by downloading my app EXPENSE KING](https://www.kimsereylam.com/expenseking). Thank you!
+
+![expense king](https://raw.githubusercontent.com/Kimserey/kimserey.github.io/master/img/readme/expenseking_screenshots.png)
+
+[Support me by downloading my app RECIPE KEEPER](https://www.kimsereylam.com/recipekeeper). Thank you!
