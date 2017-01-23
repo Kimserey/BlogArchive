@@ -218,6 +218,8 @@ Next we need a way to authenticate user request from the client side.
 
 # 3. Jwt token
 
+Useful link: [https://jwt.io/](https://jwt.io/)
+
 Jwt token provides a way to authenticate a user without the need of password verification. The token is a json format containing all necessary auth information.
 
 The flow is as followed:
@@ -325,26 +327,196 @@ The auth middleware inherit from '' which is a base class from project Katana.
 
 The important functions are:
 
- - `AuthenticationCoreAsync`
+ - `AuthenticateCoreAsync`
  - `InvokeAsync`
 
-In `AuthenticationCoreAsync` we execute the validation of tokens and return the Principal. This will set the user identity in the owin context passed to underlying middleware.
+In `AuthenticateCoreAsync` we execute the validation of tokens and return the Principal. This will set the user identity in the owin context passed to underlying middleware.
 
 ```
+// The core authentication logic which must be provided by the handler. Will be invoked at most once per request. Do not call directly, call the wrapping Authenticate method instead.(Inherited from AuthenticationHandler.)
+override self.AuthenticateCoreAsync() =
+    let prefix = "Bearer "
+
+    match self.Context.Request.Headers.Get("Authorization") with
+    | token when not (String.IsNullOrWhiteSpace(token)) && token.StartsWith(prefix) -> 
+        let payload =
+            token.Substring(prefix.Length)
+            |> JwtToken.decode self.Options.PrivateKey
+            
+        if payload.Expiry > DateTime.UtcNow then
+            Task.FromResult(null)
+        else
+            try 
+                new AuthenticationTicket(
+                    new ClaimsIdentity(
+                        payload.Principal.Identity, 
+                        payload.Principal.Claims 
+                        |> List.map (fun claim -> Claim(ClaimTypes.Role, claim))), 
+                    new AuthenticationProperties()
+                )
+                |> Task.FromResult
+            with
+            | ex ->
+                
+                Task.FromResult(null)
+    | _ -> 
+        Task.FromResult(null)
 ```
 
 `InvokeAsync` will be used to intercept token request and verify credentials and issue tokens.
 
 ```
+// Decides whether to invoke or not the middleware.
+// If true, stop further processing.
+// If false, pass through to next middleware.
+override self.InvokeAsync() =
+    if self.Request.Path.HasValue && self.Request.Path.Value = "/token" then
+        if self.Request.ContentType = "application/json" then 
+            use streamReader = new StreamReader(self.Request.Body)
+            let cred = JsonConvert.DeserializeObject<Credentials>(streamReader.ReadToEnd())
+            match self.Options.Authenticate cred with
+            | AuthenticateResult.Success userAccount ->
+                let (UserId name) = userAccount.Id
+                let principal =
+                    {
+                        Identity = 
+                            {
+                                Name = name
+                                IsAuthenticated = true
+                                AuthenticationType = self.Options.AuthenticationType
+                            }
+                        Claims = userAccount.Claims
+                    }
+
+                let token = JwtToken.generate self.Options.PrivateKey principal  (DateTime.UtcNow.AddMinutes(self.Options.TokenLifeSpanInMinutes))
+                use writer = new StreamWriter(self.Response.Body)
+                self.Response.StatusCode <- 200
+                self.Response.ContentType <- "text/plain"
+                writer.WriteLine(token)
+                Task.FromResult(true)
+            | AuthenticateResult.Failure ->
+                self.Response.StatusCode <- 401
+                Task.FromResult(true)
+        else
+            self.Response.StatusCode <- 401
+            Task.FromResult(true)
+    
+    else
+        Task.FromResult(false)
 ```
+
+Here is the full middleware implementation:
+
+```
+type JwtMiddlewareOptions(authenticate, privateKey, tokenLifeSpanInMinutes) =
+    inherit AuthenticationOptions("Bearer")
+
+    member val Authenticate = authenticate
+    member val PrivateKey = privateKey
+    member val TokenLifeSpanInMinutes = tokenLifeSpanInMinutes
+
+type private JwtAuthenticationHandler() =
+    inherit AuthenticationHandler<JwtMiddlewareOptions>()
+
+    // The core authentication logic which must be provided by the handler. Will be invoked at most once per request. Do not call directly, call the wrapping Authenticate method instead.(Inherited from AuthenticationHandler.)
+    override self.AuthenticateCoreAsync() =
+        let prefix = "Bearer "
+
+        match self.Context.Request.Headers.Get("Authorization") with
+        | token when not (String.IsNullOrWhiteSpace(token)) && token.StartsWith(prefix) -> 
+            let payload =
+                token.Substring(prefix.Length)
+                |> JwtToken.decode self.Options.PrivateKey
+                
+            if payload.Expiry > DateTime.UtcNow then
+                Task.FromResult(null)
+            else
+                try 
+                    new AuthenticationTicket(
+                        new ClaimsIdentity(
+                            payload.Principal.Identity, 
+                            payload.Principal.Claims 
+                            |> List.map (fun claim -> Claim(ClaimTypes.Role, claim))), 
+                        new AuthenticationProperties()
+                    )
+                    |> Task.FromResult
+                with
+                | ex ->
+                    
+                    Task.FromResult(null)
+        | _ -> 
+            Task.FromResult(null)
+
+    // Decides whether to invoke or not the middleware.
+    // If true, stop further processing.
+    // If false, pass through to next middleware.
+    override self.InvokeAsync() =
+        if self.Request.Path.HasValue && self.Request.Path.Value = "/token" then
+            if self.Request.ContentType = "application/json" then 
+                use streamReader = new StreamReader(self.Request.Body)
+                let cred = JsonConvert.DeserializeObject<Credentials>(streamReader.ReadToEnd())
+                match self.Options.Authenticate cred with
+                | AuthenticateResult.Success userAccount ->
+                    let (UserId name) = userAccount.Id
+                    let principal =
+                        {
+                            Identity = 
+                                {
+                                    Name = name
+                                    IsAuthenticated = true
+                                    AuthenticationType = self.Options.AuthenticationType
+                                }
+                            Claims = userAccount.Claims
+                        }
+
+                    let token = JwtToken.generate self.Options.PrivateKey principal  (DateTime.UtcNow.AddMinutes(self.Options.TokenLifeSpanInMinutes))
+                    use writer = new StreamWriter(self.Response.Body)
+                    self.Response.StatusCode <- 200
+                    self.Response.ContentType <- "text/plain"
+                    writer.WriteLine(token)
+                    Task.FromResult(true)
+                | AuthenticateResult.Failure ->
+                    self.Response.StatusCode <- 401
+                    Task.FromResult(true)
+            else
+                self.Response.StatusCode <- 401
+                Task.FromResult(true)
+        
+        else
+            Task.FromResult(false)
+            
+
+type JwtMiddleware(next, options) =
+    inherit AuthenticationMiddleware<JwtMiddlewareOptions>(next, options)
+
+    override __.CreateHandler() =
+        JwtAuthenticationHandler() :> AuthenticationHandler<JwtMiddlewareOptions>
+
+```
+
+__Bearer, what's that?__
+
+`Bearer` is the name of the authentication token protocol used. When sending the token, we prefix it with `Bearer` -> `Authorization: Bearer [token]` and the server will know what the token is for and how to handle it.
 
 Now that we have the auth middleware, we can place it before the sitelet. 
 
 ```
+app.Use<JwtMiddleware>(
+        new JwtMiddlewareOptions(
+            authenticator.Authenticate, 
+            coreCfg.Jwt.PrivateKey, 
+            float coreCfg.Jwt.TokenLifeSpanInMinutes
+        )
+    ) 
+   .UseWebSharper(webSharperOptions)
+   .UseStaticFiles(StaticFileOptions(FileSystem = PhysicalFileSystem(coreCfg.Sitelet.RootDir)))
 ```
 
-Every call except token will go through the authentication and when passing a valid token, the middleware below (here our sitelet) will have access to the principal and `IsAuthenticated` will return true.
-So this middleware allows us to authenticate the user and to request for a token.
+Here I am passing some configuration which you can find in the source code sample [here](https://github.com/Kimserey/JwtWebSharperSitelet/blob/master/Website/EntryPoint.fs).
+
+Every call except `/token` will go through the authentication and when passing a valid token, the middleware below (here our sitelet) will have access to the principal and `IsAuthenticated` will return true.
+
+_In a `SPA` context, all `GET` requests for pages will not need to be secured but all `API` calls for `data` will be done through Ajax queries and will need authentication._
 
 All we need to do now is to glue it all together
 
