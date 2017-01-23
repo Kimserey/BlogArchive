@@ -498,6 +498,8 @@ __Bearer, what's that?__
 
 `Bearer` is the name of the authentication token protocol used. When sending the token, we prefix it with `Bearer` -> `Authorization: Bearer [token]` and the server will know what the token is for and how to handle it.
 
+__Use the middleware__
+
 Now that we have the auth middleware, we can place it before the sitelet. 
 
 ```
@@ -568,55 +570,230 @@ __Ajax call__
 Another way to make request is true JQuery.Ajax so in order to add the token, we create an Ajax helper:
 
 ```
-[<JavaScript>]
-module AjaxHelper =
+type AjaxResult =
+| Success of result: obj
+| Error of errorMessage: string
 
-    type AjaxResult =
-    | Success of result: obj
-    | Error of errorMessage: string
-
-    type AjaxOptions = {
-        Url:         string
-        RequestType: RequestType
-        Headers:     (string * string) [] option
-        Data:        obj option
-        ContentType: string option
-    } 
-    with 
-        static member GET =
-            { RequestType = RequestType.GET;   Url = ""; Headers = None; Data = None; ContentType = Some "application/json" }
-        
-        static member POST =
-            { AjaxOptions.GET with RequestType = RequestType.POST }
+type AjaxOptions = {
+    Url:         string
+    RequestType: RequestType
+    Headers:     (string * string) [] option
+    Data:        obj option
+    ContentType: string option
+    DataType: JQuery.DataType
+} 
+with 
+    static member GET =
+        { RequestType = RequestType.GET  
+            Url = ""
+            Headers = None; Data = None
+            ContentType = None
+            DataType = JQuery.DataType.Json }
     
-    let httpRequest options =
-        async {
-            try
-                let! result = 
-                    Async.FromContinuations
-                    <| fun (ok, ko, _) ->
-                        let settings = JQuery.AjaxSettings(
-                                        Url = options.Url,
-                                        Type = options.RequestType,
-                                        DataType = JQuery.DataType.Json,
-                                        Success = (fun (result, _, _) ->
-                                                    ok result),
-                                        Error = (fun (jqXHR, _, _) ->
-                                                    ko (System.Exception(string jqXHR.Status)))
-                                        )
-                        options.ContentType |> Option.iter (fun c -> settings.ContentType <- c)
-                        options.Headers     |> Option.iter (fun h -> settings.Headers <- (new Object<string>(h)))
-                        options.Data        |> Option.iter (fun d -> settings.Data <- d)
-                        JQuery.Ajax(settings) |> ignore
-                return AjaxResult.Success result
-            with ex -> 
-                Console.Log <| ex.JS.ToString()
-                return AjaxResult.Error ex.Message
-        }
+    static member POST =
+        { AjaxOptions.GET 
+            with 
+                RequestType = RequestType.POST
+                ContentType = Some "application/json" }
+
+let httpRequest options =
+    async {
+        try
+            let! result = 
+                Async.FromContinuations
+                <| fun (ok, ko, _) ->
+                    let settings = JQuery.AjaxSettings(
+                                    Url = options.Url,
+                                    Type = options.RequestType,
+                                    DataType = options.DataType,
+                                    Success = (fun (result, _, _) ->
+                                                ok result),
+                                    Error = (fun (jqXHR, _, _) ->
+                                                ko (System.Exception(string jqXHR.Status)))
+                                    )
+                    options.ContentType |> Option.iter (fun c -> settings.ContentType <- c)
+                    options.Headers     |> Option.iter (fun h -> settings.Headers <- (new Object<string>(h)))
+                    options.Data        |> Option.iter (fun d -> settings.Data <- d)
+                    JQuery.Ajax(settings) |> ignore
+            return AjaxResult.Success result
+        with ex -> 
+            Console.Log <| ex.JS.ToString()
+            return AjaxResult.Error ex.Message
+    }
 ```
 
-So let's build the registration and login now:
+So let's build the registration and login now. 
+We will be making a simple Login/Registration forms page:
 
+![auth](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170128_auth_jwt_websharper/auth_ws.png)
+
+We start by the model used for the forms:
+
+```
+type RegisterData = 
+    {
+        UserId: string
+        Password: string
+        Fullname: string
+        Email: string
+        Claims: string list
+    }
+    
+type Credentials =
+    { UserId: string
+      Password: string }
+```
+
+Then we can create the `RPC` call to directly call the `userRegistry` that we created earlier to create a new user.
+
+```
+module Auth =
+    module Rpc =
+        [<Rpc>]
+        let createAccount (data: RegisterData) =
+            async {
+                let userRegistry = UserRegistry.api (Path.Combine("data", "user_accounts.db"))
+                userRegistry.Create 
+                    (UserId data.UserId) 
+                    (Password data.Password)
+                    data.Fullname
+                    data.Email
+                    data.Claims
+                return true
+            }
+```
+
+Finally we build the page and add a `Service` with `getToken` which executes an Ajax call using the `AjaxHelper` we defined earlier and giving the credentials.
+_The form inputs are filled up using `Lenses`, if you aren't familiar with lenses, you can check my previous blog post [https://kimsereyblog.blogspot.co.uk/2016/03/var-view-lens-listmodel-in-uinext.html](https://kimsereyblog.blogspot.co.uk/2016/03/var-view-lens-listmodel-in-uinext.html)._
+
+```
+    [<JavaScript>]
+    module Client =
+        open WebSharper.UI.Next.Client
+        open WebSharper.JavaScript
+        open WebSharper.JQuery
+        open AjaxHelper
+        
+        module Service =
+            
+            type GetTokenResult =
+                | Success of token: string
+                | Failure of msg: string
+            
+            let getToken (cred: Credentials) =
+                async {
+                    let! result = 
+                        httpRequest 
+                            { AjaxOptions.POST 
+                                with 
+                                    Url = "token"
+                                    DataType = JQuery.DataType.Text
+                                    Data = Some <| box (JSON.Stringify cred) }
+                    match result with
+                    | AjaxResult.Success res ->
+                        let token = string res
+                        return GetTokenResult.Success token
+                    | AjaxResult.Error err ->
+                        return Failure "Failed to get token"
+                }
+
+
+        type Message =
+            | Success of string
+            | Failure of string
+            | Empty
+            with
+                static member Embbed (x: View<Message>) = 
+                    x |> Doc.BindView (
+                        function 
+                        | Success str -> divAttr [ attr.``class`` "alert alert-success" ] [ text str ] :> Doc
+                        | Failure str -> divAttr [ attr.``class`` "alert alert-danger" ] [ text str ] :> Doc
+                        | Empty -> Doc.Empty)
+
+        let register () =
+            let registerMessage = 
+                Var.Create Empty
+
+            let data = 
+                Var.Create 
+                    { UserId = ""
+                      Password = ""
+                      Fullname = ""
+                      Email = ""
+                      Claims = [] } 
+            
+            
+            form
+                [ h3 [ text "Register" ]
+                  registerMessage.View |> Message.Embbed
+                  Doc.Input [ attr.``class`` "form-control my-3"; attr.placeholder "UserId" ] (data.Lens (fun x -> x.UserId) (fun x n -> { x with UserId = n }))
+                  Doc.Input [ attr.``class`` "form-control my-3"; attr.placeholder "Password"; attr.``type`` "password" ] (data.Lens (fun x -> x.Password) (fun x n -> { x with Password = n }))
+                  Doc.Input [ attr.``class`` "form-control my-3"; attr.placeholder "Fullname" ] (data.Lens (fun x -> x.Fullname) (fun x n -> { x with Fullname = n }))
+                  Doc.Input [ attr.``class`` "form-control my-3"; attr.placeholder "Email"; attr.``type`` "email" ] (data.Lens (fun x -> x.Email) (fun x n -> { x with Email = n }))
+                  Doc.Input [ attr.``class`` "form-control my-3"; attr.placeholder "Claims comma separated" ] (data.Lens (fun x -> x.Claims |> String.concat ",") (fun x n -> { x with Claims = n.Split(',') |> Array.map (fun str -> str.Trim()) |> Array.toList })) 
+                  Doc.Button "Create"
+                    [ attr.``class`` "btn btn-primary"; attr.``type`` "submit" ] 
+                    (fun () -> 
+                        async {
+                            let! result = Rpc.createAccount data.Value
+                            if result then 
+                                registerMessage.Value <- Success "Successfuly created user."
+                            else
+                                registerMessage.Value <- Failure "Failed to create user."
+                        } |> Async.StartImmediate) :> Doc ]
+
+        open Service
+
+        let login (navigator: PageNavigator) =
+            let message =  
+                Var.Create Message.Empty
+
+            let cred = 
+                Var.Create 
+                    { UserId = ""
+                      Password = "" }
+                    
+            form
+                [ h3 [ text "Log in" ]
+                  message.View |> Message.Embbed
+                  Doc.Input [ attr.``class`` "form-control my-3"; attr.placeholder "UserId" ] (cred.Lens (fun x -> x.UserId) (fun x n -> { x with UserId = n }))
+                  Doc.Input [ attr.``class`` "form-control my-3"; attr.placeholder "Password"; attr.``type`` "password" ] (cred.Lens (fun x -> x.Password) (fun x n -> { x with Password = n }))
+                  Doc.Button 
+                    "Log In" 
+                    [ attr.``class`` "btn btn-primary"; attr.style "submit" ] 
+                    (fun () -> 
+                        async {
+                            let! token = Service.getToken cred.Value
+                            match token with
+                            | GetTokenResult.Success token ->
+                                TokenStorage.set token
+                                navigator.GoHome()
+                            | GetTokenResult.Failure _ ->
+                                message.Value <- Message.Failure "Log in failed."
+                        } |> Async.StartImmediate) ]
+
+        let page (navigator: PageNavigator) =
+            divAttr
+                [ attr.``class`` "container" ]
+                [ divAttr
+                    [ attr.``class`` "row" ]
+                    [ divAttr  
+                        [ attr.``class`` "col-sm-6" ]
+                        [ divAttr
+                            [ attr.``class`` "card my-3" ]
+                            [ divAttr
+                                [ attr.``class`` "card-block" ]
+                                [ login navigator ] ] ]
+                      divAttr  
+                        [ attr.``class`` "col-sm-6" ]
+                        [ divAttr
+                            [ attr.``class`` "card my-3" ]
+                            [ divAttr
+                                [ attr.``class`` "card-block" ]
+                                [ register() ] ] ] ] ]
+```
+
+![auth](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170128_auth_jwt_websharper/auth_ws.png)
 
 Congratulation! We build together a full end to end authentication story. There are more to do, like renew token for example for the JWT and for password we must allow reset password but I hope this helped you understand better what pieces are required to build an auth and use it from a WebSharper selfhost application.
 
