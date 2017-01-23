@@ -147,7 +147,7 @@ let verify hashedPassword (password:string) =
         | _ -> false
 ```
 
-## 2.3 Store the user info
+## 2.3 Store the user information
 
 We have the db ready and the crypto module ready, now we can implement a UserRegistry to create a new user or get an existing one.
 
