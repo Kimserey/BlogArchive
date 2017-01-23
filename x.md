@@ -622,6 +622,8 @@ let httpRequest options =
     }
 ```
 
+__Building the UI__
+
 So let's build the registration and login now. 
 We will be making a simple Login/Registration forms page:
 
