@@ -793,8 +793,6 @@ _The form inputs are filled up using `Lenses`, if you aren't familiar with lense
                                 [ register() ] ] ] ] ]
 ```
 
-![auth](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170128_auth_jwt_websharper/auth_ws.png)
-
 Congratulation! We build together a full end to end authentication story. There are more to do, like renew token for example for the JWT and for password we must allow reset password but I hope this helped you understand better what pieces are required to build an auth and use it from a WebSharper selfhost application.
 
 # Conclusion
