@@ -210,7 +210,7 @@ module UserRegistry =
 ```
 
 We define an interface which has two main functions `Get` and `Create`.
-Get takes a `userid`, we need it to retrieve a user and get its hashe password.
+`Get` takes a `userid`, we need it to retrieve a user and get its hashe password.
 `Create` takes all the required information and save it into database. 
 
 __Note that we take a plain password and use our hash method to hash the password before saving it.__
@@ -252,7 +252,7 @@ Jose.JWT.Encode
 Jose.JWT.Decode
 ```
 
-`Encode` takes a serialized payload with the private key and algorithm (HS256).
+`Encode` takes a serialized payload with the private key and algorithm (`HS256`).
 `Decode` takes the token with a private key and algorithm expected and returns the serialized payload. It also performs all the necessary signature verification. It will throw an exception which need to be caught if the signature is wrong or the algorithm used is incorrect.
 
 ```
