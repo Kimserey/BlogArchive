@@ -209,15 +209,17 @@ module UserRegistry =
 
 We define an interface which has two main functions `Get` and `Create`.
 Get takes a `userid`, we need it to retrieve a user and get its hashe password.
-`Create` takes all the required information and save it into database. Note that we take a plain password and use our hash method to hash the password before saving it.
+`Create` takes all the required information and save it into database. 
+
+__Note that we take a plain password and use our hash method to hash the password before saving it.__
 
 We now have the first part of our story - __a way to create users with password, store the users info and retrieve it and verify credentials__.
 Next we need a way to authenticate user request from the client side.
 
 # 3. Jwt token
 
-Jwt token provides a way to authenticate a user without the need of password verification.
-The token is a json format containing all necessary auth information.
+Jwt token provides a way to authenticate a user without the need of password verification. The token is a json format containing all necessary auth information.
+
 The flow is as followed:
 
  1. user requests for token giving credentials
@@ -229,18 +231,88 @@ The Jwt token is composed by 3 parts,
  - the payload containing all the information which identify the user like principal and claims.
  - the signature which is a hash produced by the payload hashed with a private key held on the server.
 
-The algorithm used is HS256 which is a symmetric algorithm meaning the person generating and the person verifying the hash must share the key. In our case both are done by the server, we generate the signature hash on the server and when we get a token, we verify its signature on the server too.
+```
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcmluY2lwYWwiOnsiSWRlbnRpdHkiOnsiTmFtZSI6ImtpbXNlcmV5IiwiSXNBdXRoZW50aWNhdGVkIjp0cnVlLCJBdXRoZW50aWNhdGlvblR5cGUiOiJCZWFyZXIifSwiQ2xhaW1zIjpbImFkbWluIl19LCJpc3MiOiJjb20ua2ltc2VyZXkiLCJzdWIiOiJraW1zZXJleSIsImV4cCI6IjIwMTctMDEtMjNUMTA6NTk6NTMuMzM1MzE5MVoiLCJpYXQiOiIyMDE3LTAxLTIzVDA5OjU5OjUzLjM3NTMzNzRaIiwianRpIjoiYjcxMzJmN2IyMTJlNDc1MjgxYTc1N2UwNzFkYzFiYTcifQ.ssOuIt35piM0T1AEfNkq_Kaz6JrEzbNhJ4UdKHNZOK0
 
-We won't have to do all that manually as we will be using Jose-jwt which provides an implementation of the Jwt protocol and allows us to use the following functions:
+[header].[payload].[signature]
+```
+
+The algorithm used is `HS256` which is a symmetric algorithm meaning the person generating and the person verifying the hash must share the key. __In our case both are done by the server, we generate the signature hash on the server and when we get a token, we verify its signature on the server too__.
+
+But we won't have to do all that manually as we will be using `Jose-jwt` [https://github.com/dvsekhvalnov/jose-jwt](https://github.com/dvsekhvalnov/jose-jwt) which provides an implementation of the Jwt protocol and allows us to use the following functions:
 
 ```
 Jose.JWT.Encode
 Jose.JWT.Decode
 ```
 
-Encode takes a serialized payload with the private key and algorithm (HS256).
-Decode takes the token with a private key and algorithm expected and returns the serialized payload.
-Decode performs all the necessary signature verification. It will throw an exception which need to be caught if the signature is wrong or the algorithm used is incorrect.
+`Encode` takes a serialized payload with the private key and algorithm (HS256).
+`Decode` takes the token with a private key and algorithm expected and returns the serialized payload. It also performs all the necessary signature verification. It will throw an exception which need to be caught if the signature is wrong or the algorithm used is incorrect.
+
+```
+module JwtToken =
+
+    // Server dictates the algorithm used for encode/decode to prevent vulnerability
+    // https://auth0.com/blog/critical-vulnerabilities-in-json-web-token-libraries/
+    let algorithm = Jose.JwsAlgorithm.HS256
+
+    let generate key (principal: UserPrincipal) (expiry: DateTime) =
+        let payload = 
+            {
+                Id = Guid.NewGuid().ToString("N")
+                Issuer = "com.kimserey"
+                Subject = principal.Identity.Name
+                Expiry = expiry
+                IssuedAtTime = DateTime.UtcNow
+                Principal = principal
+            }
+        Jose.JWT.Encode(JsonConvert.SerializeObject(payload), Convert.FromBase64String(key), algorithm)
+
+    let decode key token =
+        JsonConvert.DeserializeObject<JwtPayload>(Jose.JWT.Decode(token, Convert.FromBase64String(key), algorithm))
+```
+
+This will be our `principal` payload:
+
+```
+type UserIdentity = 
+    {
+        Name: string
+        IsAuthenticated: bool
+        AuthenticationType: string
+    } with
+        interface IIdentity with
+            member self.AuthenticationType = self.AuthenticationType
+            member self.IsAuthenticated = self.IsAuthenticated
+            member self.Name = self.Name
+
+type UserPrincipal =
+    {
+        Identity: UserIdentity
+        Claims: string list
+    } with
+        interface IPrincipal with
+            member self.Identity with get() = self.Identity :> IIdentity 
+            member self.IsInRole role = self.Claims |> List.exists ((=) role)
+
+type JwtPayload =
+    {
+        [<JsonProperty "principal">]
+        Principal: UserPrincipal
+        [<JsonProperty "iss">]
+        Issuer: string
+        [<JsonProperty "sub">]
+        Subject: string
+        [<JsonProperty "exp">]
+        Expiry: DateTime
+        [<JsonProperty "iat">]
+        IssuedAtTime: DateTime
+        [<JsonProperty "jti">]
+        Id: string
+    }
+```
+
+`IPrincipal` and `IIdentity` are interfaces from `System.Security`. It is best to implement those because lots of API use this abstractions including `Owin` `AuthenticationMiddleware` which we will see next.
 
 So now that we know how Jwt work, we will see how we can use it to authenticate user and for the communication between client and server.
 
