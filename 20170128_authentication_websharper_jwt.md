@@ -101,8 +101,8 @@ let private hashSize = saltSize + keyLength + sizeof<int>
 ```
 
 The hash function will do the following:
-First instantiate `PBKDF2` with the password, requested salt size and iterations. The more iterations, the longer It will take to break the password but the longer it will take to verify the password too. So the number should balance both. Here we use 10000 iterations.
-Once we have that we can extract the salt and the key. We convert the number of iterations to byte. And combine salt + key + iterations to make the hash. Once we have the hash we can then converted to string with Convert.ToBase64String and we will be able to store this hash as text.
+First instantiate `PBKDF2` with the password, requested salt size and iterations. The more iterations, the longer It will take to break the password but the longer it will take to verify the password too. So the number should balance both. Here we use `10000 iterations`.
+Once we have that we can extract the `salt` and the `key`. We convert the number of `iterations` to byte. And combine `salt + key + iterations` to make the hash. Once we have the hash we can then converted to string with `Convert.ToBase64String` and we will be able to store this hash as text.
 
 ```
 // Hash password with 10k iterations
@@ -120,8 +120,8 @@ let hash password =
     Convert.ToBase64String(hashedPassword)
 ```
 
-For the verify function, as a first step we can verify if the length of the password is the same as the one we use by converting back the hashedPassword to bytes and comparing it with the hash size. If it is different we can fail quickly.
-If it is the same we need to extract the salt and iterations from the hash and then instantiate PBKDF2 given the provided password with salt and iterations and compare the result with the actual key from the hash. We do a byte by byte comparaison if both byte sequences are identical, the password is valid.
+For the `verify` function, as a first step we can verify if the length of the password is the same as the one we use by converting back the `hashedPassword` to bytes and comparing it with the hash size. If it is different we can fail quickly.
+If it is the same we need to extract the `salt` and `iterations` from the `hash` and then instantiate `PBKDF2` given the provided password with `salt` and `iterations` and compare the result with the actual `key` from the `hash`. We do a byte by byte comparaison if both byte sequences are identical the password is valid.
 
 ```
 // verify password with 10k iterations
