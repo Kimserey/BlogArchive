@@ -84,32 +84,68 @@ The purpose of the salt is to make the hashed password not retrievable in rainbo
 
 __Algorithm__
 
-We wil create a cryptography utility with two functions. 
+We will create a cryptography utility with two functions. 
 
- 1. `Hash`
- 2. `Verify`
-
-Hash will take a plain text password and hash it.
-It serves to hash the password when creating the user account and we will store the hash.
-Verify will compare a plain text password with a hash password. It will be used to verify a provided password against the hash provided (which will certainly be the hash stored in db).
+ 1. `Hash`: Hash will take a plain text password and hash it. It serves to hash the password when creating the user account and we will store the hash.
+ 2. `Verify`: Verify will compare a plain text password with a hash password. It will be used to verify a provided password against the hash provided (which will certainly be the hash stored in db).
 
 We first define the salt size, the key length and number of iterations. This will constitute the full hash. So the password size in term of bytes will be:
 
 ```
-salt size + key length + sizeof<int>
+let private saltSize = 32
+let private keyLength = 64
+let private iterations = 10000
+let private hashSize = saltSize + keyLength + sizeof<int>
 ```
 
 The hash function will do the following:
+First instantiate `PBKDF2` with the password, requested salt size and iterations. The more iterations, the longer It will take to break the password but the longer it will take to verify the password too. So the number should balance both. Here we use 10000 iterations.
+Once we have that we can extract the salt and the key. We convert the number of iterations to byte. And combine salt + key + iterations to make the hash. Once we have the hash we can then converted to string with Convert.ToBase64String and we will be able to store this hash as text.
 
-First instantiate `PBKDF2` with the password, requested salt size and iterations.
-
-The more iterations, the longer It will take to break the password but the longer it will take to verify the password too. So the number should balance both. Here we use 10000 iterations.
-
-Once we have that we can extract the salt and the key. We convert the number of iterations to byte. And combine salt + key + iterations to make the hash.
-Once we have the hash we can then converted to string with Convert.ToBase64String and we will be able to store this hash as text.
+```
+// Hash password with 10k iterations
+let hash password =
+    use pbkdf2         = new Rfc2898DeriveBytes(password, saltSize, iterations)
+    let salt           = pbkdf2.Salt
+    let keyBytes       = pbkdf2.GetBytes(keyLength)
+    let iterationBytes = if BitConverter.IsLittleEndian then BitConverter.GetBytes(iterations) else BitConverter.GetBytes(iterations) |> Array.rev
+    let hashedPassword = Array.zeroCreate<byte> hashSize
+    
+    Buffer.BlockCopy(salt,           0, hashedPassword, 0,                    saltSize)
+    Buffer.BlockCopy(keyBytes,       0, hashedPassword, saltSize,             keyLength)
+    Buffer.BlockCopy(iterationBytes, 0, hashedPassword, saltSize + keyLength, sizeof<int>)
+    
+    Convert.ToBase64String(hashedPassword)
+```
 
 For the verify function, as a first step we can verify if the length of the password is the same as the one we use by converting back the hashedPassword to bytes and comparing it with the hash size. If it is different we can fail quickly.
 If it is the same we need to extract the salt and iterations from the hash and then instantiate PBKDF2 given the provided password with salt and iterations and compare the result with the actual key from the hash. We do a byte by byte comparaison if both byte sequences are identical, the password is valid.
+
+```
+// verify password with 10k iterations
+let verify hashedPassword (password:string) =
+    let hashedPassword = Convert.FromBase64String(hashedPassword)
+
+    if hashedPassword.Length <> hashSize then
+        false
+    else
+        let salt = Array.zeroCreate<byte> saltSize
+        let keyBytes = Array.zeroCreate<byte> keyLength
+        let iterationBytes = Array.zeroCreate<byte> sizeof<int>
+
+        Buffer.BlockCopy(hashedPassword, 0,                    salt,           0, saltSize)
+        Buffer.BlockCopy(hashedPassword, saltSize,             keyBytes,       0, keyLength)
+        Buffer.BlockCopy(hashedPassword, saltSize + keyLength, iterationBytes, 0, sizeof<int>);
+        
+        let iterations = BitConverter.ToInt32((if BitConverter.IsLittleEndian then iterationBytes else iterationBytes |> Array.rev), 0)
+
+        use pbkdf2 = new Rfc2898DeriveBytes(password, salt, iterations)
+        let challengeBytes = pbkdf2.GetBytes(keyLength)
+
+        match Seq.compareWith (fun a b -> if a = b then 0 else 1) keyBytes challengeBytes with
+        | v when v = 0 -> true
+        | _ -> false
+```
 
 ## 2.3 Store the user info
 
@@ -117,11 +153,65 @@ We have the db ready and the crypto module ready, now we can implement a UserReg
 
 Here's the code:
 
-We define an interface which has two main functions get and create.
-Get takes a userid, we need it to retrieve a user and get its hashe password.
-Create takes all the required information and save it into database. Note that we take a plain password and use our hash method to hash the password before saving it.
+```
+module UserRegistry =
 
-We now have the first part of our story - a way to create users with password, store the users info and retrieve it and verify credentials.
+    type UserRegistryApi =
+        {
+            Get: UserId -> Common.UserAccount option
+            Create: UserId -> Password -> FullName -> Email -> Claims -> unit
+        }
+    and FullName = string
+    and Email = string
+    and Claims = string list
+        
+    let private getConnection (database: string) =
+        let conn = new SQLiteConnection(database)
+        conn.CreateTable<UserAccount>() |> ignore
+        conn
+
+    let private get database (UserId userId) =
+        use conn = getConnection database
+        let user = conn.Find<UserAccount>(userId)
+        if not <| Object.ReferenceEquals(user, Unchecked.defaultof<UserAccount>) then
+            Some ({ Id = UserId user.Id
+                    Email = user.Email
+                    FullName = user.FullName
+                    Password = Password user.Password
+                    PasswordTimestamp = user.PasswordTimestamp
+                    Enabled = user.Enabled
+                    CreationDate = user.CreationDate 
+                    Claims = JsonConvert.DeserializeObject<string list> user.Claims } : Common.UserAccount)
+        else
+            None
+
+    let private create database (UserId userId) (Password pwd) (fullname: string) (email: string) (claims: string list) =
+        use conn = getConnection database
+        let timestamp = DateTime.UtcNow
+        let hashedPwd = Cryptography.hash pwd
+        conn.Insert 
+            ({ Id = userId
+               FullName = fullname
+               Email = email
+               Password= hashedPwd
+               PasswordTimestamp = timestamp
+               CreationDate = timestamp
+               Enabled = true
+               Claims = JsonConvert.SerializeObject claims } : UserAccount) 
+        |> ignore
+
+    let api databasePath =
+        {
+            Get = get databasePath
+            Create = create databasePath
+        }
+```
+
+We define an interface which has two main functions `Get` and `Create`.
+Get takes a `userid`, we need it to retrieve a user and get its hashe password.
+`Create` takes all the required information and save it into database. Note that we take a plain password and use our hash method to hash the password before saving it.
+
+We now have the first part of our story - __a way to create users with password, store the users info and retrieve it and verify credentials__.
 Next we need a way to authenticate user request from the client side.
 
 # 3. Jwt token
