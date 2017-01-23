@@ -3,11 +3,11 @@
 Authentication is an important part of any Web applications. Today I will explain how we can create the essential modules required to authenticate a user. This post will be composed by four parts:
 
 ```
-1. What is needed for authentication
-2. Password encryption and storage
-3. JWT token
-4. OWIN auth middleware and WebSharper OWIN selfhost
-5. Glue it all together
+ 1. What is needed for authentication
+ 2. Password encryption and storage
+ 3. JWT token
+ 4. OWIN auth middleware and WebSharper OWIN selfhost
+ 5. Glue it all together
 ```
 
 # 1. What is needed for authentication
@@ -86,8 +86,10 @@ __Algorithm__
 
 We will create a cryptography utility with two functions. 
 
+```
  1. `Hash`: Hash will take a plain text password and hash it. It serves to hash the password when creating the user account and we will store the hash.
  2. `Verify`: Verify will compare a plain text password with a hash password. It will be used to verify a provided password against the hash provided (which will certainly be the hash stored in db).
+```
 
 We first define the salt size, the key length and number of iterations. This will constitute the full hash. So the password size in term of bytes will be:
 
@@ -224,9 +226,11 @@ Jwt token provides a way to authenticate a user without the need of password ver
 
 The flow is as followed:
 
+```
  1. user requests for token giving credentials
  2. server verify credentials and issue a short living token
  3. user can now make authenticated request using token
+```
 
 The Jwt token is composed by 3 parts, 
  - the header containing the algorithm used to generate the signature.
@@ -527,8 +531,8 @@ All we need to do now is to glue it all together
 In the previous sections we did the following:
 
 ```
-1. Created a user accounts registry with password stored
-2. Created a JWT middleware
+ 1. Created a user accounts registry with password stored
+ 2. Created a JWT middleware
 ```
 
 Now what we need to do is to have simple register page and a simple login page.
