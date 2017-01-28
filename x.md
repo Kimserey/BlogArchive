@@ -1,27 +1,36 @@
-# Workaround for ListModel input losing focus in WebSharper F#
+# WebSharper ListModel
 
-Few months ago I explained how ListModel worked [](). Today I would like to share a recurring issue that I have. The issue is that my input keep losing focus every time the ListModel values changed. There's a easy solution to that which I demonstrate by first show the initial code and explaining what is going on and why the focus is lost then I will explain how we can work around it.
+Few months ago I explained how ListModel worked [](). Today I would like to share a recurring issue that I have - lost of focus on input every time the ListModel values change. There's an easy solution to that which I will demonstrate by first showing the initial code and explaining what is going on, why the focus is lost, then I will explain how we can work around it.
 
 This post will be composed by two parts:
 
 ```
- 1. Why the inputs lose focus
+ 1. Why the inputs lose focus?
  2. How to prevent it
 ```
 
-## 1. Why the inputs lose focus
+## 1. Why the inputs lose focus?
 
-The code is the following
+The code is the following:
 
-If you try this you will see that the list gets updated but the input focus is lost after each changes.
+```
+```
 
-The problem comes from the fact that the form itself is observing the list changes. If we look at how the form is rendered, it is rendered in the View callback therefore every time we change the ListModel the whole form Dom is re-rendered and since the old one is removed, we lose focus on the input.
+If you try this [](), you will see that the list gets updated but the input focus is lost after each changes.
+
+The problem comes from the fact that the form itself is observing the list changes. 
+If we look at how the form is rendered, it is rendered in the `View callback` therefore every time we change the ListModel the whole form is re-rendered and since the old `dom` is removed, we lose focus on the input.
 
 So what can we do about it?
 
 ## 2. How to prevent it
 
-If the number of elements don't change, we actually don't need to observe the list. We can take its initial value and render the form. Like that the Dom will not be deleted each time.
+### 2.1 Number of elements doesn't change
+
+If the number of elements doesn't change, we actually don't need to observe the list. We can take its initial value and render the form. Like that the Dom will not be deleted each time.
+
+```
+```
 
 If we need to observe the list changes, observe when elements are added or removed, the form will have to be re-rendered and we will have to lose focus.
 
