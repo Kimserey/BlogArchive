@@ -1,4 +1,4 @@
-# WebSharper ListModel
+# How to avoid input lost focus with ListModel WebSharper F#
 
 Few months ago, I explained [how ListModel worked](https://kimsereyblog.blogspot.co.uk/2016/03/var-view-lens-listmodel-in-uinext.html). Today I would like to share a recurring issue that I used to have - __lost of focus on input every time the ListModel values change__. There's an easy solution to that which I will demonstrate by first showing the initial code and explaining what is going on, why the focus is lost, then I will explain how we can work around it.
 
