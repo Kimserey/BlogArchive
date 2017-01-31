@@ -28,7 +28,7 @@ First we start by creating the configuration type. It will have some members of 
 ```
 
 Now that we have the configuration type, we can create the fsx which will contain the implementation of the configuration.
-
+ 
 ```
 ```
 
