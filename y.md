@@ -1,5 +1,4 @@
- 
-Jwt authentication for WebSharper sitelet
+# Jwt authentication for WebSharper sitelet
 
 Few weeks ago I talked about how to implement a Jwt OWIN middleware which can be used to authenticate a WebSharper sitelet (link).
 Today I would like to show another simpler way of protecting a WebSharper sitelet with (again) Jwt tokens without the need of implementing a OWIN middleware which is ideal for SPA.
