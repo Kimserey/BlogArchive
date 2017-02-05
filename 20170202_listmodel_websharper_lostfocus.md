@@ -1,4 +1,4 @@
-# How to avoid input lost focus with ListModel WebSharper F#
+# WebSharper ListModel
 
 Few months ago, I explained [how ListModel worked](https://kimsereyblog.blogspot.co.uk/2016/03/var-view-lens-listmodel-in-uinext.html). Today I would like to share a recurring issue that I used to have - __lost of focus on input every time the ListModel values change__. There's an easy solution to that which I will demonstrate by first showing the initial code and explaining what is going on, why the focus is lost, then I will explain how we can work around it.
 
@@ -125,6 +125,49 @@ let Main =
 ```
 
 So when we __add__ a new alias, we trigger an update of the form. __This makes the form only render when the user click on Add.__
+
+# Correction: Use Doc.BindSeqCachedViewBy
+
+As Loïc pointed out:
+
+> You should take a look at Doc.BindSeqCachedViewBy. It does exactly what you need here: the rendered Docs are cached according to a key function, and the value is passed as a view to the renderer, so that the rendered content stays in place and only the moving parts vary.
+
+`Doc.BindSeqCachedViewBy` does exactly what was needed without having to implement our little trick.
+Here the code sample:
+
+```
+[<JavaScript>]
+module Lensing =
+    type Alias = { Key: int; Value: string }
+    
+    let aliases = 
+        ListModel.Create (fun a -> a.Key) [ { Key = 1; Value = "Bill" }; { Key = 2; Value = "Joe" } ]
+    let lensIntoAlias aliasKey = 
+        aliases.LensInto (fun a -> a.Value) (fun a n -> { a with Value = n }) aliasKey
+
+    let Main =
+        div 
+            [
+                Doc.Button 
+                    "Add alias" 
+                    [ attr.style "display: block" ]
+                    (fun() -> 
+                        aliases.Add({ Key = aliases.Length + 1; Value = "New" }))
+                
+                // Thanks to BindSeqCachedViewBy, the input stays when al.Value changes.
+                aliases.View
+                |> Doc.BindSeqCachedViewBy (fun al -> al.Key) (fun key vAl ->
+                    Doc.Input [] (lensIntoAlias key))
+                    
+                // Similarly here, the div stays and only the textView changes.
+                aliases.View
+                |> Doc.BindSeqCachedViewBy (fun al -> al.Key) (fun key vAl ->
+                    div [ textView (vAl.Map (fun al -> al.Value)) ])
+            ]
+        |> Doc.RunById "main"
+```
+
+By using `BindSeqCachedViewBy`, we can dictate precisely which element needs to be updated. This will allow us to not rerender the elements but instead render specific elements which will remove the problem of lost input and at the same time will improve performance.
 
 # Conclusion
 
