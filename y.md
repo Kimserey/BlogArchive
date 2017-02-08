@@ -3,7 +3,7 @@
 Few weeks ago I talked about how to implement a Jwt OWIN middleware which can be used to authenticate a WebSharper sitelet (link).
 Today I would like to show another simpler way of protecting a WebSharper sitelet with (again) Jwt tokens without the need of implementing a OWIN middleware which is ideal for SPA.
 This post will be compose by 3 parts:
-
+ 
 1. Overview
 2. Authentication flow
 3. Implementation
