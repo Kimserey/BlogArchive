@@ -1,7 +1,7 @@
 # Use F# script files as configuration files
 
 I have been using F# script files (.fsx) as configuration file for a while now instead of using json files.
-Like everything, there are advantages and disadvantages.
+Like everything, there are advantages and disadvantages. 
 Today I will talk about the advantages and disadvantages of using fsx for configuration files then I will proceed to show how to implement it.
 This post is composed by 2 parts:
   
