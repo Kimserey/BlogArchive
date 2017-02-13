@@ -23,11 +23,18 @@ module Serializer =
 LocalStorage : string -> Serializer<'T> -> Storage<'T>
 ```
 
+The `string` passed to `LocalStorage` is the key used to save in the local storage. For `Serializer<'T>`, we use the `Storage.default`.
+
+Here's an example on how to use it:
+
 ```
+type Resource =
+ { Name: string }
+
 let resources = ListModel.CreateWithStorage (fun r-> r.Name) (LocalStorage "local-storage" (Serializer.Default<Resource>))
 ```
 
-The `id` is the key used to save in the local storage. Now for anything added and removed and anything changed from the ListModel, it will be saved in local storage. And then when we close the browser and open again the page from a fresh page, the list model will load the data from the local storage. The data will be persisted.
+Now for anything added and removed and anything changed from the ListModel, it will be saved in local storage. And then when we close the browser and open again the page from a fresh page, the list model will load the data from the local storage. The data will be persisted.
 
 ## 2. Debug storage in Chrome
 
