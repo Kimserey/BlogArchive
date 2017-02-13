@@ -1,6 +1,6 @@
 # Use JS local storage with ListModel with WebSharper UI.Next in F#
 
-Last week I wanted to use the browser local storage to store a list of element. I wanted to update the resource split project (link) I made in the past to have the data stored so that it will be easier to add or remove resources. The browser local storage is ideal for this kind of scenario. Turns out WebSharper.UI.Next had the feature built in to persist ListModel so today I will explain how to do it.
+Last week I wanted to use the browser local storage to store a list of element. I wanted to update the [resource split project](https://github.com/Kimserey/ResourcesSplit) I made in the past to have the data stored so that it will be easier to add or remove resources. The browser local storage is ideal for this kind of scenario. Turns out `WebSharper.UI.Next` has the feature built in to persist ListModel so today I will explain how to do it.
 
 This post is composed by two parts:
 ```
@@ -27,4 +27,4 @@ Here you should be able to see your data stored in json format. It is stored as 
 
 # Conclusion
 
-Today we saw how we could use ListModel together with local storage and persists the result in local storage. This can be useful for cache or temporary storage. Hope you liked this post! If you have any comments leave it here or hit me on Twitter [@Kimserey_Lam](). See you next time!
+Today we saw how we could use ListModel together with local storage and persists the result in local storage. This can be useful for cache or temporary storage. Hope you liked this post! If you have any comments leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
