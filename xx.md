@@ -40,6 +40,8 @@ Now for anything added and removed and anything changed from the ListModel, it w
 
 The values are stored in local storage. It is possible to see the values from Chrome by accessing the developer console and looking into the storage.
 
+![storage](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170213_listmodel_storage/20170213_listmodel.png)
+
 Here you should be able to see your data stored in json format. It is stored as WebSharper stores it.
 
 # Conclusion
