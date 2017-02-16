@@ -16,7 +16,8 @@ Like our previous post, we will be using the Jwt token to implement a Bearer aut
 
 Check out the description in my previous post if you aren't sure how jwt works. (link)
 
-Why is it called Bearer?
+__Why is it called Bearer?__
+
 The definition of a Bearer is "someone who carries something". In the auth context, the bearer carries the auth token and can provide enough information for authentication to the other party without the need of any external service.
 
 So next we will define a way to create tokens. There will be two type of token, an access token and a refresh token. We will see the difference later.
