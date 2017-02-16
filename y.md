@@ -28,13 +28,13 @@ Let's start first by understanding the authentication flow.
 
 ## 2. Authentication flow
 
-User request to /token giving credentials
+User request to `/token` giving credentials
 Server validates credentials and generate access token and refresh token.
 Users uses access token to request secured resources.
-When access token expires, requests /refresh giving refresh token.
+When access token expires, requests `/refresh` giving refresh token.
 Server validates that refresh token is valid, find last updated user principal and returns latest user principals in a new set of access token and refresh token.
 
-Why do we need a refresh token?
+__Why do we need a refresh token?__
 
 The refresh token role is to __refresh the access token by creating a new access token with the most up to date user principals__.
 
@@ -47,7 +47,7 @@ Now because the token is only valid for a short time, the user will need to rese
 The refresh token is a long living token. It's purpose is solely to refresh the access token. 
 It is issued together with the access token but is only required when the access token expires so it is usually kept in a secure location on client side and sent when access token expires.
 
-What about attacks?
+__What about attacks?__
 
 Using this two tokens allows us to mitigate attacks. Access token is sent on every requests therefore the chance of it getting intercepted is the highest. But because it is only valid during a short period, it gives us more security by only leaving a small room for attacks. 
 For the refresh token, because it is only sent when the access token has expired and not all the time, it also lessen the chance of it getting intercepted.
