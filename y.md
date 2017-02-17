@@ -14,25 +14,27 @@ This post will be compose by 3 parts:
 
 Like our previous post, we will be using the Jwt token to implement a Bearer authentication.
 
-Check out the description in my previous post if you aren't sure how jwt works. (link)
+Check out the description in my previous post if you aren't sure how jwt works, [post here](https://kimsereyblog.blogspot.co.uk/2017/01/authentication-for-websharper-sitelet.html).
 
 __Why is it called Bearer?__
 
 The definition of a Bearer is "someone who carries something". In the auth context, the bearer carries the auth token and can provide enough information for authentication to the other party without the need of any external service.
 
-So next we will define a way to create tokens. There will be two type of token, an access token and a refresh token. We will see the difference later.
+To implement the Bearer auth, we will start by defining a way to create tokens. In order to properly implement the authentication, we will need __two types of token__, __an access token__ and __a refresh token__. We will see the difference later.
 
-We will also create a function which ensure that the calls on the sitelet endpoints are authenticated and return proper results if not.
+Once we have a proper way to create and refresh tokens, we will be in measure to protect our sitelet via a simple function which ensures the endpoints are protected.
 
 Let's start first by understanding the authentication flow.
 
 ## 2. Authentication flow
 
-User request to `/token` giving credentials
-Server validates credentials and generate access token and refresh token.
-Users uses access token to request secured resources.
-When access token expires, requests `/refresh` giving refresh token.
-Server validates that refresh token is valid, find last updated user principal and returns latest user principals in a new set of access token and refresh token.
+Here's how the authentication scenario works:
+ 
+ 1. User POST request to server to `/auth/token` giving credentials
+ 2. Server validates credentials and generate (and returns) access token and refresh token
+ 3. Users uses access token to request secured resources from SPA
+ 4. When access token expires, requests POST `/auth/refresh` giving refresh token
+ 5. Server validates refresh token and fetch last updated user principal and returns latest user principals in a new set of access token and refresh token
 
 __Why do we need a refresh token?__
 
