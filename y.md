@@ -64,8 +64,16 @@ First let's create a simple sitelet with the enpoints discussed above.
 
 ```
 type EndPoint =
- | [<EndPoint "GET /data">] Data
- | [<EndPoint "/auth">] Auth of 
+    | [<EndPoint "/data">] Data
+    | [<EndPoint "/auth">] Auth of AuthEndPoint
+
+and AuthEndPoint =
+    | [<EndPoint "POST /token"; Json "credentials">] Token of credentials: Credentials
+    | [<EndPoint "POST /refresh"; Json "token">] Refresh of token: string
+
+and Credentials =
+    { UserId: string
+      Password: string }
 ```
 
 We have a data endpoint which needs to be secured.
