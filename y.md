@@ -204,9 +204,8 @@ module Site =
         )
 ```
 
-Now when someone request for token we issue a token after verifying credentials against our stored credentials. In my previous post I talked about how we can store user credentials in a secure way (link).
-
-Code
+Now when someone request for a token, we verify the credentials and if valid, we get the latest principal and generate an `access_token` and a `refresh_token`.
+When the `access_token` expires, the user can invoke the `/auth/refresh` endpoint by passing the `refresh_token`, we then decode the token and if valid (not expired), we refresh the tokens with the latest principal.
 
 Next we create a function to authenticate calls, we also create a new ApiContext which will contain the user principals together with the sitelet context.
 
