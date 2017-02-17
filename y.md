@@ -36,7 +36,7 @@ Here's how the authentication scenario works:
  4. When access token expires, requests POST `/auth/refresh` giving refresh token
  5. Server validates refresh token and fetch last updated user principal and returns latest user principals in a new set of access token and refresh token
 
-We can see from 4-5 that we will need a refresh token if the access token expires.
+We can see from 4-5 that we will need a refresh token when the access token expires.
 
 __Why do we need a refresh token?__
 
