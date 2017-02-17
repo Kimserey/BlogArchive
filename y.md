@@ -49,20 +49,24 @@ So if we need to restrict the user access or even lock the user, the changes wil
 Without refresh token, because the token is only valid for a short time, the user will need to resend credentials every time the access token expires. To remove the need of sending back credentials, we use a refresh token.
 
 The refresh token is a long living token. It's purpose is solely to refresh the access token. 
-It is issued together with the access token but __it is only required when the access token expires__ so it is usually kept in a secure location on client side and only sent when access token expires, in contrast to the access token which is sent on all requests needing authentication.
+It is issued together with the access token but __it is only required when the access token expires__ so it is usually kept in a secure location on client side and only sent when the access token expires whereas the access token is sent on all requests needing authentication.
 
 __What about attacks?__
 
-Using this two tokens allows us to mitigate attacks. Access token is sent on every requests therefore the chance of it getting intercepted is the highest. But because it is only valid during a short period, it gives us more security by only leaving a small room for attacks. 
-For the refresh token, because it is only sent when the access token has expired and not all the time, it also lessen the chance of it getting intercepted.
+Using this two tokens allows us to mitigate attacks. Access token is sent on every requests therefore the chance of it getting intercepted is the highest. But because it is only valid during a short period, it gives us more security by only leaving a small timeframe for attacks. 
+For the refresh token, because it is only sent when the access token has expired and not all the time, it lessen the chances of it getting intercepted.
 
 Now that we know the flow, let's see how we can implement it.
 
 3. Implementation
 
-First let's create a simple sitelet with an endpoint.
+First let's create a simple sitelet with the enpoints discussed above.
 
-Code
+```
+type EndPoint =
+ 
+ | [<EndPoint "GET /data">] Data
+```
 
 We have a data endpoint which needs to be secured.
 We have the token endpoint to request for the tokens and a refresh endpoint to refresh it.
