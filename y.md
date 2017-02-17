@@ -64,8 +64,8 @@ First let's create a simple sitelet with the enpoints discussed above.
 
 ```
 type EndPoint =
- 
  | [<EndPoint "GET /data">] Data
+ | [<EndPoint "/auth">] Auth of 
 ```
 
 We have a data endpoint which needs to be secured.
