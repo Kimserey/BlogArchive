@@ -31,10 +31,12 @@ Let's start first by understanding the authentication flow.
 Here's how the authentication scenario works:
  
  1. User POST request to server to `/auth/token` giving credentials
- 2. Server validates credentials and generate (and returns) access token and refresh token
+ 2. Server validates credentials and generate (and returns) access token and refresh token with user principal embedded in token
  3. Users uses access token to request secured resources from SPA
  4. When access token expires, requests POST `/auth/refresh` giving refresh token
  5. Server validates refresh token and fetch last updated user principal and returns latest user principals in a new set of access token and refresh token
+
+We can see from 4-5 that we will need a refresh token if the access token expires.
 
 __Why do we need a refresh token?__
 
