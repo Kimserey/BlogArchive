@@ -44,12 +44,12 @@ The refresh token role is to __refresh the access token by creating a new access
 
 In bearer auth, when the user obtains a valid token, __the user has all the rights granted by the token as long as it is valid__. 
 
-So if we need to restrict the user access or even lock the user, the changes will only take effect when the token expires. To prevent that, we need to only issue short living tokens. This way the token will only be valid for like a day for example. 
+So if we need to restrict the user access or even lock the user, the changes will only take effect when the token expires. To prevent that, we need to only issue short living tokens. This way the token will only be valid for short period.
 
-Now because the token is only valid for a short time, the user will need to resend credentials frequently which is cumbersome. That's where the refresh token comes into play.
+Without refresh token, because the token is only valid for a short time, the user will need to resend credentials every time the access token expires. To remove the need of sending back credentials, we use a refresh token.
 
 The refresh token is a long living token. It's purpose is solely to refresh the access token. 
-It is issued together with the access token but is only required when the access token expires so it is usually kept in a secure location on client side and sent when access token expires.
+It is issued together with the access token but __it is only required when the access token expires__ so it is usually kept in a secure location on client side and only sent when access token expires, in contrast to the access token which is sent on all requests needing authentication.
 
 __What about attacks?__
 
