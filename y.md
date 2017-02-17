@@ -69,19 +69,91 @@ type EndPoint =
 
 and AuthEndPoint =
     | [<EndPoint "POST /token"; Json "credentials">] Token of credentials: Credentials
-    | [<EndPoint "POST /refresh"; Json "token">] Refresh of token: string
+    | [<EndPoint "POST /refresh"; Json "refreshToken">] Refresh of refreshToken: string
 
 and Credentials =
     { UserId: string
       Password: string }
 ```
 
-We have a data endpoint which needs to be secured.
-We have the token endpoint to request for the tokens and a refresh endpoint to refresh it.
+We have a `/data` endpoint which needs to be secured, an `/auth/token` endpoint to request for the tokens and an `/auth/refresh` endpoint to refresh it.
 
-We can take the implementation of JWT which we did last post (link). I am just going to copy paste it for convenience.
+We can take the implementation of JWT which we did [last post](https://kimsereyblog.blogspot.co.uk/2017/01/authentication-for-websharper-sitelet.html). I am just going to copy paste it for convenience.
 
-Code
+```
+type JwtPayload =
+    {
+        [<JsonProperty "tokenRole">]
+        TokenRole: string
+        [<JsonProperty "principal">]
+        Principal: UserPrincipal
+        [<JsonProperty "iss">]
+        Issuer: string
+        [<JsonProperty "sub">]
+        Subject: string
+        [<JsonProperty "exp">]
+        Expiry: DateTime
+        [<JsonProperty "iat">]
+        IssuedAtTime: DateTime
+        [<JsonProperty "jti">]
+        Id: string
+    }
+
+[<AutoOpen>]
+module Jwt =
+    
+    type DecodeResult =
+        | Success of JwtPayload
+        | Failure of DecodeError
+    and DecodeError =
+        /// if signature validation failed, integrity is compromised
+        | IntegrityException
+        /// if JWT token can't be decrypted
+        | EncryptionException
+        /// if JWT signature, encryption or compression algorithm is not supported
+        | InvalidAlgorithmException
+        | UnhandledException
+
+    // Creates a random 256 base64 key
+    let generateKey() =
+        let random = new Random()
+        let array: byte[] = Array.zeroCreate 256
+        random.NextBytes(array)
+        Convert.ToBase64String(array)
+
+    // Server dictates the algorithm used for encode/decode to prevent vulnerability
+    // https://auth0.com/blog/critical-vulnerabilities-in-json-web-token-libraries/
+    let private algorithm = Jose.JwsAlgorithm.HS256
+
+    let generate key issuer tokenRole (principal: UserPrincipal) (expiry: DateTime) =
+        let payload = 
+            {
+                Id = Guid.NewGuid().ToString("N")
+                Issuer = issuer
+                Subject = principal.Identity.Email
+                Expiry = expiry
+                IssuedAtTime = DateTime.UtcNow
+                Principal = principal
+                TokenRole = tokenRole
+            }
+        Jose.JWT.Encode(JsonConvert.SerializeObject(payload), Convert.FromBase64String(key), algorithm)
+
+    let decode key token =
+        try
+            Success <| JsonConvert.DeserializeObject<JwtPayload>(Jose.JWT.Decode(token, Convert.FromBase64String(key), algorithm))
+        with
+        | :? Jose.IntegrityException  -> Failure IntegrityException
+        | :? Jose.EncryptionException -> Failure EncryptionException
+        | :? Jose.InvalidAlgorithmException -> Failure InvalidAlgorithmException
+        | _ -> Failure UnhandledException
+```
+
+There's just a slight twist compared to the implementation of the previous post, I added a `tokenRole` which will be used to differentiate between `access_token` and `refresh_token`. And I also added a special handling of all type of failure which could be caused by an invalid token.
+
+Next we can use this implementation to build our sitelet endpoints:
+
+```
+```
 
 Now when someone request for token we issue a token after verifying credentials against our stored credentials. In my previous post I talked about how we can store user credentials in a secure way (link).
 
