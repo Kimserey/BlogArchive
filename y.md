@@ -58,7 +58,7 @@ For the refresh token, because it is only sent when the access token has expired
 
 Now that we know the flow, let's see how we can implement it.
 
-3. Implementation
+## 3. Implementation
 
 First let's create a simple sitelet with the enpoints discussed above.
 
