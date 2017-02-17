@@ -14,7 +14,7 @@ This post will be compose by 3 parts:
 
 Like our previous post, we will be using the Jwt token to implement a Bearer authentication.
 
-Check out the description in my previous post if you aren't sure how jwt works, [post here](https://kimsereyblog.blogspot.co.uk/2017/01/authentication-for-websharper-sitelet.html).
+Check out the description in my previous post if you aren't sure how JWT works, [post here](https://kimsereyblog.blogspot.co.uk/2017/01/authentication-for-websharper-sitelet.html).
 
 __Why is it called Bearer?__
 
