@@ -153,6 +153,44 @@ There's just a slight twist compared to the implementation of the previous post,
 Next we can use this implementation to build our sitelet endpoints:
 
 ```
+module Site =
+
+    type MainTemplate = Templating.Template<"Main.html">
+
+    // Fake private key
+    let getPrivateKey() = ""
+    // Fake verification
+    let verify credentials = true
+    // Fake retrieval of principal
+    let getPrincipal userId = { Claims = []; Identity = { Email = "test@test.com" } }
+
+    [<Website>]
+    let Main =
+        Application.MultiPage (fun ctx ->
+            function
+            | Data -> Content.Page(MainTemplate.Doc([ client <@ Client.main() @> ]))
+            | Auth endpoint ->
+                match endpoint with
+                | Token credentials -> 
+                    if verify credentials then
+                        // Credentials verified, retrieve principal
+                        let principal = getPrincipal credentials.Email
+                        [ Jwt.generate (getPrivateKey()) "JWTSample" "access_token" principal (DateTime.UtcNow.AddDays(1.))
+                          Jwt.generate (getPrivateKey()) "JWTSample" "refresh_token" principal (DateTime.UtcNow.AddDays(7.)) ]
+                        |> Content.Json
+                    else Content.Unauthorized
+                | Refresh refreshToken ->
+                    match decode (getPrivateKey()) refreshToken with
+                    | DecodeResult.Success payload ->
+                        if payload.Expiry <= DateTime.UtcNow then
+                            // Refresh token valid, refresh principal
+                            let principal = getPrincipal payload.Principal.Identity.Email
+                            [ Jwt.generate (getPrivateKey()) "JWTSample" "access_token" principal (DateTime.UtcNow.AddDays(1.))
+                              Jwt.generate (getPrivateKey()) "JWTSample" "refresh_token" principal (DateTime.UtcNow.AddDays(7.)) ]
+                            |> Content.Json
+                        else Content.Unauthorized
+                    | DecodeResult.Failure _ -> Content.Unauthorized
+        )
 ```
 
 Now when someone request for token we issue a token after verifying credentials against our stored credentials. In my previous post I talked about how we can store user credentials in a secure way (link).
