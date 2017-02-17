@@ -1,7 +1,7 @@
 # Simple JWT authentication for WebSharper sitelet
 
-Few weeks ago I talked about how to implement [a Jwt OWIN middleware which can be used to authenticate a WebSharper sitelet](https://kimsereyblog.blogspot.co.uk/2017/01/authentication-for-websharper-sitelet.html).
-Today I would like to show another simpler way of protecting a WebSharper sitelet with (again) Jwt tokens, but this time, without the need of implementing a OWIN middleware which is ideal for SPA.
+Few weeks ago I talked about how to implement [a JWT OWIN middleware which can be used to authenticate a WebSharper sitelet](https://kimsereyblog.blogspot.co.uk/2017/01/authentication-for-websharper-sitelet.html).
+Today I would like to show another simpler way of protecting a WebSharper sitelet with (again) JWT tokens, but this time, without the need of implementing a OWIN middleware which is ideal for SPA.
 This post will be compose by 3 parts:
 
 ```
@@ -12,7 +12,7 @@ This post will be compose by 3 parts:
 
 ## 1. Overview
 
-Like our previous post, we will be using the Jwt token to implement a Bearer authentication.
+Like our previous post, we will be using the JWT token to implement a Bearer authentication.
 
 Check out the description in my previous post if you aren't sure how JWT works, [post here](https://kimsereyblog.blogspot.co.uk/2017/01/authentication-for-websharper-sitelet.html).
 
@@ -71,7 +71,7 @@ type EndPoint =
 We have a data endpoint which needs to be secured.
 We have the token endpoint to request for the tokens and a refresh endpoint to refresh it.
 
-We can take the implementation of Jwt which we did last post (link). I am just going to copy paste it for convenience.
+We can take the implementation of JWT which we did last post (link). I am just going to copy paste it for convenience.
 
 Code
 
@@ -83,7 +83,7 @@ Next we create a function to authenticate calls, we also create a new ApiContext
 
 Code
 
-The function takes a configuration record which will have the jwt configs like token lifespans and private key and takes a token which will be the Bearer token given in the request header.
+The function takes a configuration record which will have the JWT configs like token lifespans and private key and takes a token which will be the Bearer token given in the request header.
 Note that there are multiple paths in which the token validation will fail, we need to handle every possible scenarios.
 
 Now when the token expires, a request to the refresh endpoint will be issued.
@@ -96,6 +96,6 @@ And that's it! Using our authenticate function we can authenticate each desired 
 
 # Conclusion
 
-Today we saw how we could simply create a Jwt authentication and authenticate the endpoint of our WebSharper sitelet Web API. We saw the difference between an access token and a refresh token and in which scenario they are used. As usual if you have any question leave it here or hit me on Twitter [@Kimserey_Lam](). See you next time!
+Today we saw how we could simply create a JWT authentication and authenticate the endpoint of our WebSharper sitelet Web API. We saw the difference between an access token and a refresh token and in which scenario they are used. As usual if you have any question leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
 
 # Other posts you will like!
