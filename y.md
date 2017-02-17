@@ -81,6 +81,17 @@ We have a `/data` endpoint which needs to be secured, an `/auth/token` endpoint 
 We can take the implementation of JWT which we did [last post](https://kimsereyblog.blogspot.co.uk/2017/01/authentication-for-websharper-sitelet.html). I am just going to copy paste it for convenience.
 
 ```
+type UserPrincipal =
+    {
+        Identity: UserIdentity
+        Claims: string list
+    }
+
+and UserIdentity = 
+    {
+        Email: string
+    }
+    
 type JwtPayload =
     {
         [<JsonProperty "tokenRole">]
