@@ -165,9 +165,6 @@ Next we can use this implementation to build our sitelet endpoints:
 
 ```
 module Site =
-
-    type MainTemplate = Templating.Template<"Main.html">
-
     // Fake private key
     let getPrivateKey() = ""
     // Fake verification
@@ -179,7 +176,7 @@ module Site =
     let Main =
         Application.MultiPage (fun ctx ->
             function
-            | Data -> Content.Page(MainTemplate.Doc([ client <@ Client.main() @> ]))
+            | Data -> Content.Json "Nothing yet"
             | Auth endpoint ->
                 match endpoint with
                 | Token credentials -> 
@@ -234,7 +231,7 @@ _Note that there are multiple paths in which the token validation can possibly f
 
 ```
 function
-| Data -> authenticate ctx (fun ctx -> Content.Page(MainTemplate.Doc([ client <@ Client.main ctx.Principal @> 
+ Data -> authenticate ctx (fun ctx -> "You are authenticated! " + ctx.Principal.Identity.Email |> Content.Json)
 ... other endpoints...
 ```
 
