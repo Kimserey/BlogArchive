@@ -237,6 +237,8 @@ function
 
 And that's it! Using our `authenticate` function we can authenticate each desired endpoints of the sitelet. With the `access token` and `refresh token` we can have a secured API which can be queried from an SPA or a mobile app.
 
+The full source code can be found on my GitHub [https://github.com/Kimserey/SimpleJWT/blob/master/JWTSample/Main.fs](https://github.com/Kimserey/SimpleJWT/blob/master/JWTSample/Main.fs).
+
 # Conclusion
 
 Today we saw how we could create a simple JWT authentication and authenticate our endpoints for a WebSharper sitelet API. We saw the differences between an access token and a refresh token and in which scenario they are used. And we implemented a full Bearer authentication flow. As usual if you have any question leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
