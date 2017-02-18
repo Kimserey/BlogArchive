@@ -242,3 +242,27 @@ And that's it! Using our `authenticate` function we can authenticate each desire
 Today we saw how we could create a simple JWT authentication and authenticate our endpoints for a WebSharper sitelet API. We saw the differences between an access token and a refresh token and in which scenario they are used. And we implemented a full Bearer authentication flow. As usual if you have any question leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
 
 # Other posts you will like!
+
+- Authentication JWT token for WebSharper sitelets - [https://kimsereyblog.blogspot.co.uk/2017/01/authentication-for-websharper-sitelet.html](https://kimsereyblog.blogspot.co.uk/2017/01/authentication-for-websharper-sitelet.html)
+- Setup logs for your WebSharper webapp - [https://kimsereyblog.blogspot.co.uk/2016/12/output-logs-in-console-file-and-live.html](https://kimsereyblog.blogspot.co.uk/2016/12/output-logs-in-console-file-and-live.html)
+- Understand sqlite with Xamarin - [https://kimsereyblog.blogspot.co.uk/2017/01/get-started-with-sqlite-in-from.html](https://kimsereyblog.blogspot.co.uk/2017/01/get-started-with-sqlite-in-from.html)
+- Understand Var, View and Lens in WebSharper - [https://kimsereyblog.blogspot.co.uk/2016/03/var-view-lens-listmodel-in-uinext.html](https://kimsereyblog.blogspot.co.uk/2016/03/var-view-lens-listmodel-in-uinext.html)
+- Bring i18n to your WebSharper webapp - [https://kimsereyblog.blogspot.co.uk/2016/08/bring-internationalization-i18n-to-your.html](https://kimsereyblog.blogspot.co.uk/2016/08/bring-internationalization-i18n-to-your.html)
+- Create HTML components in WebSharper - [https://kimsereyblog.blogspot.co.uk/2016/08/create-html-componants-for-your.html](https://kimsereyblog.blogspot.co.uk/2016/08/create-html-componants-for-your.html)
+
+# Support me! 
+
+[Support me by visting my website](https://www.kimsereylam.com). Thank you!
+
+[Support me by downloading my app BASKEE](https://www.kimsereylam.com/baskee). Thank you!
+
+![baskee](https://raw.githubusercontent.com/Kimserey/kimserey.github.io/master/img/readme/baskee_screenshots.png)
+
+[Support me by downloading my app EXPENSE KING](https://www.kimsereylam.com/expenseking). Thank you!
+
+![expense king](https://raw.githubusercontent.com/Kimserey/kimserey.github.io/master/img/readme/expenseking_screenshots.png)
+
+[Support me by downloading my app RECIPE KEEPER](https://www.kimsereylam.com/recipekeeper). Thank you!
+
+![recipe keeper](https://raw.githubusercontent.com/Kimserey/kimserey.github.io/master/img/readme/recipekeeper_screenshots.png)
+
