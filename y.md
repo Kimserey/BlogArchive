@@ -229,7 +229,8 @@ let authenticate (ctx: Context<_>) content =
     | _ -> Content.Unauthorized 
 ```
 
-With the `authenticate` function, we can place that in our `/data` endpoint to ensure that the user is authenticated when requesting for data.
+With the `authenticate` function, we can place that in our `/data` endpoint to ensure that the user is authenticated when requesting for data. 
+_Note that there are multiple paths in which the token validation can possibly fail, we need to handle every possible scenarios._
 
 ```
 function
@@ -237,19 +238,10 @@ function
 ... other endpoints...
 ```
 
-The function takes a configuration record which will have the JWT configs like token lifespans and private key and takes a token which will be the Bearer token given in the request header.
-Note that there are multiple paths in which the token validation will fail, we need to handle every possible scenarios.
-
-Now when the token expires, a request to the refresh endpoint will be issued.
-
-Code
-
-Here we first validate the token and then get the last updated user principal. If the user hasn't been locked, we construct the new set of tokens and return it.
-
-And that's it! Using our authenticate function we can authenticate each desired endpoints of the sitelet. With the access token and refresh token we can have a secured API which can be queried from an SPA or a mobile app.
+And that's it! Using our `authenticate` function we can authenticate each desired endpoints of the sitelet. With the `access token` and `refresh token` we can have a secured API which can be queried from an SPA or a mobile app.
 
 # Conclusion
 
-Today we saw how we could simply create a JWT authentication and authenticate the endpoint of our WebSharper sitelet Web API. We saw the difference between an access token and a refresh token and in which scenario they are used. As usual if you have any question leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
+Today we saw how we could create a simple JWT authentication and authenticate our endpoints for a WebSharper sitelet API. We saw the differences between an access token and a refresh token and in which scenario they are used. And we implemented a full Bearer authentication flow. As usual if you have any question leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
 
 # Other posts you will like!
