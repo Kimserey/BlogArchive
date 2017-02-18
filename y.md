@@ -207,9 +207,35 @@ module Site =
 Now when someone request for a token, we verify the credentials and if valid, we get the latest principal and generate an `access_token` and a `refresh_token`.
 When the `access_token` expires, the user can invoke the `/auth/refresh` endpoint by passing the `refresh_token`, we then decode the token and if valid (not expired), we refresh the tokens with the latest principal.
 
-Next we create a function to authenticate calls, we also create a new ApiContext which will contain the user principals together with the sitelet context.
+Next we create a function to `authenticate` API calls, we also create a `ApiContext` type which will hold the user principal together with the sitelet context.
 
-Code
+```
+type ApiContext =
+    { WebContext: Context<EndPoint>
+      Principal: UserPrincipal }
+
+let authenticate (ctx: Context<_>) content =
+    let result =
+        ctx.Request.Headers 
+        |> Seq.tryFind (fun h -> h.Name = "Authorization")
+        |> Option.filter (fun h -> h.Value.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+        |> Option.map (fun h -> h.Value.Substring(7))
+        |> Option.map (decode (getPrivateKey()))
+
+    match result with
+    | Some (DecodeResult.Success payload) ->
+        // do some check on the payload like token expiry, issuer, then account locked etc..
+        content { Principal = payload.Principal; WebContext = ctx }
+    | _ -> Content.Unauthorized 
+```
+
+With the `authenticate` function, we can place that in our `/data` endpoint to ensure that the user is authenticated when requesting for data.
+
+```
+function
+| Data -> authenticate ctx (fun ctx -> Content.Page(MainTemplate.Doc([ client <@ Client.main ctx.Principal @> 
+... other endpoints...
+```
 
 The function takes a configuration record which will have the JWT configs like token lifespans and private key and takes a token which will be the Bearer token given in the request header.
 Note that there are multiple paths in which the token validation will fail, we need to handle every possible scenarios.
