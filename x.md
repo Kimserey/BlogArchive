@@ -280,7 +280,7 @@ Sitelet.Infer (fun ctx endpoint ->
 )
 ```
 
-Cool! Now we have the API ready for registration, what we need to do next is to define the SPA endpoints which complement the API endpoints.
+Now we have the API ready for registration, what we need to do next is to define the SPA endpoints which complement the API endpoints.
 
 ## 4. Site endpoints
 
@@ -288,10 +288,10 @@ From the overview, we can extract 4 endpoints needed for the webapp:
 
 ```
  1. /signin
- 1. /register
- 2. /register/success/[send_activation_email_token]
- 3. /register/activate/[activation_token]
- 4. /register/activate/fail/[send_activation_email_token]
+ 2. /register
+ 3. /register/success/[send_activation_email_token]
+ 4. /register/activate/[activation_token]
+ 5. /register/activate/fail/[send_activation_email_token]
 ```
 
 So it translate to the following route:
@@ -325,6 +325,153 @@ let route =
 
 ### 4.1 /signin
 
+```
+let renderSignInForm postHref redirectActivationHref redirectSuccessHref =
+    let form = 
+        { Key = "login"
+            Type = Clear
+            Elements = 
+            [ EmailInput ("Email", "Email", NotEmpty)
+              PasswordInput ("Password", "Password", NotEmpty) ]
+            Submitter =
+            SignIn (postHref, redirectActivationHref, redirectSuccessHref, "SIGN IN") }
 
+    divAttr
+        [ attr.``class`` "card mb-4" ]
+        [ divAttr
+            [ attr.``class`` "card-block" ]
+            [ divAttr
+                    [ attr.``class`` "display-4 text-center" ]
+                    [ iAttr [ attr.``class`` "fa fa-user-circle-o mr-3 text-primary" ] []
+                      text "Sign in" ]
+              renderForm form ] ] :> Doc
+```
+
+### 4.2 /register
+
+```
+let renderRegister postHref redirectHref activateHref =
+    let form =
+        { Key = "registration"
+            Type = Clear
+            Elements = 
+            [ EmailInput ("Email", "Email", NotEmpty)
+                TextInput ("FullName", "Full name", NotEmpty)
+                PasswordInput ("Password", "Password", NotEmpty)
+                PasswordInput ("ConfirmPassword", "Confirm password", NotEmpty)
+                HiddenField ("ActivateUrl", activateHref) ]
+            Submitter = 
+            Register (postHref, redirectHref, "REGISTER") }
+    
+    divAttr
+        [ attr.``class`` "card mb-4" ]
+        [ divAttr
+            [ attr.``class`` "card-block" ]
+            [ divAttr
+                [ attr.``class`` "display-4 text-center" ]
+                [ iAttr [ attr.``class`` "fa fa-thumbs-o-up text-primary mr-3" ] []
+                  text "Register" ]
+                
+              renderForm form ] ] :> Doc
+```
+
+### 4.3 /register/success/[send_activation_email_token]
+
+```
+let private orderSendActivationEmail sendActivationEmailToken activationAbsoluteUrl =
+    AjaxHelper.postJson "/auth/sendactivation" { SendActivationEmailToken = sendActivationEmailToken; ActivateUrl = activationAbsoluteUrl }
+    |> Async.Ignore
+    |> Async.StartImmediate
+    
+let renderRegisterSuccess sendActivationEmailToken =
+    divAttr
+        [ attr.``class`` "alert-success text-center p-3" ]
+        [ strong [ text "Your account was created but is not yet verified! " ]
+          text "An email has been sent to your email address."
+          br []
+          text "Please follow the instruction in the email to activate your account."
+          br []
+          aAttr 
+            [ attr.href "#"
+                on.click (fun _ ev -> ev.PreventDefault(); orderSendActivationEmail sendActivationEmailToken) ] 
+            [ text "Click here to resend the activation email." ] ] :> Doc
+```
+
+### 4.4 /register/activate/[activate_token]
+
+```
+let renderRegisterActivation activateToken =
+    let msg = Var.Create (text "Please wait a second while we activate your account.")
+    
+    let activate (token: string) =
+        async {
+            let! res = AjaxHelper.postJson "/auth/activate" token
+            
+            match res with
+            | AjaxHelper.Success token -> 
+                let tokens = As<Token []>(token)
+                match tokens |> Array.toList with
+                | accessToken::refreshToken::_ ->
+                    // token can be stored here
+                    JS.Window.Location.Href <- "#" //redirect to log in
+                | sendActivationToken::_ ->
+                    JS.Window.Location.Href <- "#registration/activate/fail/" + sendActivationToken.Value
+                | [] -> 
+                    msg.Value <- Doc.Concat [ text "Sorry, an unexpected error occured."; br []; text "Refresh the page or contact us directly if the problem persists." ]
+            | _ ->  
+                msg.Value <- Doc.Concat [ text "Sorry, an unexpected error occured."; br []; text "Refresh the page or contact us directly if the problem persists." ]
+        }
+        |> Async.Ignore
+        |> Async.StartImmediate
+    
+    divAttr 
+        [ attr.``class`` "text-center alert-info p-3"
+          on.afterRender (fun _ -> activate activateToken) ] 
+        [ msg.View |> Doc.BindView id ] :> Doc
+```
+
+### 4.5 /register/activate/fail/[send_activation_email_token]
+
+```
+let renderActivationFail sendActivationEmailToken activationAbsoluteUrl =
+    divAttr 
+        [ attr.``class`` "alert-warning p-3" ] 
+        [ strong [ text "Sorry, " ]
+          text "it seems like the link has expired. But no worries, you can resend the activation email by clicking the link below."
+          br []
+          aAttr 
+            [ attr.href "#"
+              on.click (fun _ ev -> ev.PreventDefault(); orderSendActivationEmail sendActivationEmailToken activationAbsoluteUrl) ] 
+            [ text "Click here to resend the activation email." ] ] :> Doc
+```
+
+### 4.6 Put it all together
+
+Just as the API, we put all the functions defined above under a module called `Renderers` and call the proper functions in the correct routes.
+
+```
+// This url needs to be abolute because it will be used as a callback from the email
+let activationAbsoluteUrl = JS.Window.Location.origin + "#register/activate"
+let registerSuccessRelativeUrl = "#register/success"
+
+route.View
+    |> Doc.BindView (
+        function
+        | SignIn -> 
+            Renderers.renderSignInForm "/auth/token" registerSuccessRelativeUrl "#"
+        
+        | Register -> 
+            Renderers.renderRegister "/auth/register" registerSuccessRelativeUrl activationAbsoluteUrl
+        
+        | RegisterSuccess sendActivationEmailToken -> 
+            Renderers.renderRegisterSuccess sendActivationEmailToken activationAbsoluteUrl
+        
+        | RegisterActivation activateToken -> 
+            Renderers.renderRegisterActivation activateToken
+
+        | ActivationFailure sendActivationEmailToken ->
+            Renderers.renderActivationFail sendActivationEmailToken activationAbsoluteUrl
+    )
+```
 
 # Conclusion
