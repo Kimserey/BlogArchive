@@ -50,10 +50,10 @@ The user account not being verified, we need to assume that the user is an untru
 From the overview, we can extract 4 endpoints needed for the web api:
 
 ```
- /auth/register
- /auth/sendactivationemail
- /auth/activate
- /auth/token
+ 1. /auth/register
+ 2. /auth/sendactivationemail
+ 3. /auth/activate
+ 4. /auth/token
 ```
 
 ### 3.1 /auth/register
@@ -233,6 +233,11 @@ let getToken cfg (userRepository: UserRepository) (credentials: Credentials) =
 
 ### 3.5 Put it all together
 
+We first put all the functions define abose in a module called `Handlers` and call each function from the corresponding endpoint.
+We assume that we have a `UserRepository` containing the function required by the handlers and we provide a configuration containing all the configuration needed.
+
+_I haven't copied here the UserRepository and the Configuration because those are most likely specific to your app. You will need different sort of configuration and it is us to you to decide up to how much you want your application to be configurable._
+
 ```
 type SiteEndPoint =
   | [<EndPoint "/auth">] Auth of AuthEndPoint
@@ -275,15 +280,51 @@ Sitelet.Infer (fun ctx endpoint ->
 )
 ```
 
+Cool! Now we have the API ready for registration, what we need to do next is to define the SPA endpoints which complement the API endpoints.
+
 ## 4. Site endpoints
 
 From the overview, we can extract 4 endpoints needed for the webapp:
 
 ```
+ 1. /signin
  1. /register
  2. /register/success/[send_activation_email_token]
  3. /register/activate/[activation_token]
  4. /register/activate/fail/[send_activation_email_token]
 ```
+
+So it translate to the following route:
+
+```
+type EndPoint =
+    | SignIn
+    | Register
+    | RegisterSuccess    of sendActivationEmailToken: string
+    | RegisterActivation of activateToken: string
+    | ActivationFailure  of sendActivationEmailToken: string
+
+
+let route =
+    RouteMap.Create 
+        (function
+            | SignIn -> [ "signin" ]
+            | Register -> [ "register" ]
+            | RegisterSuccess sendActivationEmailToken -> [ "register"; "success"; sendActivationEmailToken ]
+            | RegisterActivation activateToken -> [ "register"; "activate"; activateToken ]
+            | ActivationFailure sendActivationEmailToken -> [ "register"; "activate"; "fail"; sendActivationEmailToken ])
+        (function
+            | [ "signin" ] -> SignIn
+            | [ "register" ] -> Register
+            | [ "register"; "success"; sendActivationEmailToken ] -> RegisterSuccess sendActivationEmailToken
+            | [ "register"; "activate"; activateToken ]  -> RegisterActivation activateToken
+            | [ "register"; "activate"; "fail"; sendActivationEmailToken ] -> ActivationFailure sendActivationEmailToken
+            | _ -> SignIn)
+    |> RouteMap.Install
+```
+
+### 4.1 /signin
+
+
 
 # Conclusion
