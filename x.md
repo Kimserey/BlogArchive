@@ -329,11 +329,11 @@ let route =
 let renderSignInForm postHref redirectActivationHref redirectSuccessHref =
     let form = 
         { Key = "login"
-            Type = Clear
-            Elements = 
+          Type = Clear
+          Elements = 
             [ EmailInput ("Email", "Email", NotEmpty)
               PasswordInput ("Password", "Password", NotEmpty) ]
-            Submitter =
+          Submitter =
             SignIn (postHref, redirectActivationHref, redirectSuccessHref, "SIGN IN") }
 
     divAttr
@@ -353,14 +353,14 @@ let renderSignInForm postHref redirectActivationHref redirectSuccessHref =
 let renderRegister postHref redirectHref activateHref =
     let form =
         { Key = "registration"
-            Type = Clear
-            Elements = 
+          Type = Clear
+          Elements = 
             [ EmailInput ("Email", "Email", NotEmpty)
                 TextInput ("FullName", "Full name", NotEmpty)
                 PasswordInput ("Password", "Password", NotEmpty)
                 PasswordInput ("ConfirmPassword", "Confirm password", NotEmpty)
                 HiddenField ("ActivateUrl", activateHref) ]
-            Submitter = 
+          Submitter = 
             Register (postHref, redirectHref, "REGISTER") }
     
     divAttr
