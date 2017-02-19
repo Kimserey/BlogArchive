@@ -50,10 +50,185 @@ The user account not being verified, we need to assume that the user is an untru
 From the overview, we can extract 4 endpoints needed for the web api:
 
 ```
- 1. /auth/token
- 2. /auth/register
- 3. /auth/sendactivationemail
- 4. /auth/activate
+ /auth/register
+ /auth/sendactivationemail
+ /auth/activate
+ /auth/token
+```
+
+### 3.1 /auth/register
+
+```
+let createAccount cfg (userRepository:UserRepository) (args: HandlersArguments.UserAccountCreateArguments) =
+    if userRepository.Exists args.Email then
+        None
+    else
+        let account =
+            userRepository.Create 
+                { Password = args.Password
+                    Email = args.Email
+                    Claims = [ args.AccountTypeClaim ]
+                    FullName = args.FullName }
+        
+        let principal = 
+            getPrincipal account
+        
+        // send activation token by email
+        generate 
+            cfg.JwtToken.PrivateKey 
+            cfg.JwtToken.Issuer 
+            cfg.JwtToken.TokenRoles.ActivateAccountToken 
+            principal 
+            (DateTime.UtcNow.AddDays(float cfg.JwtToken.ActivateAccountTokenLifespan))
+        |> sendActivationEmail cfg.Smtp account.Email args.ActivateUrl 
+
+        Some 
+            { Role = cfg.JwtToken.TokenRoles.SendActivateEmailToken
+              Value = 
+                generate 
+                    cfg.JwtToken.PrivateKey 
+                    cfg.JwtToken.Issuer 
+                    cfg.JwtToken.TokenRoles.SendActivateEmailToken 
+                    principal 
+                    (DateTime.UtcNow.AddDays(float cfg.JwtToken.SendActivateEmailTokenLifespan)) }
+
+```
+
+### 3.2 /auth/sendactivationemail
+
+```
+let sendActivateEmail cfg (userRepository:UserRepository) (args: SendActivationEmailArguments) =
+    match decode cfg.JwtToken.TokenRoles.SendActivateEmailToken cfg.JwtToken args.SendActivationEmailToken with
+    | Some payload 
+        when 
+            payload.TokenRole = "send_activation_email_token" 
+            && not payload.Principal.Identity.IsLocked 
+            && payload.Expiry > DateTime.UtcNow 
+            && not payload.Principal.Identity.IsEnabled ->
+        
+        userRepository.GetByEmail payload.Principal.Identity.Email 
+        |> Option.filter (fun account -> not account.Enabled)
+        |> Option.iter (fun account ->
+            generate 
+                cfg.JwtToken.PrivateKey 
+                cfg.JwtToken.Issuer 
+                cfg.JwtToken.TokenRoles.ActivateAccountToken 
+                payload.Principal 
+                (DateTime.UtcNow.AddDays(float cfg.JwtToken.ActivateAccountTokenLifespan))
+            |> sendActivationEmail 
+                    cfg.Smtp 
+                    payload.Principal.Identity.Email 
+                    args.ActivateUrl
+        )
+    | _ ->
+        // Send failed because of invalid token
+        ()
+```
+
+### 3.3 /auth/activate
+
+```
+let activateAccount cfg (userRepository:UserRepository) token =
+    match decode cfg.JwtToken.TokenRoles.ActivateAccountToken cfg.JwtToken token with
+    | Some payload 
+        when 
+            payload.TokenRole = cfg.JwtToken.TokenRoles.ActivateAccountToken 
+            && not payload.Principal.Identity.IsEnabled->
+        
+        if payload.Principal.Identity.IsLocked then 
+            // Activation failed. Reason: User is locked
+            None
+
+        else if payload.Expiry <= DateTime.UtcNow then
+            Some [ { Role = cfg.JwtToken.TokenRoles.SendActivateEmailToken
+                     Value = 
+                        generate 
+                            cfg.JwtToken.PrivateKey 
+                            cfg.JwtToken.Issuer 
+                            cfg.JwtToken.TokenRoles.SendActivateEmailToken 
+                            payload.Principal 
+                            (DateTime.UtcNow.AddDays(float cfg.JwtToken.SendActivateEmailTokenLifespan)) } ]
+
+        else
+            match userRepository.GetByEmail payload.Principal.Identity.Email with
+            | Some account when not account.Enabled ->
+                userRepository.Activate payload.Principal.Identity.Id
+
+                Some [ { Role = cfg.JwtToken.TokenRoles.AccessToken
+                         Value = 
+                            generate 
+                                cfg.JwtToken.PrivateKey 
+                                cfg.JwtToken.Issuer 
+                                cfg.JwtToken.TokenRoles.AccessToken 
+                                payload.Principal 
+                                (DateTime.UtcNow.AddDays(float cfg.JwtToken.AccessTokenLifespan)) }
+                       { Role = cfg.JwtToken.TokenRoles.RefreshToken
+                         Value = 
+                            generate 
+                                cfg.JwtToken.PrivateKey 
+                                cfg.JwtToken.Issuer 
+                                cfg.JwtToken.TokenRoles.RefreshToken 
+                                payload.Principal 
+                                (DateTime.UtcNow.AddDays(float cfg.JwtToken.RefreshTokenLifespan)) } ]
+            | _ ->
+                // Activation failed. Reason: User is already active
+                None
+    | _ ->
+        // Activation failed. Reason: Invalid token. [%s]" token
+        None
+```
+
+### 3.4 /auth/token
+
+```
+let getToken cfg (userRepository: UserRepository) (credentials: Credentials) =
+    let verify = 
+        userRepository.Verify { Email = credentials.Email; Password = credentials.Password }
+    
+    if not verify then 
+        // Sign in failed credentials provided invalid
+        None
+
+    else
+        match userRepository.GetByEmail credentials.Email with
+        | Some account ->
+            let principal = getPrincipal account
+    
+            if principal.Identity.IsLocked then 
+                // Sign in failed. Reason: User is locked
+                None
+
+            else if not principal.Identity.IsEnabled then
+                Some [ { Role = cfg.JwtToken.TokenRoles.SendActivateEmailToken
+                         Value = 
+                            generate 
+                                cfg.JwtToken.PrivateKey 
+                                cfg.JwtToken.Issuer 
+                                cfg.JwtToken.TokenRoles.SendActivateEmailToken 
+                                principal 
+                                (DateTime.UtcNow.AddDays(float cfg.JwtToken.SendActivateEmailTokenLifespan)) } ]
+            
+            else 
+                Some [ { Role = cfg.JwtToken.TokenRoles.AccessToken
+                         Value = 
+                            generate 
+                                cfg.JwtToken.PrivateKey 
+                                cfg.JwtToken.Issuer 
+                                cfg.JwtToken.TokenRoles.AccessToken 
+                                principal 
+                                (DateTime.UtcNow.AddDays(float cfg.JwtToken.AccessTokenLifespan)) }
+                        { Role = cfg.JwtToken.TokenRoles.RefreshToken
+                          Value = 
+                            generate 
+                                cfg.JwtToken.PrivateKey 
+                                cfg.JwtToken.Issuer 
+                                cfg.JwtToken.TokenRoles.RefreshToken 
+                                principal 
+                                (DateTime.UtcNow.AddDays(float cfg.JwtToken.RefreshTokenLifespan)) } ]
+    
+        | None ->
+            // Sign in failed. Reason: User not found
+            None
 ```
 
 ## 4. Site endpoints
