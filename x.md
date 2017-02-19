@@ -231,6 +231,50 @@ let getToken cfg (userRepository: UserRepository) (credentials: Credentials) =
             None
 ```
 
+### 3.5 Put it all together
+
+```
+type SiteEndPoint =
+  | [<EndPoint "/auth">] Auth of AuthEndPoint
+
+and AuthEndPoint =
+  | [<EndPoint "POST /token"; Json "credentials">] Token of credentials: Credentials
+  | [<EndPoint "POST /refresh"; Json "token">] Refresh of token: string
+  | [<EndPoint "POST /register"; Json "registration">] Register of registration: HandlersArguments.UserAccountCreateArguments
+  | [<EndPoint "POST /activate"; Json "token">] Activate of token: string
+  | [<EndPoint "POST /sendactivation"; Json "sendActivationEmail">] SendActivationEmail of sendActivationEmail: HandlersArguments.SendActivationEmailArguments
+
+
+Sitelet.Infer (fun ctx endpoint -> 
+    match endpoint with
+    | Auth endpoint ->
+        match endpoint with
+        | Token credentials -> 
+            match Handlers.getToken cfg users credentials with
+            | Some tokens -> Content.Json tokens
+            | None -> Content.Unauthorized
+
+        | Refresh refreshToken ->
+            match Handlers.refreshToken cfg users refreshToken with
+            | Some tokens -> Content.Json tokens
+            | None -> Content.Unauthorized
+            
+        | Register registration ->
+            match Handlers.createAccount cfg users registration with
+            | Some token -> Content.Json token
+            | None -> Content.Unauthorized
+        
+        | Activate activateToken ->
+            match Handlers.activateAccount cfg users activateToken with
+            | Some tokens -> Content.Json tokens
+            | None -> Content.Unauthorized
+
+        | SendActivationEmail sendActivationArgs ->
+            Handlers.sendActivateEmail cfg users sendActivationArgs
+            Content.Json ()
+)
+```
+
 ## 4. Site endpoints
 
 From the overview, we can extract 4 endpoints needed for the webapp:
