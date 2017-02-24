@@ -8,7 +8,7 @@ This post will be composed by 4 parts:
 2. Implement the renderers
 3. Implement the submit behavior
 4. Use it
-
+ 
 ## 1. Define the domain
 
 Defining a model is tricky. It needs to be both flexible enough to handle all needed scenario but it also needs to be simple enough that there aren't too many options which would make the domain messy. I will give an example later to illustrate this.
