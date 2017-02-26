@@ -193,7 +193,7 @@ let renderSomeForm postHref redirectHref =
           Elements = 
             [ TextInput ("FirstName", "First name", "(eg. Kimserey)", None)
               TextInput ("LastName", "Last name", "(eg. Lam)", None)]
-            Submitter = AjaxPost (postHref, redirectHref, "SUBMIT") }
+          Submitter = AjaxPost (postHref, redirectHref, "SUBMIT") }
 
     renderForm form
 ```
