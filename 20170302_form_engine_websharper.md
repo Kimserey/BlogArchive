@@ -186,9 +186,20 @@ We are now able to render the whole form.
 
 So we have a model, we defined the renderer for that model and lastely we defined how to submit the data. Thanks to this we can now create form very quickly and easily by instiating the model and passing it to the render function.
 
-Code 
+```    
+let renderSomeForm postHref redirectHref =
+    let form = 
+        { Key = "some-form"
+          Elements = 
+            [ TextInput ("FirstName", "First name", "(eg. Kimserey)", None)
+              TextInput ("LastName", "Last name", "(eg. Lam)", None)]
+            Submitter = AjaxPost (postHref, redirectHref, "SUBMIT") }
 
-Image
+    renderForm form
+```
+
+The benefit of having this form engine is that for all the forms, we will not have to worry about how the HTML is composed and we will not have to care about how to handle the submission as we have specific behavior support which we can supply configure.
+There will be much less room for error as the form engine DSL restrict us to the exclusively supported field and submissions.
 
 # Conclusion
 
