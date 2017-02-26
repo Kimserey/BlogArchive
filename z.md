@@ -1,6 +1,6 @@
 # Create a simple form engine with WebSharper.UI.Next in F#
 
-WebSharper came out with WebSharper.Forms. It is a terse DSL to build form (link), I posted a tutorial on it few months ago (link). 
+WebSharper came out with WebSharper.Forms. It is a terse DSL to build form, I posted a tutorial on it few months ago [https://kimsereyblog.blogspot.co.uk/2016/03/create-forms-with-websharperforms.html](https://kimsereyblog.blogspot.co.uk/2016/03/create-forms-with-websharperforms.html). 
 It's very powerful as the abstraction handles most of the scenarios.
 Today I would like to show anothe way to create forms by building a form engine.
 This post will be composed by 4 parts:
