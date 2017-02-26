@@ -203,6 +203,13 @@ There will be much less room for error as the form engine DSL restrict us to the
 
 # Conclusion
 
-Today we saw how we could create a form engine with a simple domain which allows quick creation of forms in WebSharper.UI.Next. Hope you liked this post. If you have any question leave it here or hit me on Twitter [@Kimserey_Lam](). See you next time!
+Today we saw how we could create a form engine with a simple domain which allows quick creation of forms in `WebSharper.UI.Next`. Hope you liked this post. If you have any question leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
 
 # Other posts you will like!
+
+- Authentication JWT token for WebSharper sitelets - [https://kimsereyblog.blogspot.co.uk/2017/01/authentication-for-websharper-sitelet.html](https://kimsereyblog.blogspot.co.uk/2017/01/authentication-for-websharper-sitelet.html)
+- Setup logs for your WebSharper webapp - [https://kimsereyblog.blogspot.co.uk/2016/12/output-logs-in-console-file-and-live.html](https://kimsereyblog.blogspot.co.uk/2016/12/output-logs-in-console-file-and-live.html)
+- Understand sqlite with Xamarin - [https://kimsereyblog.blogspot.co.uk/2017/01/get-started-with-sqlite-in-from.html](https://kimsereyblog.blogspot.co.uk/2017/01/get-started-with-sqlite-in-from.html)
+- Understand Var, View and Lens in WebSharper - [https://kimsereyblog.blogspot.co.uk/2016/03/var-view-lens-listmodel-in-uinext.html](https://kimsereyblog.blogspot.co.uk/2016/03/var-view-lens-listmodel-in-uinext.html)
+- Bring i18n to your WebSharper webapp - [https://kimsereyblog.blogspot.co.uk/2016/08/bring-internationalization-i18n-to-your.html](https://kimsereyblog.blogspot.co.uk/2016/08/bring-internationalization-i18n-to-your.html)
+- Create HTML components in WebSharper - [https://kimsereyblog.blogspot.co.uk/2016/08/create-html-componants-for-your.html](https://kimsereyblog.blogspot.co.uk/2016/08/create-html-componants-for-your.html)
