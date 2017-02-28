@@ -5,7 +5,7 @@ Today I will show how to implement a registration process with email verificatio
  
  _This post will not contain the email submission service part._
 
-This post will be composed by 4 parts:
+This post will be composed by 4 parts: 
 
 ```
  1. Overview
