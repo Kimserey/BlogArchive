@@ -4,7 +4,7 @@ Last week we saw how we could implement a simple JWT authentification by impleme
 Today I will show how to implement a registration process with email verification used in a WebSharper sitelet.
  
  _This post will not contain the email submission service part._
-
+ 
 This post will be composed by 4 parts: 
 
 ```
