@@ -5,8 +5,8 @@ This post will be composed by three parts:
 
 ```
 1. Get the librairies
-2. Page without sticky
-2. Make the nav stick
+2. Page without the nav sticking
+3. Make the nav stick
 ```
 
 ![https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170316_sticky_nav_bootstrap/with%20sticky.gif](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170316_sticky_nav_bootstrap/with%20sticky.gif)
@@ -28,7 +28,7 @@ bower install filament-sticky
 
 You should then have it locally in your bower folder.
 
-## 2. Page without sticky
+## 2. Page without the nav sticking
 
 We build a sample page without sticky.
 
@@ -89,7 +89,7 @@ When we scroll down we can see, as expect, that the banner and header go out of 
 
 What we want is to have the nav to remain on the viewport. 
 
-3. Use sticky
+## 3. Make the nav stick
 
 To use fixed sticky all we need to do is use the css and js provided:
 
