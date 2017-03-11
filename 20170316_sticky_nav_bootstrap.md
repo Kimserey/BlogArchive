@@ -2,6 +2,8 @@
 
 Today I will demonstrate one way to achieve a sticky navbar in `Bootstrap v4` using `fixedsticky`.
 
+This post will be composed by three parts:
+
 ```
 1. Get the librairies
 2. Page without sticky
