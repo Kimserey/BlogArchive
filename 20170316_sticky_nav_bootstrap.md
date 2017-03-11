@@ -1,7 +1,6 @@
 # How to make a sticky navbar using Bootstrap
 
 Today I will demonstrate one way to achieve a sticky navbar in `Bootstrap v4` using `fixedsticky`.
-
 This post will be composed by three parts:
 
 ```
