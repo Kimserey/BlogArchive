@@ -6,7 +6,7 @@ This post will be composed by three parts:
 ```
 1. Get the librairies
 2. Page without sticky
-2. Use sticky
+2. Make the nav stick
 ```
 
 ![https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170316_sticky_nav_bootstrap/with%20sticky.gif](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170316_sticky_nav_bootstrap/with%20sticky.gif)
