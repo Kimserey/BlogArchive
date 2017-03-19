@@ -117,3 +117,40 @@ This works because `default` is the name of our `gulp` task. If we need to have 
 ```
 
 This will have the same effect.
+Now that we have a build script which can be started with `CMD + shift + B`, which compile CSS and watch for SCSS file changes, we can use a live reload to automatically propagate changes.
+
+##  3. Use live-server for live reload
+
+In order to achieve live reload, we will be using `live-server` which is a convenient tool to have while developing. `live-server` hosts the root folder in a default endpoint and injects live reload capabilities to the pages served.
+
+First we install it globally with npm:
+
+```
+npm install -g live-server
+```
+
+After install from anywhere, we should be able to use `live-server` from the command line to start a server on the current folder.
+
+Since we are using `gulp`, we can add the `live-server` command to our previous script:
+
+```
+var gulp = require('gulp');
+var sass = require('gulp-sass');
+var exec = require('child_process').exec;
+
+gulp.task('sass', function() {
+    gulp.src('scss/*.scss')
+        .pipe(sass())
+        .pipe(gulp.dest('.'));
+});
+
+gulp.task('watch', ['sass'], function() {
+    gulp.watch('scss/*.scss', ['sass']);
+})
+
+gulp.task('default', ['watch'], function() {
+    exec("live-server");
+});
+```
+
+And we are done! Now every time the scss files are updated, the css is recompiled and every time any file is updated, the server reloads the browser!
