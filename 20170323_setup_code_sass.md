@@ -154,3 +154,13 @@ gulp.task('default', ['watch'], function() {
 ```
 
 And we are done! Now every time the scss files are updated, the css is recompiled and every time any file is updated, the server reloads the browser!
+
+# Conclusion
+
+Today we saw how we could setup `gulp` to compile SCSS and use `live-server` to host and live reload our website. It is very easy to use gulp to create build script and produce one-click scripted (semi-automation) and vscode tasks integration makes it even easier. Hope you liked this post, if you have any comments, leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
+
+# Other posts you will like
+
+- How to make a sticky navbar using Bootstrap v4 -[https://kimsereyblog.blogspot.sg/2017/03/how-to-make-sticky-navbar-using.html](https://kimsereyblog.blogspot.sg/2017/03/how-to-make-sticky-navbar-using.html)
+- Post form data to webserver from HTML or JS - [https://kimsereyblog.blogspot.sg/2017/02/post-form-data-to-server.html](https://kimsereyblog.blogspot.sg/2017/02/post-form-data-to-server.html)
+- Get your own domain name and setup SSL with Cloudfare - [https://kimsereyblog.blogspot.sg/2016/08/get-your-domain-name-and-setup-ssl-with.html](https://kimsereyblog.blogspot.sg/2016/08/get-your-domain-name-and-setup-ssl-with.html)
