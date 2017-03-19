@@ -8,6 +8,8 @@ Writing sass is very easy with code. Today we will see how we can leverage some 
  3. Use live-server for live reload
 ```
 
+![img])(https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170323_setup_vscode_sass/live-reload.gif)
+
 __The tasks are from the example of vscode documentation to compile sass [https://code.visualstudio.com/docs/languages/css#_transpiling-sass-and-less-into-css](https://code.visualstudio.com/docs/languages/css#_transpiling-sass-and-less-into-css).__
 
 ## 1. Setup vscode task
@@ -154,6 +156,8 @@ gulp.task('default', ['watch'], function() {
 ```
 
 And we are done! Now every time the scss files are updated, the css is recompiled and every time any file is updated, the server reloads the browser!
+
+![img])(https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170323_setup_vscode_sass/live-reload.gif)
 
 # Conclusion
 
