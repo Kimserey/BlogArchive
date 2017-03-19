@@ -1,0 +1,119 @@
+# Setup vscode to work with sass effortlessly
+
+Writing sass is very easy with code. Today we will see how we can leverage some NPM packages to compile SASS to CSS, watch file changes and live update the browser for an effortless style development. This post will be composed by 3 parts:
+
+```
+ 1. Setup vscode task
+ 2. Create a Gulp build script
+ 3. Use live-server for live reload
+```
+
+__The tasks are from the example of vscode documentation to compile sass [https://code.visualstudio.com/docs/languages/css#_transpiling-sass-and-less-into-css](https://code.visualstudio.com/docs/languages/css#_transpiling-sass-and-less-into-css).__
+
+## 1. Setup vscode task
+
+To use code tasks, we need to create a `tasks.json` file under the hidden `/.vscode` folder.
+
+```
+| - .vscode
+    - tasks.json
+| - style.scss
+| - index.html
+
+```
+
+The tasks allow us to execute programs by selecting from the search bar `CMD + shift + P`, `Run build task`. If a default task is set, it can directly be triggered by `CMD + shift + B`.
+
+As a first example we can start by installing the sass compiler with `node-sass`.
+
+```
+npm install -g node-sass less
+```
+
+And create a task which runs `node-sass`:
+
+```
+{
+    "version": "0.1.0",
+    "command": "node-sass",
+    "isShellCommand": true,
+    "args": ["styles.scss", "styles.css"]
+}
+```
+
+If we press `CMD + shift + B`, it will compile the `style.scss` and produce `style.css`.
+Now that we know how the task manager works, lets see how we can use `Gulp` to do the compilation.
+
+## 2. Create a Gulp build script
+
+We start first by installing `gulp` and the `gulp-sass`.
+
+```
+npm install -g gulp
+npm install gulp-sass
+```
+
+Now that we have `gulp` installed, we can create a build script `gulpfile.js` which we place in the root.
+
+```
+var gulp = require('gulp');
+var sass = require('gulp-sass');
+
+gulp.task('sass', function() {
+    gulp.src('scss/*.scss')
+        .pipe(sass())
+        .pipe(gulp.dest('.'));
+});
+
+gulp.task('default', ['sass'], function() {
+    gulp.watch('scss/*.scss', ['sass']);
+})
+```
+
+Here we import `gulp` and `gulp-sass` and create a task called `sass` and use the `sass()` function to compile the CSS and output it into the root folder destination `/.`.
+Then we set a tasj watcher named `default` where we specify that a dependent task `sass` needs to be run before `default` can be. Within the task, we set the watcher to execute `sass` task when files are changed within the files which match the following pattern: `scss/*.scss`.
+
+Once we done that we can modify the `tasks.json` to execute `gulp` directly and pass the `default` task as arguemnt:
+
+```
+{
+    "version": "0.1.0",
+    "command": "gulp",
+    "isShellCommand": true,
+    "tasks": [
+        {
+            "taskName": "default",
+            "isBuildCommand": true,
+            "showOutput": "always",
+            "isBackground": true
+        }
+    ]
+}
+```
+
+By default the name of the task is given as arguemnt, the task above will execute the following: 
+
+`gulp default`
+
+This works because `default` is the name of our `gulp` task. If we need to have another name, we can use `suppressTaskName` and pass an argument `default`:
+
+```
+{
+    "version": "0.1.0",
+    "command": "gulp",
+    "isShellCommand": true,
+    "echoCommand": true,
+    "tasks": [{
+        "taskName": "sass-1",
+        "suppressTaskName": true,
+        "args": [
+            "default"
+        ],
+        "isBuildCommand": true,
+        "showOutput": "always",
+        "isBackground": true
+    }]
+}
+```
+
+This will have the same effect.
