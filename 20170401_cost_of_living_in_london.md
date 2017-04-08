@@ -54,15 +54,25 @@ _Side note: We saw a lot of horror stories about deposit not returned but our de
 
 # 4. Bills
 
-The bills to consider were the gas and electricity, the council tax, mobile phones and internet.
+The bills to consider were: 
 
-Gas and electricty was about 50 GBP per month for two persons. 
-The council tax was of 110 GBP. This tax will depend on which area you will live in.
-For mobile phones we used Giffgaff. Giffgaff is by far the best option for mobile plans, we were having a package of 500mb of data for 7.5GBP per month with unlimited call to other Giffgaff numbers. 500mb was enough for us as we stayed home most of the time.
+ 1. gas and electricity
+ 2. council tax
+ 3. mobile phones
+ 4. internet
+
+ - Gas and electricty was about 50 GBP per month for two persons. 
+ - Council tax was of 110 GBP - everyone has to pay the council tax, the price is for the whole home and will depend on which area you will live in.
+ - Mobile phones, we used Giffgaff, __Giffgaff is by far the best option for mobile plans__, we were having a package of 500mb of data for 7.5GBP per month with unlimited call to other Giffgaff numbers. 500mb was enough for us as we stayed home most of the time.
 Lastly for internet, we used Hyperoptic with a 20gb connection for 31 GBP per month.
 
-Those were the expenses:
-Image
+__Really really check Giffgaff as they are the most, if not the only, honest provider.__
+[https://www.giffgaff.com/](https://www.giffgaff.com/)
+
+I had an issue where I forgot (It was my mistake) to disable a recurring payment and after one phone call they refunded me. I doubt that any other provider would have done the same.
+
+This is what my monthly rent + bills looked like:
+![image](image)
 
 # 5. Groceries
 
