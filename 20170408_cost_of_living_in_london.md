@@ -55,7 +55,7 @@ As stated in 2), 1250 GBP will be in the lower range of prices for one bedroom a
 
 We stayed where the red arrow points:
 
-![map](map)
+![map](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170408_cost_living_london/map.png)
 
 # 4. Bills
 
@@ -78,7 +78,7 @@ I had an issue where I forgot (It was my mistake) to disable a recurring payment
 
 This is what my monthly rent + bills looked like:
 
-![rent](rent)
+![rent](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170408_cost_living_london/rent.png)
 
 Screenshot from [Expense King](https://www.kimsereylam.com/expenseking)
 
@@ -100,7 +100,7 @@ As mentioned earlier, our spending per month in supermarket average around __400
 
 This is an example of how often we bough groceries:
 
-![groceries](groceries)
+![groceries](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170408_cost_living_london/groceries.png)
 
 Screenshot from [Expense King](https://www.kimsereylam.com/expenseking)
 
