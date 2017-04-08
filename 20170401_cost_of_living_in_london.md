@@ -2,7 +2,7 @@
 
 In 2015, I decided to relocate from Singapore to London. At the time I had no idea about the cost of living, the places where I should rent and places where the groceries would be the cheapest. 
 
-Fast forward to today, March 2017, I moved back from London to Singapore. I stayed around London for more than a year and a half and while I was there, I kept an extremely close look to every in and out from my bank account. 
+Fast forward to today, March 2017, I moved back from London to Singapore. I stayed around London for more than a year and a half and while I was there, I kept an extremely close look to every in and out from my bank account. I even created an app [Expense King](https://www.kimsereylam.com/expenseking) to track my expenses coming out from my bank account.
 
 Today I would like to share what I wish someone would have shared before I relocated, __a post about cost of living in London__. This post will be composed by 6 parts:
 
@@ -12,7 +12,6 @@ Today I would like to share what I wish someone would have shared before I reloc
 3. Rent a place
 4. Bills
 5. Grocery shopping
-6. Leisure
 ```
 
 # 1. Situation
@@ -52,6 +51,12 @@ Our apartment was located in Pontoon Dock. The rent was at 1250 GBP pcm with a d
 
 _Side note: We saw a lot of horror stories about deposit not returned but our deposit was refunded within three weeks after we vacated the property without any issues._
 
+As stated in 2), 1250 GBP will be in the lower range of prices for one bedroom apartment. We were quite far from the center of London and there was nothing walking distance accessible.
+
+We stayed where the red arrow points:
+
+![map](map)
+
 # 4. Bills
 
 The bills to consider were: 
@@ -72,15 +77,37 @@ __Really really check Giffgaff as they are the most, if not the only, honest pro
 I had an issue where I forgot (It was my mistake) to disable a recurring payment and after one phone call they refunded me. I doubt that any other provider would have done the same.
 
 This is what my monthly rent + bills looked like:
-![image](image)
+
+![rent](rent)
+
+Screenshot from [Expense King](https://www.kimsereylam.com/expenseking)
 
 # 5. Groceries
 
-For groceries, we used to buy groceries from Tesco, Waitrose, Sainsburry and Asda.
+For groceries, we used to buy groceries from:
+
+ - Tesco
+ - Waitrose
+ - Sainsburry
+ - Asda
 
 Living in Pontoon Dock, we could access to Tesco at Woolwich arsenal via DLR.
 For Waitrose and Sainsburry, they are both located at Stratford which we could access via DLR. Lastly we used Asda for home delivery to deliver heavy items like water bottles.
 
-As mentioned earlier, our spending per month in supermarket average around 450 GBP.
+Waitrose is the most expensive of all place to buy groceries but the quality of the meat is superior. Tesco would be the second place where we bought most of our food.
 
-# 6. Leisures
+As mentioned earlier, our spending per month in supermarket average around __400 GBP pcm__.
+
+This is an example of how often we bough groceries:
+
+![groceries](groceries)
+
+Screenshot from [Expense King](https://www.kimsereylam.com/expenseking)
+
+# Conclusion
+
+London is a great city, with lot of history and places to explore. But coming as a tourist versus coming to live there is a total different atmosphere.
+
+In order to live in your own apartment, like us, __be ready to fork out of your wallet 2000 GBP per month__.
+
+My advice would then be, if someone wants to recruit you to move to London, consider how much you would spend just to live, and top this up on top of your salary. Otherwise you will not be able to enjoy which will then ruin the magic of London. Again this was my personal experience, I am sure yours will be different but I hope this have helped you get a closer idea of what to expect to pay to live in London! If you have any question, leave it here or hit me on Twitter [@kimserey_lam](https://twitter.com/Kimserey_Lam). See you next time!
