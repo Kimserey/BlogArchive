@@ -30,6 +30,8 @@ Recurring expenses include rent, bills, taxes, groceries and transport.
 - Rent of our 1 bedroom was at 1250 GBP pcm.
 - All bills and tax together was at 250 GBP pcm.
 
+The apartment was a one bedroom. Located in one of the cheapest area, at that time, on the east of London. 1250 pcm will be one of the cheapest rent that you will be able to find if you do not wish to share like us and decide to take a 1 bedroom apartment.
+
 Living with my fiancee, we mostly ate at home. Our average monthly groceries spending was of 450 GBP. 
 
 - Average monthly groceries spending was of 400 GBP pcm.
@@ -42,14 +44,13 @@ Those recurring expenses add up to __2000 GBP pcm__ which __had__ to be spent in
 
 # 3. Rent a place
 
-We found our apartment with Foxtons. We had a lot of issues in finding an apprennent to rent as we did not have any credit history. Any rent is subject to credit check. Failing credit check would result in a rejection from landlords.
-There are multiple places where you can find a rent. Agencies like Foxtons have a lot of apartments and choices but you will be subject to agent fees. 
+We found our apartment with Foxtons. We had a lot of issues in finding an apprennent to rent as we did not have any __credit history__. Any rent is subject to credit check. Failing credit check would result in a rejection from the landlord.
 
-I am not sure about having a direct contract with landlord.
+_I am not sure about having a direct contract with landlord._
 
-Our apartment was located in Pontoon Dock. The rent was at 1250 pcm with a deposit of 2,5 months. Usual deposits go up to 1,5 months but in our case, with no rent history, we had to negotiate with the landlord to give her a higher security in exchange of her trust.
+Our apartment was located in Pontoon Dock. The rent was at 1250 GBP pcm with a deposit of 2,5 months. Usual deposits go up to 1,5 months but in our case, with no rent history, we had to negotiate with the landlord to give her a higher security in exchange of her trust.
 
-_Side note: our deposit was refunded within three weeks after we vacated the property without any issues._
+_Side note: We saw a lot of horror stories about deposit not returned but our deposit was refunded within three weeks after we vacated the property without any issues._
 
 # 4. Bills
 
