@@ -38,7 +38,7 @@ I was working from everyday so our transport spending was limited to going to bu
 
 - Average monthly transport spending was of 100 GBP pcm.
 
-Those recurring expenses add up to __2000 GBP pcm__ which HAD to be spent in order to live.
+Those recurring expenses add up to __2000 GBP pcm__ which __had__ to be spent in order to live.
 
 # 3. Rent a place
 
