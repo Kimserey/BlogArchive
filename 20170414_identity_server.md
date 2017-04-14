@@ -1,29 +1,28 @@
 # Authentication and authorization with Identity Server 4
 
-Few week ago I described how to build a custom Jwt authentication. Today I will show how we can use Identity server together with Resource owner password flow to authenticate and authorise your client to access your api.
+Few week ago I described how to build a [custom Jwt authentication](https://kimsereyblog.blogspot.sg/2017/01/authentication-for-websharper-sitelet.html). 
+Today I will show how we can use [Identity server](http://docs.identityserver.io/en/release/) together with Resource owner password flow to authenticate and authorise your client to access your api.
 
 This post will be composed by 3 parts:
 
-1. Identity server configuration
+1. Identity server
 2. Api protection
 3. Client access
 
 ## 1. Identity server
 
-Identity server is a framework which comes with Open ID Connect and OAuth 2.0 implementation.
-The purpose of it is to decouple your api(s) from authentication and authorization logic. This has many advantages:
+Identity server is a framework which implements Open ID Connect and OAuth 2.0 protocols.
+The purpose of Identity server is to centralize the identity management and at the same time decouple your api(s) from authentication and authorization logic.
+Centralizing has many advantages:
 
 1. If you have multiple apis, you can hold your identities in a common place
-2. If you have multiple apis, it provides you a way to have single sign on, meaning having a valid token for multiple apis
+2. If you have multiple apis, it provides single sign on - user only sign in into one client and is automatically sign in in all apis. This works because all clients will redirect to the same authority which will be able to verify that the user is already logged in
 3. It provides a powerful way to configure client access to your api
 
 There are many more advantages like the Open ID connect protocol implementation which handles consents and the handling of different authentication flows.
-
-We will be looking at the Resource owner password flow.
-It is the simplest flow but comes with two disavantages. 
+In this post, we will be looking at the `Resource owner password flow`. It is the simplest flow but comes with two disavantages:
 1. Because it does not go through Open ID connect, we lose Single Sign On functionality as the user has to send username/password for each issuance of valid token.
 2. We lose third party integration support from ID server as there is no redirect flow.
-
 But if your application doesn't need those, then It would be the easiest flow to implement.
 
 ### 1.1 Configure the identity provider
