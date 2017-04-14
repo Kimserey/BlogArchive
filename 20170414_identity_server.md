@@ -35,29 +35,87 @@ Identity resources would be pieces of information from the identity itself that 
 
 What the identity provider will provide an access token which can be used to access either the Apis or the identity information. The identity information can be retrieved from the `UserInfo` endpoint on the identity provider. We will see next that we can configure the middleware in the client to authomatically retrieve the identity claims by setting the property `GetClaimsFromUserInfoEndpoint` to true.
 
-Lastly, we can also define scopes within api resources which can be used to give granular access to clients. 
-For example a client could be only allowed to list some data but not modify any data. We will see later how can a scope be validate for authorization on the api itself using policies.
-
 In this example, we will have 3 pieces:
-1. The identity provider
-2. Our api we wish to protect
-3. Our client - could be a website or an app or a client software, for this example I will use a client software
+- The identity provider
+- Our api we wish to protect
+- Our client - could be a website or an app or a client software, for this example I will use a client software
 
 So let's start by configuring the identity provider. First we create an empty asp.net core project and add identityServer4 package.
 
 Then from the Startup file we register the identity service and add the middleware.
-Next we create a configuration file which will hold identity server configurations.
 
-In order to have identity server working, we need to add api configurations, identity configurations, client configurations and some test users.
+```
+public class Startup
+{
+    public void ConfigureServices(IServiceCollection services)
+    {
+        //... some other services here
 
-[code]
+        services.AddIdentityServer()
+                .AddInMemoryApiResources(Configs.GetApiResources())
+                .AddInMemoryClients(Configs.GetClients())
+                .AddInMemoryIdentityResources(Configs.GetIdentityResources())
+                .AddTestUsers(Configs.GetTestUsers())
+                .AddTemporarySigningCredential();
+    }
 
-`AddTestUsers` adds a test provider and test users.
-We can see from the Identity Server code what AddTestUser does:
+    public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+    {
+        //... some code here
 
-[code]
+        app.UseIdentityServer();
+    }
+}
+```
 
-We have GetApiResources and GetIdentityResources which we will be defining next.
+From the service registration, we can already see that we will need to give the configuration of our `Api resources`, `Clients`, `Identity resources` and some test users.
+
+So next we can create a configuration file which will hold identity server configurations.
+
+```
+public class Configs
+{
+    public static IEnumerable<IdentityResource> GetIdentityResources()
+    {
+        return new List<IdentityResource>();
+    }
+
+    public static IEnumerable<ApiResource> GetApiResources()
+    {
+        return new List<ApiResource>();
+    }
+
+    public static IEnumerable<Client> GetClients()
+    {
+        return new List<Client>();
+    }
+
+    public static List<TestUser> GetTestUsers()
+    {
+        return new List<TestUser> {
+            new TestUser {
+                SubjectId = "1",
+                Username = "alice",
+                Password = "password"
+            }
+        };
+    }
+}
+```
+
+Take note that `AddTestUsers` adds a `profile service` and a `resource owner password validator` which we would need to provide when not using test users. We can see from the Identity Server code what `AddTestUser` does:
+
+```
+// Code from Identity Server 4
+
+public static IIdentityServerBuilder AddTestUsers(this IIdentityServerBuilder builder, List<TestUser> users)
+{
+    builder.Services.AddSingleton(new TestUserStore(users));
+    builder.AddProfileService<TestUserProfileService>(); //<--- we will need to implement this
+    builder.AddResourceOwnerValidator<TestUserResourceOwnerPasswordValidator>(); <-- and this
+    return builder;
+}
+```
 
 ## 2. Api resource
 
