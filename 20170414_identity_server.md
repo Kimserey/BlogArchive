@@ -5,9 +5,11 @@ Today I will show how we can use [Identity server](http://docs.identityserver.io
 
 This post will be composed by 3 parts:
 
+```
 1. Identity server
 2. Api protection
 3. Client access
+```
 
 ## 1. Identity server
 
