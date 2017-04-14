@@ -7,8 +7,8 @@ This post will be composed by 3 parts:
 
 ```
 1. Identity server
-2. Api protection
-3. Client access
+2. Protect an api
+3. Configure a client
 ```
 
 ## 1. Identity server
@@ -45,6 +45,8 @@ So let's start by configuring the identity provider. First we create an empty as
 Then from the Startup file we register the identity service and add the middleware.
 
 ```
+// -- This is in the Identity provider
+
 public class Startup
 {
     public void ConfigureServices(IServiceCollection services)
@@ -73,6 +75,8 @@ From the service registration, we can already see that we will need to give the 
 So next we can create a configuration file which will hold identity server configurations.
 
 ```
+// -- This is in the Identity provider
+
 public class Configs
 {
     public static IEnumerable<IdentityResource> GetIdentityResources()
@@ -106,7 +110,7 @@ public class Configs
 Take note that `AddTestUsers` adds a `profile service` and a `resource owner password validator` which we would need to provide when not using test users. We can see from the Identity Server code what `AddTestUser` does:
 
 ```
-// Code from Identity Server 4
+// -- Code from Identity Server 4 source code
 
 public static IIdentityServerBuilder AddTestUsers(this IIdentityServerBuilder builder, List<TestUser> users)
 {
@@ -117,6 +121,85 @@ public static IIdentityServerBuilder AddTestUsers(this IIdentityServerBuilder bu
 }
 ```
 
-## 2. Api resource
+Next we will protect our api.
 
-To protect the api,
+## 2. Protect an API
+
+Let's start a web api project and add `IdentityServer4.AccessTokenValidation`.
+This library allows us to protect the api by using the `IdentityServerAuthentication` middleware which will validate the access tokens.
+
+So we place the following code before our `MVC` middleware binding:
+```
+// -- This is in the API
+
+public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+{
+    // ... some other stuff
+
+    app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
+    {
+        Authority = "http://localhost:5000",
+        ApiName = "api",
+        ApiSecret = "secret",
+        AutomaticAuthenticate = true,
+        RequireHttpsMetadata = false,
+    });
+
+    app.UseMvc();
+}
+```
+
+In the option, we specify the `endpoint of the identity provider`, our `api name`, the `secret` to connect from the api to the identity provider via the introspection endpoint - this is useful when we use reference token as it allows us to be protected against an unauthorized request possessing a reference token and trying to check the state of the access token. _More info here [https://tools.ietf.org/html/rfc7662](https://tools.ietf.org/html/rfc7662)._
+
+Now that we have configured our API and that it is now protected behind access token validation, we can register it in the identity provider in the api resource section:
+
+```
+// -- This is in the Identity provider
+
+public static IEnumerable<ApiResource> GetApiResources()
+{
+    return new List<ApiResource>
+    {
+        new ApiResource("api", "Web Api")
+        {
+            ApiSecrets =
+            {
+                new Secret("secret".Sha256())
+            }
+        }
+    };
+}
+```
+
+Every `ApiResource` come with a default scope which is the name of the api. For instance here I named it `api`, therefore I will be able to give to a client `AllowedScopes = { "api" }` which will provide an access token with `Scopes = [ 'api' ]`.
+
+Lastly what we need to do is to configure a client which will be trying to get an access token to access the API.
+
+## 3. Configure a client
+
+A client can be a website or a mobile app or a software client.
+In this example I will be creating a Console App and use the `IdentityModel` package to request for an access token.
+
+Let's first start by registering a client in the identity provider:
+
+```
+public static IEnumerable<Client> GetClients()
+{
+    return new List<Client>
+    {
+        new Client {
+            ClientId = "client",
+            AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+            ClientSecrets =
+            {
+                new Secret("secret".Sha256())
+            },
+            AllowedScopes = {
+                "api"
+            }
+        }
+    }
+}
+```
+
+Next we create a console app, and add the `IdentityModel` package. We then use the TokenClient to request for a token and we can then use that token to request for the data in the api.
