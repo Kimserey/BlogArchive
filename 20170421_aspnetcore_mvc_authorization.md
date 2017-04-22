@@ -78,3 +78,26 @@ If for any reason you wish to fail the authorization, it is also possible to cal
 
 ## 5. Resource-based authorization
 
+The last authorization is resource-based which also make use of policies but, as its name states it, require the resource to perform the authorization.
+A typical scenario would be if we need to retrieve a value and check properties against the value before being able to decide whether or not the user has the rights to act on the value.
+
+For example, Alice wants to modify a financial report. She might only be able to modify it if she authored it. Therefore we would need to retrieve the report and check if Alice is the author of it.
+
+We could do that with a if-else within the controller but Mvc provides an `authorizationService` which can be injected in the controller.
+This allows us to authorize the request and give in the resource.
+
+Similarly as policies we create a requirement and we create a handler to handle the requirement. The difference this time is that we implement the authorization handler with the resource type.
+
+...
+
+You might be thinking why would we use a if-else on the authorization service when we can use a if-else to directly check the property. The reason is that we can have multiple handlers checking for the same requirement again similar to policies where we want to implement an OR logic where one of the handler can pass the requirement. Another reason is that the logic of the authorization would be in a single place, in the handlers, for the requirements which avoid having the check logic spread in multiple controller endpoints.
+
+# Conclusion
+
+We saw the different type of authorizations available in ASP.NET core mvc and the reason why we should use those. It is important to understand the authorization tools provided by the framework since there isn't one type which can fit all use cases. If you have any question leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
+
+# Links
+
+- Example source code - []()
+- ASP.NET Core Mvc authorization documentation - [https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction)
+- ASP.NET Core Mvc repository - [https://github.com/aspnet/Mvc](https://github.com/aspnet/Mvc)
