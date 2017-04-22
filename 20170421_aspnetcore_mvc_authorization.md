@@ -5,7 +5,7 @@ In the program itself, we take her credentials and verify it and create and iden
 
 Authentication is the first part of the access security, the second part is the authorization. The difference being that for authorization, we know who the user is, what we are verifying is if Alice is allowed to perform what she is trying to perform. The easiest example is the difference between user access and admin access commonly seen in software where users are authenticated but aren't authorized to perform all the actions available in the system.
 
-ASP.NET Mvc comes with a set of useful tools to perform authorization. Today I will give examples on how we can use the different interfaces and services provided to quickly build authorization.
+ASP.NET Core comes with a set of useful tools to perform authorization. Today I will give examples on how we can use the different interfaces and services provided to quickly build authorization.
 This post will be composed by 4 parts:
 
 1. Setup the test
@@ -289,7 +289,7 @@ You might be thinking why would we use a if-else on the authorization service wh
 
 # Conclusion
 
-We saw the different type of authorizations available in ASP.NET core mvc and the reason why we should use those. It is important to understand the authorization tools provided by the framework since there isn't one type which can fit all use cases. If you have any question leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
+We saw the different types of authorization available in ASP.NET Core and the reason why we should use those. It is important to understand all the authorization types provided by the framework since there isn't one type which can fit all use cases. Hope you enjoyed this post as much as I enjoyed writing it! If you have any question leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
 
 # Links
 
