@@ -1,4 +1,4 @@
-# Authorization in ASP.NET Mvc
+# Authorization in ASP.NET Core
 
 Last week I touched on how we could authenticate users using Resource Owner Password flow with identity server. Authentication is the act of taking the information provided and verifying the "identity" of the user, ensuring that Alice (our beloved example user) is who she "claims" to be.
 In the program itself, we take her credentials and verify it and create and identity stating that the user is Alice and has claims A, B and C.
@@ -19,12 +19,82 @@ This post will be composed by 4 parts:
 In order to test our authorization we would need a test example.
 The quickest way is to have a jwt middleware which automatically authenticate and create an endpoint directly giving a valid token with claims. We start by creating a web api project and add the jwt authorization library:
 
-... Name
+```
+Microsoft.AspNetCore.Authentication.JwtBearer
+```
 
 Then we add an endpoint for the token
-...
+
+```
+using System.IdentityModel.Tokens.Jwt;
+
+[Route("api/[controller]")]
+public class TokenController : Controller
+{
+    [HttpGet]
+    public IActionResult Get()
+    {
+        var claims = new Claim[]
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, "alice"),
+        };
+
+        var jwt = new JwtSecurityToken(claims: claims);
+        var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+
+        return Json(encodedJwt);
+    }
+}
+```
+
+Next we protect the api with the Jwt bearer authentication, done from the `Startup.cs`:
+
+```
+public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+{
+    loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+    loggerFactory.AddDebug();
+
+    var tokenValidationParameters = new TokenValidationParameters
+    {
+        // Disable all token integrity validations
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = false,
+        ValidateIssuerSigningKey = false,
+        ValidateActor = false,
+        RequireSignedTokens = false
+    };
+
+    // Remove all automatic mapping for inbound claims
+    // Otherwise "sub" becomes "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+    JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+    app.UseJwtBearerAuthentication(new JwtBearerOptions
+    {
+        AutomaticAuthenticate = true,
+        TokenValidationParameters = tokenValidationParameters
+    });
+
+    app.UseMvc();
+}
+``` 
+
+We disable all check on the token to trust every token given for our testing as we only are going to try out authorization.
+
+`AutomaticAuthenticate` is used to indicate that we want the middleware to straight take the bearer token and deserialize it into a user principal and set it to the `User` property in the `HttpContext` for it to be available in the controller. 
 
 Next we simply test by adding the Authorize attribute. You can also check the user on the HttpContext, it should be set to Alice.
+
+```
+[HttpGet]
+[Authorize]
+public string Get()
+{
+    var subject = HttpContext.User.Claims.Single(claim => claim.Type == JwtRegisteredClaimNames.Sub);
+    return $"{subject.Value} is authorized!";
+}
+```
 
 ## 2. Role-based authorization
 
@@ -99,5 +169,5 @@ We saw the different type of authorizations available in ASP.NET core mvc and th
 # Links
 
 - Example source code - []()
-- ASP.NET Core Mvc authorization documentation - [https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction)
-- ASP.NET Core Mvc repository - [https://github.com/aspnet/Mvc](https://github.com/aspnet/Mvc)
+- ASP.NET Core authorization documentation - [https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction)
+- ASP.NET Core repository - [https://github.com/aspnet/Mvc](https://github.com/aspnet/Mvc)
