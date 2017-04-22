@@ -242,12 +242,48 @@ A typical scenario would be if we need to retrieve a value and check properties 
 
 For example, Alice wants to modify a financial report. She might only be able to modify it if she authored it. Therefore we would need to retrieve the report and check if Alice is the author of it.
 
+```
+[HttpPut("report/{id}")]
+public async Task<IActionResult> PutReport(string id)
+{
+    // Get the resource from somewhere
+    var report = new Report { Author = "alice", Content = "" }; 
+    
+    if (await _authorizationService.AuthorizeAsync(HttpContext.User, report, new AuthorRequirement()))
+    {
+        return Ok();
+    }
+    else
+    {
+        return Unauthorized();
+    }
+}
+```
+
 We could do that with a if-else within the controller but Mvc provides an `authorizationService` which can be injected in the controller.
 This allows us to authorize the request and give in the resource.
 
 Similarly as policies we create a requirement and we create a handler to handle the requirement. The difference this time is that we implement the authorization handler with the resource type.
 
-...
+```
+public class AuthorRequirement : IAuthorizationRequirement { }
+
+public class AuthorRequirementHandler : AuthorizationHandler<AuthorRequirement, Report>
+{
+    protected override Task HandleRequirementAsync(
+        AuthorizationHandlerContext context,
+        AuthorRequirement requirement,
+        Report resource)
+    {
+        if (context.User.Identity.Name == resource.Author)
+        {
+            context.Succeed(requirement);
+        }
+
+        return Task.CompletedTask;
+    }
+}
+```
 
 You might be thinking why would we use a if-else on the authorization service when we can use a if-else to directly check the property. The reason is that we can have multiple handlers checking for the same requirement again similar to policies where we want to implement an OR logic where one of the handler can pass the requirement. Another reason is that the logic of the authorization would be in a single place, in the handlers, for the requirements which avoid having the check logic spread in multiple controller endpoints.
 
