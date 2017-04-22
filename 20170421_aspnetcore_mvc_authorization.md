@@ -63,7 +63,9 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerF
         ValidateLifetime = false,
         ValidateIssuerSigningKey = false,
         ValidateActor = false,
-        RequireSignedTokens = false
+        RequireSignedTokens = false,
+        NameClaimType = JwtRegisteredClaimNames.Sub,
+        RoleClaimType = "roles"
     };
 
     // Remove all automatic mapping for inbound claims
@@ -100,11 +102,31 @@ public string Get()
 
 Mvc also provides an easy way to add role authorization by passing the role name in the attribute itself.
 
-... Example
+```
+[HttpGet("report")]
+[Authorize(Roles = "user")]
+public string GetReport()
+{
+    return $"{HttpContext.User.Identity.Name} is authorized!";
+}
+```
 
-Our endpoint will not be accessible for Alice. We need to give her the claim.
+Our endpoint will not be accessible for Alice. We need to give her the claim. Multiple roles can be given by setting the claim multiple time.
 
-...
+```
+var claims = new Claim[]
+{
+    new Claim(JwtRegisteredClaimNames.Sub, "alice"),
+    new Claim("roles", "admin"),
+    new Claim("roles", "user")
+};
+```
+
+Lastly, since we removed the inbound claim type map `JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();`, ASP.NET is looking for the wrong role claim name. We need to make sure we have specified which claim is used to deserialize the roles in the `TokenValidationParameters` option in `Startup.cs`:
+
+```
+RoleClaimType = "roles"
+```
 
 ## 3. Claim-based authorization
 
