@@ -131,42 +131,109 @@ RoleClaimType = "roles"
 ## 3. Claim-based authorization
 
 A claim is a property of Alice which defines her, who she is in regards to our system.
-The most obvious on is that she claims to be Alice. This translates to a claim "sub:alice" for subject.
+The most obvious one is that she claims to be Alice. This translates to a claim "sub:alice" for subject.
 If she claims to be an admin she will have a claim "roles:admin".
 
-Now we might have more business specific claims like she is part of the finance department therefore she would have the claim "departments:finance".
+We can have claims more oriented toward our business logic, for example if we have a set of reports in our application, we could only let user access reports if they have the `accesses` claim with a value of `report`.
 
-The jwt token itself is a set of claims.
+In order to achieve this example, we need to configure a policy requiring the claims `roles:user` and `accesses:report`.
 
-With claims, what we can do is only allow access to a user with claim A or A and B etc... For example we only allow users with the claim Employee and Finance department to access the endpoint.
-In order to do so, we need to configure a policy requiring the claims Employee Finance department.
+```
+[Authorize(Policy = "hasReportAccess")]
+```
 
-...
+In order to do so we define a policy:
 
-Now we should be able to access the endpoint only if Alice has the claim employee and finance department.
+```
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddAuthorization(opt =>
+    {
+        opt.AddPolicy("hasReportAccess", 
+            policy => policy
+                .RequireClaim("accesses", "report")
+                .RequireRole("user"));
+    });
+
+    services.AddMvc();
+}
+```
+
+Now we should be able to access the endpoint if Alice has the right claims:
+
+```
+var claims = new Claim[]
+{
+    new Claim(JwtRegisteredClaimNames.Sub, "alice"),
+    new Claim("roles", "admin"),
+    new Claim("roles", "user"),
+    new Claim("accesses", "report")
+};
+```
 
 ## 4. Policy-based authorization
 
 In claim-based we saw a glimpse of policy. A policy is a requirement (or mutiple requirements) to fulfill.
-Role and claim based authorization are constructed on top of policies. What a policy allows us to do is to add multiple requirements for example we could require a role of "roles:user" and some other claims like "country:singapore" and name the claim "SingaporeUsersOnly".
+Role and claim based authorization are constructed on top of policies. What a policy allows us to do is to add multiple requirements for example we could require a role of "roles:user" and some other claims like "accesses:report" and name the policy "hasReportAccess".
 
-In order to do so we define a policy:
-
-...
 
 Policies also allow more advanced scenario by defining `requirements` and `handlers`.
 We can define a policy requirement like so:
 
 ```
+public class OfficeHoursRequirement : IAuthorizationRequirement
+{
+    public OfficeHoursRequirement(int start, int end)
+    {
+        Start = start;
+        End = end;
+    }
+
+    public int Start { get; private set; }
+    public int End { get; private set; }
+}
 ```
 
 And add a `handler` to be invoked when an endpoint protected by the policy is accessed:
 
 ```
+public class OfficeHoursRequirementHandler : AuthorizationHandler<OfficeHoursRequirement>
+{
+    protected override Task HandleRequirementAsync(
+        AuthorizationHandlerContext context, 
+        OfficeHoursRequirement requirement)
+    {
+        var now = DateTime.Now;
+
+        if (now.Hour >= requirement.Start && now.Hour <= requirement.End)
+        {
+            context.Succeed(requirement);
+        }
+
+        return Task.CompletedTask;
+    }
+}
 ```
 
 If the requirement is successful, the authorization will succeed. In contrary if we simply return without succeeding, the next requirement in the pipeline will be invoke. This behavior allows OR logic with requirements.
 If for any reason you wish to fail the authorization, it is also possible to call fail and prevent other requirements to succeed.
+
+Then we can register the policy in `Startup.cs`:
+
+```
+services.AddAuthorization(opt =>
+{
+    opt.AddPolicy("hasReportAccess", 
+        policy => policy
+            .RequireClaim("accesses", "report")
+            .RequireRole("user"));
+
+    opt.AddPolicy("accessibleOnlyDuringOfficeHours", 
+        policy => policy.AddRequirements(new OfficeHoursRequirement(8, 17))
+            .RequireClaim("accesses", "report")
+            .RequireRole("user"));
+});
+```
 
 ## 5. Resource-based authorization
 
@@ -190,6 +257,6 @@ We saw the different type of authorizations available in ASP.NET core mvc and th
 
 # Links
 
-- Example source code - []()
+- Example source code - [https://github.com/Kimserey/authorization-samples](https://github.com/Kimserey/authorization-samples)
 - ASP.NET Core authorization documentation - [https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction)
 - ASP.NET Core repository - [https://github.com/aspnet/Mvc](https://github.com/aspnet/Mvc)
