@@ -67,6 +67,25 @@ public string Get2()
 ## 3. Use `ServiceFilterAttribute`
 
 ```
+public interface IHelloService
+{
+    string SayHello();
+}
+
+public class HelloService : IHelloService
+{
+    public string SayHello()
+    {
+        return "Hello from injected service";
+    }
+}
+```
+
+```
+services.AddTransient<IHelloService, HelloService>();
+```
+
+```
 public class Hello3Filter : IActionFilter
 {
     private IHelloService _service;
@@ -84,6 +103,14 @@ public class Hello3Filter : IActionFilter
     public void OnActionExecuting(ActionExecutingContext context)
     { }
 }
+```
+
+```
+services.AddScoped<Hello3Filter>();
+```
+
+```
+System.InvalidOperationException: No service for type 'AuthorizationSamples.FiltersTest.Hello3Filter' has been registered.
 ```
 
 ```        
@@ -129,6 +156,13 @@ public string Get4()
 ```
 
 ## 5. Implement `IFilterFactor`
+
+```
+public class HelloOptions
+{
+    public string Text { get; set; }
+}
+```
 
 ```
 public class Hello5FilterAttribute: Attribute, IFilterFactory
