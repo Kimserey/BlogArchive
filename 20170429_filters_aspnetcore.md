@@ -260,6 +260,8 @@ public string Get5()
 }
 ```
 
+The full source code is available on my github [https://github.com/Kimserey/authorization-samples/blob/master/AuthorizationSamples.FiltersTest/Filters.cs](https://github.com/Kimserey/authorization-samples/blob/master/AuthorizationSamples.FiltersTest/Filters.cs).
+
 # Conclusion
 
 Today we saw how we could use the different filter implementations available in ASP NET Core to provide cross cutting concern. Depending on your needs, you can choose between implementing a simple filter or using service filter or type filter. Lastly if your requirements are more advanced, implementing yourself the filter factory will allow you to have full control. Hope you enjoyed this post as much as I enjoyed writing it! If you have any question leave it here or hit me on Twitter [@Kimserey_Lam](). See you next time!
