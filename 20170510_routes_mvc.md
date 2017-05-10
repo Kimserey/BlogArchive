@@ -1,12 +1,14 @@
-Understand attribute route in ASP NET Core
+# Attribute route in ASP NET Core
 
-Attribute route is an easy way to define URL routes for Web API projects. Even though it looks straight forward, there can be instance where it gets confusing because of all the options provided. Today we will see the meaning of the different options and how they affect the constructed route. This post will be composed by 3 parts:
+Attribute route in ASP NET Core is an easy way to define URL routes for Web API projects. Even though it looks straight forward, there can be instance where it gets confusing because of all the options provided. Today we will see the meaning of the different options and how they affect the constructed route. This post will be composed by 3 parts:
 
+```
 1. Route attribute
 2. Route values and token replacement
 3. "/" or ""
+```
 
-1. Route attribute
+## 1. Route attribute
 
 The route attribute can be set on the controller or on an action or both.
 It is used to overwride the convention route.
@@ -17,15 +19,30 @@ _With attribute routing the controller name and action names play no role in whi
 
 So for example specifying the following:
 
+```
 Route("values")
+public class ValuesController: Controler 
+{
+    Route("list")
+    public IActionResult List()
+    {
+        return Ok();
+    }
+}
+```
 
-Route("list")
-
-Will match GET /values/list
+Will match `[GET] /values/list`.
 
 Attribute route can also be used with Http verb attributes.
+```
+[HttpGet("list")]
+[HttpPost("list")]
+[HttpPut("list")]
+[HttpPatch("list")]
+[HttpDelete("list")]
+```
 
-2. Route values and token replacement
+## 2. Route values and token replacement
 
 The route can accept values specified in braces {...} and can also accept token replacement in brackets [...].
 
@@ -37,7 +54,7 @@ Brackets are token replacement like controller or action.
 [controller] will be replaced by the controller name.
 [action] will be replaced by the action name.
 
-3. "/" or ""
+## 3. "/" or ""
 
 Depending on where the attribute is placed, the construction of the route is different.
 
