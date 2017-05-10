@@ -94,15 +94,11 @@ public class ValuesController: Controller
 
 ## 3. "/" or ""
 
-Depending on where the attribute is placed, the construction of the route is different.
+Controller route and action route added together by default. Prepending the action route with "/" (slash) prevents the addition of the controller route.
 
-Placing the route on the controller will prepend all route on actions apart from the routes starting with "/".
+I have compiled a list of examples together with the corresponding routes [here](https://gist.github.com/Kimserey/44dba9557d48099bae9d05f37cd6c10f).
 
-I have compiled a list of examples together with the corresponding route:
-
-By default the routes are added together. Prepending the route with a slash prevents the adding of the route which results in the disgard of the controller route.
-
-Here is the code in ASP NET MVC doing the override:
+To understand better what happens, here is the code in ASP NET MVC doing the override:
 
 ```
 private static string CombineCore(string left, string right)
@@ -136,8 +132,17 @@ private static bool IsEmptyLeftSegment(string template)
         template.Equals("~/", StringComparison.Ordinal) ||
         template.Equals("/", StringComparison.Ordinal);
 }
+
+public static bool IsOverridePattern(string template)
+{
+    return template != null &&
+        (template.StartsWith("~/", StringComparison.Ordinal) ||
+        template.StartsWith("/", StringComparison.Ordinal));
+}
 ```
+
+The `left` part being the controller route and the `right` part being the action route, when the `right` part is an `override pattern`, in other words, contains is preprended by `/` or `~/`, then only the `right` part,  the action route, is used.
 
 # Conclusion
 
-Today we saw how to define routes used attribute route. It is very easy to setup explicit routes. I hope this post removed some of the confusion which can occur with the slash or empty string route. If you have any question, leave it here or hit me on Twitter [@Kimserey_Lam](). See you next time!
+Today we saw how to define routes used attribute route. It is very easy to setup explicit routes. I hope this post removed some of the confusion which can occur with the slash or empty string route. If you have any question, leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
