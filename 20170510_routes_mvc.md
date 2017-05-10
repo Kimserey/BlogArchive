@@ -42,6 +42,19 @@ Attribute route can also be used with Http verb attributes.
 [HttpDelete("list")]
 ```
 
+And specifying a route plus a http verb attributes have the same outcome:
+
+```
+[HttpGet("list")]
+```
+
+Is similar to:
+
+```
+[HttpGet]
+[Route("list")]
+```
+
 ## 2. Route values and token replacement
 
 Routes can accept values specified in braces `{...}` and token replacement in brackets `[...]`.
