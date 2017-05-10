@@ -1,6 +1,6 @@
 # Attribute route in ASP NET Core
 
-Attribute route in ASP NET Core is an easy way to define URL routes for Web API projects. Even though it looks straight forward, there can be instance where it gets confusing because of all the options provided. Today we will see the meaning of the different options and how they affect the constructed route. This post will be composed by 3 parts:
+Attribute route in ASP NET Core is an easy way to define URL routes for Web API projects. There can be instance where it gets confusing because of all the options provided. Today we will see the meaning of the different options and how they affect the constructed route. This post will be composed by 3 parts:
 
 ```
 1. Route attribute
@@ -10,12 +10,9 @@ Attribute route in ASP NET Core is an easy way to define URL routes for Web API 
 
 ## 1. Route attribute
 
-The route attribute can be set on the controller or on an action or both.
-It is used to overwride the convention route.
+There are two ways to define routing, convention and attribute. When both are set, attribute route takes priority over convention route. In this post we will only discuss attribute route.
 
-Take not of the following statement:
-_With attribute routing the controller name and action names play no role in which action is selected._
-[https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/routing](https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/routing)
+Attribute route is specified using the `[Route(...)]` attribute. The route attribute can be set on controllers and actions. Setting the attribute on a controller will prefix all action route by the controller route.
 
 So for example specifying the following:
 
@@ -33,7 +30,7 @@ public class ValuesController: Controler
 
 Will match `[GET] /values/list`.
 
-Attribute route can also be used with Http verb attributes.
+Attribute route can also be used with http verb attributes:
 ```
 [HttpGet("list")]
 [HttpPost("list")]
