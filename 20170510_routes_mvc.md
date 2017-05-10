@@ -44,15 +44,40 @@ Attribute route can also be used with Http verb attributes.
 
 ## 2. Route values and token replacement
 
-The route can accept values specified in braces {...} and can also accept token replacement in brackets [...].
+Routes can accept values specified in braces `{...}` and token replacement in brackets `[...]`.
 
 Braces are used to extract values in the controller parameter. A common scenario is parsing an identifier.
 
-HttpGet("values/{id}")
+```
+[HttpGet("values/{id}")]
+public IActionResult GetValue(string id)
+```
 
-Brackets are token replacement like controller or action.
+Brackets are used for token replacement:
 [controller] will be replaced by the controller name.
 [action] will be replaced by the action name.
+
+```
+[Route(v1/[controller])]
+public class ValuesController: Controller { }
+```
+
+`v1/[controller]` will replace `[controller]` by `Values`. It takes the name of the controller and remove the `Controller` postfix. If there isn't a `Controller` postfix it uses the full name.
+
+`[action]` will be replaced by the action name.
+
+```
+public class ValuesController: Controller
+{
+    [Route([controller]/[action]/{id})]
+    public IActionResult GetValue(string id)
+    {
+        return Ok();
+    }
+}
+```
+
+`[controller]/[action]/{id}` will be changed to `values/getvalue/{id}` where `id` can be any string.
 
 ## 3. "/" or ""
 
