@@ -24,9 +24,15 @@ Once we have installed `EF Core SQLite`, we will create our first `DbContext`:
 public class PersonDbContext : DbContext
 { 
     public DbSet<Person> Persons { get; set; }
+    
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlite("Data source=persons.db");
+    }
 }
 ```
 
+Also installing `EF Core SQLite` gives us access to the `.UseSqlite` extension on the DbContext builder which we can register by overriding the OnConfiguring function of the DbContext.
 With our first `Person` model:
 
 ```
@@ -38,36 +44,30 @@ public class Person
 }
 ```
 
-Also installing `EF Core SQLite` gives us access to the `.UseSqlite` extension on the DbContext builder which we can register in the services configuration:
-
-```
-public void ConfigureServices(IServiceCollection services)
-{
-    services.AddDbContext<PersonDbContext>(builder =>
-        builder.UseSqlite("Data source=persons.db")
-    );
-
-    ... other configurations
-}
-```
-
 Now that we have configured our first DbContext, what we need to do is to create the database.
-While we could do that manually, `EF` provides a set of tools which can be used to create migrations.
+
+## 2. Create migrations
+
+While we could create our database manually, `EF` provides a set of tools which can be used to create migrations via the `dotnet` CLI.
 Migrations are a big advantage of `EF`, in the event of us having to change the database after data have already been added, we will be in measure to use the migration to automate the process.
 
 This way of developing ~ creating the object model, generating migrations out of the object model, creating database by running migrations ~ is also known as `Code first design`.
 
-In order to generate the migration code
+In order to generate the migration code we will start by configuring the `EF` tools. An example of command is:
 
-https://visualstudiogallery.msdn.microsoft.com/0e313dfd-be80-4afb-b5e9-6e74d369f7a1/view/Reviews/
+```
+dotnet ef migrations add InitialMigration
+```
 
-EF core uses .NET Core CLI for migration:
+If we run that we will get the error `No executable found matching the command dotnet-ef`. What we need is to configure the project to use `dotnet ef`.
+Start by adding the `EF` design library:
 
-[https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dotnet](https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dotnet)
+```
+Microsoft.EntityFrameworkCore.Design
+```
 
-1. Install EF tools
-
-Start by adding the `DotNetCliToolReference` in the `.csproj`:
+The library is needed to use the tools otherwise it will throw an exception `System.IO.FileNotFoundException: Could not load file or assembly 'Microsoft.EntityFrameworkCore.Design, Culture=neutral, PublicKeyToken=null'`.
+Then add the `EF` tools as a `DotNetCliToolReference` in the `.csproj` as followed to make the `dotnet ef` command line available:
 
 ```
 <ItemGroup>
@@ -75,11 +75,15 @@ Start by adding the `DotNetCliToolReference` in the `.csproj`:
 </ItemGroup>
 ```
 
-Then add the package reference `Microsoft.EntityFrameworkCore.Design` which is needed for the EF design tools.
+Now re-run `dotnet ef migrations add InitialMigration` and we should have the newly created `/Migrations` folder with a migration file. Then run `dotnet ef database update`, this will create the database.
 
-`DotNetCliToolReference` is used to extend the functionality of the `dotnet cli`.
 
-You can add the package either with nuget or by running `dotnet add package Microsoft.EntityFrameworkCore.Design`.
+
+https://visualstudiogallery.msdn.microsoft.com/0e313dfd-be80-4afb-b5e9-6e74d369f7a1/view/Reviews/
+
+EF core uses .NET Core CLI for migration:
+
+[https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dotnet](https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dotnet)
 
 
 2. Add migration
