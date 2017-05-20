@@ -89,6 +89,8 @@ dotnet ef database update
 ```
 
 The database should be located in the output directory usually under the `/bin` directory.
+If we need to modify our database, we can add a new migration and rerun the database update.
+
 In order to visualize it easily, we can install the VS extension to open SQLite databases:
 
 [SQLite / SQL Server Compact Toolbox](https://visualstudiogallery.msdn.microsoft.com/0e313dfd-be80-4afb-b5e9-6e74d369f7a1/view/Reviews/)
@@ -96,3 +98,37 @@ In order to visualize it easily, we can install the VS extension to open SQLite 
 EF core CLI command list can be found in the official EF core doc [https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dotnet](https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dotnet).
 
 ## 3. Use in ASP NET Core 
+
+Now that we have our database and can access it via the DbContext, we can use it in our controller to save and retrieve data.
+
+In order to have the DbContext injected via dependency injection, we need to register the DbContext in the services configuration in the `Startup.cs`:
+
+```
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddDbContext<PersonDbContext>();
+    services.AddMvc();
+}
+```
+
+This then allow us to inject the DbContext on the controller endpoint and use it:
+
+```
+[HttpPost("/test")]
+public IActionResult Test([FromServices]PersonDbContext context, [FromForm]string name)
+{
+    context.Add(new Person {
+        Name = name
+    });
+    context.SaveChanges();
+    return Ok();
+}
+```
+
+After accessing the endpoint, we should be able to see the value added to our database using the SQLite compact toolbox:
+
+![ef_sqlite](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170526_entity_framework_sqlite/ef_sqlite.PNG)
+
+# Conclusion
+
+Today we saw how to install and configure Entity Framework with a SQLite storage. Entity Framework makes it very handy to work in OOP and making the solution storage agnostic. SQLite as a backup storage makes the solution very portable and easy to maintain thanks to its small size and its embedded nature. Hope you enjoyed this post as much as I enjoyed writing it! If you have any question, leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
