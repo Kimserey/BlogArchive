@@ -75,27 +75,24 @@ Then add the `EF` tools as a `DotNetCliToolReference` in the `.csproj` as follow
 </ItemGroup>
 ```
 
-Now re-run `dotnet ef migrations add InitialMigration` and we should have the newly created `/Migrations` folder with a migration file. Then run `dotnet ef database update`, this will create the database.
-
-
-
-https://visualstudiogallery.msdn.microsoft.com/0e313dfd-be80-4afb-b5e9-6e74d369f7a1/view/Reviews/
-
-EF core uses .NET Core CLI for migration:
-
-[https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dotnet](https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dotnet)
-
-
-2. Add migration
+Now re-run the following command to create the first migration:
 
 ```
-dotnet ef add migrations [Name]
-```
+dotnet ef migrations add InitialMigration
+``` 
 
-Then run
+And we should have the newly created `/Migrations` folder with a migration file. 
+Then run the update command to create the database:
 
 ```
 dotnet ef database update
 ```
 
-3. 
+The database should be located in the output directory usually under the `/bin` directory.
+In order to visualize it easily, we can install the VS extension to open SQLite databases:
+
+[SQLite / SQL Server Compact Toolbox](https://visualstudiogallery.msdn.microsoft.com/0e313dfd-be80-4afb-b5e9-6e74d369f7a1/view/Reviews/)
+
+EF core CLI command list can be found in the official EF core doc [https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dotnet](https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dotnet).
+
+## 3. Use in ASP NET Core 
