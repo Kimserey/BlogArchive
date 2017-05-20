@@ -5,17 +5,59 @@ There is a number of provider which are implementation of the storage like SQL s
 SQLite is a embedded database. The whole database is contained within a single `.db` file which makes it highly portable, so portable that it is the default database installed in mobile OS like `iOS` and `Android`. It is extremely easy to use and to maintain. It also offer a powerful implementation of `SQL`. Today we will see how we can make use of `Entity Framework` with `SQLite provider` in a `ASP.NET Core` application.
 
 ```
- 1. Install EF tools
- 2. Add a new DbContext
- 3. Create migrations
- 4. Use in ASP NET Core
+ 1. Install EF and create a new DbContext
+ 2. Create migrations
+ 3. Use in ASP NET Core
 ``` 
 
+## 1. Install EF and create a new DbContext
 
+Start by installing the packages:
 
-Install-Package Microsoft.EntityFrameworkCore
-
+```
 Install-Package Microsoft.EntityFrameworkCore.SQLite
+```
+
+Once we have installed `EF Core SQLite`, we will create our first `DbContext`:
+
+```
+public class PersonDbContext : DbContext
+{ 
+    public DbSet<Person> Persons { get; set; }
+}
+```
+
+With our first `Person` model:
+
+```
+public class Person
+{
+    public int Id { get; set; }
+    [Required]
+    public string Name { get; set; }
+}
+```
+
+Also installing `EF Core SQLite` gives us access to the `.UseSqlite` extension on the DbContext builder which we can register in the services configuration:
+
+```
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddDbContext<PersonDbContext>(builder =>
+        builder.UseSqlite("Data source=persons.db")
+    );
+
+    ... other configurations
+}
+```
+
+Now that we have configured our first DbContext, what we need to do is to create the database.
+While we could do that manually, `EF` provides a set of tools which can be used to create migrations.
+Migrations are a big advantage of `EF`, in the event of us having to change the database after data have already been added, we will be in measure to use the migration to automate the process.
+
+This way of developing ~ creating the object model, generating migrations out of the object model, creating database by running migrations ~ is also known as `Code first design`.
+
+In order to generate the migration code
 
 https://visualstudiogallery.msdn.microsoft.com/0e313dfd-be80-4afb-b5e9-6e74d369f7a1/view/Reviews/
 
