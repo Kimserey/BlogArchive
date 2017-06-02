@@ -58,7 +58,7 @@ In the component then we can use this decorator like so:
 
 ```
 export class SquareComponent {
-    @Input() square: number;
+    @Input() side: number;
 }
 ```
 
@@ -99,6 +99,15 @@ Using input and output we can then handle inputs passed down to the component an
 It is also possible to use a template variable to get a reference to the component from the parent template and call the component actions.
 
 ```
+<app-square #square></app-square>
+{{square.side}}
 ```
 
-This is limited for usage within the template. If we need to have access to the child within the component, we can use ViewChild.
+With `#square` we can get access to component from the parent template and use it.
+This is limited for usage within the template. 
+If we need to have access to the child within the component, we can use `ViewChild`.
+
+```
+```
+
+## 4. NgOnChange
