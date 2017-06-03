@@ -94,6 +94,8 @@ export class SquareParentComponent {
 
 Using input and output we can then handle inputs passed down to the component and outputs coming out of the component from the `EventEmitter`.
 
+`Input` and `Output` are set during the init life cycle of a component. Therefore If you wish to perform any action using the inputs or outputs values, you will need to implement `OnInit` and perform your action within the `ngOnInit(){}` life cycle hook.
+
 ## 3. Access child component
 
 It is also possible to use a template variable to get a reference to the component from the parent template and call the component actions.
@@ -105,9 +107,37 @@ It is also possible to use a template variable to get a reference to the compone
 
 With `#square` we can get access to component from the parent template and use it.
 This is limited for usage within the template. 
-If we need to have access to the child within the component, we can use `ViewChild`.
+If we need to have access to the child within the component, we can use `ViewChild` which allows us to access a component. It will only return the first element matching the component selector.
 
 ```
+@ViewChild(SquareComponent) square: SquareComponent;
+```
+
+In order to use it, we need to implement the `AfterViewInit` interface single function `ngAfterViewInit()` which the callback which occurs directly after the `ViewChild` is set.
+But if we need to modify members displayed in the template, we will need to set a timer for it otherwise we will face some `Value changed after check` error.
+
+```
+@Component({
+  selector: 'app-root',
+  template: `
+    <app-square [show]="true" [side]="4" #square></app-square>
+    <app-square [show]="true" [side]="5"></app-square>
+    <strong>{{surface}}</strong>
+  `
+})
+export class AppComponent implements AfterViewInit  {
+  @ViewChild(SquareComponent) square: SquareComponent;
+
+  surface = 0;
+
+  ngAfterViewInit() {
+    setTimeout(() => this.surface = this.square.surface, 0);
+  }
+}
 ```
 
 ## 4. NgOnChange
+
+In order to communicate changes from parent to child, it is also possible to implement the `OnChange` life cycle hook.
+
+_Do not confuse the on-change or (change) DOM event binding with the `OnChange` life cycle hook._
