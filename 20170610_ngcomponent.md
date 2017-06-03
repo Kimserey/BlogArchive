@@ -141,3 +141,68 @@ export class AppComponent implements AfterViewInit  {
 In order to communicate changes from parent to child, it is also possible to implement the `OnChange` life cycle hook.
 
 _Do not confuse the on-change or (change) DOM event binding with the `OnChange` life cycle hook._
+
+When one of the input changes, the `ngOnChanges(changes: SimpleChanges){}` callback will be called.
+
+`SimpleChanges` is a dictionary defined by angular:
+
+```
+export interface SimpleChanges {
+    [propName: string]: SimpleChange;
+}
+```
+
+Where a `SimpleChange` contains information about the change itself:
+
+```
+export declare class SimpleChange {
+    previousValue: any;
+    currentValue: any;
+    firstChange: boolean;
+    /**
+     * Check whether the new value is the first value assigned.
+     */
+    isFirstChange(): boolean;
+}
+```
+
+Using that we can detect changes in our SquareComponent example to recompute the surface:
+
+```
+export class SquareComponent implements OnChanges {
+  @Input() side: number;
+
+  ngOnChanges(changes: SimpleChanges) {
+    // the value already changed
+    this.computeSurface();
+
+    console.log(`side previous value: ${changes['side'].previousValue}, side current value: ${changes['side'].currentValue}`);
+  }
+  
+  private computeSurface() {
+    this.surface = this.service.computeSurface(this.side);
+  }
+```
+
+This method is useful when many input can be changed and we wish to handle all changes in one single place and we need to know the details of the change, previous value and current value.
+
+__Setter and getter__
+
+Otherwise a simpler approach in handling changes would be to define a setter on the input:
+
+```
+@Input() set side(s: number) {
+    this._side = s;   
+}
+get side() {
+    return this._side;
+}
+```
+
+We can then intercept the change in the setter to perform an action.
+
+# Conclusion
+
+Today we saw how we could define angular components. We saw how we could communicate between parent and child. Components need to be kept as simple as possible and must be broken down into small pieces. 
+Communication must be taken very seriously into consideration as it can easily degenerate into an unmaintainable solution where changes become extremely hard to track.
+I hope you enjoyed this post as much as I enjoyed writing it, if you have any question, leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam), see you next time!
