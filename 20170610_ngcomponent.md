@@ -9,7 +9,7 @@ We will see what argument it takes and how we can use it.
 2. Input/Ouput
 3. Access child component
 4. NgOnChange
-````
+```
 
 ## 1. Parameters
 
