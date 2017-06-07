@@ -11,39 +11,121 @@ Since its evolution from 1.x.x, Angular have supports for reactive form with a f
 
 ```
 1. Create a reactice form with form builder
-2. Handle the value changes
+2. Setting values and submitting
 3. Validation
 ```
 
 ## 1. Create a reactice form with form builder
 
-The main elements of the form are the 
-FormGroup
-FormControl
-FormArray
+All the directives are provided by the `ReactiveFormsModule` module which can be imported from `@angular/forms`.
+In order to create a form, we have access to three main elements; `FormGroup`, `FormControl` and `FormArray`.
+- `FormGroup` is used to group single elements or a set of elements together.
+- `FormControl` is used to represent a single element control.
+- `FormArray` is used to represent a dynamic set of `FormGroup`, therefore a dynamic set of fields or set of set of field.
 
-Those three elements can be used to create a form. In order to reduce the repetition of creation, we can use the form builder.
+To build and manipulate a form, Angular provides us a `FormBuilder` which is provided by the `ReactiveFormsModule` and can be injected in constructor.
 
-Name:
-Categories
+```
+constructor(private fb: FormBuilder) {
+    const ingredients = [ 'carrot', 'beans' ];
+    const ingredientFromGroups = ingredients.map(i => fb.group({ ingredientName: i }));
 
-This.registration : FormGroup
+    this.recipeForm = fb.group({
+        profile: fb.group({
+            name: ['', Validators.required ],
+            timeEstimation: ''
+        }),
+        ingredients: fb.array(ingredientFromGroups)
+    });
+}
+```
 
-Registration = fb.group({
-Name: [''' Validators.required],
-Categories: fb.array([])
+Then in our template we can have the following:
 
-[formGroup]=registration
-FormControlName=name
+```
+<form [formGroup]="recipeForm">
+  <div formGroupName="profile">
+    <label>Recipe name</label>
+    <input type="text" formControlName="name" />
+    <label>Estimation</label>
+    <input type="text" formControlName="timeEstimation" />
+  </div>
 
-The form group directive is assigned to the registration which contains the overall form. The formControlName is used to target a particular form control.
+  <div formArrayName="ingredients">
+    <div *ngFor="let ingredient of ingredients.controls; let i=index" [formGroupName]="i">
+      <label>#{{ i }} Ingredient</label>
+      <input type="text" formControlName="ingredientName" />
+    </div>
+  </div>
+</form>
+```
 
-Thanks to this approach, we have a cleaner template with an explicit definition of the form field and validation.
+[fromGroup] directive is meant to be used for the top level form.
+[formControl] is meant to be used for a top level single control element.
+`formControlName` is used to indicate a `dot notation`.
+`xxxName` is used to provide `dot notation`. There is also `formGroupName` and `formArrayName`.
 
-The form array in our example is a list of categories.
-The benefit of form array is that it is dynamic. We can add or remove from it and it's display will be changed accordingly.
-We started with an empty array, if we do have items, we can set them using setControl('categories', [ fb.formControl, ']).
-If at any point we need to add more, we can do so with push(fb.formcontrol).
+```
+[formGroup]="myForm"
+ - formControlName="something"
+``` 
+
+This will find `myForm.something`. Similarly if we have nested form groups, `formGroupName` can be used.
+
+```
+[formGroup]="myForm"
+ - formGroupName="something"
+   - formControlName="else"
+``` 
+
+This will find the value for the control `myForm.something.else`.
+
+The `FormArray` is slightly different. It is a array of group or control. It is there to cater for dynamic fields or group of fields. For example here we have a dynamic list of ingredients.
+
+```
+const ingredients = [ 'carrot', 'beans' ];
+const ingredientFromGroups = ingredients.map(i => fb.group({ ingredientName: i }));
+```
+
+We are creating a list of groups with a single `ingredientName` control. To display that we need to provide the `dot notation` by using the `formArrayName="ingredients"`. Then under it we can use `*ngFor` and iterate over the `ingredients.controls`.
+
+Also the __index is needed to target a control in the form array__, so we need to use `let i=index"` and `[formGroupName]="i"`. `[formGroupName]` is special case where `[]` is needed as it is contained within the array. Under it, we use `formGroupName` and `formControlName`.
+
+```
+  <div formArrayName="ingredients">
+    <div *ngFor="let ingredient of ingredients.controls; let i=index" [formGroupName]="i">
+      <label>#{{ i + 1 }} Ingredient</label>
+      <input type="text" formControlName="ingredientName" />
+    </div>
+  </div>
+```
+
+The benefit of the form array is its dynamic nature. We can push and remove control from the form. For example we could add a `add` button and `remove` button:
+
+```
+  <button (click)="addIngredient()">Add another ingredient</button>
+  <div formArrayName="ingredients">
+    <div *ngFor="let ingredient of ingredients.controls; let i=index" [formGroupName]="i">
+      <label>#{{ i + 1 }} Ingredient</label>
+      <input type="text" formControlName="ingredientName" />
+      <button (click)="removeIngredientAtIndex(i)">-</button>
+    </div>
+  </div>
+```
+
+And add `addIngredient` and `removeIngredientAtIndex`.
+
+```
+  addIngredient() {
+    this.ingredients.push(this.fb.group({
+        ingredientName: 'new ingredient'
+    }));
+  }
+
+  removeIngredientAtIndex(index) {
+    this.ingredients.removeAt(index);
+  }
+```
 
 FormArray is an array of form, whether form group or form control. Do not confuse the array with an array of values.
 
@@ -56,6 +138,26 @@ FormArray setControl given control name
 
 Formarray.push
 
-## 2. Handle the value changes
+## 2. Setting values and submitting
+
+When our input changes it is also possible to change the content of any control using setValue or patchValue.
+
+We can also observe any changes of values in the form using ... .valueChanges().forEach(). Any control can be observed. This makes it easy to show a live preview of the info or a show a status as we can subscribe to any changes of the overall form.
+
+For example here we display a nicer preview of the recipe live.
+
+To submit the form, the same method as template form is used with a ngSubmit and a button with type submit.
+We can have access to all the values with the property form.value.
+But we need to make sure to make a deep copy of the objects and arrays within the form in order to not expose a reference to our form model.
 
 ## 3. Validation
+
+We saw how to construct an entire form without validation. Of course the server side will validate but it is always nice to prevent the user from even submitting the form and guide as much as possible to ease the process of filling up the form.
+
+There are two types of validator, synchronous and asynchronous. They can be applied to a single control or to a group of control as both implement the abstraction AbstractControl.
+
+For a single control, the Validators gives access to some already built in validation like required, minlength, maxlength, email, regex pattern, etc...
+
+If we need to apply a validation on multiple control, we need to create a custom validator and apply it to a group.
+To do that we can implement the function definition ValidationFn.
+Return null if the control is valid, it will pass to the next validator.
