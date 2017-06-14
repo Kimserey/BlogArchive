@@ -180,8 +180,58 @@ Those default validators can be applied any form control. Multiple validators ca
 name: [ '', [ Validators.required, Validators.pattern('carrot') ] ],
 ```
 
-Here it is required and the string must be `carrot`.
+The array (or tuple) notation takes the `value` as first element, a `validator` as second argument and an `async validator` as last.
+
+The source code which create the control can be found on `forms.js`:
+
+```
+else if (Array.isArray(controlConfig)) {
+    const /** @type {?} */ value = controlConfig[0];
+    const /** @type {?} */ validator = controlConfig.length > 1 ? controlConfig[1] : null;
+    const /** @type {?} */ asyncValidator = controlConfig.length > 2 ? controlConfig[2] : null;
+    return this.control(value, validator, asyncValidator);
+}
+```
+
+Our validator previously defined ensures that the value isn't `null` and that the string must be `carrot`.
+
+__We return `null` if the control is valid, it will pass to the next validator.__
 
 If we need to apply a validation on multiple control, we need to create a custom validator and apply it to a group.
 To do that we can implement the function definition `ValidationFn`.
-Return null if the control is valid, it will pass to the next validator.
+
+```
+function nameValidator(nameKey: string, descriptionKey: string): ValidatorFn {
+  return (control: AbstractControl): {[key: string]: any} => {
+    const fg = control as FormGroup;
+    const name = fg.get('name').value;
+    const description = fg.get('description').value;
+    return name.length > description.length ? { 'descriptionTooSmall': {name, description}} : null;
+  };
+}
+```
+
+For example here we verify that the description is longer than the name. This check spans accross two controls. In order to use it, we need to pass it to the formbuilder `group` function as followed:
+
+```
+fb.group({
+  name: '',
+  description: '',
+  timeEstimation: ''
+}, {
+  validator: nameValidator('name', 'description')
+})
+``` 
+
+The `validator` is passed as `extra`, the code can be found in the `forms.js` where we see that the extra can accept a validator or an async validator:
+
+```
+group(controlsConfig, extra = null) {
+    const /** @type {?} */ controls = this._reduceControls(controlsConfig);
+    const /** @type {?} */ validator = extra != null ? extra['validator'] : null;
+    const /** @type {?} */ asyncValidator = extra != null ? extra['asyncValidator'] : null;
+    return new FormGroup(controls, validator, asyncValidator);
+}
+```
+
+This sort of validation can be also useful in a password/confirm-password check.
