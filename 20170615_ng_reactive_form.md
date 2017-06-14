@@ -235,3 +235,7 @@ group(controlsConfig, extra = null) {
 ```
 
 This sort of validation can be also useful in a password/confirm-password check.
+
+# Conclusion
+
+Reactive forms together with form builder is very powerful. The explicitness of its definition makes it attractive as all configuration, values setting, validations is done in a single place, in the component code. It is also very easy to handle tree structure with sections by defining groups within groups. Creating validators on control is also very easy now as we saw, it is a single interface to implement. Lastely the handling of array of controls is simplified by the form array which handles all the UI for us. Hope you enjoyed this post, if you have any question leave it here or hit me on Twitter [@Kimserey_lam](https://twitter.com/Kimserey_Lam). See you next time!
