@@ -127,37 +127,61 @@ And add `addIngredient` and `removeIngredientAtIndex`.
   }
 ```
 
-FormArray is an array of form, whether form group or form control. Do not confuse the array with an array of values.
-
-Nested FormGroup
-Access nested with dot notation
-
-Setvalue patchvalue
-
-FormArray setControl given control name
-
-Formarray.push
-
 ## 2. Setting values and submitting
 
-When our input changes it is also possible to change the content of any control using setValue or patchValue.
+When our input changes it is also possible to change the content of any control using `setValue` or `patchValue`. `setValue` is used to set all values for the control while `patchValue` is used to set a part of the values. `setValue` will crash if not all the values are provided.
 
-We can also observe any changes of values in the form using ... .valueChanges().forEach(). Any control can be observed. This makes it easy to show a live preview of the info or a show a status as we can subscribe to any changes of the overall form.
+Those functions are available from the `AbstractControl`.
 
-For example here we display a nicer preview of the recipe live.
+```
+this.recipeForm.get('profile').setValue({ lastName: '', firstName: '' });
+this.recipeForm.get('profile').patchValue({ firstName: '' });
+```
 
-To submit the form, the same method as template form is used with a ngSubmit and a button with type submit.
-We can have access to all the values with the property form.value.
-But we need to make sure to make a deep copy of the objects and arrays within the form in order to not expose a reference to our form model.
+We can also observe any changes of values in the form using `valueChanges` and a side effect function like `forEach` or `subscribe`.
+
+```
+this.recipeForm
+  .valueChanges
+  .forEach(c => console.log(JSON.stringify(c)));
+```
+
+Any abstract control can be observed. This makes it easy to show a live preview of the info or a show a status as we can subscribe to any changes of the overall form.
+
+To submit the form, the same method as template form is used with a `ngSubmit` and a button with type submit. We can have access to all the values with the property `form.value` and also access the form status with `form.valid/pristine/dirty/etc..`.
+
+```
+<form [formGroup]="recipeForm" (ngSubmit)="save()">
+  <!-- some other controls -->
+  <button type="submit" [disabled]="!recipeForm.valid">Submit</button>
+</form>
+```
+
+Be sure to make a deep copy of the objects and arrays within the form in order to not expose a reference of our form model to other components.
 
 ## 3. Validation
 
 We saw how to construct an entire form without validation. Of course the server side will validate but it is always nice to prevent the user from even submitting the form and guide as much as possible to ease the process of filling up the form.
 
-There are two types of validator, synchronous and asynchronous. They can be applied to a single control or to a group of control as both implement the abstraction AbstractControl.
+Validators can be applied to a single control or to a group of control as both implement the abstraction `AbstractControl`.
 
-For a single control, the Validators gives access to some already built in validation like required, minlength, maxlength, email, regex pattern, etc...
+For a single control, the `Validators` gives access to some already built in validations:
+
+- required
+- email
+- min length
+- max length
+- pattern
+- and a no-op validator `nullValidator`
+
+Those default validators can be applied any form control. Multiple validators can be given as array.
+
+```
+name: [ '', [ Validators.required, Validators.pattern('carrot') ] ],
+```
+
+Here it is required and the string must be `carrot`.
 
 If we need to apply a validation on multiple control, we need to create a custom validator and apply it to a group.
-To do that we can implement the function definition ValidationFn.
+To do that we can implement the function definition `ValidationFn`.
 Return null if the control is valid, it will pass to the next validator.
