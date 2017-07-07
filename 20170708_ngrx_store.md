@@ -56,5 +56,48 @@ The actions define what will change the state. In our sample, we will have the f
  - Load groups fail
 
 Since loading the values will access an external resource, like an API, we need to cater for failure.
-
 Now in code, an action is defined by a type and a payload where for example Select user will be the type expressed by a string constant and the user Id will be the payload.
+
+```
+import { Action } from '@ngrx/store';
+import { Profile } from '../models/user';
+
+export const SELECT = '[User] Select';
+export const LOAD_PROFILE = '[User] Load Profile';
+export const LOAD_PROFILE_SUCCESS = '[User] Load Profile Success';
+export const LOAD_PROFILE_FAIL = '[User] Load Profile Fail';
+
+export class SelectAction implements Action {
+  readonly type = SELECT;
+
+  constructor(public payload: string) { }
+}
+
+export class LoadProfileAction implements Action {
+  readonly type = LOAD_PROFILE;
+
+  constructor(public payload: string) { }
+}
+
+export class LoadProfileSuccessAction implements Action {
+  readonly type = LOAD_PROFILE_SUCCESS;
+
+  constructor(public payload: Profile) { }
+}
+
+export class LoadProfileFailAction implements Action {
+  readonly type = LOAD_PROFILE_FAIL;
+
+  constructor(public payload?: any) { }
+}
+
+export type Actions
+  = SelectAction
+  | LoadProfileAction
+  | LoadProfileSuccessAction
+  | LoadProfileFailAction;
+```
+
+And similarly for the groups.
+
+#
