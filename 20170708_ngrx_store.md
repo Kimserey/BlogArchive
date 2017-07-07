@@ -370,3 +370,40 @@ Lastely we can import the effects by adding it in the app module with `EffectsMo
 })
 export class AppModule { }
 ```
+
+## 5. Selectors and views
+
+Now that we have all in place we can build the UI which will use the state by selecting a piece of it.
+A function selecting a piece of the state is called a selector. We can make use of redux helper `reselect` which includes some clever caching, memoization and others.
+
+```
+npm install reselect --save
+```
+
+For example we would need to select the profile from the state. We start by adding the selector in the user reducer file where the state can be found.
+
+```
+export const getProfile = (state: State) => state.profile;
+```
+
+Next we add a global selector in the barel file containing the concatenated state
+
+```
+export const getUserState = (state: State) => state.user;
+export const getUserProfile = createSelector(getUserState, fromUser.getProfile);
+```
+
+`createSelector` is provided by `reselect`.
+
+Doing so allow us to select a specific piece by creating dedicated selectors.
+
+
+The selectors now return us an observable which we can subscribe to anywhere needed.
+
+First let's create a container which will be a component having access to the store.
+
+In this container we will provide a dropdown list of users.
+
+When selected, we will broadcast a select action and the state changes to all parties interested.
+
+Notice that we call components injecting the store "containers". Others are simple components with intput output.
