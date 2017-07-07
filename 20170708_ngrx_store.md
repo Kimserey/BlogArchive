@@ -139,7 +139,7 @@ export interface State {
   failure: boolean;
 }
 
-export const initialState: State {
+export const initialState: State = {
   profile: null,
   failure: false
 };
@@ -183,7 +183,7 @@ export interface State {
   failure: boolean;
 }
 
-export const initialState: State {
+export const initialState: State = {
   entites: [],
   failure: false
 };
@@ -396,14 +396,91 @@ export const getUserProfile = createSelector(getUserState, fromUser.getProfile);
 `createSelector` is provided by `reselect`.
 
 Doing so allow us to select a specific piece by creating dedicated selectors.
+We can then move on to create the views starting from the containers.
+We start by creating a `select-user` container which will provide a dropdown list of users.
 
+```
+@Component({
+  selector: 'app-select-user',
+  template: `
+    <select (change)="select($event.target.value)">
+      <option value=""> -- Select a user -- </option>
+      <option value="joe">Joe</option>
+      <option value="kim">Kim</option>
+      <option value="mike">Mike</option>
+    </select>
+  `,
+  styles: []
+})
+export class SelectUserContainer {
+  constructor(private store: Store<fromRoot.State>) { }
 
-The selectors now return us an observable which we can subscribe to anywhere needed.
+  select(userId: string) {
+    this.store.dispatch(new user.SelectAction(userId));
+  }
+}
+```
 
-First let's create a container which will be a component having access to the store.
+When selected, we will broadcast a select action and the state changes to all parties interested with `store.dispatch`.
 
-In this container we will provide a dropdown list of users.
+```
+this.store.dispatch(new user.SelectAction(userId));
+```
 
-When selected, we will broadcast a select action and the state changes to all parties interested.
+This in turn will trigger the effects which will update the state in the reducers.
+We can then create a `profile` container, which will subscribe to the profile state.
 
-Notice that we call components injecting the store "containers". Others are simple components with intput output.
+```
+@Component({
+  selector: 'app-user-profile',
+  template: `
+    <app-profile [profile]="profile$ | async"></app-profile>
+  `,
+  styles: []
+})
+export class ProfileContainer implements OnInit {
+  profile$: Observable<Profile>;
+
+  constructor(private store: Store<fromRoot.State>) { }
+
+  ngOnInit() {
+    this.profile$ = this.store.select(fromRoot.getUserProfile);
+  }
+}
+```
+
+In order to get a piece of the state, we use `store.select` passing it the selector we created previously.
+`.select()` is provided by the store, it is important to no confuse it with the Observable.select as this `store.select` will not trigger if the new value is equal to the previous one, meaning on update of the state, this piece will __only__ trigger if the profile is changed.
+This container handles the asynchronous portion of the state and extract the result to pass it to a simple component `app-profile` defined as followed:
+
+```
+@Component({
+  selector: 'app-profile',
+  template: `
+    <div>
+      <strong>Profile</strong>
+    </div>
+    <dl>
+      <dt>Name</dt>
+      <dd>{{ profile?.name }}</dd>
+      <dt>Address</dt>
+      <dd>{{ profile?.address }}</dd>
+    </dl>
+  `,
+  styles: []
+})
+export class ProfileComponent {
+  @Input() profile: Profile;
+}
+```
+
+This component takes the profile as input which allows to remove the `Observable` and `async` handling.
+And that's it, when the user is selected, the changes will be propagated to the profile. 
+We do the same for the groups which I'll leave to you!
+
+The full source code is available on my GitHub [https://github.com/Kimserey/ngrx-store-sample](https://github.com/Kimserey/ngrx-store-sample)
+
+# Conclusion
+
+Today we saw how we could manage global state and side effects thanks to Ngrx Store. Managing state has been a problem for some time now, with application growing in complexity on the browser, Ngrx Store definitly helps by bringing a predictable way of updating and sharing global state.
+Combined with the effects and the devtools and the power of Observables, it is the right tool to handle state in big projects. Hope you like this post, if you have any question leave it here or hit me on Twitter [Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
