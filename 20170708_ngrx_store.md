@@ -209,3 +209,67 @@ export function reducer(state = initialState, action: group.Actions) {
   }
 }
 ```
+
+### 3.3 Combined reducer
+
+There is only one reducer in the app, therefore for it to work, we will combine the two reducers into a single reducer.
+We do so by creating a combined reducer in a barel `index.ts`.
+
+```
+import { compose } from '@ngrx/core/compose';
+import { combineReducers } from '@ngrx/store';
+import * as fromUser from './user';
+import * as fromGroup from './group';
+
+export interface State {
+  user: fromUser.State;
+  group: fromGroup.State;
+}
+
+const reducers = {
+  user: fromUser.reducer,
+  group: fromGroup.reducer,
+};
+
+const combinedReducer = combineReducers(reducers);
+
+export function reducer(state: any, action: any) {
+  return combinedReducer(state, action);
+}
+```
+
+`combineReducers` is a function provided by ngrx store which will direct the correct actions to the correct reducers allowing us to have a clearer code separation.
+
+Lastely we can now register our reducer with the import of the store on our app module using `StoreModule.provideStore(reducer)`.
+
+```
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+
+import { AppComponent } from './app.component';
+import { reducer } from './reducers';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpModule,
+    StoreModule.provideStore(reducer),
+    StoreDevtoolsModule.instrumentOnlyWithExtension(),
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+
+Notice that I also imported the devtools `StoreDevtoolsModule.instrumentOnlyWithExtension()`.
+
+## 4. Effects
