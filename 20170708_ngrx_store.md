@@ -48,7 +48,6 @@ Also from Chrome extensions, we can install the [__Redux DevTools__](https://chr
 The actions define what will change the state. In our sample, we will have the following actions:
 
  - Select user
- - Load profile
  - Load profile success
  - Load profile fail
  - Load groups
@@ -63,18 +62,11 @@ import { Action } from '@ngrx/store';
 import { Profile } from '../models/user';
 
 export const SELECT = '[User] Select';
-export const LOAD_PROFILE = '[User] Load Profile';
 export const LOAD_PROFILE_SUCCESS = '[User] Load Profile Success';
 export const LOAD_PROFILE_FAIL = '[User] Load Profile Fail';
 
 export class SelectAction implements Action {
   readonly type = SELECT;
-
-  constructor(public payload: string) { }
-}
-
-export class LoadProfileAction implements Action {
-  readonly type = LOAD_PROFILE;
 
   constructor(public payload: string) { }
 }
@@ -98,6 +90,122 @@ export type Actions
   | LoadProfileFailAction;
 ```
 
-And similarly for the groups.
+And similarly for the groups:
 
-#
+```
+import { Action } from '@ngrx/store';
+import { Group } from '../models/group';
+
+export const LOAD = '[Group] Load';
+export const LOAD_SUCCESS = '[Group] Load Success';
+export const LOAD_FAIL = '[Group] Load Fail';
+
+export class LoadAction implements Action {
+  readonly type = LOAD;
+
+  constructor(public payload: string) { }
+}
+
+export class LoadSuccessAction implements Action {
+  readonly type = LOAD_SUCCESS;
+
+  constructor(public payload: Group) { }
+}
+
+export class LoadFailAction implements Action {
+  readonly type = LOAD_FAIL;
+
+  constructor(public payload?: any) { }
+}
+
+export type Actions
+  = LoadAction
+  | LoadSuccessAction
+  | LoadFailAction;
+```
+
+## 3. Reducers
+
+The reducers are the handlers of the action. They take in the actions and apply the values of the action payload to the state.
+Our state will be composed by two parts, the user state and the group state which will both hold the users and the groups.
+
+### 3.1 Users
+
+For the users, we will hold all user profile.
+
+```
+export interface State {
+  profile: Profile;
+  failure: boolean;
+}
+
+export const initialState: State {
+  profile: null,
+  failure: false
+};
+```
+
+The reducer will take the actions we defined earlier:
+
+```
+export function reducer(state = initialState, action: user.Actions) {
+  switch (action.type) {
+    case user.LOAD_PROFILE_SUCCESS: {
+      return Object.assign({}, state, {
+        profile: action.payload,
+        failure: false
+      });
+    }
+
+    case user.LOAD_PROFILE_FAIL: {
+      return Object.assign({}, state, {
+        failure: true
+      });
+    }
+
+    default: {
+      return state;
+    }
+  }
+}
+```
+
+A reducer takes a state in and an action which it will reduce onto the state.
+Here when we receive a load profile success, we set it to the state and reset the failure boolean.
+
+### 3.2 Groups
+
+Similarly for the group reducer, we hold a list of all the groups the user is part of and a boolean indicating failure.
+
+```
+export interface State {
+  entites: Group[];
+  failure: boolean;
+}
+
+export const initialState: State {
+  entites: [],
+  failure: false
+};
+
+export function reducer(state = initialState, action: group.Actions) {
+  switch (action.type) {
+    case group.LOAD_SUCCESS: {
+      return Object.assign({}, state, {
+        entites: action.payload,
+        failure: false
+      });
+    }
+
+    case group.LOAD_FAIL: {
+      return Object.assign({}, state, {
+        failure: true
+      });
+    }
+
+    default: {
+      return state;
+    }
+  }
+}
+```
