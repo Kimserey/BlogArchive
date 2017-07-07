@@ -21,6 +21,8 @@ Today I will go through the library and build a sample application demonstrating
 
 Our example will be a profile selection. We will have a list of users and on selection, the display will show 2 sections, the user profile and the groups of that user.
 
+![example](https://raw.githubusercontent.com/Kimserey/ngrx-store-sample/master/example.PNG)
+
 Adding a global state using ngrx store is composed by multiple pieces. Some actions defining how the state will be changed, some reducers which are stateless functions "reducing each values of the action payload onto the state", some effects which are used for side effects, like api calls, based on actions produce more actions and lastly the selectors for the views.
 
 Let's start first by adding the necessary libraries:
