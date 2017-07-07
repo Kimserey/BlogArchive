@@ -273,3 +273,100 @@ export class AppModule { }
 Notice that I also imported the devtools `StoreDevtoolsModule.instrumentOnlyWithExtension()`.
 
 ## 4. Effects
+
+Effects handle actions and allows to publish other actions.
+They can be used to make calls to APIs and to dispatch appropriate actions based on the result. Essentially we would be calling services within the effects.
+Let's start by creating an example service:
+
+```
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
+import { Profile } from './models/user';
+import { Group } from './models/group';
+
+@Injectable()
+export class AppService {
+  getUserProfile(userId: string): Observable<Profile> {
+    return of(<Profile>{
+      userId: userId,
+      address: '29 avenue street',
+      groups: [ 'group1', 'group2' ],
+      name: 'Kim'
+    });
+  }
+
+  getGroup(userId: string): Observable<Group[]> {
+    return of([<Group>{
+      groupId: 'group1',
+      name: 'Football avenue street'
+    }, <Group>{
+      groupId: 'group2',
+      name: 'Basketball gottam'
+    }]);
+  }
+}
+```
+
+Our first effect will be to load user profile when selected:
+
+```
+@Injectable()
+export class UserEffects {
+  @Effect()
+  load$: Observable<Action> = this.actions$
+    .ofType(user.SELECT)
+    .map(toPayload)
+    .switchMap(payload => {
+      return this.service.getUserProfile(payload)
+        .map(profile => new user.LoadProfileSuccessAction(profile))
+        .catch(() => of(new user.LoadProfileFailAction()));
+    });
+
+  constructor(private actions$: Actions, private service: AppService) { }
+}
+```
+
+The effect class will receive a list of all actions which we filter with `.ofType`. We then use `toPayload` given by ngrx effects to select the payload of the action and we `.switchMap` to the Observable given by `getUserProfile()`. This in turn produces either a success or failure action.
+The flow `.ofType.map.switchMap` is very common and can be found in a lot of other samples.
+
+Similarly for the group effects:
+
+```
+@Injectable()
+export class GroupEffects {
+  @Effect()
+  load$: Observable<Action> = this.actions$
+    .ofType(group.LOAD)
+    .map(toPayload)
+    .switchMap(payload => {
+      return this.service.getUserProfile(payload)
+        .map(groups => new group.LoadSuccessAction(groups))
+        .catch(() => of(new group.LoadFailAction()));
+    });
+
+  constructor(private actions$: Actions, private service: AppService) { }
+}
+```
+
+Lastely we can import the effects by adding it in the app module with `EffectsModule.run(XXXEffects)`.
+
+```
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpModule,
+    StoreModule.provideStore(reducer),
+    StoreDevtoolsModule.instrumentOnlyWithExtension(),
+    EffectsModule.run(GroupEffects),
+    EffectsModule.run(UserEffects)
+  ],
+  providers: [AppService],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
