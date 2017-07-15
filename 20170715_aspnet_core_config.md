@@ -1,4 +1,4 @@
-# How to use the configuration API in ASP NET Core
+# Configurations in ASP NET Core
 
 Every application needs configurations, whether it is a port, or a path or simply string values. In order to deal with configurations, ASP NET Core ships with a Configuration framework. The framework provides a builder allowing to read configurations from different json files, supports environment convention and also defining custom configuration providers in order to read from other sources like MSSQL or other services.
 Today we will see how we can use the configuration framework.
