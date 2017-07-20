@@ -3,12 +3,13 @@
 When developing multiple Web api under multiple Visual Studio solutions, it can become very tedious to maintain, run and debug. Opening multiple instances of Visual Studio is very costly in term of memory and running all at once also clutter the screen which rapidly becomes irritating. With the advent of dotnet CLI tools, it has been clear that the next step would be to move out of the common "right click/build, F5" of Visual Studio and toward "dotnet run" on a command prompt.
 Last month I was looking for a Windows alternative of the bash terminal which can be found on Mac and I found __ConEmu__.
 
-__ConEmu__ provides access to all typical shells via an enhanced UI. It is actively maintained and open sourced [https://github.com/Maximus5/ConEmu](https://github.com/Maximus5/ConEmu). Today we will see how we can use __ConEmu__ to ease our development process by leveraging only 2 of its features; the tasks and environment setup. This post will be composed by 3 parts:
+__ConEmu__ provides access to all typical shells via an enhanced UI. It is actively maintained and open sourced [https://github.com/Maximus5/ConEmu](https://github.com/Maximus5/ConEmu). Today we will see how we can use __ConEmu__ to ease our development process by leveraging only 2 of its features; the tasks and environment setup. This post will be composed by 4 parts:
 
 ```
 1. dotnet CLI
 2. Setup environment
 3. Setup tasks
+4. Apply to multiple services
 ```
 
 ## 1. dotnet CLI
@@ -85,4 +86,21 @@ The naming convention allows grouping of tasks for easy access through the UI, `
 
 A Hotkey can also be set with a combination of keys for even quicker access.
 
+## 4. Apply to multiple services
+
+All we have to do left is to create a script and task per service that we have.
+We can then create a global task which we can call `Services::Multi` containing all services:
+
+```
+cmd.exe /k MyApi.cmd
+
+cmd.exe /k MyApi2.cmd
+
+cmd.exe /k MyApi3.cmd
+```
+
+This task when ran will open 3 tabs and launch one script per tab which will result in a __start of all services in one click__.
+
 # Conclusion
+
+Today we saw how to configure ConEmu to environment and task to allow us to start multiple services running ASP NET Core Web API in a single click. The ease of use and the support of multi tab make ConEmu a major contributor to reducing the amount of time wasted in development cycle. Hope you enjoyed reading this post as much as I enjoyed writing it. If you have any questions leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
