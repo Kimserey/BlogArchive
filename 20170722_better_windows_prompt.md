@@ -99,7 +99,7 @@ cmd.exe /k MyApi2.cmd
 cmd.exe /k MyApi3.cmd
 ```
 
-![multi]()
+![multi](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170722/multi.PNG)
 
 This task when ran will open 3 tabs and launch one script per tab which will result in a __start of all services in one click__.
 
