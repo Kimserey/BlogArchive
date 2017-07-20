@@ -36,7 +36,7 @@ At each prompt start, ConEmu allows us to run a set of commands. Those can be us
 
 In order to access the environment setup, go to `settings > startup > environment` and the following window will show:
 
-![environment]()
+![environment](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170722/environment.PNG)
 
 From here we can see that we can set variables, here I've set `ASPNETCORE_ENVIRONMENT` and also the base path of all my projects.
 And I also set an alias `ns` which helps me to quickly serve an Angular app with Angular CLI `ng serve`.
@@ -72,16 +72,16 @@ This is already pretty neat as it cut down a lot of time for quick launching but
 
 We start by opening the task settings `settings > startup > tasks`.
 
-![tasks]()
+![tasks](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170722/task.PNG)
 
 From there we can set a task which will start a new prompt and run the `MyApi.cmd` script.
 We do that by clicking on `+`, naming the service `Services::My Api` and adding the command `cmd.exe /k MyApi.cmd`.
 
-![configure_task]()
+![configure_task](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170722/create_task.PNG)
 
 The naming convention allows grouping of tasks for easy access through the UI, `[Group]::[Task]` which is accessable from `+` on the main UI page.
 
-![access_task]()
+![access_task](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170722/access_task.png)
 
 A Hotkey can also be set with a combination of keys for even quicker access.
 
