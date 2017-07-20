@@ -14,7 +14,7 @@ __ConEmu__ provides access to all typical shells via an enhanced UI. It is activ
 ## 1. dotnet CLI
 
 We can start first by getting ConEmu from the repository releases [https://github.com/Maximus5/ConEmu/releases](https://github.com/Maximus5/ConEmu/releases).
-From now we can start straight using ConEmu as a command prompt. Multi tabs are supported by default, `win + w` shortkey opens a new tab.
+From now we can start straight using ConEmu as a command prompt. Multi tabs are supported by default, `win + w` hotkey opens a new tab.
 
 Next what we can do is navigate to our Web API project and run `dotnet run`.
 This will run the Web API service in the command prompt, here in ConEmu.
@@ -43,10 +43,46 @@ And I also set an alias `ns` which helps me to quickly serve an Angular app with
 
 `ConEmuBaseDir` is the base directory containing ConEmu files. As we can see, `%ConEmuBaseDir%\Scripts` is also set to the path. This `\Scripts` folder is provided by ConEmu and already set to path for us to place scripts in which are then easy access for our tasks.
 
-Now that we know how to setup environment variables, we will no longer need to manually set the `ASPNETCORE_ENVIRONMENT` variable as it will be done automatically. What we still need to do is to navigate to our service and `dotnet run` the project manually. Lucky us, again, ConEmu has a way to automate that by creating a script and setting it to a shortkey with ConEmu tasks which we will see next.
+Now that we know how to setup environment variables, we will no longer need to manually set the `ASPNETCORE_ENVIRONMENT` variable as it will be done automatically. What we still need to do is to navigate to our service and `dotnet run` the project manually. Lucky us, again, ConEmu has a way to automate that by creating a script and setting it to a hotkey with ConEmu tasks which we will see next.
 
 ## 3. Setup tasks
 
+Let's say we have a Web API located in `C:\Projects\MyApi\MyApi.Web`. In order to run it, we could do the following:
 
+```
+title My Api
+cd C:\Projects\MyApi\MyApi.Web
+dotnet run
+```
+
+This would set the title of the prompt to `My Api` then navigate to the service folder and run the project under development environment (since it was set in 2.).
+What we can do now is put those 3 lines in `MyApi.cmd` file which we will place under ConEmu `\Scripts` folder.
+
+```
+\ConEmu\ConEmu\Scripts\MyApi.cmd
+```
+
+Since the `\Scripts` folder is added to `PATH` in each prompt, we should be able to launch it straight from anywhere.
+
+```
+> MyApi.cmd
+```
+
+This is already pretty neat as it cut down a lot of time for quick launching but we can go a step further by defining a task.
+
+We start by opening the task settings `settings > startup > tasks`.
+
+![tasks]()
+
+From there we can set a task which will start a new prompt and run the `MyApi.cmd` script.
+We do that by clicking on `+`, naming the service `Services::My Api` and adding the command `cmd.exe /k MyApi.cmd`.
+
+![configure_task]()
+
+The naming convention allows grouping of tasks for easy access through the UI, `[Group]::[Task]` which is accessable from `+` on the main UI page.
+
+![access_task]()
+
+A Hotkey can also be set with a combination of keys for even quicker access.
 
 # Conclusion
