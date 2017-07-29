@@ -164,6 +164,10 @@ After that only three possibilities remain:
 
 ### 2.1 If a file => add it as a node
 
+We start first by handling the first scenario, the path is just a file.
+If it is just a file, it means that where we reduced to is the correct folder where the file should be. 
+So we add it to the list of nodes.
+
 ```
   reducePath = (nodes: TreeNode[], path: string) => {
     const split = path.split('/');
@@ -179,11 +183,17 @@ After that only three possibilities remain:
       ];
     }
 
+    // will be removed
     return [];
   }
 ```
 
 ### 2.2 If a non existing folder => add the new folder as a node and recursively reduce the rest of the path
+
+If the first piece of the path is a folder, it means that we are still reducing the path.
+We handle the scenario where the folder does not exist by adding a new folder to the list of nodes.
+
+We know from here that the file will be a child of this newly created folder therefore we reduce the remaining path and set the result to the folder children.
 
 ```
 reducePath = (nodes: TreeNode[], path: string) => {
@@ -212,11 +222,15 @@ reducePath = (nodes: TreeNode[], path: string) => {
       ];
     }
 
+    // will be removed
     return [];
   }
 ```
 
 ### 2.3 If existing folder => recursively reduce 
+
+Lastly if the folder already exists, we know that the file will be under an existing folder already within the `nodes`.
+So we iterate over all `nodes` and when found, reduce the rest of the path together with the current children of the node.
 
 ```
 reducePath = (nodes: TreeNode[], path: string) => {
@@ -225,37 +239,41 @@ reducePath = (nodes: TreeNode[], path: string) => {
     // 2.1
     if (split.length === 1) {
         return [
-        ...nodes,
-        {
-            label: split[0],
-            icon: 'fa-file-o'
-        }
+            ...nodes,
+            {
+                label: split[0],
+                icon: 'fa-file-o'
+            }
         ];
     }
 
     // 2.2
     if (nodes.findIndex(n => n.label === split[0]) === -1) {
         return [
-        ...nodes,
-        {
-            label: split[0],
-            icon: 'fa-folder',
-            children: this.reducePath([], split.slice(1).join('/'))
-        }
+            ...nodes,
+            {
+                label: split[0],
+                icon: 'fa-folder',
+                children: this.reducePath([], split.slice(1).join('/'))
+            }
         ];
     }
 
     // 2.3
     return nodes.map(n => {
         if (n.label !== split[0]) {
-        return n;
+            return n;
         }
 
         return Object.assign({}, n, {
-        children: this.reducePath(n.children, split.slice(1).join('/'))
+            children: this.reducePath(n.children, split.slice(1).join('/'))
         });
     });
 }
 ```
 
+And that's it, this should construct the tree with folders, subfolders and files.
+
 ## 3. Other use cases
+
+The tree construct was actually only a demonstration of the utility of the reduce function.
