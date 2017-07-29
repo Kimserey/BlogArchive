@@ -11,7 +11,7 @@ This post will be composed by 3 parts:
 3. Other use cases 
 ```
 
-# 1. Install PrimeNg
+## 1. Install PrimeNg
 
 [PrimeNg](https://www.primefaces.org/primeng) can be added via npm `npm install primeng --save`.
 It also needs font awesome for icons which can be added via npm `npm install font-awesome --save`.
@@ -103,7 +103,7 @@ The result should be as followed:
 
 ![tree](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170729/tree.PNG)
 
-#  2. Mold data for Tree structure
+## 2. Mold data for Tree structure with reduce
 
 Tree structures are hard to construct. Especially for file paths, usually what we get is an array of path as followed:
 
@@ -129,7 +129,7 @@ We start fist by writing the skeleton:
 export class PrimeNgComponent implements OnInit {
   files: TreeNode[];
 
-  reduce(nodes: TreeNode[], path: string) {
+  reducePath = (nodes: TreeNode[], path: string) => {
     return [];
   }
 
@@ -142,10 +142,120 @@ export class PrimeNgComponent implements OnInit {
       'folderC/file1.txt'
     ];
 
-    this.files = f.reduce(this.reduce, []);
+    this.files = f.reduce(this.reducePath, []);
   }
 }
 ```
 
-`reduce` takes a function taking the previous state `TreeNode[]`, which is the result of the previous iteration on the previous path value, and the currenct value it is iterating on. The result of the function is the next state. The second argument of `reduce` is the initial value of the state.
+`reducePath` takes the previous state `TreeNode[]`, which is the result of the previous iteration on the previous path value, and the currenct value it is iterating on. The result of the function is the next state. The second argument of `reduce` is the initial value of the state.
 
+__Notice that reducePath is defined as a variable, this is needed in order to recursively call itself.__
+
+__The idea:__
+
+As a tree traversal algorithm, we will be:
+ - taking each path one by one,
+ - dissecting the path by '/'
+
+After that only three possibilities remain:
+ 1. if a file => add it as a node
+ 2. if a non existing folder => add the new folder as a node and recursively reduce the rest of the path
+ 3. if existing folder => recursively reduce 
+
+### 2.1 If a file => add it as a node
+
+```
+  reducePath = (nodes: TreeNode[], path: string) => {
+    const split = path.split('/');
+
+    // 2.1
+    if (split.length === 1) {
+      return [
+        ...nodes,
+        {
+          label: split[0],
+          icon: 'fa-file-o'
+        }
+      ];
+    }
+
+    return [];
+  }
+```
+
+### 2.2 If a non existing folder => add the new folder as a node and recursively reduce the rest of the path
+
+```
+reducePath = (nodes: TreeNode[], path: string) => {
+    const split = path.split('/');
+
+    // 2.1
+    if (split.length === 1) {
+      return [
+        ...nodes,
+        {
+          label: split[0],
+          icon: 'fa-file-o'
+        }
+      ];
+    }
+
+    // 2.2
+    if (nodes.findIndex(n => n.label === split[0]) === -1) {
+      return [
+        ...nodes,
+        {
+          label: split[0],
+          icon: 'fa-folder',
+          children: this.reducePath([], split.slice(1).join('/'))
+        }
+      ];
+    }
+
+    return [];
+  }
+```
+
+### 2.3 If existing folder => recursively reduce 
+
+```
+reducePath = (nodes: TreeNode[], path: string) => {
+    const split = path.split('/');
+
+    // 2.1
+    if (split.length === 1) {
+        return [
+        ...nodes,
+        {
+            label: split[0],
+            icon: 'fa-file-o'
+        }
+        ];
+    }
+
+    // 2.2
+    if (nodes.findIndex(n => n.label === split[0]) === -1) {
+        return [
+        ...nodes,
+        {
+            label: split[0],
+            icon: 'fa-folder',
+            children: this.reducePath([], split.slice(1).join('/'))
+        }
+        ];
+    }
+
+    // 2.3
+    return nodes.map(n => {
+        if (n.label !== split[0]) {
+        return n;
+        }
+
+        return Object.assign({}, n, {
+        children: this.reducePath(n.children, split.slice(1).join('/'))
+        });
+    });
+}
+```
+
+## 3. Other use cases
