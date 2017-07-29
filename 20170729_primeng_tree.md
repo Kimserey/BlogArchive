@@ -8,7 +8,7 @@ This post will be composed by 3 parts:
 ```
 1. Install PrimeNg
 2. Mold data for Tree structure with reduce
-3. Other use cases 
+3. Other use cases and benefits
 ```
 
 ## 1. Install PrimeNg
@@ -274,6 +274,13 @@ reducePath = (nodes: TreeNode[], path: string) => {
 
 And that's it, this should construct the tree with folders, subfolders and files.
 
-## 3. Other use cases
+## 3. Other use cases and benefits
 
-The tree construct was actually only a demonstration of the utility of the reduce function.
+The tree construct was actually only a demonstration of the utility of the reduce function. There are other instances where reducing is effective, for example for grouping/categorizing, it is very useful to know how to resonate around reducing arrays. 
+
+The biggest advantage is that the `reducePath` function is side-effect free, meaning it does not need anything from the outside world and could be made `static`. There are zero mutations in the function which help in debugging. Everything is coming in from the arguments and coming out by the `return`.
+
+# Conclusion
+
+Today we saw how to use PrimeNg with the `TreeModule`. PrimeNg is a very complete set of components for Angular. Without it, implementing `Tree` and `DataTree` can be very challenging. We also saw how to use `reduce` and recursion to build a tree structure out of a flat array following a more functional way. I do like `reduce` a lot as I find it extremely useful. Hope you enjoyed reading this post as much as I enjoyed writing it! If you have any question, leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time! 
+
