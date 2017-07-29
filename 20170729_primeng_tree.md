@@ -100,6 +100,6 @@ As mentioned previously, we use the `p-tree` selector `<p-tree [value]="files"><
 
 The result should be as followed:
 
-![tree]()
+![tree](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170729/tree.PNG)
 
 #  2. Mold data for Tree structure
