@@ -26,8 +26,96 @@ The goal of the post was to demonstrate how ngrx-store works. Therefore in `sele
 
 But this previous post left us with the following questions:
 
-1. Where do we load data?
-2. How can we ensure that de data is loaded in the page?
+1. How can we ensure that de data is loaded in the page?
+2. Where do we load data?
+
+In order to answer those questions, we will first start by modify the sample to require a pre-loading of users before the app can be used.
+
+We start by changing `select-user.ts`.
+
+```
+@Component({
+  selector: 'app-select-user',
+  template: `
+    <select (change)="select($event.target.value)">
+      <option value=""> -- Select a user -- </option>
+      <option *ngFor="let user of users$ | async">{{user}}</option>
+    </select>
+  `,
+  styles: []
+})
+export class SelectUserContainer implements OnInit {
+  users$: string[];
+}
+```
+
+We then add an action and together with a list of user in the state saved by the reducer. [https://github.com/Kimserey/ngrx-store-sample/commit/13d9eccdf8aef563f40840238c93a02ddb2b3d80](https://github.com/Kimserey/ngrx-store-sample/commit/13d9eccdf8aef563f40840238c93a02ddb2b3d80)
+
+```
+export const LOAD_ALL = '[User] Load All';
+export const LOAD_ALL_SUCCESS = '[User] Load All Success';
+export const LOAD_ALL_FAIL = '[User] Load All Fail';
+
+export class LoadAllAction implements Action {
+  readonly type = LOAD_ALL;
+
+  constructor(public payload?: any) { }
+}
+
+export class LoadAllSuccessAction implements Action {
+  readonly type = LOAD_ALL_SUCCESS;
+
+  constructor(public payload: string[]) { }
+}
+
+export class LoadAllFailAction implements Action {
+  readonly type = LOAD_ALL_FAIL;
+
+  constructor(public payload?: any) { }
+}
+```
+
+Then we continue by adding the effect to load a list of users. [https://github.com/Kimserey/ngrx-store-sample/commit/13e1e208850916d989a7d6271152c4ac55505655](https://github.com/Kimserey/ngrx-store-sample/commit/13e1e208850916d989a7d6271152c4ac55505655)
+
+```
+@Effect()
+loadAll$: Observable<Action> = this.actions$
+    .ofType(user.LOAD_ALL)
+    .switchMap(() => {
+        return this.service.getAll()
+        .map(users => new user.LoadAllAction(users))
+        .catch(() => of(new user.LoadAllFailAction()));
+    });
+```
+
+And we finish with the reducer with the selector. 
+[https://github.com/Kimserey/ngrx-store-sample/commit/e55f1ca7f5e7e9854a6e45fda63b88e61f96576e](https://github.com/Kimserey/ngrx-store-sample/commit/e55f1ca7f5e7e9854a6e45fda63b88e61f96576e)
+
+```
+export interface State {
+  users: string[];
+  profile: Profile;
+  failure: boolean;
+}
+
+export const initialState: State = {
+  users: [],
+  profile: null,
+  failure: false
+};
+
+export function reducer(state = initialState, action: user.Actions) {
+  switch (action.type) {
+    case user.LOAD_ALL_SUCCESS: {
+      return Object.assign({}, state, {
+        users: action.payload
+      });
+    }
+
+    ...
+  }
+}
+```
 
 ## 2. Guard
 
