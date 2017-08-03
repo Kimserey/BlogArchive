@@ -1,9 +1,15 @@
 # Easily ensure that data is loaded with Ngrx store and router guards in Angular
 
 Last month, I describe [a way to manage global state with ngrx/store](https://kimsereyblog.blogspot.sg/2017/07/managing-global-state-with-ngrx-store.html). With the store, we mamage the overal state of the Angular application in a single global object. Loading and retrieving data affects a single main state object. This simplication gives opportunities to other simplications. Like for example, if we loaded once a collection of items, we wouldn't need to reload it when a component is displayed as it is available in the state. But how can we ensure that and more importantly how can we keep the check logic in a maintainable state. Here enter the Angular router route guard which I also described few weeks ago in my post on [how we could create and manage routes with the Angular router](https://kimsereyblog.blogspot.sg/2017/06/how-to-use-angular-router.html).
-Today I will show how we can use both together to solve the issue of ensuring data is loaded before displaying a route.
+Today I will show how we can use both together to solve the issue of ensuring data is loaded before displaying a route. This post will be composed by 3 parts:
 
-## 1. Context
+```
+ 1. Extand the previous sample to load users
+ 2. Route guard
+ 3. How to use it
+```
+
+## 1. Extand the previous sample to load users
 
 Let start back from the previous sample we built in [the previous ngrx store post](https://kimsereyblog.blogspot.sg/2017/07/managing-global-state-with-ngrx-store.html).
 You can browse the project before the changes made to demonstrate this blog post 
@@ -166,7 +172,7 @@ Then we can add this guard as a provider.
 export class AppModule { }
 ```
 
-## 3. Usage
+## 3. How to use it
 
 Now that we have the guard, we can use it in the route definition to protect the component.
 
@@ -196,3 +202,6 @@ Utilizing a guard has multiple advantages:
  - The fourth and last advantage is that a guard was created to ensure that data is loaded before showing a page which fit exactly with our purpose. Therefore the code in the `canActivate` is very simple and easily understood.
  
 # Conclusion
+
+Today we continued to look at how we could improve our implementation with ngrx-store. We saw how and where we could preload data by using Angular guard. The scenario exposed in this post is rather simple as the loading could have been placed in the container. But when multiple containers need to have the same data loaded, the guard is the way to go as it is a reusable way to ensure data is preladed. 
+Hope you liked this post as much as I liked writing it. If you have any question, leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
