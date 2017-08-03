@@ -117,8 +117,82 @@ export function reducer(state = initialState, action: user.Actions) {
 }
 ```
 
-## 2. Guard
+## 2. Route guard
+
+A guard is a service implementing `CanActivate`. It will be registered on the route. `CanActivate` expects the implementation of a single function `canActivate` which returns a boolean or a promise of a boolean or an observable of boolean. In the case of observable on once the observable completes will the guard take the last item to decide whether the user can or not access the component.
+
+In our case what we want is to:
+ 1. Check if the users are loaded
+ 2. If no, dispatch `new user.LoadAllAction()`
+ 3. Wait till the users are loaded to allow showing the page
+
+This logic translate to the following guard:
+
+```
+@Injectable()
+export class UserLoadedGuard implements CanActivate {
+  constructor(private store: Store<fromRoot.State>) { }
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    
+    // 1
+    const isLoaded$ = this.store.select(fromRoot.getUsers)
+      .map(users => users.length > 0);
+
+    // 2
+    isLoaded$
+      .take(1)
+      .filter(loaded => !loaded)
+      .map(() => new user.LoadAllAction())
+      .subscribe(this.store);
+
+    // 3
+    return isLoaded$
+      .take(1);
+  }
+}
+```
+
+Then we can add this guard as a provider.
+
+```
+@NgModule({
+  ...
+  providers: [
+    UserLoadedGuard,
+    ...
+  ]
+})
+export class AppModule { }
+```
 
 ## 3. Usage
 
+Now that we have the guard, we can use it in the route definition to protect the component.
+
+```
+export const routes: Routes = [
+  {
+    path: '',
+    canActivate: [UserLoadedGuard],
+    component: MainContainer,
+    children: [{
+        path: ':userId',
+        component: UserContainer
+    }]
+  }
+];
+```
+
+Now everytime we navigate to the application, the guard will be excuted and the users will be loaded.
+
+__Why is it important?__
+
+Utilizing a guard has multiple advantages:
+
+ - The first one is that the code to ensure that the data is loaded is reusable. The guard can be placed in front of any route which needs to load all users. It will ensure that the users are loaded before someone navigate to the route via other path or via direct browser access.
+ - The second advantage is that we can now make the assumption that the users will be loaded before the entrance of the code in the component. Knowing that makes a big difference as we can write component code which doesn't need to care about preloading data hence the component code is simpler.
+ - The  third advantage is that it can be followed as a universal guideline to place preloading data code in guard. This will allow a superior maintenable code as it will be easy to find where the loading is even after few months of not touching the code.
+ - The fourth and last advantage is that a guard was created to ensure that data is loaded before showing a page which fit exactly with our purpose. Therefore the code in the `canActivate` is very simple and easily understood.
+ 
 # Conclusion
