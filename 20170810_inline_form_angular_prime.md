@@ -120,6 +120,8 @@ For the group `name`, we define two controls `firstname` and `lastname` and crea
 </form>
 ```
 
+Next we can build the component which backs the form HTML:
+
 ```
 export class ProfileNameComponent implements OnInit {
   @Input() defaultFirstname: string;
@@ -147,6 +149,15 @@ export class ProfileNameComponent implements OnInit {
 }
 ```
 
+We initialize the form in `ngOnInit` with the default inputs.
+We also define two function, `submit` and `cancel` which are used in the respective buttons.
+We now have a working form component to change the `firstname` and `lastname` of the user. What is left to do is to __display the form when in edit mode__ and __display the data when in view mode__. 
+View vs Edit mode will be decided by an `editedField` value which we will store in the __state__ inside the `ngrx store`.
+
+__This component can pretty much be copied over for every forms.__
+
+For now let's pretend that we have it and simply add the condition to show or hide the displayed data and form:
+
 ```
   <div *ngIf="editedField !== 'name'">
     <div class="row mb-3">
@@ -168,3 +179,5 @@ export class ProfileNameComponent implements OnInit {
     (cancelForm)="resetEdit()">
   </app-profile-name>
 ```
+
+`*ngIf="editedField !== 'name'"` prevents the data from being shown we the group `name` is in edit mode while `*ngIf="editedField === 'name'"` shows the form in edit mode.
