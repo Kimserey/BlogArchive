@@ -11,9 +11,8 @@ Angular offers convenient directives to handle showing and hiding elements, toge
 
 ## 1. Build a simple form
 
-For the form we will be using Bootstrap and PrimeNg.
-Bootstrap provides universally known css classes.
-PrimeNg provides components for Angular like button, accordions, panels or datatables. In this example we will be using it to use a button with icon.
+For the form we will be using Bootstrap, PrimeNg and FontAwesome.
+Bootstrap provides universally known css classes. PrimeNg provides components for Angular like button, accordions, panels or datatables. In this example we will be using it to use a button with icon. FontAwesome is a dependency of PrimeNg used for icons.
 
 In this example we will build a form containing the following fields:
  
@@ -24,4 +23,4 @@ In this example we will build a form containing the following fields:
  - Home number
  - Mobile number
 
- ![form]()
+ ![form](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170810_form_ng_prime/form.PNG)
