@@ -82,3 +82,85 @@ We have the data displayed and have the edit buttons but those don't do anything
 Next we will be building the individual forms for each group of fields.
 
 ## 2. Build the segmented forms
+
+As we can see from the picture we have 3 separated pieces which we can build form for.
+In order to have a good way to find files, we can place the forms under a `/profile` folder under `/components`.
+
+We have defined 3 groups; `address`, `name` and `number`.
+
+```
+/components
+ - /profile
+    - profile-address.ts (will contain the form for address)
+    - profile-name.ts (will contain the form for name)
+    - profile-number.ts (will contain the form for number)
+    - profile.ts (will contain the display of the overall form)
+```
+
+To build the forms we will be using `reactive forms`. If you aren't familiar with it, I suggest you take a look at one of my previous blog post on [how to use Reactive form with Angular](https://kimsereyblog.blogspot.sg/2017/06/reactive-form-with-angular.html).
+
+For the group `name`, we define two controls `firstname` and `lastname` and create two inputs under a group:
+
+```
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="form-group">
+    <label for="firstname">Firstname</label>
+    <input id="firstname" type="text" class="form-control" formControlName="firstname" />
+  </div>
+  <div class="form-group">
+    <label for="lastname">Lastname</label>
+    <input id="lastname" type="text" class="form-control" formControlName="lastname" />
+  </div>
+  <button pButton type="button" class="ui-button-info" icon="fa-times" label="Cancel" (click)="cancel()"></button>
+  <button pButton type="submit" class="ui-button-success" icon="fa-floppy-o" label="Save" [disabled]="!form.valid"></button>
+</form>
+```
+
+```
+export class ProfileNameComponent implements OnInit {
+  @Input() defaultFirstname: string;
+  @Input() defaultLastname: string;
+  @Output() submitForm = new EventEmitter<ProfileName>();
+  @Output() cancelForm = new EventEmitter<void>();
+  form: FormGroup;
+
+  constructor(private fb: FormBuilder) { }
+
+  ngOnInit() {
+    this.form = this.fb.group({
+      firstname: [this.defaultFirstname, Validators.required],
+      lastname: [this.defaultLastname, Validators.required]
+    });
+  }
+
+  submit() {
+    this.submitForm.emit(this.form.value);
+  }
+
+  cancel() {
+    this.cancelForm.emit();
+  }
+}
+```
+
+```
+  <div *ngIf="editedField !== 'name'">
+    <div class="row mb-3">
+      <div class="col-sm-3"><strong>Firstname</strong></div>
+      <div class="col-sm-7">{{ profile.firstname }}</div>
+      <div class="col-sm-2 text-right">
+        <button pButton type="button" icon="fa-pencil" class="ui-button-secondary" (click)="toggleEdit('name')"></button>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-sm-3"><strong>Lastname</strong></div>
+      <div class="col-sm-9">{{ profile.lastname }}</div>
+    </div>
+  </div>
+  <app-profile-name *ngIf="editedField === 'name'"
+    [defaultFirstname]="profile.firstname"
+    [defaultLastname]="profile.lastname"
+    (submitForm)="submitName($event)"
+    (cancelForm)="resetEdit()">
+  </app-profile-name>
+```
