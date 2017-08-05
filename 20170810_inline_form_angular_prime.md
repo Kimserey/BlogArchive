@@ -128,6 +128,8 @@ For the group `name`, we define two controls `firstname` and `lastname` and crea
 </form>
 ```
 
+![form_name](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170810_form_ng_prime/form_name.PNG)
+
 We use Bootstrap grid classes to inline the form, add padding with `p-3` and apply a faded background with `bg-faded`.
 
 Next we can build the component which backs the form HTML:
@@ -191,3 +193,75 @@ For now let's pretend that we have it and simply add the condition to show or hi
 ```
 
 `*ngIf="editedField !== 'name'"` prevents the data from being shown we the group `name` is in edit mode while `*ngIf="editedField === 'name'"` shows the form in edit mode.
+Now in order to have it hide and show the way the preview demonstrates, we will need to add `editedField` in to the state.
+
+## 3. Bind the display edit buttons to the forms displays
+
+_This example start from the previous ngrx store guard tutorial, therefore the whole ngrx structure is already built. If you wish to know more you can check [my previous post on ngrx store](https://kimsereyblog.blogspot.sg/2017/07/managing-global-state-with-ngrx-store.html) or [Angular guard](https://kimsereyblog.blogspot.sg/2017/08/easily-ensure-that-data-is-loaded-with.html)._
+
+We start by adding the `editedField` to the `State` and the `initialState`.
+
+```
+// in reducers/user.ts
+
+export interface State {
+  ...
+  editedField: string;
+}
+
+export const initialState: State = {
+  ...
+  editedField: null
+};
+```
+
+Next we can define an action `EDIT_FIELD` which will be used to specify the state change.
+
+```
+// in actions/user.ts
+
+export const EDIT_FIELD = '[User] Edit Field';
+
+export class EditFieldAction implements Action {
+  readonly type = EDIT_FIELD;
+
+  constructor(public payload: string) { }
+}
+
+export type Actions
+  = ...
+  | EditFieldAction;
+```
+
+After that the reducer function can handle the edited field change:
+
+```
+export function reducer(state = initialState, action: user.Actions) {
+  switch (action.type) {
+    
+    ...
+    
+    case user.EDIT_FIELD: {
+      return Object.assign({}, state, {
+        editedField: action.payload
+      });
+    }
+
+    default: {
+      return state;
+    }
+  }
+}
+```
+
+Finally we can expose the selectors from `reducers/user`:
+
+```
+export const getEditedField = (state: State) => state.editedField;
+```
+
+Then the barrel `reducers/index.ts`:
+
+```
+export const getUserEditedField = createSelector(getUserState, fromUser.getEditedField);
+```
