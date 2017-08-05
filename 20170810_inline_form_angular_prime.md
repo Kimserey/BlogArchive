@@ -15,13 +15,13 @@ For the form we will be using Bootstrap and PrimeNg.
 Bootstrap provides universally known css classes.
 PrimeNg provides components for Angular like button, accordions, panels or datatables. In this example we will be using it to use a button with icon.
 
-In this example we will build the following form
+In this example we will build a form containing the following fields:
+ 
+ - Firstname
+ - Lastname
+ - Address
+ - Postal code
+ - Home number
+ - Mobile number
 
-Username
-Useremail
-Firstname
-Lastname
-Address
-Postal code
-Home number
-Mobile number
+ ![form]()
