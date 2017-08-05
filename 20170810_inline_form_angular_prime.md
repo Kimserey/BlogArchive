@@ -10,6 +10,10 @@ Angular offers convenient directives to handle showing and hiding elements, toge
  3. Bind the display edit buttons to the forms displays
 ```
 
+This is a preview of what we will be building:
+
+![preview]()
+
 ## 1. Build a diplay of segmented forms data
 
 For the form we will be using Bootstrap, PrimeNg and FontAwesome.
