@@ -14,6 +14,8 @@ This is a preview of what we will be building:
 
 ![preview](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170810_form_ng_prime/inline_form.gif)
 
+The full source code is available on [my GitHub](https://github.com/Kimserey/ngrx-store-sample/tree/master/src/app/components/profile).
+
 ## 1. Build a diplay of segmented forms data
 
 For the form we will be using Bootstrap, PrimeNg and FontAwesome.
@@ -106,19 +108,27 @@ To build the forms we will be using `reactive forms`. If you aren't familiar wit
 For the group `name`, we define two controls `firstname` and `lastname` and create two inputs under a group:
 
 ```
-<form [formGroup]="form" (ngSubmit)="submit()">
-  <div class="form-group">
-    <label for="firstname">Firstname</label>
-    <input id="firstname" type="text" class="form-control" formControlName="firstname" />
+<form [formGroup]="form" (ngSubmit)="submit()" class="p-3 bg-faded">
+  <div class="form-group row">
+    <label for="firstname" class="col-sm-3 col-form-label"><strong>Firstname</strong></label>
+    <div class="col-sm-9">
+      <input id="firstname" type="text" class="form-control" formControlName="firstname" />
+    </div>
   </div>
-  <div class="form-group">
-    <label for="lastname">Lastname</label>
-    <input id="lastname" type="text" class="form-control" formControlName="lastname" />
+  <div class="form-group row">
+    <label for="lastname" class="col-sm-3 col-form-label"><strong>Lastname</strong></label>
+    <div class="col-sm-9">
+      <input id="lastname" type="text" class="form-control" formControlName="lastname" />
+    </div>
   </div>
-  <button pButton type="button" class="ui-button-info" icon="fa-times" label="Cancel" (click)="cancel()"></button>
-  <button pButton type="submit" class="ui-button-success" icon="fa-floppy-o" label="Save" [disabled]="!form.valid"></button>
+  <div class="text-right">
+    <button pButton type="button" class="ui-button-info" icon="fa-times" label="Cancel" (click)="cancel()"></button>
+    <button pButton type="submit" class="ui-button-success" icon="fa-floppy-o" label="Save" [disabled]="!form.valid"></button>
+  </div>
 </form>
 ```
+
+We use Bootstrap grid classes to inline the form, add padding with `p-3` and apply a faded background with `bg-faded`.
 
 Next we can build the component which backs the form HTML:
 
