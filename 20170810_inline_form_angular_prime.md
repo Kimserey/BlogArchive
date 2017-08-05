@@ -265,3 +265,68 @@ Then the barrel `reducers/index.ts`:
 ```
 export const getUserEditedField = createSelector(getUserState, fromUser.getEditedField);
 ```
+
+After that we can extract the edited field inside the container which will use the `profile` container.
+
+```
+@Component({
+  selector: 'app-user-profile',
+  template: `
+    <app-profile
+      [profile]="profile$ | async"
+      [editedField]="editedField$ | async"
+      (changeEditedField)="changeEditedField($event)">
+     </app-profile>
+  `,
+  styles: []
+})
+export class ProfileContainer implements OnInit {
+  profile$: Observable<Profile>;
+  editedField$: Observable<string>;
+
+  constructor(private store: Store<fromRoot.State>) { }
+
+  ngOnInit() {
+    this.profile$ = this.store.select(fromRoot.getUserProfile);
+    this.editedField$ = this.store.select(fromRoot.getUserEditedField);
+  }
+
+  changeEditedField(field) {
+    this.store.dispatch(new user.EditFieldAction(field));
+  }
+}
+```
+
+We pass in the profile and edited field and handle the `changeEditedField` event.
+Finally we complete the implementation by handling all form submit form the `Profile` component and emiting on `changeEditedField` for the container to catch up when edit is toggled.
+
+```
+@Component({
+  selector: 'app-profile',
+  templateUrl: 'profile.html',
+  styles: []
+})
+export class ProfileComponent {
+  @Input() profile: Profile;
+  @Input() editedField: string;
+  @Output() changeEditedField = new EventEmitter<string>();
+
+  submitName(name: ProfileName) { }
+
+  submitAddress(name: ProfileAddress) { }
+
+  submitNumber(name: ProfileNumber) { }
+
+  toggleEdit(field) {
+    this.changeEditedField.emit(field);
+  }
+
+  resetEdit() {
+    this.changeEditedField.emit(null);
+  }
+}
+```
+
+And that's it, the same methodology can be followed to build the rest of the form. The full source code is available on my GitHub. []().
+
+# Conclusion
