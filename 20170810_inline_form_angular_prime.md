@@ -327,6 +327,8 @@ export class ProfileComponent {
 }
 ```
 
-And that's it, the same methodology can be followed to build the rest of the form. The full source code is available on my GitHub. []().
+And that's it, the same methodology can be followed to build the rest of the form. The full source code is available on my GitHub. [https://github.com/Kimserey/ngrx-store-sample](https://github.com/Kimserey/ngrx-store-sample).
 
 # Conclusion
+
+Today we saw how we could use ngrx store to maintain the state of an inline form edited field. Building inline form requires more work as multiple forms need to be built instead of a single big mess. Although more time is required to get it out, I highly believe that the improvement in user experience provided largely outweigh the time cost. Hope you enjoyed this post as much as I enjoyed writing it. If you have any questions, leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
