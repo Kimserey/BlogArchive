@@ -12,7 +12,7 @@ Angular offers convenient directives to handle showing and hiding elements, toge
 
 This is a preview of what we will be building:
 
-![preview]()
+![preview](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170810_form_ng_prime/inline_form.gif)
 
 ## 1. Build a diplay of segmented forms data
 
