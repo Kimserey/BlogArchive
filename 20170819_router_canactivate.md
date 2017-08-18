@@ -1,6 +1,6 @@
 # Difference between CanActivate and CanActivateChild in Angular Router
 
-Few weeks ago I spoke about the functionality of the Angular Router [http://kimsereyblog.blogspot.com/2017/05/attribute-route-in-asp-net-core.html](http://kimsereyblog.blogspot.com/2017/05/attribute-route-in-asp-net-core.html). It was a brief overview of all the router features but one of the feature was not totally explain, the `CanActivate` feature. From there a question emerged, __what is the difference between CanActivate and CanActivateChild?__. Today I will answer this question and at the same time discussing extra behaviours of the router with this post composed by 2 parts:
+Few weeks ago I spoke about the functionality of the Angular Router [http://kimsereyblog.blogspot.com/2017/05/attribute-route-in-asp-net-core.html](http://kimsereyblog.blogspot.com/2017/05/attribute-route-in-asp-net-core.html). It was a brief overview of all the router features but one of the feature was not totally explain, the `CanActivate` feature. From there a question emerged, __what is the difference between CanActivate and CanActivateChild?__. Today I will answer this question and at the same time discussing extra behaviours of the router with this post composed by 4 parts:
 
 ```
 1. Refresh on CanActivate and CanActivateChild
@@ -128,3 +128,13 @@ canActivate(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return Observable.never();
 }
 ```
+
+## 4. Component reusability with router
+
+In 2. we accessed the same route `/guards/:something/:somethingelse` but using different values.
+
+The resulting route displayed the `GuardComponent`.
+Angular router is optimized to reuse the same component when the route is re-entered with new data.
+The consequence of this behaviour is that the constructor and OnInit function are only called once, the first time the component is instantiated.
+
+Another important point is that a new value is pushed to the `Observable` route params. Therefore is the component is accessible through multiple routes, it is better to use the route params as `Observable` instead of the snapshot. 
