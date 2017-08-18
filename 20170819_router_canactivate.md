@@ -138,3 +138,7 @@ Angular router is optimized to reuse the same component when the route is re-ent
 The consequence of this behaviour is that the constructor and OnInit function are only called once, the first time the component is instantiated.
 
 Another important point is that a new value is pushed to the `Observable` route params. Therefore is the component is accessible through multiple routes, it is better to use the route params as `Observable` instead of the snapshot. 
+
+# Conclusion
+
+Today we saw what were the differences between the Angular route `CanActivate` guard and `CanActivateChild` guard. We also saw in which situation we could end up in a deadlock when the guard never end and the navigations never occur. Lastly we saw in which situation components were instantiated and when new values on the route params observable get pushed. Hope this post was helpful, if you have any question leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
