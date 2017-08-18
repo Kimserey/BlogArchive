@@ -5,7 +5,8 @@ Few weeks ago I spoke about the functionality of the Angular Router [http://kims
 ```
 1. Refresh on CanActivate and CanActivateChild
 2. Difference
-3. Component reusability with router
+3. Some considerations
+4. Component reusability with router
 ```
 
 ## 1. Refresh on CanActivate and CanActivateChild
@@ -111,3 +112,19 @@ If we need to run a guard when __only the child route changes__, we need to use 
 ```
 
 `GuardTest` will still run even though coming from `guards/x/y` and trying to activate `guards/x/z`.
+
+## 3. Some considerations
+
+__It used to be possible to redirect using the router within the guard.__ But this behaviour has changed.
+
+Now the guard invoke is expected to complete before any navigation. Meaning the `Observable<boolean>` will need to complete (regardless of the result), in order for a navigation to occur.
+
+For example this following sample will never redirect:
+
+```
+canActivate(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    // this will never redirect and will get stuck
+    this.router.navigate(['/']);
+    return Observable.never();
+}
+```
