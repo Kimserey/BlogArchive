@@ -50,7 +50,7 @@ export class PrimeNgComponent implements OnInit {
 ```
 `model` binds to our property `crumbs` in our component and we can push `MenuItem` in it on initialization. The result is as followed:
 
-![preview]()
+![preview](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170826/breadcrumb_preview.PNG)
 
 Now that we have a breadcrumb component working, what we have left to do is to use it from our pages and update it accordingly to the current page we navigated to.
 
@@ -116,6 +116,7 @@ export class ParentComponent implements OnInit {
 }
 ```
 
+The `<router-outlet></router-outlet>` defines where the content of the child will be placed; under the tag.
 Then we can place it as a parent route for our components:
 
 ```
@@ -170,5 +171,8 @@ In order to fix this, we simply delay the update to the end of the change cycle 
 
 And that's it, we have now a workable breadcrumb. More enhancement can be made, for example, we can make a common base class which will be used by all components needing to update the breadcrumb and we could add the menu items straight into the route data so that no code would be needed on the component. Lastly we could implement a token replacement mechanism in order to allow the route labels to use values from the params of the activated route but I will leave that for you to implement!
 
+The source code is available on my GitHub [https://github.com/Kimserey/ng-samples/blob/master/src/app/primeng/parent.component.ts](https://github.com/Kimserey/ng-samples/blob/master/src/app/primeng/parent.component.ts).
+
 # Conclusion
 
+Today we saw how to implement a breadcrumb bar to enhance the user experience of a website. In the process we saw how we could create a parent component, child components and how we can bind them via the Angular router. We also saw how we could utilize a service to allow a decoupled two way communication from component to component using observables. Lastly we saw how to solve one particular tricky problem encountered for parent/child communication whereby parent will be updated after being checked. Hope you enjoyed this post as much as I enjoyed writing it. As usual, if you have any question leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
