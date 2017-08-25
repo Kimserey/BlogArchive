@@ -9,6 +9,8 @@ Few weeks ago I spoke about the functionality of the Angular Router [http://kims
 4. Component reusability with router
 ```
 
+Sample is available on [my GitHub](https://github.com/Kimserey/ng-samples/blob/master/src/app/guards-test/guard.ts).
+
 ## 1. Refresh on CanActivate and CanActivateChild
 
 As we saw in my previous post, `CanActivate` is a interface with a single function `canActivate(...)`.
