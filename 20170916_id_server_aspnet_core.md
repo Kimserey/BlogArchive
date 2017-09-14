@@ -1,12 +1,13 @@
 # Implicit flow with Identity Server and ASP NET Core
 
-Few months ago I talked about [Resource owner password flow with Identity Server and ASP NET Core](https://kimsereyblog.blogspot.sg/2017/04/resourceownerpassword-with-identity.html). But as mentioned in multi places, ROP is an anti pattern when it comes down to a correct implementation of Open ID Connect. A more appropriate flow for API <-> SPA authentication is the __Implicit flow__. Today we will see how we can implement it in 4 steps:
+Few months ago I talked about [Resource owner password flow with Identity Server and ASP NET Core](https://kimsereyblog.blogspot.sg/2017/04/resourceownerpassword-with-identity.html). But as mentioned in multi places, ROP is an anti pattern when it comes down to a correct implementation of Open ID Connect. A more appropriate flow for API <-> SPA authentication is the __Implicit flow__. Today we will see how we can implement it in 5 steps:
 
 ```
 1. Configure Identity server
 2. Configure Identity server Login
 3. Protect our Api
 4. Log in from the JS client
+5. Configure Identity server Consent
 ```
 
 ## 1. Configure Identity server
@@ -352,7 +353,7 @@ If you are unfamiliar with assets, I suggest you take a look at my previous post
 
 Now when we hit the sign in button we can see that we are redirected to the consent page, which we have not yet created.
 
-## 5. Consent
+## 5. Configure Identity server Consent
 
 The consent page allows the user to choose which clients can access their resources. The user identity and the apis being resources protected with sensitive data from the user, it makes sense to ask the user her consent on which to allow and to which client.
 
@@ -534,7 +535,11 @@ Where each scope item is a partial view:
 @model ScopeViewModel
 
 <div>
-    <input class="d-inline" type="checkbox" name="ScopesConsented" id="scopes_@Model.Name" value="@Model.Name" checked="@Model.Checked" disabled="@Model.Required" />
+    <input class="d-inline" type="checkbox" name="ScopesConsented" 
+        id="scopes_@Model.Name" 
+        value="@Model.Name" 
+        checked="@Model.Checked" 
+        disabled="@Model.Required" />
     @Model.DisplayName
     @if (Model.Required)
     {
