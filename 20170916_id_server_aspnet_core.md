@@ -556,7 +556,57 @@ Now that we have that, once logged in, we should be redirected to the consent pa
 Finally we add a support to the postback of consents:
 
 ```
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Index(ConsentInputModel model)
+{
+    if (model.Consent)
+    {
+        if (!_interaction.IsValidReturnUrl(model.ReturnUrl)
+            || model.ScopesConsented == null
+            || !model.ScopesConsented.Any())
+        {
+            return View("Error");
+        }
+
+        var authorizationContext = await _interaction
+            .GetAuthorizationContextAsync(model.ReturnUrl);
+
+        if (authorizationContext == null)
+        {
+            return View("Error");
+        }
+
+        var request = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
+        await _interaction.GrantConsentAsync(request, new ConsentResponse
+        {
+            RememberConsent = model.RememberConsent,
+            ScopesConsented = model.ScopesConsented
+        });
+        return Redirect(model.ReturnUrl);
+    }
+    else
+    {
+        var authorizationContext = await _interaction
+        .GetAuthorizationContextAsync(model.ReturnUrl);
+
+        var request = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
+
+        await _interaction.GrantConsentAsync(request, ConsentResponse.Denied);
+        return Redirect(model.ReturnUrl);
+    }
+}
 ```
 
-We can then post back the consent to store those. The identity server part is now done.
-What we can do next is to protect our Api.
+Here we Grant consent when the model is valid or we deny if the user pressed deny. We can then post back the consent to store those. The identity server part is now done.
+Once the user grants access, Identity server redirect to the callback url and the token is set in the session storage and accessible through the `oidc-client`.
+And that's it we are done for the Login part of the Implicit flow. Here we used test users, memory persisted grant and memory clients and resources, in the future we will see how we can use Identity Core to abstract away the complexity of identity handling, we will also see how we can use Entity Framework to store grants and resources.
+
+Code is available on my GitHub:
+
+ -[Server: https://github.com/Kimserey/identity-server-sample/tree/master/Identity](https://github.com/Kimserey/identity-server-sample/tree/master/Identity)
+ -[Client: https://github.com/Kimserey/ng-samples/blob/master/src/app/auth/auth-test.ts](https://github.com/Kimserey/ng-samples/blob/master/src/app/auth/auth-test.ts)
+
+# Conclusion
+
+Today we saw how to implement the Implicit Flow with Identity Server. This flow is particularly useful for SPAs as the redirect and handling of authentication allows us to have a single place to manage identities for multiple Apis and multiple clients. We saw what sort of endpoints and screens must be created to support the login feature and we saw how we could configure the JS SPA client in Angular to handle the login redirect. Hope you liked this post as much as I enjoyed writting it. As usual if you have any questions, leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
