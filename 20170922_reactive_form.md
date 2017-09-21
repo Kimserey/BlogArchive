@@ -97,6 +97,12 @@ export class ComplexComponent implements OnInit {
 }
 ```
 
+__What is the difference between [formGroup] and formControlName?__
+
+The __difference resides in what the value is__:
+ - `[FormGroup]` is a binding property, the value passed is the `form object`, `[formGroup]="form"` itself containing all the controls
+ - `formControlName` is an attribute on the component accepting _simple_ text `formControlName="name" ` here. It is used to access the property within the `form object`, meaning it will try to access `form.name` (or something like that). 
+
 ### ColorPicker
 
 To add a color picker input, we use the `ColoPicker` component from PrimeNg.
@@ -281,4 +287,48 @@ Let's start first by looking at the template of a form array:
         </div>
     </div>
 </div>
+```
+
+As discussed in (1), `formArrayName` takes a string which points to the __property name of the array on the form object passed to the FormGroup__.
+
+We then iterate over the `sections.controls` and set the `[FormGroupName]="i"`. Every elements in the section array is a `FormGroup` which we need to select to display. The selection is done using the index of the section in the array and setting it to `FormGroupName`. Because it is a variable which need to be bound, we need to write it in the binding format `[FormGroupName]="i"`. 
+
+Then once we have bound the form group array element, what is contained within it is targeting the array element itself. Therefore we can use `formControlName` to target the property of the particular element `formControlName="sectionName"`. This will result in the control displaying `form.sections[0].sectionName` for: 
+
+```
+[FormGroup]="form" 
+=> formArrayName="sections" 
+=> [formGroupName]="i" (where i=0 for first element) 
+=> formControlName="sectionName"
+
+==> form.sections[0].sectionName
+```
+
+There is a catch though, we must not forget to define `sections` in `*ngFor="let section of sections.controls; index as i"`.
+`sections` is a variable in our component which we need to declare and which needs to point to the array within the `form`. We do so by added a getter and getting the `sections` property of the `form`:
+
+```
+get sections() {
+    return this.form.get('sections');
+}
+```
+
+Lastly we can instantiate the `sections` using the `array()` function of the `FormBuilder`:
+
+```
+this.form = this.fb.group({
+    name: [''],
+    color: [''],
+    validity: [new Date()],
+    range: [[0, 100]],
+    choice: [this.choices[0].value],
+    sections: this.fb.array([
+        this.fb.group({
+            sectionName: ['']
+        }),
+        this.fb.group({
+            sectionName: ['']
+        })
+    ])
+});
 ```
