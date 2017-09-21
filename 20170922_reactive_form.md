@@ -462,3 +462,4 @@ And we are done, we have completed our form with multiple inputs of different ty
 
 # Conclusion
 
+Today we saw how to use different components from PrimeNg with the Angular FormBuilder to build quickly a form which can handle most of the scenarios, with date, color, selection, range and arrays. The model-driven (also known as reactive form) is extremely easy to use as it is directly bound to a model form within the component. Every directive created to render the UI is straight forward to use if we understand properly what they are and how they are meant to be used. Hope you like this post, if you have any question leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam), see you next time!
