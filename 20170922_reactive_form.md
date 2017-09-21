@@ -272,6 +272,8 @@ export class ComplexComponent implements OnInit {
 }
 ```
 
+![preview](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20170922/reactive_form.PNG)
+
 Now that we saw how to build common elements, we can move on to build the array sections.
 
 ## 2. Building the array sections
@@ -334,7 +336,8 @@ Now what is intereting about an array is that we can `add` and `remove` item fro
 
 ```
 addSection() {
-    this.sections.push(this.fb.group({
+    this.sections.push(
+        this.fb.group({
             sectionName: ['']
         })
     );
@@ -374,7 +377,8 @@ Then we just need the functions to add and remove keywords from a specific secti
 
 ```
 addSectionKeyword(sectionIndex) {
-    this.getKeywords(sectionIndex).push(this.fb.group({
+    this.getKeywords(sectionIndex).push(
+        this.fb.group({
             keyword: ['']
         })
     );
@@ -417,6 +421,44 @@ Lastly we add the sub-section handling the inner array:
 </div>
 ```
 
-We added the `formArrayName="keywords"` and handled everything exactly the same way as for the sections.
+We added the `formArrayName="keywords"` and handled everything exactly the same way as for the sections. We now have the following:
+
+```
+[FormGroup]="form" 
+=> formArrayName="sections" 
+=> [formGroupName]="i" (where i=0 for first element) 
+=> formControlName="sectionName"
+
+==> form.sections[0].sectionName
+
+==> formArrayName="keywords" (targets form.sections[0].keywords)
+==> form.sections[0].keywords
+==> [formGroupName]="j" (because 'i' is used for sections)
+==> formControlName="keyword"
+```
+![preview_2](https://github.com/Kimserey/BlogArchive/blob/master/img/20170922/array.PNG?raw=true)
 
 ## 3. Postback
+
+Submitting data is easy. We use the `ngSubmit` directive with a submit button.
+Then we can handle the data and send it to our server or whatever we wish to do.
+
+```
+<form [formGroup]="form" (ngSubmit)="save()">
+    ...
+    <button class="btn btn-primary" type="submit">Submit</button>
+</form>
+```
+
+And in the component we implement `save()`:
+
+```
+save() {
+    console.log(this.form.value);
+}
+```
+
+And we are done, we have completed our form with multiple inputs of different type and arrays of arrays.
+
+# Conclusion
+
