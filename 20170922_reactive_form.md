@@ -21,7 +21,7 @@ interface Model {
   choice: string;
   sections: {
     sectionName: string;
-    keywords: string[];
+    keywords: { keyword: string }[];
   }[];
 }
 ```
@@ -325,10 +325,97 @@ this.form = this.fb.group({
     sections: this.fb.array([
         this.fb.group({
             sectionName: ['']
-        }),
-        this.fb.group({
-            sectionName: ['']
         })
     ])
 });
 ```
+
+Now what is intereting about an array is that we can `add` and `remove` item from it. It is a collection of multiple elements. To do that we start by adding two function in our component:
+
+```
+addSection() {
+    this.sections.push(this.fb.group({
+            sectionName: ['']
+        })
+    );
+}
+
+removeSection(i) {
+    this.sections.removeAt(i);
+}
+```
+
+Then we can change our array template to include two more buttons, one to add and one to remove on each element:
+
+```
+<div class="col-sm-9" formArrayName="sections">
+    <div class="row mb-2" *ngFor="let section of sections.controls; index as i;" [formGroupName]="i">
+        <div class="col-sm-9">
+            <input id="{{ 'sectionName-' + i }}" type="text" class="form-control" formControlName="sectionName" placeholder="Enter section name" />
+        </div>
+        <div class="col-sm-3">
+            <button class="btn btn-danger" (click)="removeSection(i)">Remove</button>
+        </div>
+    </div>
+    <button class="btn btn-primary" (click)="addSection()">Add a section</button>
+</div>
+```
+
+We now support the array. For the inner array, we can apply the exact same way starting by adding the accessor function to the keyword array:
+
+```
+getKeywords(sectionIndex) {
+    return this.sections.controls[sectionIndex].get('keywords') as FormArray;
+}
+```
+
+We need to make sure that we get the `controls` which is an array of `FormGroup` then select the right index and get the `keywords` property. 
+Then we just need the functions to add and remove keywords from a specific section:
+
+```
+addSectionKeyword(sectionIndex) {
+    this.getKeywords(sectionIndex).push(this.fb.group({
+            keyword: ['']
+        })
+    );
+}
+
+removeSectionKeyword(sectionIndex, keywordIndex) {
+    this.getKeywords(sectionIndex).removeAt(keywordIndex);
+}
+```
+
+Lastly we add the sub-section handling the inner array:
+
+```
+<div class="form-group row">
+    <label class="col-sm-3 col-form-label">Sections</label>
+    <div class="col-sm-9" formArrayName="sections">
+        <div class="row mb-2" *ngFor="let section of sections.controls; index as i;" [formGroupName]="i">
+            <div class="col-sm-9">
+                <input id="{{ 'sectionName-' + i }}" type="text" class="form-control" formControlName="sectionName" placeholder="Enter section name" />
+            </div>
+            <div class="col-sm-3">
+                <button class="btn btn-danger" (click)="removeSection(i)">Remove this section</button>
+            </div>
+            <div class="col-12 p-3" formArrayName="keywords">
+                <div class="m-2">
+                    <div class="row mb-2" *ngFor="let keyword of getKeywords(i).controls; index as j" [formGroupName]="j">
+                    <div class="col-sm-9">
+                        <input id="{{ 'keyword-' + i + '-' + j }}" type="text" class="form-control" formControlName="keyword" placeholder="Enter section name" />
+                    </div>
+                    <div class="col-sm-3">
+                        <button class="btn btn-danger" (click)="removeSectionKeyword(i, j)">Remove this keyword</button>
+                    </div>
+                    </div>
+                    <button class="btn btn-primary" (click)="addSectionKeyword(i)">Add a keyword</button>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-primary" (click)="addSection()">Add a section</button>
+    </div>
+</div>
+```
+
+We added the `formArrayName="keywords"` and handled everything exactly the same way as for the sections.
+
