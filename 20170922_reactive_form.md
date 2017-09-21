@@ -20,7 +20,7 @@ interface Model {
   range: number[];
   choice: string;
   sections: {
-    name: string;
+    sectionName: string;
     keywords: string[];
   }[];
 }
@@ -60,8 +60,11 @@ import { CalendarModule, ColorPickerModule, DropdownModule, SliderModule } from 
 })
 ```
 
-### Skeleton
+### Text input
 
+We start first by the basic:
+ - define the form
+ - define the simplest element, the name text input
 
 ```
 <div class="p-3">
@@ -76,7 +79,27 @@ import { CalendarModule, ColorPickerModule, DropdownModule, SliderModule } from 
 </div>
 ```
 
+For the component, we define a `FormGroup` containing the whole form and we instantiate it using the `FormBuilder` `group()` function.
+[More explanation can be found on my previous blog post on Reactive forms.](https://kimsereyblog.blogspot.sg/2017/06/reactive-form-with-angular.html)
+
+```
+export class ComplexComponent implements OnInit {
+  form: FormGroup;
+
+  constructor(private fb: FormBuilder) {
+  }
+
+  ngOnInit() {
+    this.form = this.fb.group({
+      name: ['']
+    });
+  }
+}
+```
+
 ### ColorPicker
+
+To add a color picker input, we use the `ColoPicker` component from PrimeNg.
 
 ```
 <div class="p-3">
@@ -104,8 +127,18 @@ Note that if we forget to add `BrowserAnimationsModule` we will be presented wit
 Found the synthetic property @panelState. Please include either "BrowserAnimationsModule" or "NoopAnimationsModule" in your application.
 ```
 
+In the component then we simply need to add it in the instantiation:
+
+```
+this.form = this.fb.group({
+    name: [''],
+    color: ['']
+});
+```
+
 ### Calendar
 
+To add a calendar for date input, we use the `Calendar` component from PrimeNg.
 Same as the color picker, we add the calendar for the date by using the `formControlName="validity"`:
 
 ```
@@ -154,8 +187,19 @@ yy - year (four digit)
 '' - single quote
 ```
 
+And similarly as the name and color, we need to instantiate it:
+
+```
+this.form = this.fb.group({
+    name: [''],
+    color: [''],
+    validity: [new Date()]
+});
+```
+
 ### Range
 
+To add a range input, we use the `Slider` component from PrimeNg.
 Range can be added using `p-slider` and also work with `formControlName="range"`.
 
 ```
@@ -169,9 +213,20 @@ Range can be added using `p-slider` and also work with `formControlName="range"`
 
 In order to specify that the value is a range; a value composed of two values, we specify `[range]="true"`.
 
+```
+this.form = this.fb.group({
+    name: [''],
+    color: [''],
+    validity: [new Date()],
+    range: [[0, 100]]
+}
+```
+
+The range being an array of two elements, we can instantiate it with any value here `0 and 100`.
+
 ### Choice
 
-Lastly for a choice, we can use a `p-dropdown`.
+Lastly for a choice, we use the `Dropdown` component from PrimeNg.
 
 ```
 <div class="form-group row">
@@ -181,6 +236,8 @@ Lastly for a choice, we can use a `p-dropdown`.
     </div>
 </div>
 ```
+
+The dropdown also support reactive form notation with `formControlName="choice"`. In order to provide the options, we pass an object `{ label: string; value: any; }`, the label is used to display on the selection and the value is the one saved into the form variable.
 
 ```
 export class ComplexComponent implements OnInit {
@@ -207,4 +264,21 @@ export class ComplexComponent implements OnInit {
     });
   }
 }
+```
+
+Now that we saw how to build common elements, we can move on to build the array sections.
+
+## 2. Building the array sections
+
+Let's start first by looking at the template of a form array:
+
+```
+<div class="form-group row">
+    <label class="col-sm-3 col-form-label">Sections</label>
+    <div class="col-sm-9" formArrayName="sections">
+        <div *ngFor="let section of sections.controls; index as i" [formGroupName]="i">
+            <input id="{{ 'sectionName-' + i }}" type="text" class="form-control" formControlName="sectionName" placeholder="Enter section name" />
+        </div>
+    </div>
+</div>
 ```
