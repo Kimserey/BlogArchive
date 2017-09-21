@@ -60,7 +60,7 @@ import { CalendarModule, ColorPickerModule, DropdownModule, SliderModule } from 
 })
 ```
 
-### Text input
+### 1.1 Text input
 
 We start first by the basic:
  - define the form
@@ -103,7 +103,7 @@ The __difference resides in what the value is__:
  - `[FormGroup]` is a binding property, the value passed is the `form object`, `[formGroup]="form"` itself containing all the controls
  - `formControlName` is an attribute on the component accepting _simple_ text `formControlName="name" ` here. It is used to access the property within the `form object`, meaning it will try to access `form.name` (or something like that). 
 
-### ColorPicker
+### 1.2 ColorPicker
 
 To add a color picker input, we use the `ColoPicker` component from PrimeNg.
 
@@ -142,7 +142,7 @@ this.form = this.fb.group({
 });
 ```
 
-### Calendar
+### 1.3 Calendar
 
 To add a calendar for date input, we use the `Calendar` component from PrimeNg.
 Same as the color picker, we add the calendar for the date by using the `formControlName="validity"`:
@@ -203,7 +203,7 @@ this.form = this.fb.group({
 });
 ```
 
-### Range
+### 1.4 Range
 
 To add a range input, we use the `Slider` component from PrimeNg.
 Range can be added using `p-slider` and also work with `formControlName="range"`.
@@ -230,7 +230,7 @@ this.form = this.fb.group({
 
 The range being an array of two elements, we can instantiate it with any value here `0 and 100`.
 
-### Choice
+### 1.5 Choice
 
 Lastly for a choice, we use the `Dropdown` component from PrimeNg.
 
@@ -419,3 +419,4 @@ Lastly we add the sub-section handling the inner array:
 
 We added the `formArrayName="keywords"` and handled everything exactly the same way as for the sections.
 
+## 3. Postback
