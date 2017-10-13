@@ -265,6 +265,14 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
+The client also requires a configuration `ClientConfiguration.xml` which points to the primary silo gateway in the current settings:
+
+```
+<ClientConfiguration xmlns="urn:orleans">
+  <Gateway Address="localhost" Port="40000"/>
+</ClientConfiguration>
+```
+
 An Orleans Client is meant to be instantiated once and shared therefore we created as a singleton.
 We initialize the singleton on startup too.
 
