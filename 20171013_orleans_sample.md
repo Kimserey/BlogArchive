@@ -1,4 +1,4 @@
-# Create a simple Microsoft Orleans application
+# Create a simple Microsoft Orleans application (Microsoft Orleans Part 2)
 
 Last week I presented [an overview of Microsoft Orleans](https://kimsereyblog.blogspot.sg/2017/10/a-first-look-at-microsoft-orleans.html). Gave an explanation on the concepts and keywords which can be found in the framework.
 Today I will explain how we can implement a simple Orleans application with a cluster composed by a localhost Silo and with a client within an ASP Net Core Mvc application.
