@@ -5,11 +5,11 @@ This post will be composed by 3 parts:
 
 ```
 1 - Traditional system
-2 - Problem
+2 - The problems
 3 - Grain solution
 ```
 
-## 1. Database and locks
+## 1. Traditional system
 
 In a traditional system, we can often see a N-tier architecture (usually 3-tier) composed by the following:
 
@@ -78,22 +78,20 @@ The second business rule is ensured by doing the following:
 
 This service, even though stateless, has a major drawback, __it isn't thread safe__. Meaning this service is not guaranteed to yield predictable results if multiple threads call its functions concurrently.
 
-## 2. The problem
+## 2. The problems
 
-Thread safety is one of the main problem modern system face. How can we allow our system to execute multiple queries while keeping a consistent output?
+Thread safety is one of the main problem modern system face. How can we allow our system to execute multiple concurrent transactions while keeping a consistent output?
 
-One easy scenario, starting from a zero balance, could be if `Deposit` happens slightly before `Withdraw`, but both run on different threads. There will be 2 possible results:
+One common scenario, starting from a zero balance, could be if a `Deposit` happens slightly before a `Withdrawal`, both running on different threads. There will be 2 possible results:
 - Saving deposit amount happens before withdraw validation is done and the withdraw can be executed
 - Withdraw validation happens before deposit therefore a validation exception is thrown
 
-__Without thread safety, it is impossible to predicte the result of code.__
+__Without thread safety, it is impossible to predicte the result.__
 
-In order to bring back the consistency in the system, a concurrency control must be implemented.
+In order to bring back the consistency in the system, a concurrency control must be implemented:
 
-When the resource is not frequently accessed or when it is not often that a the resource gets updated concurrently, an __Optimistic concurrency control__ can be employed.
-__Optimistic concurrency__ assumes that the changes done on the resource do not happen frequently therefore instead of locking the resource, it tracks the values of the resource from the time it was read and at the moment of writing, checks if the resource has changed since. Depending on the way we handle the result, we can either overwrite the value or just abort the changes.
-
-This works well for most scenarios where updates is not frequent. In the event of having frequent calls, say our  bank account had money withdrawn frequently. We would need to implement another concurrency control, pessimistic concurrency control. 
+__Optimistic concurrency__ assumes that the changes done on the __same__ resource do not happen frequently therefore instead of locking the resource, it tracks if the resource changed from the time it was read. Depending on the way we handle the result, we can either overwrite the value or just abort the changes.
+This works well for most scenarios where updates is not frequent. In the event of having frequent calls, say our  bank account had money withdrawn frequently. We would need to implement another concurrency control.
 
 __Pessimistic concurrency control__ is used when frequent read and write to a resource are required. It is pessimistic in the sense that we assume the worse therefore lock the resource for each transaction. There are two type of locks read and write locks:
 
@@ -104,8 +102,14 @@ In our example, we will need to implement a locking mechanism on all 3 functions
 
 The main problem with pessimistic concurrency is that it creates contention as locking is invovled. __The other main problem is that it is the responsability of the developer to create the complex logic around the locking mechanism__.
 
-Therefore we can conclude that there are three major problems in a N-tier application:
+Therefore three major problems can be seen in a N-tier application:
 
-1. the state of the application is stored in the database therefore for an update, two round trips are needed, one to fetch the latest state and a second one to write the state after update
-2. the database is the source of truth which makes the system highly reliant on the data saved, the fetch is required to prevent validating business rules on stale data
-3. the services contaning the business logic isn't thread safe which pushes us to implement a complex locking mechanism to handle multi threads
+1. the state of the application is stored in the database involving two round trips are needed, one to fetch the latest state and a second one to write the state after update
+2. the database is the source of truth making the system highly reliant on the data saved, the fetch is required to prevent validating business rules on stale data
+3. the services contaning the business logic isn't thread safe forcing developers to implement a complex locking mechanism to handle multi threads
+
+__The actor pattern addresses this three problems.__
+
+## 3. Grain solution
+
+In Microsoft Orleans, the implementation of an actor is called a `Grain`.
