@@ -1,4 +1,4 @@
-# Microsoft Orleans Grains (Microsoft Orleans Part 3)
+# Microsoft Orleans Grains Concurrency Handling (Microsoft Orleans Part 3)
 
 Few weeks ago [I explained the benefits of using Microsoft Orleans](https://kimsereyblog.blogspot.sg/2017/10/a-first-look-at-microsoft-orleans.html). One of them was the implementation of the actor pattern. Today I will dig deeper into it by revisiting a common scenario present in today systems and how it can be solved with Orleans grains.
 This post will be composed by 3 parts:
