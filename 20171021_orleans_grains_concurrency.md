@@ -112,4 +112,74 @@ __The actor pattern addresses this three problems.__
 
 ## 3. Grain solution
 
-In Microsoft Orleans, the implementation of an actor is called a `Grain`.
+In Microsoft Orleans, the implementation of an actor is called a `Grain`. 
+Orleans enters into the N-tier by replacing the middle layer and the storage layer by  
+
+```
+Front end -> Orleans grains -> Orleans grains storage
+```
+
+Instead of having __stateless services__, Orleans comes with __stateful actors__. 
+
+There implementation is very similar to the service we implemented earlier. To implement a bank account grain, we would start first by the interface:
+
+```
+interface IBankAccount: IGrainWithGuidKey
+{
+    Task SetOwner(string ownerName);
+    Task Deposit(decimal amount);
+    Task Withdraw(string ownerName, decimal amount);
+}
+```
+
+Then the grain:
+
+```
+class BankAccountService: Grain, IBankAccount
+{
+    string _owner;
+    decimal _balance;
+
+    public Task SetOwner(string ownerName)
+    {
+        _owner = ownerName;
+        return Task.CompletedTask;
+    }
+
+    public Task Deposit(decimal amount)
+    {
+        _balance += amount;
+        return Task.CompletedTask;
+    }    
+
+    public Task Withdraw(string ownerName, decimal amount)
+    {
+        if (_balance < amount)
+            throw new ValidationException("Amount withdrawn must be lower or equal to balance.");
+
+        if (_owner != ownerName)
+            throw new ValidationException("Only the owner is allowed to withdraw.");
+
+        _balance -= amount;
+        return Task.CompletedTask;
+    }
+}
+```
+
+By moving to Orleans grains, the visible benefit we eliminated the first and second problems:
+
+1. The state is no longer stored in the database, the actor holds the state therefore no trip is needed, the state is always available in memory
+2. The database is no longer the source of truth, the truth is the actor itself which makes the code much closer to OOP as an actor can be seen as an object with behaviours
+
+The last benefit is actually not visible as it is handled by the Orleans runtime:
+
+3. Grains are thread safe in themselves
+
+All grains are assured to be thread safe as each functions of the grain is assured to be called in sequential order synchronously. It is ensured by the Orleans runtime which queues calls. _All grains calls are asynchronous and must return a `Task`_.
+It means that if one client calls `Deposit` and another client few second after calls `Withdraw`, `Deposit` will be assured to complete first regardless of when `Withdraw` is called.
+
+
+# Conclusion
+
+Today we saw the benefit of the actor pattern by moving from a N-tier system to a Microsoft Orleans application. 
+Thanks to the Orleans grains, we have eliminated the three major problems found in the service tier of a N-tier system. We, developer, do not need to think about concurrency, it is completed abstracted by Orleans runtime. This allows us to focus on business logic and simplify the code in the grain. Hope you liked this post, if you have any question do not hesitate! See you next time!
