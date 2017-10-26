@@ -90,8 +90,8 @@ __Without thread safety, it is impossible to predicte the result.__
 
 In order to bring back the consistency in the system, a concurrency control must be implemented:
 
-__Optimistic concurrency__ assumes that the changes done on the __same__ resource do not happen frequently therefore instead of locking the resource, it tracks if the resource changed from the time it was read. Depending on the way we handle the result, we can either overwrite the value or just abort the changes.
-This works well for most scenarios where updates is not frequent. In the event of having frequent calls, say our  bank account had money withdrawn frequently. We would need to implement another concurrency control.
+__Optimistic concurrency control__ (OCC) assumes that the changes done on the __same__ resource do not happen frequently therefore instead of locking the resource, it tracks if the resource changed from the time it was read. Depending on the way we handle the result, we can either overwrite the value or just abort the changes.
+Most ORMs come with OCC build in, when an entity is retrieved from the ORM, it is tracked and when wrote back, it is checked for changes. If we want to ensure that calls come sequentially, we will need to introduce a queuing system.
 
 __Pessimistic concurrency control__ is used when frequent read and write to a resource are required. It is pessimistic in the sense that we assume the worse therefore lock the resource for each transaction. There are two type of locks read and write locks:
 
