@@ -13,7 +13,64 @@ Today we will see one of the other major feature of Orleans, cluster management.
 
 Let's start first by implementing a Silo. We will be using the example we used in the past post.
 
-Together with our client, we are now able to tall can talk to the grain.
+```
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        var silo = new SiloHost("main");
+        silo.InitializeOrleansSilo();
+        var success = silo.StartOrleansSilo();
+
+        if (!success)
+        {
+            throw new Exception("Failed to start silo");
+        }
+
+        Console.ReadKey();
+    }
+}
+```
+
+With the following connfiguration:
+
+```
+<?xml version="1.0" encoding="utf-8"?>
+<OrleansConfiguration xmlns="urn:orleans">
+  <Globals>
+    <SeedNode Address="localhost" Port="30023" />
+  </Globals>
+  <Defaults>
+    <Networking Address="localhost" Port="30023" />
+    <ProxyingGateway Address="localhost" Port="40023" />
+  </Defaults>
+</OrleansConfiguration>
+```
+
+Together with our client configured in `Startup`, we are now able to tall can talk to the grain.
+
+```
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddSingleton<IGrainFactory>(sp =>
+    {
+        var builder = new ClientBuilder().LoadConfiguration();
+        var client = builder.Build();
+        client.Connect().Wait();
+        return client;
+    });
+
+    services.AddMvc();
+}
+```
+
+With the following configuration:
+
+```
+<ClientConfiguration xmlns="urn:orleans">
+  <Gateway Address="localhost" Port="40023"/>
+</ClientConfiguration>
+```
 
 ## 2. Form a cluster with multiple silo
 
