@@ -53,7 +53,7 @@ Logs on silo appears with `{ip}:{port}`
 ### 2.1 Silo restart on same address
 
 ```
-[2017-10-01 05:24:53.407 GMT    16      WARNING 100619  MembershipOracle        127.0.0.1:30222]    Detected older version of myself - Marking other older clone as Dead -- Current Me=S127.0.0.1:30222:244531487 Older Me=S127.0.0.1:30222:244530878, Old entry= SiloAddress=S127.0.0.1:30222:244530878 SiloName=AFTSGLT056-30222 Status=Active
+[2017-10-01 05:24:53.407 GMT    16      WARNING 100619  MembershipOracle        127.0.0.1:30222]    Detected older version of myself - Marking other older clone as Dead -- Current Me=S127.0.0.1:30222:244531487 Older Me=S127.0.0.1:30222:244530878, Old entry= SiloAddress=S127.0.0.1:30222:244530878 SiloName=SGLT056-30222 Status=Active
 ```
 
 The silo detects that it has restarted and deprecate its old address by adding itself in the suspect silo list on theold address.
@@ -62,7 +62,7 @@ The silo detects that it has restarted and deprecate its old address by adding i
 
 ```
 [2017-10-01 09:52:47.631 GMT    18      INFO    100612  MembershipOracle        127.0.0.1:30017]        Will watch (actively ping) 1 silos: [S127.0.0.1:30007:244547490]
-[2017-10-01 09:52:47.633 GMT    18      INFO    100645  MembershipOracle        127.0.0.1:30017]        -ReadAll (called from BecomeActive, after local view changed, with removed duplicate deads) Membership table: 2 silos, 2 are Active, 0 are Dead, Version=<0, 0>. All silos: [SiloAddress=S127.0.0.1:30007:244547490 SiloName=AFTSGLT056-30007 Status=Active, SiloAddress=S127.0.0.1:30017:244547560 SiloName=AFTSGLT056-30017 Status=Active]
+[2017-10-01 09:52:47.633 GMT    18      INFO    100645  MembershipOracle        127.0.0.1:30017]        -ReadAll (called from BecomeActive, after local view changed, with removed duplicate deads) Membership table: 2 silos, 2 are Active, 0 are Dead, Version=<0, 0>. All silos: [SiloAddress=S127.0.0.1:30007:244547490 SiloName=SGLT056-30007 Status=Active, SiloAddress=S127.0.0.1:30017:244547560 SiloName=AFTSGLT056-30017 Status=Active]
 ```
 
 ### 2.3 Silo going down

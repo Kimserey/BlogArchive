@@ -140,15 +140,15 @@ Then when a silo tries to join the cluster, it looks for the primary node and pi
 
 ```
 [2017-10-28 00:45:06.530 GMT    12	INFO   	100614	MembershipOracle	127.0.0.1:30030]	About to send pings to 2 nodes in order to validate communication in the Joining state. Pinged nodes = [
-    [SiloAddress=S127.0.0.1:30001:246847086 SiloName=AFTSGLT056@30001 Status=Active HostName=AFTSGLT056 ProxyPort=40001 RoleName=OrleansExample UpdateZone=0 FaultZone=0 StartTime = 2017-10-28 00:38:08.406 GMT IAmAliveTime = 2017-10-28 00:43:10.682 GMT Suspecters = [] SuspectTimes = []], 
-    [SiloAddress=S127.0.0.1:30020:246847347 SiloName=AFTSGLT056@30020 Status=Active HostName=AFTSGLT056 ProxyPort=40020 RoleName=OrleansExample UpdateZone=0 FaultZone=0 StartTime = 2017-10-28 00:42:29.147 GMT IAmAliveTime = 2017-10-28 00:42:33.866 GMT Suspecters = [] SuspectTimes = []]
+    [SiloAddress=S127.0.0.1:30001:246847086 SiloName=SGLT056-30001 Status=Active HostName=SGLT056 ProxyPort=40001 RoleName=OrleansExample UpdateZone=0 FaultZone=0 StartTime = 2017-10-28 00:38:08.406 GMT IAmAliveTime = 2017-10-28 00:43:10.682 GMT Suspecters = [] SuspectTimes = []], 
+    [SiloAddress=S127.0.0.1:30020:246847347 SiloName=SGLT056-30020 Status=Active HostName=SGLT056 ProxyPort=40020 RoleName=OrleansExample UpdateZone=0 FaultZone=0 StartTime = 2017-10-28 00:42:29.147 GMT IAmAliveTime = 2017-10-28 00:42:33.866 GMT Suspecters = [] SuspectTimes = []]
 ]	
 ```
 
 Once the communication is established, the silo marks itself in the membership table as alive and read the alive nodes in the cluster. For example let's assume we have been running multiple silos and some went down already and we are booting a silo on 30020:
 
 ```
-[2017-10-28 00:45:06.557 GMT    14	INFO   	100634	MembershipOracle	127.0.0.1:30030]	-ReadAll (called from BecomeActive) Membership table 4 silos, 3 are Active, 1 are Dead, Version=<9, 23>. All silos: [SiloAddress=S127.0.0.1:30001:246847086 SiloName=AFTSGLT056@30001 Status=Active, SiloAddress=S127.0.0.1:30020:246847347 SiloName=AFTSGLT056@30020 Status=Active, SiloAddress=S127.0.0.1:30030:246847496 SiloName=AFTSGLT056@30030 Status=Active, SiloAddress=S127.0.0.1:30020:246847106 SiloName=AFTSGLT056@30020 Status=Dead]	
+[2017-10-28 00:45:06.557 GMT    14	INFO   	100634	MembershipOracle	127.0.0.1:30030]	-ReadAll (called from BecomeActive) Membership table 4 silos, 3 are Active, 1 are Dead, Version=<9, 23>. All silos: [SiloAddress=S127.0.0.1:30001:246847086 SiloName=SGLT056-30001 Status=Active, SiloAddress=S127.0.0.1:30020:246847347 SiloName=SGLT056-30020 Status=Active, SiloAddress=S127.0.0.1:30030:246847496 SiloName=SGLT056-30030 Status=Active, SiloAddress=S127.0.0.1:30020:246847106 SiloName=SGLT056-30020 Status=Dead]	
 ```
 
 _The number postfixed with the silo address is a timestamp which avoid silos to be written in the table with the same key._  
@@ -162,7 +162,7 @@ After this point, the silo will start to monitor its connection with the alive s
 Lastly some cleaned up are performed and the table is read for a last time:
 
 ```
-[2017-10-28 00:45:06.619 GMT    14	INFO   	100645	MembershipOracle	127.0.0.1:30030]	-ReadAll (called from BecomeActive, after local view changed, with removed duplicate deads) Membership table: 4 silos, 3 are Active, 1 are Dead, Version=<9, 23>. All silos: [SiloAddress=S127.0.0.1:30001:246847086 SiloName=AFTSGLT056@30001 Status=Active, SiloAddress=S127.0.0.1:30020:246847347 SiloName=AFTSGLT056@30020 Status=Active, SiloAddress=S127.0.0.1:30030:246847496 SiloName=AFTSGLT056@30030 Status=Active, SiloAddress=S127.0.0.1:30020:246847106 SiloName=AFTSGLT056@30020 Status=Dead]	
+[2017-10-28 00:45:06.619 GMT    14	INFO   	100645	MembershipOracle	127.0.0.1:30030]	-ReadAll (called from BecomeActive, after local view changed, with removed duplicate deads) Membership table: 4 silos, 3 are Active, 1 are Dead, Version=<9, 23>. All silos: [SiloAddress=S127.0.0.1:30001:246847086 SiloName=SGLT056-30001 Status=Active, SiloAddress=S127.0.0.1:30020:246847347 SiloName=SGLT056-30020 Status=Active, SiloAddress=S127.0.0.1:30030:246847496 SiloName=SGLT056-30030 Status=Active, SiloAddress=S127.0.0.1:30020:246847106 SiloName=SGLT056-30020 Status=Dead]	
 ```
 
 Which then conclude the process of the silo joining the cluster. This process is known as the `activation` of a silo. It is contained within the following logs:
@@ -216,7 +216,7 @@ Which provoke an update in `30001`:
 
 ```
 [2017-10-28 01:18:17.317 GMT    10	INFO   	100612	MembershipOracle	127.0.0.1:30001]	Will watch (actively ping) 1 silos: [S127.0.0.1:30020:246849443]	
-[2017-10-28 01:18:17.319 GMT    10	INFO   	100645	MembershipOracle	127.0.0.1:30001]	-ReadAll (called from gossip, after local view changed, with removed duplicate deads) Membership table: 3 silos, 2 are Active, 1 are Dead, Version=<8, 19>. All silos: [SiloAddress=S127.0.0.1:30001:246849436 SiloName=AFTSGLT056@30001 Status=Active, SiloAddress=S127.0.0.1:30020:246849443 SiloName=AFTSGLT056@30020 Status=Active, SiloAddress=S127.0.0.1:30030:246849451 SiloName=AFTSGLT056@30030 Status=Dead]	
+[2017-10-28 01:18:17.319 GMT    10	INFO   	100645	MembershipOracle	127.0.0.1:30001]	-ReadAll (called from gossip, after local view changed, with removed duplicate deads) Membership table: 3 silos, 2 are Active, 1 are Dead, Version=<8, 19>. All silos: [SiloAddress=S127.0.0.1:30001:246849436 SiloName=SGLT056-30001 Status=Active, SiloAddress=S127.0.0.1:30020:246849443 SiloName=SGLT056-30020 Status=Active, SiloAddress=S127.0.0.1:30030:246849451 SiloName=SGLT056-30030 Status=Dead]	
 ```
 
 Notice the time, as soon as `30020` marks `30030` as dead, it pings `30001` and then `30001` updates its watch and read back the table. This is how the cluster is managed together with the membership, silos are able to know when other silos join the cluster and when other silos exit the cluster.
