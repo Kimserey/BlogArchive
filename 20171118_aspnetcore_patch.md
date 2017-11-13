@@ -5,7 +5,7 @@ When building web APIs, most of the HTTP methods are implemented, GET, POST, PUT
 ```
 1. JSON Patch protocol
 2. Implementation on ASP NET Core
-3. Usage from frontend in Angular application
+3. Usage from frontend in TypeScript
 ```
 
 ## 1. JSON Patch protocol
@@ -136,6 +136,29 @@ public async Task<IActionResult> Patch(Guid bankAccountId, [FromBody]JsonPatchDo
 We start by getting the account from a service and then applying the patches to it. Once applied, the resulting account is modified following the operations provided by the patches. We can simply save it back after. Just by using the `JsonPatchDocument`, we can allow patching of any property of the bank account. 
 If in the future we add more properties, those will be made available to be patched without any code change required.
 
-## 3. Usage from frontend in Angular application
+## 3. Usage from frontend in TypeScript
+
+We have the API endpoint. Now what we need is a way to apply those patches submitted to an object on the client-side.
+To do that, we can use the `fast-json-patch` library. We can install it using npm:
+
+```
+npm install fast-json-patch --save
+```
+
+After building the patches, we can apply them using `applyPatch`:
+
+```
+import * as jsonPatch from 'fast-json-patch/lib/core';
+
+... some other code
+
+const newBankAccount = jsonPatch.applyPatch(
+    bankAccount, 
+    <jsonPatch.Operation[]>patches).newDocument;
+```
+
+This can be used after submitting patches to the API, updating the model on the client-side for SPA.
 
 # Conclusion
+
+Today we saw how to implement PATCH for web APIs with JSON Patch. We saw how it can be handled in ASP NET Core with `JsonPatchDocument` and how a client-side can use JSON Patch to update its models with `fast-json-patch`. PATCH considerably simplify frontend development for editing as it allows partial update of information which allows a big object to be broken down in multiple update form from the UI yielding smaller patches. Hope you like this post, if you have any question leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam). See you next time!
