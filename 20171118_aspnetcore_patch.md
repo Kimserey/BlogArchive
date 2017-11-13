@@ -10,7 +10,131 @@ When building web APIs, most of the HTTP methods are implemented, GET, POST, PUT
 
 ## 1. JSON Patch protocol
 
+[JSON Patch](https://tools.ietf.org/html/rfc6902)
+ is a protocol defining a format expressing operations to be applied on JSON objects.
+
+The operations are composed by the following object:
+
+```
+{ op: '', path: '', value: '' }
+```
+
+`op` being the operation, `path` being the path of the property of the JSON object and lastly `value` being the value to set the property.
+
+The common ways to patch an object would be to:
+
+ - replace a property
+ - delete a property
+ - add an item on a property which is a list
+ - remove an item from a property which is a list
+ - switch positions of two items within a property which is a list
+ 
+Let's see how those operation can be created:
+
+For replacing a property, this can be done with `op: replace`:
+
+```
+{ op: "replace",
+  path: "/name",
+  value: "Kim" }
+```
+
+For removing a property, this can be done with `op: remove`:
+
+```
+{ op: "remove",
+  path: "/name" }
+```
+
+For adding a value on a list, it can be done with `op: add` and a path ending with `/-`: 
+
+```
+{ 
+  op = "add",
+  path = "/members/-",
+  value = { 
+      name: 'Kim'
+  } 
+}
+```
+
+For adding at a particular index, it can be done by specifying the index:
+
+```
+{ op = "add",
+  path = "/members/0",
+  value = new { ... } }
+```
+
+To remove at a particular index, it can be done with `remove`:
+
+```
+{ op = "remove",
+  path = "/members/0" }
+```
+
+To set a value at a particular index, it can be done with `replace`:
+
+```
+{ op = "replace",
+  path = "/members/0",
+  value = new { ... } }
+```
+
+Lastly to switch positions, it can be done with `move` using the `from` property:
+
+```
+{ op = "move",
+  from = "/members/2",
+  path = "/members/0" }
+```
+
+Now that we know how to construct the operation in JSON format, let's see how we can handle those from ASP NET Core.
+
 ## 2. Implementation on ASP NET Core
+
+ASP NET Core comes with a built in support for JSON Patch.
+All we need to do is to use the `JsonPatchDocument<TResource>` interface which we take as argument of our controller endpoint:
+
+```
+public class BankAccountsController : Controller
+{
+    [HttpPatch("{bankAccountId}")]
+    public async Task<IActionResult> Patch(Guid bankAccountId, [FromBody]JsonPatchDocument<BankAccount> patches)
+    { ... }
+}
+```
+
+We can now submit the following request:
+
+```
+PATCH /bankAccounts/123
+
+Body:
+    [
+        {
+            "op": "replace",
+            "path": "/number",
+            "value": "123-123-123"
+        }
+    ]
+```
+
+To use the patches, all we need to do is to apply them by calling th `.ApplyTo(T)` function:
+
+```
+public async Task<IActionResult> Patch(Guid bankAccountId, [FromBody]JsonPatchDocument<BankAccount> patches)
+{ 
+    var bankAccount = this.service.Get(bankAccountId);
+    patches.ApplyTo(bankAccount);
+   
+    this.service.Save(bankAccount);
+    return NotContent();
+}
+```
+
+We start by getting the account from a service and then applying the patches to it. Once applied, the resulting account is modified following the operations provided by the patches. We can simply save it back after. Just by using the `JsonPatchDocument`, we can allow patching of any property of the bank account. 
+If in the future we add more properties, those will be made available to be patched without any code change required.
 
 ## 3. Usage from frontend in Angular application
 
