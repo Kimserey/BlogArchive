@@ -63,7 +63,7 @@ It is also possible to validate model created from within the controller functio
 Once we use `TryValidateModel`, the errors are registered into the `ModelState` which we can return straight to the UI.
 
 ```
-[HttpPatch("{categoryKey}")]
+[HttpPatch("{bankAccountId}")]
 [ProducesResponseType(204)]
 public async Task<IActionResult> Patch(Guid bankAccountId, [FromBody]JsonPatchDocument<BankAccount> patches)
 { 
