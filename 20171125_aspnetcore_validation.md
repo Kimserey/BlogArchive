@@ -1,13 +1,13 @@
-# Validation in ASP NET Core
+# Validation in ASP NET Core and Angular
 
-In order to ensure that values passed to our web server are correct, it is required to ensure validation. Today we will see how we can implement validation in ASP NET Core using data annotation. This post will be composed by 2 parts:
+Validation is an important part of the application development. There are two parts where validation is required, the API level and the frontend. The API validation is meant to prevent any malformed input to corrupt our data while the frontend validation is meant to guide the user to fill in a form by providing interactive feedback on her input. ASP NET Core for the backend and Angular for the frontend both ship with validation mechanisms fulfilling are requirements. Today we will see how we can implement validation in ASP NET Core using data annotation and inline validation with Angular reactive form. This post will be composed by 2 parts:
 
 ```
-1. Validation with ASP NET Core
+1. Implement validation for ASP NET Core
 2. Implement inline validation for Angular form
 ```
 
-## 1. Validation with ASP NET Core
+## 1. Implement validation for ASP NET Core
 
 In ASP NET Core, validation can be implemented using data annotation. On each call, parameters are tested against the annotation and the `ModelState` property is filled up.
 When any of the parameters is invalid, the model state will be invalid and the following `Model.IsValid` will be `false`.
@@ -25,7 +25,7 @@ public class BankAccount
 ```
 
 `[Required]` means that the property value is required to be present for the model state to be valid.
-
+ 
 ```
 [HttpPost]
 [ProducesResponseType(typeof(Guid), 200)]
