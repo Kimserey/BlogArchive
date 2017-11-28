@@ -245,7 +245,7 @@ Knowing that we can add those to the data table:
 </p-dataTable>
 ```
 
-![preview_paginator]()
+![preview_paginator](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20171202_datatable_prime/paginator.PNG)
 
 # Conclusion
 
