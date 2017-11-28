@@ -8,6 +8,8 @@ In every web application there is a need to display data in a tabular form. If t
 3. Pagination
 ```
 
+All the source code for this example is [available on my GitHub](https://github.com/Kimserey/ng-samples/blob/master/src/app/primeng/data-table.component.ts).
+
 ## 1. Use Prime NG data table
 ### 1.1 Basic usage
 
@@ -79,7 +81,7 @@ Each `p-column` directives specify the field to show on the table and the header
 <p-column field="date" header="Date"></p-column>
 ```
 
-![data table]()
+![data table](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20171202_datatable_prime/datatable.PNG)
 
 As we see here, displaying data is made extremely easy. But what if we need more features like sorting and filtering?
 
@@ -93,7 +95,7 @@ In order to provide sorting, all we need to do is define which column is sortabl
 
 Doing that on all columns will make the whole table sortable:
 
-![sortable]()
+![sortable](https://github.com/Kimserey/BlogArchive/blob/master/img/20171202_datatable_prime/datatable_sort.PNG?raw=true)
 
 The column on which the sort is applied can be also set directly on the data table using `sortField` and the order can bbe set using `sortOrder`.
 
@@ -226,7 +228,7 @@ Notice the following `onChange` handler:
 
 `dt` is the template variable referencing the data table which we extract with `#dt` on `<p-dataTable #dt>`. It gives us access to `.filter()` which we use by passing the value, the field and the `filterMatchMode` which is set on `<p-column filterMatchMode="equals">`. The default filter match mode is `startWith`, but it can be change to `equals`, `endWith`, `contains` or `in`.
 
-![preview_filter]()
+![preview_filter](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20171202_datatable_prime/table_filter.PNG)
 
 ## 3. Pagination
 
