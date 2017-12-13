@@ -1,6 +1,8 @@
 # Understand Microsoft Orleans warnings and errors
 
-Microsoft Orleans is a framework which helps in building a distributed system by taking care of availability and concurrency for us. Even though it abstracts all the distributed system problems, there are instances where errors arize without us, developers, understanding what is going on. Lucky us, the logs is well documented... for those who can decrypt it. Today I will go through some of the errors and warnings which can be seen from the Silo and the Client. The code used to produce those errors can be found on my GitHub [https://github.com/Kimserey/orleans-cluster-consul](https://github.com/Kimserey/orleans-cluster-consul). Enjoy!
+Microsoft Orleans is a framework which helps in building a distributed system by taking care of availability and concurrency for us. If you are unfamiliar with Microsoft Orleans, I suggest that you look at my previous blog post explaining [the benefits of Microsoft Orleans](https://kimsereyblog.blogspot.sg/2017/10/a-first-look-at-microsoft-orleans.html). Even though Orleans promises to abstract the distributed system problems, there are instances where errors arize without us being able to understand what is going on. Lucky us, the logs are well documented... for those who can decrypt them.
+Today I will go through some of the errors and warnings which can be seen from silo and client. The code used to produce those errors can be found on my GitHub [https://github.com/Kimserey/orleans-cluster-consul](https://github.com/Kimserey/orleans-cluster-consul). 
+Enjoy!
 
 ## 1. Client logs
 
@@ -10,7 +12,6 @@ Logs on client appears with address `{ip}:0`.
 
 ```
 An unhandled exception occurred while processing the request.
-
 OrleansException: Cannot find an invoker for interface GrainInterfaces.IGrainTwo (ID=610902580,0x2469A234).
 ```
 
