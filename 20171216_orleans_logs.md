@@ -58,7 +58,7 @@ Logs on silo appears with `{ip}:{port}`
 [2017-10-01 05:24:53.407 GMT    16      WARNING 100619  MembershipOracle        127.0.0.1:30222]    Detected older version of myself - Marking other older clone as Dead -- Current Me=S127.0.0.1:30222:244531487 Older Me=S127.0.0.1:30222:244530878, Old entry= SiloAddress=S127.0.0.1:30222:244530878 SiloName=SGLT056-30222 Status=Active
 ```
 
-The silo detects that it has restarted and deprecate its old address by adding itself in the suspect silo list on theold address.
+This warning occurs when the silo detects that it has restarted (same address and port) and deprecate its old address by adding itself in the suspect silo list of suspect silo.
 
 ### 2.2 Silo joining cluster
 
@@ -67,34 +67,32 @@ The silo detects that it has restarted and deprecate its old address by adding i
 [2017-10-01 09:52:47.633 GMT    18      INFO    100645  MembershipOracle        127.0.0.1:30017]        -ReadAll (called from BecomeActive, after local view changed, with removed duplicate deads) Membership table: 2 silos, 2 are Active, 0 are Dead, Version=<0, 0>. All silos: [SiloAddress=S127.0.0.1:30007:244547490 SiloName=SGLT056-30007 Status=Active, SiloAddress=S127.0.0.1:30017:244547560 SiloName=AFTSGLT056-30017 Status=Active]
 ```
 
+This log happens when a silo joins the cluster `30007`, reading all active states from the membership table and watching the newly added silo.
+
 ### 2.3 Silo going down
 
-When there are two silos within the same cluster, they can look for each other and detect each other failures. Let's say we have two silos, one on `30007` and the other on port `30017`, when `30007`
+The last log which we see here occurs when there are two silos in the cluster. Each one of them look for each others failures.
 
 ```
-Could not connect to 127.0.0.1:30007: ConnectionRefused
-Exception = Orleans.Runtime.OrleansException: Could not connect to 127.0.0.1:30007: ConnectionRefused
-   at Orleans.Runtime.SocketManager.Connect(Socket s, IPEndPoint endPoint, TimeSpan connectionTimeout)
-   at Orleans.Runtime.SocketManager.SendingSocketCreator(IPEndPoint target)
-   at Orleans.Runtime.LRU`2.Get(TKey key)
-   at Orleans.Runtime.Messaging.SiloMessageSender.GetSendingSocket(Message msg, Socket& socket, SiloAddress& targetSilo, String& error)
-
 [2017-10-01 09:58:15.695 GMT    22      WARNING 101021  Runtime.Messaging.SiloMessageSender/PingSender  127.0.0.1:30017]        Exception getting a sending socket to endpoint S127.0.0.1:30007:244547490
-
 Exc level 0: Orleans.Runtime.OrleansException: Could not connect to 127.0.0.1:30007: ConnectionRefused
    at Orleans.Runtime.SocketManager.Connect(Socket s, IPEndPoint endPoint, TimeSpan connectionTimeout)
    at Orleans.Runtime.SocketManager.SendingSocketCreator(IPEndPoint target)
    at Orleans.Runtime.LRU`2.Get(TKey key)
    at Orleans.Runtime.Messaging.SiloMessageSender.GetSendingSocket(Message msg, Socket& socket, SiloAddress& targetSilo, String& error)
+
 [2017-10-01 09:58:15.736 GMT    20      WARNING 100613  MembershipOracle        127.0.0.1:30017]        -Did not get ping response for ping #33 from S127.0.0.1:30007:244547490. Reason = Original Exc Type: Orleans.Runtime.OrleansMessageRejectionException Message:Silo S127.0.0.1:30017:244547560 is rejecting message: Request S127.0.0.1:30017:244547560MembershipOracle@S0000000f->S127.0.0.1:30007:244547490MembershipOracle@S0000000f #677: global::Orleans.Runtime.IMembershipService:Ping(). Reason = Exception getting a sending socket to endpoint S127.0.0.1:30007:244547490
 ```
 
+`30017` failed to talk to `30007` which after few attempts will mark it as dead.
 At the same time on the client, we can see the following warning when silo goes down:
 
 ```
 [2017-10-01 06:04:43.697 GMT    28      WARNING 100912  Messaging.GatewayConnection/GatewayClientSender_gwy.tcp://127.0.0.1:40063/244530432     10.0.75.1:0]    Marking gateway at address gwy.tcp://127.0.0.1:40063/244530432 as Dead in my client local gateway list.
 ```
 
+The gateway is notified that the silo was marked as dead and removes the gateway from client local gateway list.
+
 # Conclusion
 
-Today we saw some common logs which can be found on silos and clients. Understanding the logs of Orleans allowed me to understand how the flow works which I believe is always beneficial rather than simply using the framework and expecting it to always work. As usual, if you have any question leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam)! See you next time!
+Today we saw some common logs which can be found on silos and clients. Understanding the logs of Orleans allowed me to understand how the flow works which is always beneficial rather than simply using the framework and expecting it to always work. As usual, if you have any question leave it here or hit me on Twitter [@Kimserey_Lam](https://twitter.com/Kimserey_Lam)! See you next time!
