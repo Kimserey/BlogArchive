@@ -1,7 +1,6 @@
 # Publish Angular application with Angular CLI and AspDotNet Core
 
-A few month back I showed how to bootstrap an Angular application using Angular CLI. Apart from bootstrapping and serving, Angular CLI is also capable of packing the application and get it ready to be published. 
-We can then use the published site and serve it on our own webserver. Today we will see how the process of publishing can be done in three steps
+A few months back I showed how to [bootstrap an Angular application using Angular CLI](https://kimsereyblog.blogspot.sg/2017/06/bootstrap-your-angular-project-with_30.html). Apart from bootstrapping and serving, Angular CLI is also capable of packing the application and get it ready to be published in order for us to serve it on our own webserver. Today we will see how the process of publishing can be done in three steps
 
 ```
 1. Prepare the project for packing
@@ -12,12 +11,33 @@ We can then use the published site and serve it on our own webserver. Today we w
 ## 1. Prepare the project for packing
 
 In order to ease the understanding, we start by separating our client Angular application and Host application.
+The client will go into `/client` while the host into `/host`. Here a preview of how the structure will look like:
 
-The client will go into `/client` while the host into `/host`.
+```
+- MyApplication
+    | - /.git
+    | - /client
+            | - /e2e
+            | - /node_modules
+            | - /src
+            | - ...
+    | - /host (nothing here yet)
+            | - /Host
+            | - MyApplication.Host.sln
+```
 
-Now that we have proper folder separation we can build using `ng build`. To set the output folder we can modify the value in Angular CLI configuration.
+In order to create this structure we can start by creating the main application folder `/MyApplication`. Then we navigate to it and execute the following command:
 
-For now we can leave it as is. 
+```
+ng new MyApplication -sg -sc -dir client
+```
+
+Where `-sg` stands for `skip-git`, `-sc` for `skip-commit` and lastly we change the directory of the files to `/client`.
+Next from the root we can `git init` to create the git files. For the `.gitignore`, we can copy it from another project like this collection of `.gitignore` from github `https://github.com/github/gitignore`.
+
+Now that we have proper folder separation we can build using `ng build` from within the client which creates a `/dist` folder with the application packaged for publishing. 
+
+The output folder can be modified in Angular CLI configuration, we will do it later. For now we can leave it as is. 
 
 ## 2. Create the host
 
