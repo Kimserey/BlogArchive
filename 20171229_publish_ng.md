@@ -41,23 +41,37 @@ The output folder can be modified in Angular CLI configuration, we will do it la
 
 ## 2. Create the host
 
-Under the host folder, we can create an empty AspDotNet Core application. This will be our webserver hosting our Angular application.
+Under the host folder, we can create an empty AspNetCore application. Don't forget untick `Create directory for solution`. 
+This application will be our webserver hosting our Angular application. 
+When creating the application, it auto-creates an `/wwwroot` folder. This is the root of the web application. All files inside this folder will be served by the host. 
+This comes on point since what Angular CLI builds is a set of static files; html and js files, therefore all we need to do is to have the `/client` build the content of its `/dist` straight into `/wwwroot` of the host and have the host serves those static files.
 
-Because the files packed our all static files, html, css, js etc.. we need to add the
-
-Create application under client
-
-Create host aspnet core under host
-
-Use ServeFile in aspnet core. The default behaviour is that AspNetCore will look into the wwwroot folder for an index.html page to serve which is ideal for our scenario. Once ready we can create a simple helloworld index.html and navigate to our host.
+To serve the files, we can make use of the `AspNetCore.StaticFiles` library which comes preinstalled with `AspNetCore.All` when creating an AspNetCore project by registering it on our app builder pipeline:
 
 ```
+public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+{
+    app.UseFileServer();
+}
 ```
+
+`UseFileServer` will serve the `/wwwroot` and find the `index.html` file.
+
+`AspNetCore.StaticFiles` comes with multiple extensions for the app builder which are useful in different scenarios:
+
+ - `UseDefaultFiles` will find `index.html`
+ - `UseStaticFiles` will serve `/wwwroot`, the files will be accessible by direct url
+ - `UseDirectoryBrowser` will enable browsing on the directory
+ - `UseFileServer` will combine all three where browsing needs to be explicitly set to true
+
+[More info on the official documentation of AspNetCore here](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/static-files).
+
+In our case all we need is `UseFileServer`. We are now ready with a working client and host. What we need to do next is prepare for publishing.
 
 ## 3. Publish the application
 
-First thing we need to do is to setup Ng CLI to write the package webapp to the wwwroot folder of our host.
-This can be done by modifying the outDir in the angular-cli.json to output to wwwroot.
+First thing we need to do is to setup Angular CLI to write the `/dist` to the `/wwwroot` folder of our host.
+This can be done by modifying the `outDir` in the `.angular-cli.json` to output to `/wwwroot`:
 
 ```
 ```
