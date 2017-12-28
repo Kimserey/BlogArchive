@@ -74,11 +74,20 @@ First thing we need to do is to setup Angular CLI to write the `/dist` to the `/
 This can be done by modifying the `outDir` in the `.angular-cli.json` to output to `/wwwroot`:
 
 ```
+{
+    "apps": [
+        {
+            "ourDir": "../host/Host/wwwroot"
+        }
+    ]
+}
 ```
 
-Now that we have that we can `ng build`, it will compile pack and copy to the wwwroot. Then we can `dotnet publish` on the host which will pack every library together with the wwwroot is the publish folder. And that's it we have our artefact ready.
+[The .angular-cli.json schema can be found on Angular CLI github here](https://github.com/angular/angular-cli/blob/master/packages/%40angular/cli/lib/config/schema.json).
 
-To run it, navigate to the folder and do `dotnet host.dll`.
+Now that we have that we can `ng build`, it will compile pack and copy to the wwwroot. Then we can `dotnet publish` on the host which will pack every library together with the `/wwwroot` is the publish folder. And that's it we have our package ready.
+
+To run it, navigate to the `/publish` folder of your AspNetCore app and execute `dotnet Host.dll`. And that's it, we have a running hosted Angular application!
 
 # Conclusion
 
