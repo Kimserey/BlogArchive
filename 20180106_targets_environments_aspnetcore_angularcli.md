@@ -13,7 +13,7 @@ Today I will amswer this question by explaining how we can setup targets and env
 
 A target refers to a target build. A target build is a set of configurations used to build the application. For development, the optimization is usually disabled as build time is more important than the optimization of code for example which would slow down the build time. Other configurations can be set like the architecture and platform targeted.
 In Visual Studio the target is the build configuration which can be set through the property of the project.
-In Angular CLI there are two predefined targets, dev and prod. The difference of configuration can be found here []().
+In Angular CLI there are two predefined targets, dev and prod.
 
 An environment refers to a global context where the application runs. The most common environments for Software Development are:
 
@@ -45,6 +45,8 @@ appsettings.json
 appsettings.production.json
 appsettings.integration.json
 ```
+
+The content of the configuration file is a json object.
 
 The environment is selected at runtime. It is set via system environment variable for the application but can also be passed as command line argument.
 Make sure that your configuration has the command line argument on its builder pipeline.
@@ -93,14 +95,13 @@ That's how we can setup and use multiple targets and environments in Visual Stud
 
 ## 3. Setup target and environment settings for Angular CLI
 
-In Angular CLI, there are two predefined targets. Dev and prod, they set diffwrent configuration for the build itself. AThe target can be selected on build:
+In Angular CLI, there are two predefined targets. Dev and prod, they set different configurations for the build itself. The differences of configuration can be found [here](https://github.com/angular/angular-cli/blob/master/docs/documentation/build.md#--dev-vs---prod-builds). The target can be selected for the build using `--dev` or `--prod`.
 
 ```
 ng build --prod
 ```
 
-For the environment settings, Angular CLI supports having multiple evironment files which are used to set the settings.
-
+For the environment settings, Angular CLI supports having multiple evironment files which are used to set the all settings.
 Similarly as AspNetCore, we can have the following:
 
 ```
@@ -108,6 +109,8 @@ environment.ts
 environment.integration.ts
 environment.production.ts
 ```
+
+The content of the environment file is a simple object.
 
 And those will defines settings which will be used depending on the environment selected.
 The mapping from keyword to file must be set in the `.angular-cli.json` file under environments:
@@ -132,4 +135,4 @@ And that's it once we build, we will have an application ready to be deployed un
 
 # Conclusion
 
-Today we saw how we could set targets for builds to enable build time configurations like code optimizations. We also saw how to configure differenr environments for the application to run using different settings.
+Today we saw how we could set targets for builds to enable build time configurations. We also saw how to configure different environments for the application to run using different settings. Using this methods we can setup multiple environments to run our application. Hope you like this post as much as I liked writing it. See you next time!
