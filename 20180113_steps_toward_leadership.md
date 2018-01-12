@@ -14,9 +14,9 @@ Last year, I was placed in this exact situation. Coming from a Software Engineer
 
 ## 1. Misconceptions
 
-__Being a leader isn't related to accomplishments__
+__Leadership is not the same as accomplishments__
 
-When we talk about _Leader_ we immediately associate it to Bill G., Larry P., Mark Z., Elon M. or Jeff B. Pretty sure you know all of them. Those are the most notorious ones who became publicly famous. They have few common points; they own a company, they have a clear vision and they have a story to tell about their life and how they came to where they are today. So much to talk about that all of them have at least one biography book. Concluding that we must exhibit the same behaviours as them to be leaders is the biggest trap and as it turns out, the easiest to fall into.
+When we talk about _Leaders_ we immediately associate it to Bill G., Larry P., Mark Z., Elon M. or Jeff B. Pretty sure you know all of them. Those are the most notorious ones who became publicly famous. They have few common points; they own a company, they have a clear vision and they have a story to tell about their life and how they came to where they are today. So much to talk about that all of them have at least one biography book. Concluding that we must exhibit the same behaviours as them to be leaders is the biggest trap and as it turns out, the easiest to fall into.
 Although there is a possibility of you and I accomplishing what they have done, the _Leader_ tag should not be confused with accomplishments.
 While having a clear vision is important to lead, having a company is not a necessity.
 
@@ -27,7 +27,7 @@ While having a clear vision is important to lead, having a company is not a nece
 __Being a leader isn't about being the alpha__
 
 Another stereotype has been anchored in Software development with the fallacy of successful Software being built in less than a week by 3 or 4 developers working 24 hours a day.
-Although those are nice story to tell, most of the Software aren't built in this manor nor should they be. This comes in hand with the fallacy of overtime, the more overtime we do, the more task we can complete. Unfortunately all the experiences I have seen shows the opposite. The more overtime someone is doing, the less productive she became.
+Although those are nice stories to tell, most of the Software aren't built in this manor nor should they be. This comes in hand with the fallacy of overtime, the more overtime we do, the more work we can complete. Unfortunately all the experiences I have seen shows the opposite. The more overtime someone is doing, the less productive she became.
 
 - Leading isn't about staying late at the office,
 - It isn't about being the first at reaching the office in the morning,
@@ -40,10 +40,10 @@ We saw what leading isn't, now we will see what it takes to __lead__.
 ## 2. Lead
 
 To lead is to provide guidance and value to whoever works around you.
-We must guide our team to move forward and find the next steps by enabling to work by themselves.
-Leaders are individuals who are able to empower those around and elevate them to a point where they can work on their own.
-Empowering includes teaching, listening and most importantly be an inspiration for others to have a reference.
-As we want to show the way, we must become the way, we must portrait what and how we want our team to work. 
+We must guide our team to move forward and find the next steps by enabling them to work by themselves.
+Leaders are individuals who are able to empower and elevate those around them to a point where they can work on their own.
+Empowering includes teaching, listening and most importantly become an inspiration.
+As we want to show the way, we must become the way, we must portrait what and how we want our teammates to work. We must be the example. 
 Those are the key characteritics to pursue:
 
 - Professionalism 
@@ -51,26 +51,36 @@ Those are the key characteritics to pursue:
 - Wisdom
 - Patience
 
-__Professionalism__ in our behaviour, being respectful and being open to discussion. Being punctual for discussion and meetings and predictible in our delivery. Keeping promises and when failing, notfying early.
+__Professionalism__ in our behaviour, being respectful and being open to discussion. Being punctual for discussion and meetings and predictible in our delivery. Keeping promises and when failing, notifying early.
 __Honesty__ is the key to enable trust. With trust, a powerful bond can be established where every critisism is accepted as a way to progress.
-__Patience__ with a strong mind. Having a strong mind is about sustaining the pain of difficult situations. Knowing when to think about long term plans to convert down situation to up situation. This will come with maturity.
-Understanding that problems are inheritent in all companies and projects and the world is in need of leaders.
+__Wisdom__ to take thoughtful decisions. Understand the pros and cons of the decisions we are making and the impact they will have in short and long run. Digging into the implicit requirements behind features to come out with the best decisions.
+__Patience__ with a strong mind. Having a strong mind is about sustaining pain during difficult situations. Knowing when to think about long term plans to convert down situation to up situation. Understanding that problems are inheritent in all companies and projects and that they are a necessity for us to learn and progress.
 
-Become the person you would want to work for.
+__All this key characteristics build your character.__ We must be conscious about what our surrounding thinks and feels about us. What do they see?
 
-## 2. Opportunity
+- Threat or Opportunity, 
+- Depression or Excitment, 
+- Frustration or Motivation, 
+- Hopelessness or Guidance,
+- Messiness or Reliability, 
+- Negativity or Positivity 
+ 
+Become the person you would want to work with and work for.
 
-Ask essential questions, what does your team see when they see you, what do they feel coming from you?
-Threat, Depression, Frustration, Hopelessness, Negativity or Opportunity, Positivity, Open mind, Open ear, Guidance, Reliability.
+## 3. Opportunity
 
-In all the companies I worked for, I have experienced the same pattern. I was lost. As I mentioned in the intro, the feeling of being lost came from my immaturity but it also came from the way the companies worked. There was a need for leadership. Someone who would take the lead, guiding, mentoring and acting as a role model. Leadership values aren't inborn. They aren't inherited from family tree. Leadership values can be discovered along your working experiences and/or can be learnt. 
+In all the companies I worked for, I have experienced the same pattern. I, as a Software engineer, was lost.
+The feeling of being lost came from my immaturity but it also came from the way the companies worked and the project was directed.
+There was the need for someone who could take the lead, guide, mentor and act as a role model.
+As I move from company to company, it became obvious that there was and still is an immense opportunity in all companies and even in the world for leaders.
+There is an endless need for people who can bring minds together, coordinate them to work together and enable them to be at their best at all time by providing the right framework and process.
 
-We can make a difference as single individuals but if we learn to guide and bring brilliant minds to work together toward a common vision, we will reach a higher stage where we will be able to impact on a larger scale.
+__This opportunity is available to everyone as leadership values aren't inborn.__ They aren't inherited from family. In fact, Leadership values can be discovered along working experiences and/or learnt. 
 
-Through the way we act, how we behave, the aura which comes out of us, we can change our surrounding. We can change the way people see us.
-
-
+We all can lead in our own ways and bring values to those surrounding us. The opportunity is in front of you, grab it.
 
 # Conclusion
 
-Those who are currently leading position need to think and move forward as leaders. Those who feels deep down that a difference can be made through their contribution need to act and take the lead. The world is in need to leaders
+Those who are in currently leading position need to think and move forward as leaders. Those who feel deep down that a difference can be made through their contribution need to act and take the lead. The world is in need of leaders.
+We can make a difference as single individuals but if we lead and enable more people to work together toward a common vision, we will reach a higher step and be able to impact on a larger scale. 
+Thanks for reading, see you next time!
