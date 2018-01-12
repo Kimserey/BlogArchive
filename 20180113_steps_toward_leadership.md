@@ -8,7 +8,7 @@ Last year, I was placed in this exact situation. Coming from a Software Engineer
 
 ```
 1. Misconceptions
-2. What to pursue
+2. Lead
 3. Opportunity
 ```
 
@@ -35,12 +35,15 @@ Although those are nice story to tell, most of the Software aren't built in this
 - It isn't about being the loudest,
 - It isn't about being right or wrong.
 
-## 2. What to pursue
+We saw what leading isn't, now we will see what it takes to __lead__. 
 
-Leading is about providing guidance. Impacting whoever works around you. 
-It comes with a lot of responsabilities. As we want to show the way, we must become the way, we must portrait what and how we want our team to work. 
-Leaders are individuals who are able to empower those around them to achieve more.
-Empowering includes teaching, providing help when needed while never being a bottleneck and the most important being becoming an inspiration for others to have a reference.
+## 2. Lead
+
+To lead is to provide guidance and value to whoever works around you.
+We must guide our team to move forward and find the next steps by enabling to work by themselves.
+Leaders are individuals who are able to empower those around and elevate them to a point where they can work on their own.
+Empowering includes teaching, listening and most importantly be an inspiration for others to have a reference.
+As we want to show the way, we must become the way, we must portrait what and how we want our team to work. 
 Those are the key characteritics to pursue:
 
 - Professionalism 
@@ -49,8 +52,7 @@ Those are the key characteritics to pursue:
 - Patience
 
 __Professionalism__ in our behaviour, being respectful and being open to discussion. Being punctual for discussion and meetings and predictible in our delivery. Keeping promises and when failing, notfying early.
-__Honesty__ is the 
-
+__Honesty__ is the key to enable trust. With trust, a powerful bond can be established where every critisism is accepted as a way to progress.
 __Patience__ with a strong mind. Having a strong mind is about sustaining the pain of difficult situations. Knowing when to think about long term plans to convert down situation to up situation. This will come with maturity.
 Understanding that problems are inheritent in all companies and projects and the world is in need of leaders.
 
