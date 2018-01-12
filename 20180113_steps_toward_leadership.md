@@ -14,13 +14,11 @@ Last year, I was placed in this exact situation. Coming from a Software Engineer
 
 ## 1. Misconceptions
 
+__Being a leader isn't related to accomplishments__
+
 When we talk about _Leader_ we immediately associate it to Bill G., Larry P., Mark Z., Elon M. or Jeff B. Pretty sure you know all of them. Those are the most notorious ones who became publicly famous. They have few common points; they own a company, they have a clear vision and they have a story to tell about their life and how they came to where they are today. So much to talk about that all of them have at least one biography book. Concluding that we must exhibit the same behaviours as them to be leaders is the biggest trap and as it turns out, the easiest to fall into.
 Although there is a possibility of you and I accomplishing what they have done, the _Leader_ tag should not be confused with accomplishments.
 While having a clear vision is important to lead, having a company is not a necessity.
-
-__Being a leader isn't related to accomplishments__
-
-It is important to remove the misconceptions; 
 
 - Leading isn't about putting a product to market,
 - It isn't building a company,
