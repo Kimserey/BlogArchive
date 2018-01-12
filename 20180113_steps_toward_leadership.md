@@ -37,20 +37,22 @@ Although those are nice story to tell, most of the Software aren't built in this
 
 ## 2. What to pursue
 
-Leading is about providing guidance. Impacting whoever works directly or indirectly with you. 
-It comes with a lot of responsabilities. As we want to show the way, we must become the way, we must portrait what and how we want our team to work toward.
-
-- Professionalism 
-- Wisdom
-- Punctuality
-- Patience
-- Honesty
-
-We need to have a strong mind. Having a strong mind is about sustaining the pain of difficult situations. Knowing when to think about long term plans to convert down situation to up situation. This will come with maturity. 
-Understanding that problems are inheritent in all companies and projects and the world is in need of leaders.
-
+Leading is about providing guidance. Impacting whoever works around you. 
+It comes with a lot of responsabilities. As we want to show the way, we must become the way, we must portrait what and how we want our team to work. 
 Leaders are individuals who are able to empower those around them to achieve more.
 Empowering includes teaching, providing help when needed while never being a bottleneck and the most important being becoming an inspiration for others to have a reference.
+Those are the key characteritics to pursue:
+
+- Professionalism 
+- Honesty
+- Wisdom
+- Patience
+
+__Professionalism__ in our behaviour, being respectful and being open to discussion. Being punctual for discussion and meetings and predictible in our delivery. Keeping promises and when failing, notfying early.
+__Honesty__ is the 
+
+__Patience__ with a strong mind. Having a strong mind is about sustaining the pain of difficult situations. Knowing when to think about long term plans to convert down situation to up situation. This will come with maturity.
+Understanding that problems are inheritent in all companies and projects and the world is in need of leaders.
 
 Become the person you would want to work for.
 
@@ -59,12 +61,9 @@ Become the person you would want to work for.
 Ask essential questions, what does your team see when they see you, what do they feel coming from you?
 Threat, Depression, Frustration, Hopelessness, Negativity or Opportunity, Positivity, Open mind, Open ear, Guidance, Reliability.
 
-In all the companies I worked for, I have experienced the same pattern. I was lost. As I mentioned in the intro, the feeling of being lost came from my immaturity but it also came from the way the companies worked. There was a need for leadership. Someone who would take the lead, guiding, mentoring and acting as a role model. Leadership values aren't inborn. They aren't inherited from family tree. Leadership values can be discovered along your working experiences and/or can be learnt.
+In all the companies I worked for, I have experienced the same pattern. I was lost. As I mentioned in the intro, the feeling of being lost came from my immaturity but it also came from the way the companies worked. There was a need for leadership. Someone who would take the lead, guiding, mentoring and acting as a role model. Leadership values aren't inborn. They aren't inherited from family tree. Leadership values can be discovered along your working experiences and/or can be learnt. 
 
 We can make a difference as single individuals but if we learn to guide and bring brilliant minds to work together toward a common vision, we will reach a higher stage where we will be able to impact on a larger scale.
-
-
-
 
 Through the way we act, how we behave, the aura which comes out of us, we can change our surrounding. We can change the way people see us.
 
