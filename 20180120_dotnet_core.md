@@ -15,9 +15,7 @@ Today, I would like to explain the differences in term of project templates. Wha
 ## 1. DotNet Framework
 
 Everything started from DotNet framework.
-We would build libraries, console app and web application using ASP.Net MVC on top of DotNet Framework 1.x 2.x 3.x 4.x etc...
-This remains the most widely used platform.
-
+We would build libraries, console app and web application using ASP.Net MVC on top of DotNet Framework.
 DotNet framework provides a set of API available for application to use in order to tap into core functionalities provided by the framework like garbage collection but also lower level functionalities like operating system or even hardware.
 
 The problem was that the framework and the operating system, Windows here, used to be highly coupled. They worked hand in hand together to deliver applications. This limited the amount of use cases for DotNet as it was tied to Windows ecosystem.
