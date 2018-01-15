@@ -27,7 +27,7 @@ DotNet Standard was born.
 ## 2. DotNet Standard
 
 DotNet Standard standardizes the API previously provided by DotNet Framework.
-This allows libraries who previously were dependent on DotNet Framework, hence Windows, to now inverse their dependency and point to DotNet Standard which then decouples them from Windows.
+This allows libraries who previously were dependent on DotNet Framework to now inverse their dependency and point to DotNet Standard which then decouples them from Windows.
 
 DotNet Standard is meant to be the platform targeted by libraries for maximum compatibility.
 
