@@ -57,6 +57,7 @@ Now that we know the diffences between DotNet Standard, Core and Framework we ca
 ## 5. ASP.Net Core
 
 __ASP.Net Core is a library which targets DotNet Standard__.
+
 This means that __it can be use in both, DotNet core projects and DotNet Framework projects__.
 
 For example, when creating new project and selecting the template it is possible to select DotNet Framework 4.7 with ASP.Net Core:
