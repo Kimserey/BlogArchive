@@ -20,9 +20,7 @@ DotNet framework provides a set of API available for application to use in order
 
 The problem was that the framework and the operating system, Windows here, used to be highly coupled. They worked hand in hand together to deliver applications. This limited the amount of use cases for DotNet as it was tied to Windows ecosystem.
 
-In the most recent years, surfing the wave of cross platform development, came the abstraction of the underlying core functionalities of DotNet with the goal of decoupling DotNet from the operating system.
-
-DotNet Standard was born.
+In the most recent years came DotNet Standard, the abstraction of the underlying core functionalities of DotNet with the goal of decoupling DotNet from the operating system and therefore allowing cross platform development.
 
 ## 2. DotNet Standard
 
@@ -32,8 +30,6 @@ This allows libraries who previously were dependent on DotNet Framework to now i
 DotNet Standard is meant to be the platform targeted by libraries for maximum compatibility.
 
 But another problem is that not all functionalities of the DotNet Framework can be ported because some can't be abstracted and some just take time. On top of that, new features needed to be added which would be cross platform hence  not targeting DotNet Framework.
-
-There came DotNet Core.
 
 ## 3. DotNet Core
 
