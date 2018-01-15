@@ -2,7 +2,7 @@
 
 Lot of things have changed from the past few years in the DotNet ecosystem. In many occasions, I have seen people get confused with the differences between DotNet Core, DotNet Standard and DotNet Framework and how do they all relate to ASP Net Core.
 I don't blame them, so many new keywords that it is quite confusing to first look at.
-Today, I would like to take another approach and dive into each one of them by explaining the differences, not in term of keyword but in term of project template. What is the difference between DotNet Standard library or DotNet Core library, what is the difference between DotNet Core application or DotNet Framework application, etc... This post will contain 6 points:
+Today, I would like to explain the differences in term of project templates. What is the difference between DotNet Standard library or DotNet Core library, what is the difference between DotNet Core application or DotNet Framework application, etc... This post will contain 5 points:
 
 ```
 1. DotNet Framework
