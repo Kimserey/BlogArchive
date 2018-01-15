@@ -1,3 +1,5 @@
+echo off
+
 REM Checkout release branch
 git checkout release
 
@@ -12,3 +14,5 @@ git push github release:master
 
 REM Checkout master branch
 git checkout master
+
+echo on
