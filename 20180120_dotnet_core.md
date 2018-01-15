@@ -8,7 +8,7 @@ Today, I would like to explain the differences in term of project templates. Wha
 1. DotNet Framework
 2. DotNet Standard
 3. DotNet Core
-4. Which one to choose
+4. How to choose
 5. ASP.Net Core
 ```
 
@@ -36,7 +36,7 @@ But another problem is that not all functionalities of the DotNet Framework can 
 DotNet Core can be the platform for libraries, console app and web applications.
 DotNet Core is meant for cross platform development. The framework contains all new features ensuring cross platform but is not backward compatible with DotNet Framework.
 
-## 4. Which one to choose
+## 4. How to choose
 
 For libraries there is then 3 choices, 
 
