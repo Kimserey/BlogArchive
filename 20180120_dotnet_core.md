@@ -38,7 +38,7 @@ DotNet Core is meant for cross platform development. The framework contains all 
 
 ## 4. How to choose
 
-For libraries there is then 3 choices, 
+For libraries there are 3 choices:
 
 - DotNet Framework libraries, 
 - DotNet Standard libraries,
