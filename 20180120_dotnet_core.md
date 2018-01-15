@@ -1,6 +1,6 @@
 # DotNet Framework Standard Core and ASP Net Core
 
-A lot of things have changed from the past few years with the DotNet ecosystem. In many occasions, I have seen myself explaning the differences between DotNet Core and DotNet Standard but more precisely the difference between DotNet Framework application, DotNet Standard libraries and how do they all relate to ASP Net Core.
+A lot of things have changed from the past few years with the DotNet ecosystem. In many occasions, people have asked me to explain the differences between DotNet Core and DotNet Standard but more precisely the difference between DotNet Framework application, DotNet Standard libraries and how do they all relate to ASP Net Core.
 So many variant and buzz words that it is quite confusing to first look at.
 So today, I would like to take another approach and dive into each one of them by explaining the differences, not in term of keyword but in term of project template. What is the difference between DotNet Standard library or DotNet Core library, what is the difference between DotNet Core application or DotNet Framework application, etc... This post will contain 6 points:
 
@@ -12,7 +12,7 @@ So today, I would like to take another approach and dive into each one of them b
 5. ASP.Net Core
 ```
 
-## 1. DotNet framework
+## 1. DotNet Framework
 
 Everything started from DotNet framework.
 We would build libraries, console app and web application using ASP.Net MVC on top of DotNet Framework 1.x 2.x 3.x 4.x etc...
@@ -60,14 +60,14 @@ If the library is meant to be used by DotNet Core applications then DotNet Stand
 
 Now that we know the diffences between DotNet Standard, Core and Framework we can choose which suits our needs.
 
-## ASP.Net Core
+## 5. ASP.Net Core
 
 __ASP.Net Core is a library which targets DotNet Standard__.
 This means that __it can be use in both, DotNet core projects and DotNet Framework projects__.
 
 For example, when creating new project and selecting the template it is possible to select DotNet Framework 4.7 with ASP.Net Core:
 
-[Image](https://raw.githubusercontent.com/Kimserey/BlogArchive/github/img/20180120/aspnetcore.PNG)
+![Image](https://raw.githubusercontent.com/Kimserey/BlogArchive/github/img/20180120/aspnetcore.PNG)
 
 # Conclusion
 
