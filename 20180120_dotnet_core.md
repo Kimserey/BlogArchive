@@ -1,4 +1,4 @@
-# DotNet Framework Standard Core and ASPDotNet
+# DotNet Framework Standard Core and ASP Net Core
 
 A lot of things have changed from the past few years with the DotNet ecosystem. In many occasions, I have seen myself explaning the differences between DotNet Core and DotNet Standard but more precisely the difference between DotNet Framework application, DotNet Standard libraries and how do they all relate to ASP Net Core.
 So many variant and buzz words that it is quite confusing to first look at.
@@ -62,8 +62,8 @@ Now that we know the diffences between DotNet Standard, Core and Framework we ca
 
 ## ASP.Net Core
 
-_ASP.Net Core is a library which targets DotNet Standard_.
-This means that _it can be use in both, DotNet core projects and DotNet Framework projects_.
+__ASP.Net Core is a library which targets DotNet Standard__.
+This means that __it can be use in both, DotNet core projects and DotNet Framework projects__.
 
 For example, when creating new project and selecting the template it is possible to select DotNet Framework 4.7 with ASP.Net Core:
 
