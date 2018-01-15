@@ -5,15 +5,14 @@ So many variant and buzz words that it is quite confusing to first look at.
 So today, I would like to take another approach and dive into each one of them by explaining the differences, not in term of keyword but in term of project template. What is the difference between DotNet Standard library or DotNet Core library, what is the difference between DotNet Core application or DotNet Framework application, etc... This post will contain 6 points:
 
 ```
-1. DotNet Standard library
-2. DotNet Core library
-3. DotNet application
-4. DotNet framework application
-5. ASP Net MVC
-6. ASP Net Core
+1. DotNet Framework
+2. DotNet Standard
+3. DotNet Core
+4. Which one to choose
+5. ASP.Net Core
 ```
 
-# Dotnet framework
+## 1. DotNet framework
 
 Everything started from DotNet framework.
 We would build libraries, console app and web application using ASP.Net MVC on top of DotNet Framework 1.x 2.x 3.x 4.x etc...
@@ -27,7 +26,7 @@ In the most recent years, surfing the wave of cross platform development, came t
 
 DotNet Standard was born.
 
-# DotNet Standard
+## 2. DotNet Standard
 
 DotNet Standard standardizes the API previously provided by DotNet Framework.
 This allows libraries who previously were dependent on DotNet Framework, hence Windows, to now inverse their dependency and point to DotNet Standard which then decouples them from Windows.
@@ -38,12 +37,12 @@ But another problem is that not all functionalities of the DotNet Framework can 
 
 There came DotNet Core.
 
-# DotNet Core
+## 3. DotNet Core
 
 DotNet Core can be the platform for libraries, console app and web applications.
 DotNet Core is meant for cross platform development. The framework contains all new features ensuring cross platform but is not backward compatible with DotNet Framework.
 
-# Which one to choose
+## 4. Which one to choose
 
 For libraries there is then 3 choices, 
 
@@ -58,3 +57,18 @@ If the library is meant to be used by general public, cross platform, cross fram
 If the library is meant to be used by only DotNet Framework libraries or applications then DotNet Standard can be used, if not sufficient then DotNet Framework should be used.
 
 If the library is meant to be used by DotNet Core applications then DotNet Standard can be used and if not sufficient then DotNet Core should be used.
+
+Now that we know the diffences between DotNet Standard, Core and Framework we can choose which suits our needs.
+
+## ASP.Net Core
+
+_ASP.Net Core is a library which targets DotNet Standard_.
+This means that _it can be use in both, DotNet core projects and DotNet Framework projects_.
+
+For example, when creating new project and selecting the template it is possible to select DotNet Framework 4.7 with ASP.Net Core:
+
+[Image]()
+
+# Conclusion
+
+I have always been a supporter of the cross platform movement. DotNet Standard together with Core opens a lot of possibilities. In this post we saw what were the differences between the frameworks available and what were the goal of each of them. I hope you enjoyed this post as much as I enjoyed writing it. See you next time!
