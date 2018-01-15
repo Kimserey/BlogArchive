@@ -29,7 +29,7 @@ This allows libraries who previously were dependent on DotNet Framework to now i
 
 DotNet Standard is meant to be the platform targeted by libraries for maximum compatibility.
 
-But another problem is that not all functionalities of the DotNet Framework can be ported because some can't be abstracted and some just take time. On top of that, new features needed to be added which would be cross platform hence  not targeting DotNet Framework.
+But another problem is that not all functionalities of the DotNet Framework can be ported because some can't be abstracted and some just take time. On top of that, new features needed to be added which would be cross platform hence  not targeting DotNet Framework. This is where DotNet Core comes into picture.
 
 ## 3. DotNet Core
 
