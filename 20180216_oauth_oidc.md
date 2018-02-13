@@ -26,6 +26,14 @@ In a nutshell,
  - __Client credentials__ is used when the client needs to authenticate as itself, for example when your own application needs access to your own protected resource.
  - __Resource owner password__ is used when the client is trusted. Be very cautious with this flow as the user credentials will need to be given to the client for the client to pass it to the idp.
 
-OAuth 2.0 protocol also defines how clients are registered and how the flows occurs with the exchange on defined HTTP endpoints.
+OAuth 2.0 protocol also defines how clients are registered and how the flows occurs with the exchange on defined HTTP endpoints. It is handling authorization by providing an access token to access resources but it does not define how to identify the user requesting the access. A common practice used to be to return a second token signed by the identity provider, deserializable by the receipient containing the identifier of the user. Then came OpenID Connect.
+
 
 ## 2. What is OpenID Connect
+
+OAuth 2.0 being so flexible, it allowed the authentication protocol, OpenID Connect, to be built on top of it.
+OIDC standardizes the way to identify the user by providing an `id_token` together with the OAuth access_token.
+
+OIDC is built on top of OAuth 2.0.
+
+What it means is that OIDC standardized the delivery of the id_token within the existing flows of OAuth 2.0.
