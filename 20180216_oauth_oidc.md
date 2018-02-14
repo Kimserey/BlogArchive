@@ -83,4 +83,4 @@ With Identity Server 4, we will get OAuth 2.0 and OIDC, coupled with ASP .NET Co
 
 # Conclusion
 
-Today we saw what was OAuth 2.0 and OIDC. We also decypher some of the misconceptions around authorization versus authentication and lastly we saw a .NET implementation of it, Identity Server. Hope this post was helpful! See you next time!
+Today we saw what was OAuth 2.0 and OIDC. We also deciphered some of the concepts around authorization versus authentication and lastly we saw Identity Server 4, a .NET implementation of it. Hope this post was helpful! See you next time!
