@@ -20,14 +20,16 @@ This is where OAuth 2.0 comes into picture by providing a way to delegate access
 
 It makes the delegation possible via different flows. The flows are Authorization code, Implicit, Client credentials and Resource owner password flows.
 
- - __Authorization code__ is used for clients who can keep a secret between themselves and the idp like hosted frontend.
- - __Implicit flow__ is used for pure frontend clients like SPA who can't keep a secret.
- - __Client credentials__ is used when the client needs to authenticate as itself, for example when your own application needs access to your own protected resource.
- - __Resource owner password__ is used when the client is trusted. Be very cautious with this flow as the user credentials will need to be given to the client for the client to pass it to the idp.
+- __Authorization code__ is used for clients who can keep a secret between themselves and the idp like hosted frontend.
+- __Implicit flow__ is used for pure frontend clients like SPA who can't keep a secret.
+- __Client credentials__ is used when the client needs to authenticate as itself, for example when your own application needs access to your own protected resource.
+- __Resource owner password__ is used when the client is trusted. Be very cautious with this flow as the user credentials will need to be given to the client for the client to pass it to the idp.
 
 OAuth 2.0 protocol also defines how clients are registered and how the flows occurs with the exchange on defined HTTP endpoints and when the access token is exchanged. But what it does not define is how to identify the user requesting the access.
 A common practice used to be to return a second token signed by the identity provider, deserializable by the receipient containing the identifier of the user. But because the identification of the actual owner of the resource was not defined, every company providing external login had to create their own way and we now have a full list of OAuth 2.0 external provider.
 Then came OpenID Connect.
+
+[https://tools.ietf.org/html/rfc6749](https://tools.ietf.org/html/rfc6749)
 
 ## 2. What is OpenID Connect
 
@@ -38,6 +40,28 @@ OpenID Connect standardizes the way to identify the user by providing an `id_tok
 
 What it means is that OpenID Connect standardized the delivery of the `id_token` __within the existing flows of OAuth 2.0__.
 
+The good thing is that it is standardized therefore it is possible to adopt an identity as a service model by providing our identity implementation to external application just like how it is possible to use external identity providers for our own applications.
+
+[http://openid.net/specs/openid-connect-core-1_0.html](http://openid.net/specs/openid-connect-core-1_0.html)
+
 ## 3. What is Identity Server
 
-Identity Server is a framework implementing OAuth 2.0 and OpenID Connect.
+Identity Server is a framework implementing OAuth 2.0 and OpenID Connect in the .NET ecosystem, and particularly for ASP .NET Core.
+
+In previous blog post I have covered two flow implementations:
+- [Implicit](https://kimsereyblog.blogspot.sg/2017/09/implicit-flow-with-identity-server-and.html)
+- [Resource owner password](https://kimsereyblog.blogspot.sg/2017/04/resourceownerpassword-with-identity.html)
+
+But all the flows are actually supported and there are examples backing up the flows on the github of identity server.
+
+[https://github.com/identityserver](https://github.com/identityserver)
+
+The project is totally open sourced and extremely well maintained and is OpenID certified.
+
+__Identity server does not manage users__
+
+A common misconception is to think that Identity Server implementation manages users. The responsability to store users information together with credentials is delegated to us. But there are helpers which binds common implementation of membership systems like ASP .NET Core Identity.
+
+# Conclusion
+
+Today we saw what was OAuth 2.0 and OpenID Connect. We also decypher some of the misconceptions around authorization versus authentication and lastly we saw a .NET implementation of it, Identity Server. Hope this post was helpful! See you next time!
