@@ -55,3 +55,40 @@ sudo apt-get install dotnet-sdk-2.1.4
 
 ## 3. Run an ASP NET Core behind nginx
 
+For a simple Hello World application, we create an empty template of ASP NET Core application called `HelloWorld` and run `dotnet publish -c Release` to publish it.
+
+Next from the Ubuntu shell, we copy the binaries into `/var/aspnetcore/hello-world/`.
+
+```bash
+cp -r [path of publish folder] /var/aspnetcore/hello-world
+```
+
+And verify that we can run the application using `dotnet HelloWorld.dll`.
+
+![helloworld]()
+
+We can also make sure that we can hit the endpoint from the browser by going to `http://localhost:5000`.
+Kestrel allows us to selfhost our application and if we hit the port, we can access the application. But it is not recommended to direclty hit Kestrel, instead it is best to pass by a reverse proxy like Nginx giving us more power in term of response, caching and load balancing.
+
+### Install Nginx
+
+Similarly as we installed dotnet, we can install nginx and start it.
+
+```bash
+sudo apt-get install nginx
+sudo service nginx start
+```
+
+```txt
+server {
+    listen 80;
+    location / {
+        proxy_pass http://localhost:5000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection keep-alive;
+        proxy_set_header Host $http_host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
