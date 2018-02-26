@@ -68,7 +68,7 @@ And verify that we can run the application using `dotnet HelloWorld.dll`.
 ![helloworld]()
 
 We can also make sure that we can hit the endpoint from the browser by going to `http://localhost:5000`.
-Kestrel allows us to selfhost our application and if we hit the port, we can access the application. But it is not recommended to direclty hit Kestrel, instead it is best to pass by a reverse proxy like Nginx giving us more power in term of response, caching and load balancing.
+Kestrel allows us to selfhost our application and if we hit the port, we can access the application. But it is not recommended to direclty hit Kestrel, instead it is best to pass by a reverse proxy like Nginx giving us more power in term of response, caching and of course act as a reverse proxy.
 
 ### Install Nginx
 
@@ -76,8 +76,15 @@ Similarly as we installed dotnet, we can install nginx and start it.
 
 ```bash
 sudo apt-get install nginx
+```
+
+Then we can start nginx.
+
+```bash
 sudo service nginx start
 ```
+
+The configuration of nginx can be found in `/etc/nginx/sites-available/default`. Change the content of the file by the following:
 
 ```txt
 server {
@@ -92,3 +99,15 @@ server {
     }
 }
 ```
+
+Next we should be able to navigate to `http://localhost` and see our application.
+
+_To run Kestrel as a daemon, dotnet documentation recommends to use `systemd`. Unfortunately I did not manage to get it running on WSL. Multiple issues are open on the WSL repository on GitHub._
+
+The official documentation can be found [here](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?tabs=aspnetcore2x).
+
+That concludes today post on running a Hello World ASP NET Core application locally on Ubuntu on Windows 10.
+
+## Conclusion
+
+Today we discovered how to install Ubuntu as a subsystem within Windows 10. Installing a Linux system gives us access to the powerful functionalities of bash. We then saw how to install dotnet on Ubuntu and how we could boot a Hello World application behind Nginx. Hope you liked this post. See you next time!
