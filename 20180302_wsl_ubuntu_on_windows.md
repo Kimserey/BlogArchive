@@ -16,11 +16,11 @@ Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-L
 
 Alternatively we can also enable WSL from the Windows Features.
 
-![WSL](WSL.png)
+![WSL](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20180302_wsl/WSL.PNG)
 
 Then download Ubuntu from the Microsoft Store.
 
-![MSFT_Store]()
+![MSFT_Store](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20180302_wsl/msft_store.PNG)
 
 After the download complete, launch it and we will be prompted to create our root user. Once done, we should be able to open the Ubuntu shell.
 
@@ -64,8 +64,6 @@ cp -r [path of publish folder] /var/aspnetcore/hello-world
 ```
 
 And verify that we can run the application using `dotnet HelloWorld.dll`.
-
-![helloworld]()
 
 We can also make sure that we can hit the endpoint from the browser by going to `http://localhost:5000`.
 Kestrel allows us to selfhost our application and if we hit the port, we can access the application. But it is not recommended to direclty hit Kestrel, instead it is best to pass by a reverse proxy like Nginx giving us more power in term of response, caching and of course act as a reverse proxy.
