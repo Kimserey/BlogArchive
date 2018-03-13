@@ -3,11 +3,11 @@
 Few weeks ago I was tasked to estimate a cloud architecture with limited requirements.
 Today we will see the rules which can be followed in order to come up with a price tag. This post is composed by three parts:
 
- 1. Implicit requirements
+ 1. Defining the requirements
  2. Solution needs
  3. Price
 
-## 1. Implicit requirements
+## 1. Defining the requirements
 
 Before starting any estimation, it is important to get at least one requirement. In this example we will invent a scenario, really close to what I had irl, whereby __we would be setting up a Christmas tree website__ with the following requirements.
 
@@ -23,21 +23,25 @@ Having large requirements is better than having none. Using that, we can deduce 
 
 In a web development estimation, what we need to consider are the main contributors to price. Those are:
 
-- the hosting VMs
-- the database VMs
-- bandwith
-- enterprise licenses of app and/or frameworks
+- Hosting VMs
+- Database VMs
+- Bandwith
+- Enterprise licenses of app and/or frameworks
 - CDN
-- object storage
-- extra cloud services
+- Object storage
+- Extra cloud services
 
 Some of the contributors which would directly map to a price on AWS. Hosting VMs map to EC2s, bandwith maps to the outbound cost of VM conmunications, CDN maps to Cloudfront and object storage maps to a S3 storage.
 Enterprise licenses are for tools like NService bus, Segment or similar which are paid solutions.
 Extra cloud services could be services like elastic search.
 
-Knowing this we have already scoped down to what we need to look into to get an estimate od the price.
+Knowing this we have already scoped down to what we need to look into to get an estimate of the price.
 
 ## 2. Solution needs
+
+Using back the requirements, __trees are put to sale accross the whole year__, we know that we will need to have the system up and running for the whole year. This implies that we can evaluated the cost of the VMs as if they will be running 24 hours per day.
+
+
 
 ## 3. Price
 
