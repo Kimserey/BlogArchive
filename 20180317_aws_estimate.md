@@ -41,7 +41,7 @@ Knowing this we have already scoped down to what we need to look into to get an 
 
 Using back the requirements, __trees are put to sale accross the whole year__, we know that we will need to have the system up and running for the whole year. This implies that we can evaluated the cost of the VMs as if they will be running 24 hours per day.
 
-
+The other requirements "50K purchases where 80% during November and December" means that 40K purchases happen during the last two months. 40K happening in two months means, we can make an assumption that it will be 20K per months hence around 645 orders per day which would mean 
 
 ## 3. Price
 
