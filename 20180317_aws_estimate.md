@@ -7,7 +7,7 @@ Today we will see the rules which can be followed in order to come up with a pri
  2. Solution needs
  3. Price
 
-## 1. Defining the requirements
+## 1. Defining Requirements
 
 Before starting any estimation, it is important to get at least one requirement. In this example we will invent a scenario, really close to what I had irl, whereby __we would be setting up a Christmas tree website__ with the following requirements.
 
@@ -37,7 +37,7 @@ Extra cloud services could be services like elastic search.
 
 Knowing this we have already scoped down to what we need to look into to get an estimate of the price.
 
-## 2. Solution needs
+## 2. Solution Needs
 
 Using back the requirements, __trees are put to sale accross the whole year__, we know that we will need to have the system up and running for the whole year. This implies that we can evaluated the cost of the VMs as if they will be running 24 hours per day.
 The other requirements "50K purchases where 80% during November and December" means that 40K purchases happen during the last two months. 40K happening in two months means, we can make an assumption that it will be 20K per months hence around 645 orders per day, 
@@ -47,9 +47,9 @@ For a single country, we assume that all orders are spread across 6 hours during
 _Now we know that we would need to be able to cater for 100 orders per hour._
 
 Next we need to compute the storage of assets needed. For a shop-like site, we would have images of articles and advertisements.
-Here we again assume about 20 variety of trees. If each image is a HD image of 12mb and we have maximum three pictures per tree, we would need around 1gb of storage. Including extra space for other content, _5gb of storage should be enough_.
+Here we again assume about 20 variety of trees. If each image is a HD image of 12mb and we have maximum three pictures per tree, we would need around 1gb of storage. Including extra space for other content, _5gb of storage should be enough__, and we can start by estimating a buffer of 500k read/write/listing.
 
-Lastly for CDN purposes, we can assume a visit of 100K users for 40K purchases. If we assume that each users individually consume 100mb of content, _the CDN would deliver 10tb_.
+Lastly for CDN purposes, we can assume a visit of 100K users for 40K purchases. If we assume that each users individually consume   of content, _the CDN would deliver 10tb_.
 
 For database usage, 5gb would be enough for a start to contain 40K orders history and data linked to it.
 
@@ -72,12 +72,19 @@ The storage of assets will be taken care of by a S3 storage.
 
 The CDN is a negligeable price as 10tb can be seen as a small amount.
 
-For cloud database storage, in AWS Aurora can be used to leverage the cloud benefits together with the relation aspect of the database.
+For cloud database storage, DyanmoDB can be used to leverage the cloud benefits together with the noSQL aspect of the database.
 
 Putting the prices together using the [AWS price calculator](http://calculator.s3.amazonaws.com/index.html).
 
-| Name       | Unit price  | Monthly price |
-|------------|-------------|-------------|
-| t2.micro   | $0.0192 /month | $15         |
-| S3 storage | -              | 
-Aurora
+| Name       | Unit price  | Reason | Monthly price |
+|------------|-------------|--------|---------------|
+| t2.micro   | $0.0192 /month | Hosting | $15 |
+| S3 storage | - | 5gb storage and 500k read/write/list | $3 |
+| DynamoDB | - | 5gb of relational database and 1M 15WCU/15RCU | $8 |
+| Total | - | - | $26 |
+
+We now have concluded that roughly monthly for the usage of the site, we would need $100 to sustain it for the production environment if we go for such a small scale.
+
+## Conclusion
+
+Today we saw how we could derive infrastructure needs out of vague requirements. We saw how to calculate prices by looking at AWS calculator and documentation. Finally we establish a way to go from large requirements to a number which can be used for estimation. Hope you like this post, see you next time!
