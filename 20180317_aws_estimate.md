@@ -74,8 +74,10 @@ The CDN is a negligeable price as 10tb can be seen as a small amount.
 
 For cloud database storage, in AWS Aurora can be used to leverage the cloud benefits together with the relation aspect of the database.
 
-Putting the prices together results in the following.
+Putting the prices together using the [AWS price calculator](http://calculator.s3.amazonaws.com/index.html).
 
-T2.micro xx
-S3 storage
+| Name       | Unit price  | Monthly price |
+|------------|-------------|-------------|
+| t2.micro   | $0.0192 /month | $15         |
+| S3 storage | -              | 
 Aurora
