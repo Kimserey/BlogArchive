@@ -40,9 +40,42 @@ Knowing this we have already scoped down to what we need to look into to get an 
 ## 2. Solution needs
 
 Using back the requirements, __trees are put to sale accross the whole year__, we know that we will need to have the system up and running for the whole year. This implies that we can evaluated the cost of the VMs as if they will be running 24 hours per day.
+The other requirements "50K purchases where 80% during November and December" means that 40K purchases happen during the last two months. 40K happening in two months means, we can make an assumption that it will be 20K per months hence around 645 orders per day, 
 
-The other requirements "50K purchases where 80% during November and December" means that 40K purchases happen during the last two months. 40K happening in two months means, we can make an assumption that it will be 20K per months hence around 645 orders per day which would mean 
+For a single country, we assume that all orders are spread across 6 hours during the day which results in 100 orders per hour.
+
+_Now we know that we would need to be able to cater for 100 orders per hour._
+
+Next we need to compute the storage of assets needed. For a shop-like site, we would have images of articles and advertisements.
+Here we again assume about 20 variety of trees. If each image is a HD image of 12mb and we have maximum three pictures per tree, we would need around 1gb of storage. Including extra space for other content, _5gb of storage should be enough_.
+
+Lastly for CDN purposes, we can assume a visit of 100K users for 40K purchases. If we assume that each users individually consume 100mb of content, _the CDN would deliver 10tb_.
+
+For database usage, 5gb would be enough for a start to contain 40K orders history and data linked to it.
+
+Lastely, the bandwith which needs to be paid is the outbound connection from the VM to the outside. In our case it is negligeable.
 
 ## 3. Price
 
-## Conclusion
+From the assumptions we made, we had the following:
+
+- Support for 100 orders per hour
+- 5gb of asset storage
+- 10tb of CDN
+- 5gb of cloud storage
+
+To support 100 orders per hour we need to be able to measure the complexity of our system to support a single order.
+For instance if an order takes an hour, we would need 100 times the setup to match the requirement while if an order takes about 10 seconds, we can have 6 orders per minutes which means that we would be able to handle 360 orders per hour. Three time more than the requirement.
+For such system, a t2.micro ec2 instance would be enough to support the website.
+
+The storage of assets will be taken care of by a S3 storage.
+
+The CDN is a negligeable price as 10tb can be seen as a small amount.
+
+For cloud database storage, in AWS Aurora can be used to leverage the cloud benefits together with the relation aspect of the database.
+
+Putting the prices together results in the following.
+
+T2.micro xx
+S3 storage
+Aurora
