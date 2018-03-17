@@ -27,7 +27,6 @@ In a web development estimation, what we need to consider are the main contribut
 - Database VMs
 - Bandwith
 - Enterprise licenses of app and/or frameworks
-- CDN
 - Object storage
 - Extra cloud services
 
@@ -49,8 +48,6 @@ _Now we know that we would need to be able to cater for 100 orders per hour._
 Next we need to compute the storage of assets needed. For a shop-like site, we would have images of articles and advertisements.
 Here we again assume about 20 variety of trees. If each image is a HD image of 12mb and we have maximum three pictures per tree, we would need around 1gb of storage. Including extra space for other content, _5gb of storage should be enough__, and we can start by estimating a buffer of 500k read/write/listing.
 
-Lastly for CDN purposes, we can assume a visit of 100K users for 40K purchases. If we assume that each users individually consume   of content, _the CDN would deliver 10tb_.
-
 For database usage, 5gb would be enough for a start to contain 40K orders history and data linked to it.
 
 Lastely, the bandwith which needs to be paid is the outbound connection from the VM to the outside. In our case it is negligeable.
@@ -61,7 +58,6 @@ From the assumptions we made, we had the following:
 
 - Support for 100 orders per hour
 - 5gb of asset storage
-- 10tb of CDN
 - 5gb of cloud storage
 
 To support 100 orders per hour we need to be able to measure the complexity of our system to support a single order.
@@ -69,8 +65,6 @@ For instance if an order takes an hour, we would need 100 times the setup to mat
 For such system, a t2.micro ec2 instance would be enough to support the website.
 
 The storage of assets will be taken care of by a S3 storage.
-
-The CDN is a negligeable price as 10tb can be seen as a small amount.
 
 For cloud database storage, DyanmoDB can be used to leverage the cloud benefits together with the noSQL aspect of the database.
 
