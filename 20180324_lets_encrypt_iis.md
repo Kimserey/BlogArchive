@@ -3,7 +3,7 @@
 Few weeks ago we saw how we could generate a SSL cert for free using a browser based ACME implementation. While doing that, we had some manual process to do for the verification to happen, either by changing the DNS settings or making a key available on an endpoint. Today we will see how we can achieve that without manual handling of the secrets.
 
 1. Register application on IIS
-2. Download Let's Encrypt and configure
+2. Use Let's Encrypt
 
 ## 1. Register application on IIS
 
@@ -28,11 +28,19 @@ https://github.com/PKISharp/win-acme
 
 Once downloaded, place it somewhere on the VM and add it to the path. Then simply run `letsencrypt` and you will be prompted with the menu. Follow the instruction and the CLI will verify that you own the domain and setup your SSL automatically.
 
-![win-acme]()
+![win-acme](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20180324/letsencrypt.PNG)
 
 To host multiple services, we can download the URL rewrite module. This will also be needed to redirect HTTP calls to our HTTPS endpoint.
 
 https://www.iis.net/downloads/microsoft/url-rewrite
+
+To redirect HTTP to HTTPS, we configure the following:
+
+![config]()
+
+The condition `{HTTPS}` with pattern `OFF` means that we detect when HTTPS is OFF. Once detected we redirect to HTTPS using the pattern `https://{HTTP_HOST}/{R:1}`.
+
+![rediredct]()
 
 ## Conclusion
 
