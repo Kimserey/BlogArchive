@@ -34,6 +34,14 @@ To host multiple services, we can download the URL rewrite module. This will als
 
 https://www.iis.net/downloads/microsoft/url-rewrite
 
+To redirect HTTP to HTTPS, we configure the following:
+
+![config]()
+
+The condition `{HTTPS}` with pattern `OFF` means that we detect when HTTPS is OFF. Once detected we redirect to HTTPS using the pattern `https://{HTTP_HOST}/{R:1}`.
+
+![rediredct]()
+
 ## Conclusion
 
 Today we saw how we could quickly get an ASP.NET Core application hosted on a Windows Server VM behind IIS. We also saw how we could issue a SSL cert using an automated verification of domain with ACME protocol and Let's Encrypt. Hope you like this post, see you next time!
