@@ -12,14 +12,22 @@ For example, one of the reason why is that only one application can listen to th
 
 So the first step, coming from an empty Windows Server 2016 instance, we can start by installing IIS by activating from __Add Roles And Features__ from __Manage__ on the __Server Manager__.
 
-![server_manager]()
+![server_manager](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20180324/server_manage_Add_role.PNG)
+
+Follow the steps and select IIS from the wizard:
+
+![iis_install](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20180324/iis.PNG)
 
 Next we can head to the release notes of dotnet core and grab:
 
 1. the runtime [https://github.com/dotnet/core/blob/master/release-notes/download-archives/2.0.6-download.md#net-core-206](https://github.com/dotnet/core/blob/master/release-notes/download-archives/2.0.6-download.md#net-core-206)
 2. the AspNetCore module [https://github.com/dotnet/core/blob/master/release-notes/download-archives/2.0.6-download.md#windows](https://github.com/dotnet/core/blob/master/release-notes/download-archives/2.0.6-download.md#windows)
 
-Now that we have IIS setup with the module setup, we can copy our dll's on the machine and create a website in IIS console to point to the folder.
+Now that we have IIS setup with the module setup, we can access the console from the IIS section in the Server Manager.
+
+![iis](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20180324/iis_console.PNG)
+
+Then we can copy our dll's on the machine and create a website in IIS console to point to the folder.
 
 On the application pool, make sure to specify __No Managed code__ for the .NET CLR version as ASP.NET Core is not managed by IIS, it does not need IIS to load any libraries to support the runtime of the application as everything is handled by Kestrel.
 
