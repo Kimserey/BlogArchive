@@ -66,31 +66,49 @@ vault login
 Token (will be hidden):
 ```
 
+We should now be logged in as root user.
+
 ## 2. Save secrets
-
-Now that we have started the Vault, we can log in as the root user.
-
-
-vault login []
-
 
 Next we can start to add secret like so:
 
-
+```txt
 vault write secret/myapp some_secret=123
-
+```
 
 As you can see Vault works like a filesystem with paths. We are able to read/write secrets on a particular path.
 
-
+```txt
 vault read secret/myapp
-
+Key                 Value
+---                 -----
+refresh_interval    768h
+some_secret         123
+```
 
 We can also write in sub folders:
 
-
+```txt
 vault write secret/myapp/production some_secret=456
+```
 
+```txt
+vault list secret/myapp
+Keys
+----
+production
+```
 
-You also must have noticed that everything was prefixed with `secret`. `secret` is the default handler for secrets as key value store.
-The list of handlers
+```txt
+vault read secret/myapp/production
+Key                 Value
+---                 -----
+refresh_interval    768h
+some_secret         456
+```
+
+You also must have noticed that everything was prefixed with `secret`. `secret` is the default handler for secrets to be stored and retrieved from key value store. More information [here](https://www.vaultproject.io/intro/getting-started/secrets-engines.html).
+
+## 3. Create a role with a policy
+
+## 4. Retrieve secrets
