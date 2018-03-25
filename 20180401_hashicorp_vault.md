@@ -111,4 +111,71 @@ You also must have noticed that everything was prefixed with `secret`. `secret` 
 
 ## 3. Create a role with a policy
 
+What we need next is to have a way to generate tokens with read access only to the secrets under myapp.
+
+The authentication targeted to application needing to authenticate to Vault to request the secrets they need is called `approle`.
+
+### 3.1 Enable approle
+
+Approle allows us to create a role which is configured with policies dictating the accesses granted by the token.
+We run the following command to enable approle.
+
+```txt
+vault auth enable approle
+```
+
+### 3.2 Create policy
+
+Next we can create a policy which allows the read on `/myapp`. We start by creating a hcl file:
+
+```txt
+path "secret/myapp/*" {
+  capabilities = ["read"]
+}
+```
+
+Vault also provides a utility to verify that the policy is formatted properly using `fmt`.
+
+```txt
+vault policy fmt policies/myapp.hcl
+```
+
+And lastly we add the policy in vault.
+
+```txt
+vault policy write myapp policies/myapp.hcl
+```
+
+```txt
+vault policy read myapp
+path "secret/myapp/*" {
+  capabilities = ["read"]
+}
+```
+
+### 3.3  Create role
+
+A role allows us to group together a set of policies and configurate settings on the secret and token like TTL.
+
+We already created the policy so now we can create the role and associate the policy to it.
+
+```txt
+vault write auth/approle/role/myapp secret_id_ttl=10m secret_id_num_uses=10 policies=default,myapp
+```
+
+Whoever authenticates under the role myapp will be provided a token allowing read access to secrets under `/myapp`.
+
+Now the authentication requires two pieces, role Id and secret Id.
+The role id can be found using the following command.
+
+....
+
+And the secret id can be found using the following command.
+
+...
+
+Providing the information to the application......not handle the srecret only app handles
+
+## 4. Retrieve secrets
+
 ## 4. Retrieve secrets
