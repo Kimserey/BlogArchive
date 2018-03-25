@@ -129,6 +129,10 @@ vault auth enable approle
 Next we can create a policy which allows the read on `/myapp`. We start by creating a hcl file:
 
 ```txt
+path "secret/myapp" {
+  capabilities = ["read"]
+}
+
 path "secret/myapp/*" {
   capabilities = ["read"]
 }
@@ -148,6 +152,10 @@ vault policy write myapp policies/myapp.hcl
 
 ```txt
 vault policy read myapp
+path "secret/myapp" {
+  capabilities = ["read"]
+}
+
 path "secret/myapp/*" {
   capabilities = ["read"]
 }
@@ -168,14 +176,85 @@ Whoever authenticates under the role myapp will be provided a token allowing rea
 Now the authentication requires two pieces, role Id and secret Id.
 The role id can be found using the following command.
 
-....
+```txt
+vault read auth/approle/role/myapp/role-id
+Key        Value
+---        -----
+role_id    2fbc9478-c4fe-6243-792b-5ac1642fb05c
+```
 
 And the secret id can be found using the following command.
 
-...
+```txt
+> vault write -f auth/approle/role/myapp/secret-id
+Key                   Value
+---                   -----
+secret_id             fa856dcc-129e-7da4-fe3e-6e21e46ae7ff
+secret_id_accessor    6cd7beb1-afb1-4e3a-3c97-a89cf01756f7
+```
 
-Providing the information to the application......not handle the srecret only app handles
+Here `-f` is used to force to generate the value without content posted.
+
+Providing the `role Id` and the `secret Id` to the application provides a safeguard as no one will be handling the secrets apart from the application.
+
+Another advantage is that the secret Id lifecycle is controlled by the role.
 
 ## 4. Retrieve secrets
 
-## 4. Retrieve secrets
+So far we have a configured a role, retrieved the role Id and secret Id. 
+In an application we need to retrieve the secrets which we defined in 2) to use them.
+To do that we start by authenticating using the role Id and secret Id.
+
+```cmd
+vault write auth/approle/login role_id=2fbc9478-c4fe-6243-792b-5ac1642fb05c secret_id=fa856dcc-129e-7da4-fe3e-6e21e46ae7ff
+
+Key                     Value
+---                     -----
+token                   524986cf-d1bb-0c67-25c3-d039c6831bf0
+token_accessor          14396458-c942-f7b1-17cd-a02130cdb1b5
+token_duration          768h
+token_renewable         true
+token_policies          [default myapp]
+token_meta_role_name    myapp
+```
+
+Once we have authenticated we receive a token which we can login with.
+
+```cmd
+vault login 524986cf-d1bb-0c67-25c3-d039c6831bf0
+Success! You are now authenticated. The token information displayed below
+is already stored in the token helper. You do NOT need to run "vault login"
+again. Future Vault requests will automatically use this token.
+
+Key                     Value
+---                     -----
+token                   523986cf-d1bb-0c67-25c3-d039c6831bf0
+token_accessor          14296458-c942-f7b1-17cd-a02130cdb1b5
+token_duration          767h58m46s
+token_renewable         true
+token_policies          [default myapp]
+token_meta_role_name    myapp
+```
+
+We can now retrieve the data from `/secret/myapp`!
+
+```cmd
+```
+
+If we try to perform any actions which we were doing while authenticated as root user, we will receive an unauthorized error.
+
+```cmd
+vault policy list
+Error listing policies: Error making API request.
+
+URL: GET http://localhost:8200/v1/sys/policy
+Code: 403. Errors:
+
+* permission denied
+```
+
+In an application scenario, we would be authenticating from within the application and using the token to configure our database connection settings for example.
+
+## Conclusion
+
+Today we saw how we could manage application secrets with Hashicorp Vault by setting up approle, an authentication designed for application to login and retrieve their secrets. Hope you liked this post. See you next time!
