@@ -1,6 +1,6 @@
 # Microsoft Project Orleans 2.0.0 beta 3 to 2.0.0 stable
 
-Microsoft Project Orleans just released its 2.0.0 stabe version. This version embodies an enormous amount of enhancements, fixes, refactor, new functionalities but above all in my perspective, moving to dotnet standard, aligning to the philosophy behind asp.net core with the configuration framework and logging framework provided by Microsoft.Extensions, and lastly providing a direct configuration easy to use with comprehensible separations of API to boot clients and silos.
+Microsoft Project Orleans just released its 2.0.0 stabe version. This version embodies an enormous amount of enhancements, fixes, refactor, new functionalities aligning to the new tools used in asp.net core with the configuration framework, logging framework, and at the same time providing a direct configuration via builder with comprehensible separations of API to boot clients and silos.
 Today I want to take the time to explain how the migration between beta 3 and stable can be done in three parts:
 
 1. What changed
@@ -9,9 +9,8 @@ Today I want to take the time to explain how the migration between beta 3 and st
 
 ## 1. What changed
 
-Back in 1.5, we used to configure client and silo using `ClientConfiguration` and `ClusterConfiguration`. One of the biggest confusion was __why do we configure the cluster? Aren't we configuring Silo?__.
-Moving forward with the introduction of dotnet standard, it made sense to start to shift in order to take advantage of the cross platform capibilities of dotnet (leverage cheaper linux box or leverage container services).
-Along the months, in the multiple alpha/beta releases more changes happened to evolve Orleans without breaking changes, some properties were added to supersede others while obsolete ones not being removed.
+Back in 1.5, we used to configure client and silo using `ClientConfiguration` and `ClusterConfiguration` which were hard to configure with many possibilities.
+Following the shift to dotnet standard, multiple alpha/beta releases happened and in order to maintain Orleans backward compatibilities, some properties were added to supersede others while obsolete ones were not removed.
 
 _For example the seed nodes configuration, I had a hard time to understand as it was an array but it turns out to be an obsolete configuration and was supposed to be a single value pointing to the primary node._
 
