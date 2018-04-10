@@ -28,13 +28,7 @@ A client needs to connect to a cluster. The only configuration needed for the cl
 2. the id of the service
 3. where to find the cluster
 
-During beta this used to be configured in ClientConfiguration like so:
-
-```c#
-Outdated version!
-```
-
-It is now done using the `ClientBuilder`:
+During beta this used to be configured in `ClientConfiguration`, it is now done using the `ClientBuilder`:
 
 ```c#
 IClusterClient client = new ClientBuilder()
@@ -69,13 +63,7 @@ A silo needs more configurations. It is the runtime for the grains. If we levera
 7. the stream service
 8. the reminder type and storage if needed
 
-During beta this used to be configured in ClusterConfiguration like so:
-
-```c#
-Outdated version!
-```
-
-It is now done using the `SiloBuilder`:
+During beta this used to be configured in `ClusterConfiguration`, it is now done using the `SiloBuilder`:
 
 ```c#
 ISiloHost host = new SiloHostBuilder()
