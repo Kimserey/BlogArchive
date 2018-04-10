@@ -131,3 +131,13 @@ __This is also one of the major changes; the libraries have been split into mean
 - The reminders are provided by the library `Microsoft.Orleans.Reminders.xxx`.
 
 Here we are using Azure so everything was with `.AzureStorage` but if we were to use AWS, we could import `.DynamoDB` and we will have access to the extensions to use DynamoDB as clustering, backing storage for grains and reminders.
+
+## Further readings
+
+If you are looking for a tutorial on how to get started with Orleans, have a look at my previous tutorials.
+
+- [A first look at Microsoft Orleans](https://kimsereyblog.blogspot.sg/2017/10/a-first-look-at-microsoft-orleans.html?m=1)
+- [Create a simple Microsoft Orleans application](https://kimsereyblog.blogspot.sg/2017/10/create-simple-microsoft-orleans.html?m=1)
+- [Microsoft Orleans Grains Concurrency Handling](https://kimsereyblog.blogspot.sg/2017/10/microsoft-orleans-grains-concurrency.html?m=1)
+- [Silo configuration and Cluster management in Microsoft Orleans](https://kimsereyblog.blogspot.sg/2017/10/silo-configuration-and-cluster.html?m=1)
+- [Microsoft Orleans logs warnings and errors](https://kimsereyblog.blogspot.sg/2017/12/microsoft-orleans-logs-warnings-and.html?m=1)
