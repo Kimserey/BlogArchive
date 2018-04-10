@@ -1,6 +1,6 @@
 # Microsoft Project Orleans 2.0.0 beta 3 to 2.0.0 stable
 
-On the 29 March, Microsoft Project Orleans team accomplished a major step through by releasing the stable version 2.0.0 of the framework. This version embodies an enormous amount of enhancements, fixes, refactor, new functionalities but above all in my perspective, moving to dotnet standard, aligning to the philosophy behind asp.net core with the configuration framework and logging framework provided by Microsoft.Extensions, and lastly providing a direct configuration easy to use with comprehensible separations of API to boot clients and silos.
+Microsoft Project Orleans just released its 2.0.0 stabe version. This version embodies an enormous amount of enhancements, fixes, refactor, new functionalities but above all in my perspective, moving to dotnet standard, aligning to the philosophy behind asp.net core with the configuration framework and logging framework provided by Microsoft.Extensions, and lastly providing a direct configuration easy to use with comprehensible separations of API to boot clients and silos.
 Today I want to take the time to explain how the migration between beta 3 and stable can be done in three parts:
 
 1. What changed
