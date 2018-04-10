@@ -4,7 +4,7 @@ Versioning application allows us to know which features are currently available 
 
 1. Version assemblies
 2. Sementic versioning
-3. Automatic versioning with Gitversion
+3. Gitversion
 
 ## 1. Versioning assemblies
 
@@ -23,7 +23,7 @@ using System.Reflection;
 
 This assembly info will yield the following assembly:
 
-![img]()
+![img](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20180411_version/dll.PNG)
 
 In .NET Framework, the assembly info is added in the project template and can be found under the Properties foldee of the project. We can directly edit this data and see the version of the assembly change when it is built.
 
@@ -50,7 +50,7 @@ There are many scenarios where the different type matters but the most common ar
 
 This convention allows consumer to know what has been changed and whether it is safe or not to update the library by only looking at the version.
 
-## 3. Automation with Gitversion
+## 3. Gitversion
 
 At every release, the developer releasing would need to deduce whether the next version is major, minor or patch.
 
@@ -166,3 +166,53 @@ Once we are ready to release, we then tag with the release number the commit whi
   "CommitDate":"2018-04-06"
 }
 ```
+
+Now for gitversion to be able to detect whether it needs to bump the major, minor or patch digit, we need to provide some sort of indication. This indication comes from the commit messages in the form of regex strings.
+
+The regex pattern is `+semver: major|minor|patch`. Patch does not need to be specified as it is the default bump for master. For the major and minor, the developer committing needs to add the pattern in the commit message so that when her branch merges back to master, gitversion will know how to version it.
+
+For example here the current version is `2.0.1`. If a developer makes a breaking change, we would commit with `+semver: major`. Next version will then be `3.0.0`.
+
+```cmd
+> git commit -m "some message +semver: major" --allow-empty
+[master 655cbd2] some message +semver: major
+
+> gitversion
+{
+  "Major":3,
+  "Minor":0,
+  "Patch":0,
+  "PreReleaseTag":"",
+  "PreReleaseTagWithDash":"",
+  "PreReleaseLabel":"",
+  "PreReleaseNumber":"",
+  "BuildMetaData":3,
+  "BuildMetaDataPadded":"0003",
+  "FullBuildMetaData":"3.Branch.master.Sha.655cbd2706c944adcd1b2d0edcf94530cd131ab9",
+  "MajorMinorPatch":"3.0.0",
+  "SemVer":"3.0.0",
+  "LegacySemVer":"3.0.0",
+  "LegacySemVerPadded":"3.0.0",
+  "AssemblySemVer":"3.0.0.0",
+  "AssemblySemFileVer":"3.0.0.0",
+  "FullSemVer":"3.0.0+3",
+  "InformationalVersion":"3.0.0+3.Branch.master.Sha.655cbd2706c944adcd1b2d0edcf94530cd131ab9",
+  "BranchName":"master",
+  "Sha":"655cbd2706c944adcd1b2d0edcf94530cd131ab9",
+  "NuGetVersionV2":"3.0.0",
+  "NuGetVersion":"3.0.0",
+  "NuGetPreReleaseTagV2":"",
+  "NuGetPreReleaseTag":"",
+  "CommitsSinceVersionSource":3,
+  "CommitsSinceVersionSourcePadded":"0003",
+  "CommitDate":"2018-04-06"
+}
+```
+
+We can see now gitversion knows that the next version is `3.0.0`. Similarly, we can use `+semver: minor` to specify a minor change.
+
+And that completes this post on how to version applications in dotnet!
+
+## Conclusion
+
+Today we saw how we could version .NET Framework applications and dotnet core applications. We also had a brief explanation of what is Semantic versioning and why it is important. Lastly we looked at GitVersion, an open source software calculating the sementic version of the current branch removing the burdden to have to check manually and decide the version numbers. Hope you like this post! See you next time!
