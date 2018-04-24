@@ -372,3 +372,5 @@ services.AddHealthChecks(c =>
 And that concludes our healthcheck library.
 
 ## Conclusion
+
+Today we saw how to implement a healthcheck framework which can be used in any ASP NET Core application. We started from deciding how we want to have our healthcheck configured then moved to the implementation and ended by creating an extension for Sqlite. This methodology can be used to create any framework starting from deciding how we wish to use the framework and moving backward to the implementation. Hope you liked this post, see you next time!
