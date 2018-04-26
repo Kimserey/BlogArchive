@@ -1,13 +1,13 @@
 # Healthchecks in ASP NET Core
 
-Healthchecks are used to assess the health of an application. There are multiple level of checks which can be implemented, the first level being whether the application is itself running. The second level being whether the application dependencies, services, databases, files, are accessible by the application. Last level being whether the process itself is healthy, consume a reasonable amount of CPU/RAM.
+Healthchecks are used to assess the health of an application. There are multiple level of checks which can be implemented, the first level being whether the application is itself running. The second level being whether the application dependencies, services, databases, files, are accessible by the application. Last level being whether the process itself is healthy, consumes a reasonable amount of CPU/RAM.
 Today we will see how we can implement a simple healthcheck middleware for ASP NET Core in three parts:
 
-1. Objective
+1. Usage
 2. Build the framework
 3. Sqlite Healthcheck extension
 
-## 1. Objective
+## 1. Usage
 
 _ASP NET Core is cooking a healthcheck framework but the nuget package hasn't been created yet therefore only the codebase is available. The framework in this post is a simpler version inspired by the official healthcheck framework._
 
