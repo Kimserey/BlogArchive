@@ -43,36 +43,79 @@ This is where we have been used to `.subscribe`.
 
 ## 2. Subscribe function
 
-We pass the observable around, combining it saving it to different variables with different combination of operators but at the end, an `Observable<T>` is useless on its own. We need a way to "terminate" the observale and extract the type `T` out of it.
-That is what subscribe is used for. To subscribe to the resulting stream and terminate the observable.
+We pass the observable around, combining it, saving it to different variables with different combination of operators but at the end, an `Observable<T>` is useless on its own. We need a way to "terminate" the observale and extract the type `T` out of it. That is what `.subscribe` is used for. To subscribe to the resulting stream and terminate the observable.
 
-Now many times I have seen the following:
+Now we could do the following:
 
 ```ts
-name: string;
+expenses: Expense[];
 
-onInit() {
-this.getName()
-   .subscribe(name => {
-       this.name = name;
-   });
+ngOnInit() {
+    this.getExpenses()
+        .subscribe(expenses => {
+            this.expenses = expenses;
+        });
 }
 ```
+
+But as soon as it becomes more complex, like if we need to get a list of expense type to filter, it becomes hard to combine.
+
+```ts
+expenses: Expense[] = [];
+filter = "food";
+
+ngOnInit() {
+    this.getExpenses()
+        .subscribe(expenses => {
+            this.expenses = expenses.filter(e => e.type === this.filter);
+        });
+
+    this.getFilter()
+        .subscribe(filter => {
+            this.filter = filter;
+            this.expenses = this.expenses.filter(e => e.type === filter);
+        });
+}
+```
+
+Now we can already appreciate the benefit of only subscribing when necessary and using the `RxJS` combinators:
+
+```ts
+expenses: Expense[] = [];
+
+ngOnInit() {
+    this.getExpenses()
+        .combineLatest(this.getFilter())
+        .subscribe(([expenses, filter]) => {
+            this.expenses = expenses.filter(e => e.type === filter);
+        });
+}
+```
+
+But as I said earlier, we are safe from asynchronousy as long as we stay in the observable therefore we can do even better and never actually use subscribe by using `async pipe`.
+
+## 3. Async.pipe
 
 In order to keep the observable, we would transform it as such:
 
 ```ts
-name$: Observable<string>;
+expenses$: Observable<Expense[]>;
 
-onInit() {
-this.name$ = this.getName();
+ngOnInit() {
+    this.expenses$ = this.getExpenses()
+        .combineLatest(this.getFilter())
+        .map(([expenses, filter]) => expenses.filter(e => e.type === filter));
 }
 ```
 
 The dollar `$` is a convention to know that the variable is an observable. Then to display from the UI, we would need to use the async pipe.
 
 ```ts
-{{ name$ | async }}
+{{ expenses$ | async }}
 ```
 
-## 3. Async.pipe
+The other benefit from using the `async` pipe is that it shows us the way to decompose our UI into components. Because we want to remove the observable, we want to make a binding using `[expenses]="{{ expenses$ | async }}"` so that the component itself taking as input `expenses` will be without `observable`. And this is the true beauty of the framework. By delaying the subscription till the end, we end up forcing ourselves in writing granular components which are abstracted from asynchronousy.
+
+## Conclusion
+
+Today we saw what was an Observable and how we could use leverage its power using RxJS. We also saw the differences between async pipe and subscription. Lastly I shared my advice which is that __we should always use async pipe when possible__ and __only use `.subscribe` when side effect is an absolute necessity__ as __we are safe as long as we stay in the observable__. The code terminating the observable should be the framework (Angular) and the last piece (the UI). Hope you like this post, see you next time!
