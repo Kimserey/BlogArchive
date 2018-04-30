@@ -3,7 +3,7 @@
 Over the past year, working in companies using Angular, many times have I been in situations where I was asked to explain the differences between `async` pipe and `.subscribe` in Angular. 
 More precisely explain my standpoint which is to __always use async pipe when possible__ and __only use `.subscribe` when side effect is an absolute necessity__.
 The challenge in explaining this comes to how to convince without giving an hour boring lesson of why side effects in logic are hard to maintain and how prematured `.subscribe` forces developers to make unecessary side effects.
-So today I would like to cover that subject and provide an explanation which I hope will answer the question of when to use which. This post will be composed of three parts:
+So today I would like to talk about that and provide explanations which I hope will help to understand which to use. This post will be composed of three parts:
 
 1. Observable and Rxjs
 2. Subscribe function
@@ -94,7 +94,7 @@ ngOnInit() {
 
 But as I said earlier, we are safe from asynchronousy as long as we stay in the observable therefore we can do even better and never actually use subscribe by using `async pipe`.
 
-## 3. Async.pipe
+## 3. Async Pipe
 
 In order to keep the observable, we would transform it as such:
 
