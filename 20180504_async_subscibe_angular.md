@@ -123,11 +123,11 @@ The other benefit from using the `async` pipe is that it shows us the way to dec
 
 To summarize, those are the best practices to ensure validity of the logic:
 
-1. Prefer assignments rather than callbacks, assign Observable rather than subscription,
-2. Let the framework terminate the observable,
-3. Leverage the power of components and async pipe to code without asynchronousy,
+1. Prefer assignments rather than callbacks, assign `Observable` rather than `subscription`,
+2. Let the framework terminate the `Observable`,
+3. Leverage the power of Angular components and Angular `async` pipe to code without asynchronousy,
 4. Use libraries like reselect, rxjs to manipulate observable,
-5. Make sure the external variables used inside the rx operator functions are constants.
+5. Make sure the external variables used inside the rx operators function are `const`.
 
 ## Conclusion
 
