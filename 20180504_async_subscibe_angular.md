@@ -1,13 +1,17 @@
 # Async pipe versus Subscribe in Angular
 
-Over the past year, working in companies using Angular, many times have I been in situations where I was asked to explain the differences between `async` pipe and `.subscribe` in Angular. 
+Over the past year, working in companies using Angular, many times have I been in situations where I was asked to explain the differences between `async` pipe and `.subscribe` in Angular.
+
 More precisely explain my standpoint which is to __always use async pipe when possible__ and __only use `.subscribe` when side effect is an absolute necessity__.
+
 The challenge in explaining this comes to how to convince without giving an hour boring lesson of why side effects in logic are hard to maintain and how prematured `.subscribe` forces developers to make unecessary side effects.
+
 So today I would like to talk about that and provide explanations which I hope will help to understand which to use. This post will be composed of three parts:
 
 1. Observable and Rxjs
 2. Subscribe function
 3. Async pipe
+4. Best practices
 
 ## 1. Observable ans RxJS
 
@@ -16,14 +20,13 @@ First to understand the context, we need to understand what is an observable.
 ### 1.1 Observable
 
 Observable is an abstraction of asynchronous stream of data.
-
-For example, when we look at `Observable<string>`, it represents a stream of strings. This means that the class represents a stream of strings which will be delivered one by one over the time.
+For example, when we look at `Observable<string>`, it represents a stream of strings which will be delivered one by one over the time.
 
 __Now why would we care?__
 
-We need to care because stream of data coming in an asynchronous fashion is __extremely__ hard to think about. Even worse when multiple streams need to be combined. Thinking about time is very error prone.
+We need to care because stream of data coming in an asynchronous fashion is __extremely__ hard to think about. And it is even harder when multiple streams need to be combined. It becomes very error prone to code around it.
 
-So far we know that Observable is an abstraction of asynchronousy and that it is very hard to work with stream of data. So how do we combine streams of data? Here comes RxJS operators.
+To do such operations, we can use RxJS operators.
 
 ### 1.2 RxJS
 
@@ -35,11 +38,10 @@ I have said this to many people and this is the most valuable piece of advise I 
 
 __You are safe as long as you stay in the Observable.__
 
-We must to keep the observable, combining it or modifying it using RxJS operators. As long as we stay within the observable, we do not need to think about the bigger picture. All we need to think about is what to do with the single string we receive. We don't need to care about the fact that we will receive multiple values over the time hence the safety. The power of RxJS is that each operation is assured to be receiving as input the output of the previous operation. This is an extremely powerful model which allows developers to easily follow the logic and makes the code predictable.
+We must try to keep the observable as long as possible, combining it or modifying it using RxJS operators. As long as we stay within the observable, we do not need to think about the bigger picture. 
+All we need to think about is what to do with the single string we receive. We don't need to care about the fact that we will receive multiple values over the time hence the safety. The power of RxJS is that each operation is assured to receive the output of the previous operation as its own input. This is an extremely powerful model which allows developers to easily follow the code logic making it predictable.
 
-But if we keep the Observable modifying it around, how do we display data?
-
-This is where we have been used to `.subscribe`.
+But if we keep the Observable modifying it around, how do we display data? This is where we have been used to `.subscribe`.
 
 ## 2. Subscribe function
 
@@ -81,6 +83,7 @@ ngOnInit() {
 Now we can already appreciate the benefit of only subscribing when necessary and using the `RxJS` combinators:
 
 ```ts
+
 expenses: Expense[] = [];
 
 ngOnInit() {
@@ -115,6 +118,16 @@ The dollar `$` is a convention to know that the variable is an observable. Then 
 ```
 
 The other benefit from using the `async` pipe is that it shows us the way to decompose our UI into components. Because we want to remove the observable, we want to make a binding using `[expenses]="{{ expenses$ | async }}"` so that the component itself taking as input `expenses` will be without `observable`. And this is the true beauty of the framework. By delaying the subscription till the end, we end up forcing ourselves in writing granular components which are abstracted from asynchronousy.
+
+## 4. Best practices
+
+To summarize, those are the best practices to ensure validity of the logic:
+
+1. Prefer assignments rather than callbacks, assign Observable rather than subscription,
+2. Let the framework terminate the observable,
+3. Leverage the power of components and async pipe to code without asynchronousy,
+4. Use libraries like reselect, rxjs to manipulate observable,
+5. Make sure the external variables used inside the rx operator functions are constants.
 
 ## Conclusion
 
