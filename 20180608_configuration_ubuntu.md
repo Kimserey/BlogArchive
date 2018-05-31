@@ -7,7 +7,7 @@ Today we will see how we can manage secrets is am easy way on Ubuntu with system
 2. Manage secrets locally with UserSecrets on ASP NET Core
 3. Manage UserSecrets for dotnet Console Application
 
-## 1. Objective
+## Goal
 
 We need to keep secrets out of the source code. Therefore we want to have our application get secrets locally for local testing and we want the application to get them in our hosted environment.
 In order to achieve that we will use systemd override configuration to hold configuration of secrets on our server and in our local machine we will use UserSecrets which holds configurations in the user app folder.
