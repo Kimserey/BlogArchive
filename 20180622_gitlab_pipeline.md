@@ -106,7 +106,7 @@ _If you are unfamiliar with systemd, read my previous blog on [how to manage Kes
 
 ## 3. Setup the job in our project
 
-We have a runner setup to run jobs and we have our application already running. What we need to do next is to define the jobs to run to update the running application with the latest build once we push new code to the repository. For that we need to create a job file.
+We have a runner setup to run jobs and we have our application already running. What we need to do next is to define the jobs to run to update the running application with the latest build once we push new code to the repository. For that we need to create a job file which we put in the root of the application.
 
 The job file defines all the jobs which can be run by runners registered for the repository. The first section of the yaml defines the stages where jobs run. At each stage, job run concurrently when multiple runners are registered. The order of execution respects the order we define in the yaml.
 
@@ -233,3 +233,55 @@ clean:
 ```
 
 `when: always` is a variable used to define when is the job run where `always` means that thd job will run regardless the state of the previous stage hence if `deploy` succeeds or fails, `clean` will run.
+
+Here is the full yaml job file:
+
+```yml
+stages:
+  - build
+  - deploy
+  - clean
+
+build:
+  stage: build
+  script:
+    - /usr/bin/dotnet publish -c Release
+  only:
+    - master
+  variables:
+    GIT_STRATEGY: fetch
+  tags:
+    - myapp
+
+deploy:
+  stage: deploy
+  script:
+    - chmod 774 $CI_PROJECT_DIR/deploy.sh
+    - SERVICES=( Service1 Service2 )
+    - for i in "${SERVICES[@]}"; do $CI_PROJECT_DIR/deploy.sh $i; done
+  variables:
+    GIT_STRATEGY: none
+  only:
+    - master
+  tags:
+    - myapp
+
+clean:
+  stage: clean
+  script:
+    - rm -r ~/ek*
+    - ssh myserver "rm -r ek*"
+  variables:
+    GIT_STRATEGY: none
+  only:
+    - master
+  when: always
+  tags:
+    - myapp
+```
+
+Once we push our code, the pipeline should run and build/deploy our application!
+
+## Conclusion
+
+Today we saw how to configure a complete CI/CD chain for automating build and deployment of an ASP NET Core application on an Ubuntu 16.04 server. We started by setting up our CI server then saw how to configure our application to run and lastly we saw how to setup the Gitlab pipeline to automate the whole build and deployment. Hope you like this post, see you next time!
