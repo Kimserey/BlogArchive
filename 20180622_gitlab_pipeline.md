@@ -14,21 +14,37 @@ If you are unfamiliar with ssh and systemd, you can read [my previous blog post 
 
 Setup the runner on your CI server by getting the package with apt-get.
 
-...
+```sh
+curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | sudo bash
+sudo apt-get install gitlab-runner
+```
 
 Next register the runner using the token from your project.
 
 While registering the runner, the tags are used for Gitlab to know which runner should get the job hence it is good to set tags tied to the project, the environment, the os, frameworks and even package manager available.
 
-Once the runner is setup we should be able to see it under the runner configuration. 
+```sh
+sudo gitlab-runner register
+```
+
+Once the runner is setup we should be able to see it under the runner configuration.
 
 Next we need to install dotnet for the CI server to be able to build the application.
 
-...
+```sh
+wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+sudo apt-get install apt-transport-https
+sudo apt-get update
+sudo apt-get install dotnet-sdk-2.1
+```
 
 Lastly install zip as we will be using it to package all files.
 
-...
+```sh
+apt-get update
+apt-get install zip
+```
 
 ## 2. Setup the application on the server
 
