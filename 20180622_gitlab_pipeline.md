@@ -52,16 +52,51 @@ Place the application in the right folders on your server: `/usr/share/myapp` fo
 
 Install nginx to proxy port 80 to the dotnet Kestrel process.
 
-apt-get nginx
+```sh
+server {
+    listen 80;
+    listen [::]:80;
+    include /etc/nginx/conf.d/http;
+    include /etc/nginx/proxy_params;
+
+    location / {
+        proxy_pass http://localhost:5000/;
+    }
+}
+```
+
+Here's the `/etc/nginx/conf.d/http` content:
 
 ```sh
-nginx file
+proxy_http_version 1.1;
+proxy_set_header Connection keep-alive;
+proxy_set_header Upgrade $http_upgrade;
+proxy_cache_bypass $http_upgrade;
+```
+
+Here's the `/etc/nginx/proxy_params` content:
+
+```sh
+proxy_set_header Host $http_host;
+proxy_set_header X-Real-IP $remote_addr;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-Proto $scheme;
 ```
 
 Setup systemd unit to boot the dotnet process and manage it as a service.
 
 ```sh
-unit file
+[Unit]
+Description=
+
+[Service]
+WorkingDirectory=/usr/share/myapp
+ExecStart=/usr/bin/dotnet /usr/share/myapp/MyApp.dll
+SyslogIdentifier=myapp
+User=www-data
+
+[Install]
+WantedBy=multi-user.target
 ```
 
 From here we should be able to access our server on internet.
