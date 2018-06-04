@@ -54,16 +54,20 @@ Install nginx to proxy port 80 to the dotnet Kestrel process.
 
 apt-get nginx
 
-... nginx file
+```sh
+nginx file
+```
 
 Setup systemd unit to boot the dotnet process and manage it as a service.
 
-... unit file
+```sh
+unit file
+```
 
 From here we should be able to access our server on internet.
 
-_If you are unfamiliar with nginx, read my previous blog post on [how to setup Kestrel behind nginx]()._
-_If you are unfamiliar with systemd, read my previous blog on [how to manage Kestrel procesz with systemd]()._
+_If you are unfamiliar with nginx, read my previous blog post on [how to setup Kestrel behind nginx](https://kimsereyblog.blogspot.com/2018/06/asp-net-core-with-nginx.html)._
+_If you are unfamiliar with systemd, read my previous blog on [how to manage Kestrel procesz with systemd](https://kimsereyblog.blogspot.com/2018/05/manage-kestrel-process-with-systemd.html)._
 
 ## 3. Setup the job in our project
 
@@ -104,7 +108,7 @@ build:
 
 After we built, we can deploy the application. Following the same job properties as the build, we set a script command to run a shell script present in our source code.
 
-```
+```yml
 deploy:
   stage: deploy
   script:
@@ -178,7 +182,7 @@ ssh myserver "sudo systemctl restart myapp-$APP_NAME"
 
 Last stage is to clean the temporary folder created during zip and unzip.
 
-```
+```yml
 clean:
   stage: clean
   script:
