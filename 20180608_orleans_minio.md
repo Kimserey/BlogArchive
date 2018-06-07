@@ -500,7 +500,7 @@ var silo = new SiloHostBuilder()
 
 Once we save a grain now, we should be able to see it in Minio.
 
-![Minio]()
+![Minio](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20180608_grainstate/1.PNG)
 
 The full source code of the example is my GitHub [https://github.com/Kimserey/orleans-minio](https://github.com/Kimserey/orleans-minio).
 
