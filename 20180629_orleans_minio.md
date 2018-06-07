@@ -129,7 +129,7 @@ Microsoft.Orleans.Runtime.Abstraction
 ```
 
 Next we implement the two interfaces, `IGrainStorage` and `ILifecycleParticipant<ISiloLifecycle>`.
-`IGrainStorage` defines the main storage functionality while `ILifecycleParticipant<ISiloLifecycle>` is used to register a function to lifecycle of the silo.
+`IGrainStorage` defines the main storage functionality. I contains the Read/Write/Clear functions found in every storage.
 
 ```c#
 public interface IGrainStorage
@@ -140,6 +140,8 @@ public interface IGrainStorage
 }
 ```
 
+`ILifecycleParticipant<ISiloLifecycle>` is used to register a function to lifecycle of the silo.
+
 ```c#
 public interface ILifecycleParticipant<TLifecycleObservable>
     where TLifecycleObservable : ILifecycleObservable
@@ -147,6 +149,8 @@ public interface ILifecycleParticipant<TLifecycleObservable>
     void Participate(TLifecycleObservable lifecycle);
 }
 ```
+
+Here is the full implementation of the grain storage which we will decompose next:
 
 ```c#
 internal class MinioGrainStorage : IGrainStorage, ILifecycleParticipant<ISiloLifecycle>
@@ -167,6 +171,11 @@ internal class MinioGrainStorage : IGrainStorage, ILifecycleParticipant<ISiloLif
         _storage = storage;
         _grainFactory = grainFactory;
         _typeResolver = typeResolver;
+    }
+
+    private string GetBlobNameString(string grainType, GrainReference grainReference)
+    {
+        return $"{grainType}-{grainReference.ToKeyString()}";
     }
 
     public async Task ClearStateAsync(string grainType, GrainReference grainReference, IGrainState grainState)
@@ -278,11 +287,6 @@ internal class MinioGrainStorage : IGrainStorage, ILifecycleParticipant<ISiloLif
         }
     }
 
-    private string GetBlobNameString(string grainType, GrainReference grainReference)
-    {
-        return $"{grainType}-{grainReference.ToKeyString()}";
-    }
-
     private byte[] ConvertToStorageFormat(object record)
     {
         var data = JsonConvert.SerializeObject(record, _jsonSettings);
@@ -319,6 +323,118 @@ internal class MinioGrainStorage : IGrainStorage, ILifecycleParticipant<ISiloLif
 }
 ```
 
+Prior starting, we define a class which will be used to store the state in a blob:
+
+```c#
+internal class GrainStateRecord
+{
+    public int ETag { get; set; }
+    public object State { get; set; }
+}
+```
+
+Then we start first by implementing the `Clear` function:
+
+```c#
+public async Task ClearStateAsync(string grainType, GrainReference grainReference, IGrainState grainState)
+{
+    string blobName = GetBlobNameString(grainType, grainReference);
+
+    try
+    {
+        await _storage.DeleteBlob(_container, blobName);
+        grainState.ETag = null;
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error clearing: GrainType={0} Grainid={1} ETag={2} BlobName={3} in Container={4} Exception={5}",
+            grainType, grainReference, grainState.ETag, blobName, _container, ex.Message);
+
+        throw;
+    }
+}
+```
+
+It simply deletes the blob and set the grain state ETag to `null`.
+Next we implement the `Read` function:
+
+```c#
+public async Task ReadStateAsync(string grainType, GrainReference grainReference, IGrainState grainState)
+{
+    string blobName = GetBlobNameString(grainType, grainReference);
+
+    try
+    {
+        GrainStateRecord record;
+        try
+        {
+            using (var blob = await _storage.ReadBlob(_container, blobName))
+            using (var stream = new MemoryStream())
+            {
+                await blob.CopyToAsync(stream);
+                record = ConvertFromStorageFormat(stream.ToArray());
+            }
+        }
+        catch (BucketNotFoundException ex)
+        {
+            return;
+        }
+        catch (ObjectNotFoundException ex)
+        {
+            return;
+        }
+
+        grainState.State = record.State;
+        grainState.ETag = record.ETag.ToString();
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error reading: GrainType={0} Grainid={1} ETag={2} from BlobName={3} in Container={4} Exception={5}",
+            grainType, grainReference, grainState.ETag, blobName, _container, ex.Message);
+
+        throw;
+    }
+}
+```
+
+The read function reads from the blob storage and skips if bucket is not found or object is not found. Then we assign the data read to the `grainState`.
+Lastly we implement the `Write` function:
+
+```c#
+public async Task WriteStateAsync(string grainType, GrainReference grainReference, IGrainState grainState)
+{
+    string blobName = GetBlobNameString(grainType, grainReference);
+
+    int newETag = string.IsNullOrEmpty(grainState.ETag) ? 0 : Int32.Parse(grainState.ETag) + 1;
+    try
+    {
+        var record = new GrainStateRecord
+        {
+            ETag = newETag,
+            State = grainState.State
+        };
+
+        using (var stream = new MemoryStream(ConvertToStorageFormat(record)))
+        {
+            await _storage.UploadBlob(_container, blobName, stream, contentType: "application/json");
+        }
+
+        grainState.ETag = newETag.ToString();
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error writing: GrainType={0} Grainid={1} ETag={2} from BlobName={3} in Container={4} Exception={5}",
+            grainType, grainReference, grainState.ETag, blobName, _container, ex.Message);
+
+        throw;
+    }
+}
+```
+
+The write function simply write the state provided to blob storage while updating the ETag.
+
+## 3. Register the grain storage
+
 ```c#
 internal static class MinioGrainStorageFactory
 {
@@ -331,8 +447,6 @@ internal static class MinioGrainStorageFactory
     }
 }
 ```
-
-## 3. Register the grain storage
 
 ```c#
 public static class MinioSiloBuilderExtensions
