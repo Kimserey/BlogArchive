@@ -435,18 +435,8 @@ The write function simply write the state provided to blob storage while updatin
 
 ## 3. Register the grain storage
 
-```c#
-internal static class MinioGrainStorageFactory
-{
-    internal static IGrainStorage Create(IServiceProvider services, string name)
-    {
-        IOptionsSnapshot<MinioGrainStorageOptions> optionsSnapshot = services.GetRequiredService<IOptionsSnapshot<MinioGrainStorageOptions>>();
-        var options = optionsSnapshot.Get(name);
-        IMinioStorage storage = ActivatorUtilities.CreateInstance<MinioStorage>(services, options.AccessKey, options.SecretKey, options.Endpoint);
-        return ActivatorUtilities.CreateInstance<MinioGrainStorage>(services, name, options.Container, storage);
-    }
-}
-```
+Now that we have built the grain storage, we must register it for it to be available as a storage for the Silo.
+The registration is done via registering the grain factory as a `Named singleton service` using the extension provided by Orleans.Runtime `.AddSingletonNamedService()`. We register both Minio grain storage and lifecycle.
 
 ```c#
 public static class MinioSiloBuilderExtensions
@@ -465,3 +455,55 @@ public static class MinioSiloBuilderExtensions
     }
 }
 ```
+
+To make the creation of the grain storage easier, we implemented a factory where we use the name of the provider to setup named options.
+
+```c#
+internal static class MinioGrainStorageFactory
+{
+    internal static IGrainStorage Create(IServiceProvider services, string name)
+    {
+        IOptionsSnapshot<MinioGrainStorageOptions> optionsSnapshot = services.GetRequiredService<IOptionsSnapshot<MinioGrainStorageOptions>>();
+        var options = optionsSnapshot.Get(name);
+        IMinioStorage storage = ActivatorUtilities.CreateInstance<MinioStorage>(services, options.AccessKey, options.SecretKey, options.Endpoint);
+        return ActivatorUtilities.CreateInstance<MinioGrainStorage>(services, name, options.Container, storage);
+    }
+}
+```
+
+Named options are used to provide multiple options for the same class which can then be loaded using `.Get()` on an `IOptionSnapshot<TOption>`.
+Once we have the extension ready, we can add the provider on the Silo just like how we would add other providers:
+
+```c#
+var silo = new SiloHostBuilder()
+    .UseLocalhostClustering()
+    .AddMinioGrainStorage("Minio", opts =>
+    {
+        opts.AccessKey = config["MINIO_ACCESS_KEY"];
+        opts.SecretKey = config["MINIO_SECRET_KEY"];
+        opts.Endpoint = "localhost:9000";
+        opts.Container = "ek-grain-state";
+    })
+    .ConfigureApplicationParts(x =>
+    {
+        x.AddFrameworkPart(typeof(MinioGrainStorage).Assembly);
+        x.AddApplicationPart(typeof(BankAccount).Assembly).WithReferences();
+    })
+    .ConfigureLogging(x => x
+        .AddFilter("System", LogLevel.Information)
+        .AddFilter<ConsoleLoggerProvider>("OrleansMinio.Storage.MinioStorage", LogLevel.Trace)
+        .AddConsole()
+        .AddDebug()
+    )
+    .Build();
+```
+
+Once we save a grain now, we should be able to see it in Minio.
+
+![Minio]()
+
+The full source code of the example is my GitHub [https://github.com/Kimserey/orleans-minio](https://github.com/Kimserey/orleans-minio).
+
+## Conclusion
+
+Today we saw how we could create a custom Minio grain storage for Microsoft.Orleans. We started by implementing a simple Blob storage then moved to using it in a grain storage implementation and finally saw how we could create extensions to make it easier for us to register the storage onto the Silo. Hope you liked this post, see you on the next one!
