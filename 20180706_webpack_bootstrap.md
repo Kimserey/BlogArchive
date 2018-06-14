@@ -296,7 +296,23 @@ import 'bootstrap/js/dist/modal';
 ```
 
 This import of scss, although weird, is interpreted by the test `/\.(scss)$/` and go through the different loaders. Next if we build this, we should be able to now see the page styled with Bootstrap and the modal should be working.
-The last step would be to extract the file into a css file. For that we use `MiniCssExtractPlugin` which can be downloaded from the `mini-css-extract-plugin`:
+But just like the js, if we want to reduce even more the size of the css file, we can opt out of certain module. Therefore instead of importing `~bootstrap/scss/bootstrap` which imports all modules, we can select the modules we are interested in:
+
+```scss
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/root";
+@import "~bootstrap/scss/reboot";
+@import "~bootstrap/scss/type";
+@import "~bootstrap/scss/grid";
+@import "~bootstrap/scss/buttons";
+@import "~bootstrap/scss/card";
+@import "~bootstrap/scss/modal";
+@import "~bootstrap/scss/close";
+```
+
+This will reduce even further the css produced. Once we have the css built, the next step is to extract it into a separate file, for that we can use `MiniCssExtractPlugin` which can be downloaded from the `mini-css-extract-plugin`:
 
 ```sh
 npm install mini-css-extract-plugin --save-dev
