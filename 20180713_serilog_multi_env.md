@@ -8,7 +8,7 @@ Few months ago we saw how to get started with Serilog. We discovered what was Se
 
 ## 1. Setup Serilog
 
-If you have never seen Serilog before you can start with my previous post on [How to get started with Serilog]().
+If you have never seen Serilog before you can start with my previous post on [How to get started with Serilog](https://kimsereyblog.blogspot.com/2018/02/logging-in-asp-net-core-with-serilog.html).
 
 In order to configure our first logging mechanism, we start by creating an AspNet Core application and install `Serilog`, `Serilog.AspNetCore` and the sinks we will be using `Serilog.Sinks.Console`, `Serilog.Sinks.File`.
 
@@ -33,7 +33,7 @@ So far we are logging to the Console and in a file with a Debug minimim level. W
 
 AspNet Core already ship with a powerful configuration framework which we can leverage using `Serilog.Settings.Configuration`.
 
-_If you haven't used AspNet Core configuration, you can have a look at my previous post where I [briefly touch on the Configuration framework]()._
+_If you haven't used AspNet Core configuration, you can have a look at my previous post where I [briefly touch on the Configuration framework](https://kimsereyblog.blogspot.com/2017/07/configurations-in-asp-net-core.html)._
 
 We start by installing the package and setup Serilog using configuration:
 
@@ -109,7 +109,7 @@ We start first by adding a formatter for the file:
         "Name": "File",
         "Args": {
           "formatter": "Serilog.Formatting.Compact.CompactJsonFormatter, Serilog.Formatting.Compact",
-          "path": "/var/log/myapp/myapp.json",
+          "path": "/var/log/myapp/myapp.log",
           "fileSizeLimitBytes": 10485760,
           "rollOnFileSizeLimit": true,
           "retainedFileCountLimit": 3
@@ -125,7 +125,7 @@ Once we run the application we can see that the logs are no longer text but json
 
 __Assuming that we have deployed our application on a ec2 instance__, we can now install the CloudWatch agent on our server and configure it to ship the content of our logs to CloudWatch.
 
-We start first by adding an IAM Role with inline policy then attach policy to ec2
+We start first by adding an IAM Role with a `CloudWatchAgentServerPolicy` policy attached and attach the role to our ec2 instance. This role will allow the instance to access CloudWatch to use the agent to create log groups, log streams and write logs into the log streams. Installing the agent can be done by downloading the zip file and extracting it:
 
 ```sh
 wget https://s3.amazonaws.com/amazoncloudwatch-agent/linux/amd64/latest/AmazonCloudWatchAgent.zip
@@ -135,6 +135,8 @@ cd tmp
 unzip AmazonCloudWatchAgent.zip
 sudo ./install.sh
 ```
+
+Once installed, we can remove the folder and navigate to `/opt/aws/amazon-cloudwatch-agent/etc` and we can create a configuration file called `config.json`, the documentation for the configuration can be found on the [official documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Agent-Configuration-File-Details.html):
 
 ```json
 {
@@ -157,10 +159,21 @@ sudo ./install.sh
 }
 ```
 
+The `timezone` needs to be set to `UTC` else it will take the region timezone. The `timestamp_format` needs to correspond to the log time, Serilog will print the time as `"@t": "2018-06-16T10:55:02.8853229Z"`, therefore our `timestamp` will be `%Y-%m%dT%H:%M:%S`. It is important to set the timestamp else the injestion time will be used as timestamp which will not correspond to the time when the log actually occured. It is possible to setup more log streams by adding another item in the `collect_list`. Once we are done, we can configure the agent by running the following command:
+
 ```sh
 sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/config.json -s
 ```
 
+Once this is done, we can check the status of the service and start it if not yet started:
+
 ```sh
-sudo systemctl restart amazon-cloudwatch-agent
+sudo systemctl status amazon-cloudwatch-agent
+sudo systemctl start amazon-cloudwatch-agent
 ```
+
+Once we are done we should be able to see the log flowing into CloudWatch under the log group we specified and under the log stream specified. The advantage of providing Json over plain text is the capabilities offered by CloudWatch to filter on property of the Json object like `{ $.ElapsedTimeMilliseconds > 200  }`. The full filter documentation can be foudn on the [official documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/FilterAndPatternSyntax.html).
+
+## Conclusion
+
+Today we saw how we could use Serilog to construct and saved logs as structured logs. We saw how we could configure different outputs depending on the environment where we were running under, console for development and file for production. Lastly we saw how we could save the log as structured json log which we saved into AWS CloudWatch. AWS CloudWatch then makes it easy to navigate and run some query through the CloudWatch interface on the json logs. Hope you liked this post, see you next time!
