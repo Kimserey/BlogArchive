@@ -126,3 +126,41 @@ Once we run the application we can see that the logs are no longer text but json
 __Assuming that we have deployed our application on a ec2 instance__, we can now install the CloudWatch agent on our server and configure it to ship the content of our logs to CloudWatch.
 
 We start first by adding an IAM Role with inline policy then attach policy to ec2
+
+```sh
+wget https://s3.amazonaws.com/amazoncloudwatch-agent/linux/amd64/latest/AmazonCloudWatchAgent.zip
+cd ~
+mkdir tmp
+cd tmp
+unzip AmazonCloudWatchAgent.zip
+sudo ./install.sh
+```
+
+```json
+{
+  "logs": {
+    "logs_collected": {
+      "files": {
+        "collect_list": [
+          {
+            "file_path": "/var/log/myapp/*.log",
+            "log_group_name": "myapp",
+            "log_stream_name": "myapp",
+            "timezone": "UTC",
+            "timestamp_format": "%Y-%m-%dT%H:%M:%S"
+          }
+        ]
+      }
+    },
+    "log_stream_name": "default"
+  }
+}
+```
+
+```sh
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/config.json -s
+```
+
+```sh
+sudo systemctl restart amazon-cloudwatch-agent
+```
