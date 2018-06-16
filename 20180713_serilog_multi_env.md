@@ -17,10 +17,33 @@ __RollingFile sink also exists but it has been superseded with File sink.__
 Next we can configure the logger to write to Console and write to a file:
 
 ```c#
+public static IWebHost BuildWebHost(string[] args)
+{
+    return WebHost.CreateDefaultBuilder(args)
+                .UseSerilog((builder, cfg) =>
+                {
+                    cfg
+                        .MinimumLevel.Debug()
+                        .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                        .WriteTo.Console(
+                            theme: AnsiConsoleTheme.Code,
+                            outputTemplate: "[{Timestamp:HH:mm:ss.fff} {Application} {Level:u3}][{RequestId}] {SourceContext}: {Message:lj}{NewLine}{Exception}"
+                        )
+                        .WriteTo.File(
+                            formatter: new CompactJsonFormatter(),
+                            path: "C:/log/myapp/myapp.log",
+                            fileSizeLimitBytes: 10485760,
+                            rollOnFileSizeLimit: true,
+                            retainedFileCountLimit: 3
+                        );
+                })
+                .UseStartup<Startup>()
+                .Build();
+}
 ```
 
 We have set the minimun level of the logs to Debug and have overwritten Microsoft to only provide Information level.
-We have also configure two sinks, the Console sink to write with the format `...` and using the theme `...` and the File sink which we have configured to rotate files on size limit and keep only 3 files.
+We have also configure two sinks, the Console sink to write with the format `[{Timestamp:HH:mm:ss.fff} {Application} {Level:u3}][{RequestId}] {SourceContext}: {Message:lj}{NewLine}{Exception}` and using the theme `AnsiConsoleTheme.Code` and the File sink which we have configured to rotate files on size limit and keep only 3 files.
 
 Once we run the applicatiom, we should now be able to see the logs from the Console and, at the same time, logs should flow into files at the path specified.
 
@@ -38,7 +61,7 @@ _If you haven't used AspNet Core configuration, you can have a look at my previo
 We start by installing the package and setup Serilog using configuration:
 
 ```c#
-...
+webHostBuilder.UseSerilog((ctx, cfg) => cfg.ReadFrom.ConfigurationSection(ctx.Configuration.GetSection(section)));
 ```
 
 Next we setup the `appsettings.development.json` to include the settings which will be used in development:
