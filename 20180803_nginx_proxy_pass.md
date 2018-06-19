@@ -89,4 +89,4 @@ This will not work as `/api/home` will result in `/test//home`.
 
 ## Conclusion
 
-Today we saw 
+Today we explored different combinations between `location` path and `proxy_pass` URL and saw which were working as expected. More importantly we saw the rule were __when a URI is present in `proxy_pass`, the matched path is replaced where an empty trailing slash is considered as a URI__. Following this rule, it should allow us to understand if a request will match what we expect or not. Hope you liked this post, see you next time!
