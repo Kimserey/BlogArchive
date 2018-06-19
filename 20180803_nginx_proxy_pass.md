@@ -17,7 +17,7 @@ If no URI is specified, the full path is forwarded and nothing is replaced.
 
 Now let's assume that we have setup an ASP NET Core application running on `http://locahost:5000` and has two endpoint `/home` and `/test/home` which respectively are accessible on `http://localhost:5000/home` and `http://localhost:5000/test/home`. __And let's assume that we want to be able to proxy all calls to `/api/xxx` to our ASP NET Core application.__
 
-Now we saw in 1) that if there is no URI, the full path is forwarded, this means that ......
+Now we saw in 1) that if there is no URI, the full path is forwarded, this means that in our example, any `proxy_pass` specified without URI will not work. For example, the following configurations will not work:
 
 ```
 location /api {
@@ -25,7 +25,7 @@ location /api {
 }
 ```
 
-Becomes /api/home
+Notice that the `proxy_pass` URL does not contain any URI therefore if we hit `myserver/api/home`, it will be forwarded as `http://localhost:5000/api/home` which does not exists.
 
 ```txt
 location /api/ {
@@ -33,15 +33,8 @@ location /api/ {
 }
 ```
 
-Becomes /api/home
-
-```
-location /api {
-    proxy_pass http://localhost:5000/;
-}
-```
-
-Becomes //home
+Similarly here, it will be forwarded as `http://localhost:5000/api/home` which does not exists.
+Now if we add a URI, the matched path will be replaced so the following will work:
 
 ```
 location /api/ {
@@ -49,7 +42,18 @@ location /api/ {
 }
 ```
 
-Becomes /home OK
+`/` is the URI, so the path will be replaced. Here the path is `/api/` so for `myserver/api/home`, `myserver/api/` will be replaced by `http://localhost:5000/` which results in `http://localhost:5000/home` which works!
+But we still need to be cautious as the following will not work:
+
+```
+location /api {
+    proxy_pass http://localhost:5000/;
+}
+```
+
+Note that the location path does not contain a trailing slash therefore `mysever/api/home` will result in `http://localhost:5000//home` which does not exists.
+
+And this works the same when the URI is `/test`:
 
 ```
 location /api {
@@ -57,7 +61,15 @@ location /api {
 }
 ```
 
-Becomes /test/home OK
+This will work as it will `/api/home` will be proxied to `/test/home`.
+
+```
+location /api/ {
+    proxy_pass http://localhost:5000/test/;
+}
+```
+
+This will also work as `/api/home` will be proxied to `/test/home`.
 
 ```
 location /api/ {
@@ -65,7 +77,7 @@ location /api/ {
 }
 ```
 
-Becomes /testhome
+This will not work as `/api/home` will result in `/testhome`, missing the slash.
 
 ``` 
 location /api {
@@ -73,12 +85,8 @@ location /api {
 }
 ```
 
-Becomes /test//home
+This will not work as `/api/home` will result in `/test//home`.
 
-```
-location /api/ {
-    proxy_pass http://localhost:5000/test/;
-}
-```
+## Conclusion
 
-Becomes /test/home OK
+Today we saw 
