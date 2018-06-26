@@ -1,6 +1,6 @@
 # Serilog with AWS Cloudwatch on Ubuntu
 
-Few weeks ago we saw [How to configure Serilog to work with different environment](). At the end of the post, we saw briefly how to get the structured logs synced to Cloudwatch. Today we will explore the configuration in more details.
+Few weeks ago we saw [How to configure Serilog to work with different environment](https://kimsereyblog.blogspot.com/2018/06/multi-environment-logging-with-serilog.html). At the end of the post, we saw briefly how to get the structured logs synced to Cloudwatch. Today we will explore the configuration in more details.
 
 1. Unified Cloudwatch agent
 2. Literate and json logs with Serilog
@@ -87,7 +87,7 @@ To stop the agent, we can use `-a stop`, then start it again with `-a start`:
 
 ## 2. Literate and json logs with Serilog
 
-With the configuration of our logger in json format which we created in [the last post](), we can utilise filters to build more powerful queries than with a fulltext search. But the drawback is that the logs became less readable.
+With the configuration of our logger in json format which we created in [the last post](https://kimsereyblog.blogspot.com/2018/06/multi-environment-logging-with-serilog.html), we can utilise filters to build more powerful queries than with a fulltext search. But the drawback is that the logs became less readable.
 
 ![json format logs]()
 
