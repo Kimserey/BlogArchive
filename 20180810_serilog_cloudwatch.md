@@ -56,7 +56,7 @@ This configuration reloading action will have as effect to modify the `amazon-cl
 
 `-a status` can be used to ensure that the agent is actually running:
 
-```
+```sh
 > sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a status
 
 {
@@ -93,7 +93,7 @@ With the configuration of our logger in json format which we created in [the las
 
 What we can do to have more readible logs is to create a new log group which will contain plain text logs. We do that by first __adding a second file sink__ without specifying any formatter. We also define our own template as extra.
 
-```
+```json
 {
     "Name": "File",
     "Args": {
@@ -108,7 +108,7 @@ What we can do to have more readible logs is to create a new log group which wil
 
 `:u` will format the timestamp as UTC. It is needed for Cloudwatch to recognize the date and time. If we dont set the template, it will consider it as UTC time as we set previously UTC in the `config.json`. This will save the following logs in a file at the path specified.
 
-```
+```txt
 [2018-06-26 10:09:23Z INF] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 504.561ms 200  
 { ElapsedMilliseconds: 504.561, StatusCode: 200, ContentType: null, EventId: { Id: 2 }, RequestId: "0HLER9JH460UL:00000001", RequestPath: "/", CorrelationId: null, ConnectionId: "0HLER9JH460UL", MachineName: "KIM" }
 [2018-06-26 10:09:24Z INF] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 GET http://localhost:5000/favicon.ico   
@@ -120,7 +120,7 @@ What we can do to have more readible logs is to create a new log group which wil
 Those are the plain text logs. Note that the json object is the `{Properties}` token.
 We can then configure the Cloudwatch agent to get that log file synced by adding it to the `collection_list`:
 
-```
+```json
 {
     "logs": {
         "logs_collected": {
@@ -152,7 +152,7 @@ We can then configure the Cloudwatch agent to get that log file synced by adding
 The first difference is that the timestamp format is different. For json it is by default UTC in ISO datetime format while for templating, `:u` provides the datetime as a different format which we need to accomodate to by __adding a space between the date and the time in the `timestamp_format`__.
 Now we saw that the properties were prefix with a newline, specified with the `{NewLine}` token. By default, Cloudwatch will consider every non empty newlines as a new log entry therefore here, even though the properties are part of the same log entry, it will be considered as a new log entry. To fix it, we can use the `multi_line_start_pattern` property and pass to it a regex which delimites each log entries. In our case, the datetime is logged as so `2018-06-26 10:09:23Z` so we can use the format `%Y-%m-%d %H:%M:%S`. Once we have changed the configuration, we can load back the configuration on the agent.
 
-```
+```sh
 sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/config.json -s
 ```
 
