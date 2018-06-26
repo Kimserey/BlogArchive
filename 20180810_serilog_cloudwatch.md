@@ -89,7 +89,7 @@ To stop the agent, we can use `-a stop`, then start it again with `-a start`:
 
 With the configuration of our logger in json format which we created in [the last post](https://kimsereyblog.blogspot.com/2018/06/multi-environment-logging-with-serilog.html), we can utilise filters to build more powerful queries than with a fulltext search. But the drawback is that the logs became less readable.
 
-![json format logs]()
+![json format logs](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20180629_log/jsonlog.PNG)
 
 What we can do to have more readible logs is to create a new log group which will contain plain text logs. We do that by first __adding a second file sink__ without specifying any formatter. We also define our own template as extra.
 
