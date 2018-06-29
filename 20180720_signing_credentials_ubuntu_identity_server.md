@@ -104,15 +104,15 @@ public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
 
 Before starting the application, we can install the certificate in our Trusted Root Certification Authorities which would allow the computer to recognize the certificate when delivered by the webserver. This can be done by opening the `.pfx` file and follow the wizard to install under `Trusted Root Certification Authorities`.
 
-![install cert]()
+![install cert](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20180720_signing_cred/install_ssl_cert.PNG)
 
 Once installed, we run the application, we face the following issue:
 
-![common name invalid]()
+![common name invalid](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20180720_signing_cred/common_name_invalid.PNG)
 
 __Our certificate isn't trusted even though we imported it into the trusted certificates.__ This is due to the fact that we did not specified a __Subject Alternate Name__. Comparing our certificate to the certificate from ASPNET Core, we can see that we are missing the subject alternate name:
 
-![aspnet core]()
+![aspnet core](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20180720_signing_cred/aspnet_cert.PNG)
 
 _More information [here](https://groups.google.com/a/chromium.org/forum/m/#!topic/security-dev/IGT2fLJrAeo). Chrome has dropped the verification of domain name using "Subject" in favor of "Subject Alternate Name" which was dropped few versions ago by Mozilla too._
 
@@ -158,7 +158,7 @@ sudo openssl pkcs12 -export -out ~/ssl.pfx -inkey ssl-selfsigned.key -in ssl-sel
 
 Now when we navigate to `https://localhost:5001`, Chrome will be able to validate the certificate and provide that indication that the connection is secured using our selfsigned certificate.
 
-![secure]()
+![secure](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20180720_signing_cred/secure.PNG)
 
 And this concludes today's post.
 
