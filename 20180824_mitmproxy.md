@@ -96,11 +96,11 @@ This will yield 3 binaries `mitmproxy`, `mitmdump` and `mitmweb`. Here we are in
 
 This will start `mitmproxy`. If we host an application on `http://localhost:5000` and wish to proxy request from the browser, we can set it up in the proxy settings in Chrome.
 
-![proxy_setting]()
+![proxy_setting](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20180824_mitmproxy/1_proxy_settings.PNG)
 
 When we navigate to `http://localhost:5000`, the call will be proxied through `mitmproxy` and will be displayed on the CLI.
 
-![mitmproxy]()
+![mitmproxy](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20180824_mitmproxy/2_proxy_settings.PNG)
 
 If our underlying host is serving on HTTPS with a self signed SSL certificate, common in develoment, we will hit the following error:
 
@@ -168,7 +168,7 @@ proxy_pass https://localhost:8080;
 
 And we should now see the header coming out in `mitmproxy`:
 
-![3_mitmproxy]()
+![3_mitmproxy](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20180824_mitmproxy/3_reverse.PNG)
 
 And that conclude today's post!
 
