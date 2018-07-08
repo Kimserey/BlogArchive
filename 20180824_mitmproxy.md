@@ -1,4 +1,4 @@
-# Inspect proxied requests ffrom Nginx to Kestrel
+# Inspect proxied requests from Nginx to Kestrel
 
 In previous blog posts, we saw [how to proxy requests to an ASP NET Core application using Nginx](https://kimsereyblog.blogspot.com/2018/06/asp-net-core-with-nginx.html). We saw that request headers also can be proxied with `proxy_set_header` In order to ease development, we need to be able to debug the values to verify that they are what we expect.
 Today we will see two methods to inspect the proxied requests. This post will be composed by two parts:
@@ -173,3 +173,5 @@ And we should now see the header coming out in `mitmproxy`:
 And that conclude today's post!
 
 ## Conclusion
+
+Today we saw multiple ways to debug requests coming from Browsers or proxied from Nginx. We started by looking at how to debug location routing, verifying whether paths matched what we expected. Then we moved on to see how we could debug Nginx variables and see what there contents were. Lastly we looked into `mitmproxy`, a powerful CLI proxy which can be used to debug calls from Browsers to servers and debug calls proxied from Nginx to Kestrel which will allow us to see if the necessary headers and content are proxied as we expect them to be. Hope you like this post, see you next time!
