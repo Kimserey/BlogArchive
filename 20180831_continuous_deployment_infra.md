@@ -95,7 +95,7 @@ deploy:
 clean:
   stage: clean
   script:
-    - ssh husky "rm -r myapp-infrastructure-*"
+    - ssh appserver "rm -r myapp-infrastructure-*"
   variables:
     GIT_STRATEGY: none
   only:
@@ -117,29 +117,114 @@ Then `clean` will remove the temporary folder(s) `myapp-infrastructure-*`.
 
 ```yml
 script:
-    - ssh husky "rm -r myapp-infrastructure-*"
+    - ssh appserver "rm -r myapp-infrastructure-*"
 ```
 
 We now have our runner job setup, and Gitlab will run the `deploy` job and `clean` job everytime we push a change on the infrastructure repository. What we have left to do is to write the `deploy.sh` script.
 
 ## 3. Deploy the configurations
 
+The `deploy.sh` script will push the latest files from the CI server to the Application server. Then once pushed, will update the original files and restart/reload the service if required.
+
 ```sh
 #!/bin/bash -v
 set -e
 
-echo "[systemd] Copy over units to husky."
-rsync -crlDz $CI_PROJECT_DIR/systemd/ husky:~/ek-infrastructure-systemd/
+echo "[systemd] Copy over units to appserver."
+rsync -crlDz $CI_PROJECT_DIR/systemd/ appserver:~/myapp-infrastructure-systemd/
 
 echo "[systemd] Sync configurations with /etc/systemd/ folder."
-RESULT="$(ssh husky "sudo rsync -crlDi ~/ek-infrastructure-systemd/ /etc/systemd/")"
+RESULT="$(ssh appserver "sudo rsync -crlDi ~/myapp-infrastructure-systemd/ /etc/systemd/")"
 
 if [ -n "$RESULT" ]; then
         echo "[systemd] Updated files:"
         echo "$RESULT"
         echo "[systemd] Reloading systemd."
-        ssh husky "sudo systemctl daemon-reload"
+        ssh appserver "sudo systemctl daemon-reload"
 else
         echo "[systemd] Nothing has changed."
 fi
 ```
+
+We start first by using `rsync` to sync our file to the `appserver` on a temporary folder `myapp-infrastructure-systemd`. We assume here that we have configure ssh to connect to `appserver` with `ssh appserver`. 
+
+```sh
+echo "[systemd] Copy over units to appserver."
+rsync -crlDz $CI_PROJECT_DIR/systemd/ appserver:~/myapp-infrastructure-systemd/
+```
+
+ - `-c` option is used to check file with checksum,
+ - `-r` is for recursive
+ - `-l` and `-D` are to copy symlink and preserve device and special files
+ - `-z` is to compress files
+
+Once we have the file onto the temporary location, we execute a remote `rsync` to replace the original files:
+
+```sh
+echo "[systemd] Sync configurations with /etc/systemd/ folder."
+RESULT="$(ssh appserver "sudo rsync -crlDi ~/myapp-infrastructure-systemd/ /etc/systemd/")"
+```
+
+ - `-i` option allows us to get back a summary of each changes done by `rsync`
+
+The result of `rsync` is then saved in a variable `$RESULT` which we use to decide whether we should restart the service or not.
+
+```sh
+if [ -n "$RESULT" ]; then
+        echo "[systemd] Updated files:"
+        echo "$RESULT"
+        echo "[systemd] Reloading systemd."
+        ssh appserver "sudo systemctl daemon-reload"
+else
+        echo "[systemd] Nothing has changed."
+fi
+```
+
+ - `-n` check for `null` string and returns true if the string is not null
+
+When a result is returned by `rsync`, we know that one of the service file from `systemd` has changed therefore we can execute a remote ssh command to reload `systemd` with `ssh appserver "sudo systemctl daemon-reload"`.
+
+Following the same example, we can setup the same deployment for nginx sites files. Here is a full example of the `deploy.sh` script:
+
+```sh
+#!/bin/bash -v
+set -e
+
+echo "[nginx] Copy over configurations to appserver."
+rsync -crlDz $CI_PROJECT_DIR/nginx/ appserver:~/myapp-infrastructure-nginx/
+
+echo "[nginx] Sync configurations with /etc/nginx/ folder."
+RESULT="$(ssh appserver "sudo rsync -crlDi ~/myapp-infrastructure-nginx/ /etc/nginx/")"
+
+if [ -n "$RESULT" ]; then
+        echo "[nginx] Updated files:"
+        echo "$RESULT"
+        ssh appserver "sudo nginx -t"
+
+        echo "[nginx] Reloading nginx."
+        ssh appserver "sudo service nginx reload"
+else
+        echo "[nginx] Nothing has changed."
+fi
+
+echo "[systemd] Copy over units to appserver."
+rsync -crlDz $CI_PROJECT_DIR/systemd/ appserver:~/myapp-infrastructure-systemd/
+
+echo "[systemd] Sync configurations with /etc/systemd/ folder."
+RESULT="$(ssh appserver "sudo rsync -crlDi ~/myapp-infrastructure-systemd/ /etc/systemd/")"
+
+if [ -n "$RESULT" ]; then
+        echo "[systemd] Updated files:"
+        echo "$RESULT"
+        echo "[systemd] Reloading systemd."
+        ssh appserver "sudo systemctl daemon-reload"
+else
+        echo "[systemd] Nothing has changed."
+fi
+```
+
+And that concludes today's post. We should now have a fully automated deployment of a infrastructure files. Everytime we push any changes on the configuration files, the runner will pick them up and deploy it to our application server and restart the appropriate service either `systemd` or `nginx`.
+
+## Conclusion
+
+Today we saw how we could setup a continuous deployment of infrastructure files in the same way as we did for our application code.
