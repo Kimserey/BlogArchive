@@ -1,13 +1,42 @@
 # HttpClientFactory in ASP NET Core 2.1
 
-ASP.NET Core 2.1 ships with a factory for `HttpClient` called `HttpclientFactory`. This factory allows us to no longer care about the lifecycle of the `HttpClient` by leaving it to the framework. Today we will see two ways of instantiating clients:
+ASP.NET Core 2.1 ships with a factory for `HttpClient` called `HttpclientFactory`. This factory allows us to no longer care about the lifecycle of the `HttpClient` by leaving it to the framework. Today we will see few ways of instantiating clients:
 
- 1. Typed clients
- 2. Named clients
+ 1. Default client
+ 2. Typed client
+ 3. Named client
 
-## 1. Typed clients
+## 1. Default client
 
 To use the factory, we start first by registering it to the service collection with `.AddHttpClient()` which is an extension coming from `Microsoft.Extensions.Http`.
+
+```c#
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddMvc();
+    
+    services.AddHttpClient();
+}
+```
+
+This gives us access to the `IHttpClientFactory` which we can inject and using it, we can create a `HttpClient`.
+
+```c#
+[HttpPost]
+public async Task<ActionResult<string>> PostDefaultClient([FromServices]IHttpClientFactory factory, [FromBody] ValueDto value)
+{
+    var client = factory.CreateClient();
+    client.BaseAddress = new System.Uri("http://localhost:5100");
+    var result = await client.PostAsJsonAsync("api/values", value);
+    return await result.Content.ReadAsStringAsync();
+}
+```
+
+Notice here that we have set the `client.BaseAddress` from the controller endpoint. If we have multiple places where we want to use the `HttpClient`, a more appropriate way would be to configure it before hand.
+
+## 2. Typed client
+
+Typed clients provide us a way to configure base address and default headers for the request of our `HttpClient` while mainting type safety using a class which we create. To use it, we register it from `.AddHttpClient<T>`:
 
 ```c#
 public void ConfigureServices(IServiceCollection services)
@@ -51,9 +80,9 @@ public async Task<ActionResult<string>> Post([FromServices]MyTypedClient client,
 }
 ```
 
-## 2. Named clients
+## 3. Named client
 
-The second way to get a `HttpClient` is to use named clients. Instead of passing a type, we use the overload specifying a name for the client:
+The last way to get a `HttpClient` is to use named clients. Instead of passing a type, we use the overload specifying a name for the client:
 
 ```c#
 public void ConfigureServices(IServiceCollection services)
