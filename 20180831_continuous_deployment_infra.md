@@ -21,6 +21,7 @@ We start first by creating a repository with the same structure as our server. F
         - myapp.com
         - myapp2.com
 - deploy.sh
+- .gitlab-ci.yml
 ```
 
 _If you are not familiar with Gitlab Pipeline and ASP NET Core deployment onto Ubuntu, you can refer to my previous post on [How to setup CICD for ASP NET Core with Gitlab Pipeline](https://kimsereyblog.blogspot.com/2018/06/setup-cicd-pipeline-with-gitlab-for.html)._
@@ -68,7 +69,13 @@ What we end up with is a repository containing all the configurations for our in
 
 ## 2. Setup the runner job
 
-```
+Here we assume that we already have setup a CI server containing our runner. We also assume that the runner has ssh access to the application server to deploy files to it.
+
+_If you aren't familiar with Gitlab runner, refer to my [previous post explaning how to setup a runner](https://kimsereyblog.blogspot.com/2018/06/setup-cicd-pipeline-with-gitlab-for.html) or if you aren't familiar with ssh, refer to my [previous post explaining how to configure ssh](https://kimsereyblog.blogspot.com/2018/05/useful-bash-and-friends-commands.html)._
+
+The `.gitlab-ci.yml` file defines how the runner execute the jobs.
+
+```yml
 stages:
   - deploy
   - clean
@@ -83,23 +90,41 @@ deploy:
   only:
     - master
   tags:
-    - ek
-    - nginx
+    - infra
 
 clean:
   stage: clean
   script:
-    - ssh husky "rm -r ek-infrastructure-*"
+    - ssh husky "rm -r myapp-infrastructure-*"
   variables:
     GIT_STRATEGY: none
   only:
     - master
   when: always
   tags:
-    - ek
+    - infra
 ```
 
+Here we setup two jobs, `deploy` and `clean`. `deploy` will push the files to the server on a temporary folder `myapp-infrastructure-xxx`, depending on what we are pushing, before replacing the root files. Because the whole repository is present on the CI server, we can make use of our deployment script `deploy.sh`. We make sure to change first the permissions to be able to execute it.
+
+```yml
+script:
+    - chmod 755 $CI_PROJECT_DIR/deploy.sh
+    - $CI_PROJECT_DIR/deploy.sh
 ```
+
+Then `clean` will remove the temporary folder(s) `myapp-infrastructure-*`.
+
+```yml
+script:
+    - ssh husky "rm -r myapp-infrastructure-*"
+```
+
+We now have our runner job setup, and Gitlab will run the `deploy` job and `clean` job everytime we push a change on the infrastructure repository. What we have left to do is to write the `deploy.sh` script.
+
+## 3. Deploy the configurations
+
+```sh
 #!/bin/bash -v
 set -e
 
