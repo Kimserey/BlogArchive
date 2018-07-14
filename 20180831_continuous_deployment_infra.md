@@ -227,4 +227,4 @@ And that concludes today's post. We should now have a fully automated deployment
 
 ## Conclusion
 
-Today we saw how we could setup a continuous deployment of infrastructure files in the same way as we did for our application code.
+Today we saw how we could setup a continuous deployment of infrastructure files in the same way as we did for our application code. We started by setting up a repository for our infrastructure files, then moved to configure the runner jobs and finally wrote a deployment script files used by the job to deploy the files to the application server and restart the appropriate services. Hope you liked this post, see you next time!
