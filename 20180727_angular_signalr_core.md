@@ -8,6 +8,8 @@ Last week we saw how to [Configure SignalR and get a server notifying a client b
 4. Send messages
 5. Authentication
 
+![1_messages](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20180727_signalrng/1_messages.PNG)
+
 ## 1. SignalR server
 
 We won't be describing the server here, instead we will take from where we left in my [previous blog post](https://kimsereyblog.blogspot.com/2018/07/signalr-with-asp-net-core.html) with the code fully available on my Github [https://github.com/Kimserey/signalr-core-sample/tree/master/Example](https://github.com/Kimserey/signalr-core-sample/tree/master/Example).
@@ -362,6 +364,8 @@ The  `display` variable is used to control the visibility of the modal. On init 
   </form>
 </p-dialog>
 ```
+
+![login](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20180727_signalrng/2_login.PNG)
 
 We should now have a prompt asking us to log in everytime we navigate to `http://localhost:4200`. Once log in, we are able to send messages under our authenticated user. And that concludes today's post!
 
