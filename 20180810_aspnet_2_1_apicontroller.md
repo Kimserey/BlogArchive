@@ -83,6 +83,8 @@ public IActionResult Post(MyModel viewModel)
 }
 ```
 
+**`IEnumerable<IFormFile>` is not inferred, to be able to get the files in a controller, we must use `IFormFileCollection` instead.**
+
 ## 4. `ActionResult<T>`
 
 Lastly to provide Swagger the type to display provide the model in the Swagger UI, we needed to add the `[ProducesResponseType(typeof(MyModel), 200)]` attribute.
