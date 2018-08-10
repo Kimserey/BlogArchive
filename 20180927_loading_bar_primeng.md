@@ -5,6 +5,8 @@ In Angular, it is common practice to execute commands prior routing a page using
 1. Setup an Angular project
 2. PrimeNG Progress bar
 
+![progressbar]()
+
 If you are unfamiliar with the Angular router, you can have a look at my previous blog post explaining the feature of the router [https://kimsereyblog.blogspot.com/2017/06/how-to-use-angular-router.html](https://kimsereyblog.blogspot.com/2017/06/how-to-use-angular-router.html).
 
 ## 1. Setup an Angular project
@@ -126,6 +128,77 @@ Once we navigate to `localhost:4200`, we now have to wait five seconds before se
 
 ## 2. PrimeNG Progress bar
 
+To start using the progress bar we need to import the module from PrimeNG:
+
+```
+import { ProgressBarModule } from 'primeng/progressbar';
+
+
+@NgModule({
+  imports: [
+    ProgressBarModule
+  ],
+  ...
+})
+export class AppModule { }
+
+```
+
+We can then create a component using the progress bar:
+
+```
+import { Component, Input } from '@angular/core';
+import { Router, NavigationStart, NavigationEnd } from '@angular/router';
+import { filter, map } from 'rxjs/operators';
+
+@Component({
+  selector: 'app-progress-bar',
+  template: `
+    <p-progressBar mode="indeterminate"></p-progressBar>
+  `
+  ]
+})
+export class ProgressBarComponent { }
+```
+
+`indeterminate` correspond to a progress bar which animates but does not have any definite ending. The official documentation can be found [here](https://www.primefaces.org/primeng/#/progressbar). If we want to stop the animation, we can set the mode to `''` (empty string). So what we can do is to set the mode to `indeterminate` when navigation is initiated and set it to `''` when navigation ends.
+
+```
+import { Component, Input } from '@angular/core';
+import { Router, NavigationStart, NavigationEnd } from '@angular/router';
+import { filter, map } from 'rxjs/operators';
+
+@Component({
+  selector: 'app-progress-bar',
+  template: `
+    <p-progressBar mode="{{ mode$ | async }}"></p-progressBar>
+  `
+})
+export class ProgressBarComponent { 
+    mode$ = this.router.events.pipe(
+        filter(evt => evt instanceof NavigationStart || evt instanceof NavigationEnd),
+        map(evt => evt instanceof NavigationStart ? 'indeterminate' : '')
+    );
+
+    constructor(private router: Router) { }
+}
+```
+
+We achieve that by subscribing to the router events and filtering `NavigationStart` and `NavigationEnd` where we set the mode as `indeterminate` when navigation starts and `''` when it ends. We can then place it just below a navbar so that it looks part of the design.
+
+```
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Navbar</a>
+</nav>
+
+<app-progress-bar></app-progress-bar>
+
+<h1>App component</h1>
+<router-outlet></router-outlet>
+```
+
+We also touch slightly on its style by using the class selector `:host` combined with `::ng-deep` to target classes within the component it is defined. If we did not use those selectors, we will not be able to target the classes from PrimeNG due to the mechanism used to isolated style classes from different components.
+
 ```
 import { Component, Input } from '@angular/core';
 import { Router, NavigationStart, NavigationEnd } from '@angular/router';
@@ -163,14 +236,10 @@ export class ProgressBarComponent {
 }
 ```
 
-```
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Navbar</a>
-</nav>
+And we are done! We now have a working progress bar.
 
-<app-progress-bar></app-progress-bar>
+![progressbar]()
 
-<h1>App component</h1>
-<router-outlet></router-outlet>
-```
+## Conclusion
 
+Today we saw how to create a progress bar for Angular using PrimeNG. We bound the progress bar animation to the navigation of the Angular router and saw how to style a component and component used within it using `:host` and `::ng-deep`. Hope you liked this post, see you next time!
