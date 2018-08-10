@@ -5,7 +5,7 @@ In Angular, it is common practice to execute commands prior routing a page using
 1. Setup an Angular project
 2. PrimeNG Progress bar
 
-![progressbar]()
+![progressbar](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20180927_progressbar/progressbar.gif)
 
 If you are unfamiliar with the Angular router, you can have a look at my previous blog post explaining the feature of the router [https://kimsereyblog.blogspot.com/2017/06/how-to-use-angular-router.html](https://kimsereyblog.blogspot.com/2017/06/how-to-use-angular-router.html).
 
@@ -238,7 +238,7 @@ export class ProgressBarComponent {
 
 And we are done! We now have a working progress bar.
 
-![progressbar]()
+![progressbar](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20180927_progressbar/progressbar.gif)
 
 ## Conclusion
 
