@@ -4,10 +4,10 @@ Last week I encountered an issue with MSBuild while trying to run it from comman
 The issue did not appear when using VisualStudio `right click + build` but only appeared when using `msbuild.exe` CLI directly with a clean project.
 
 ```
-Assets file 'C:\Projects\ConsoleApplication1\obj\project.assets.json' not found. Run a NuGet package restore to generate this file.
+Assets file 'C:\[...]\obj\project.assets.json' not found. Run a NuGet package restore to generate this file.
 ```
 
-When I first saw the error, few questions came to my mind which I will share today:
+When I first saw the error, few questions came to my mind which I will share today in 3 points:
 
 1. Overview of project.assets.json
 2. Slim SDK-Style project
@@ -19,7 +19,7 @@ Special shoutout to [@enricosada](https://twitter.com/enricosada) who provided m
 
 `project.assets.json` lists all the dependencies of the project. It is created in the `/obj` folder when using `dotnet restore` or `dotnet build` as it implicitly calls `restore` before build, or `msbuid.exe /t:restore` with `msbuild` CLI.
 
-To simulate `dotnet build` for .NET Framework project, we can do `msbuild /t:restore;build`
+To simulate `dotnet build` (restore + build) for .NET Framework project with `msbuild`, we can do `msbuild /t:restore;build` which use the target parameter `/t`.
 
 > Building requires the project.assets.json file, which lists the dependencies of your application. The file is created when dotnet restore is executed. Without the assets file in place, the tooling cannot resolve reference assemblies, which results in errors. With .NET Core 1.x SDK, you needed to explicitly run the dotnet restore before running dotnet build. Starting with .NET Core 2.0 SDK, dotnet restore runs implicitly when you run dotnet build. If you want to disable implicit restore when running the build command, you can pass the --no-restore option. 
 
@@ -28,7 +28,7 @@ Source:
 
 ## 2. Slim SDK-Style project
 
-In the past, all dependencies were listed directly in the project file:
+In the past, all dependencies were listed directly in the _old_ project file:
 
 ```
 <?xml version="1.0" encoding="utf-8"?>
@@ -88,8 +88,8 @@ But since MSBuild 15.0, a new kind of project called [`SDK-Style` project](https
 </Project>
 ```
 
-This has the big advantage of having the project file now being _developer friendly_. In the past it would be filled with XML tags added by the VS tooling which would prevent developers from changing the project file without fearing breaking the project.
-With the SDK-Style or slim project, dependencies are specified in `project.assets.json` generated during `restore` in `/obj`, it is now transparent to developers as it is more of a build step rather than a development step.
+This has the big advantage of having the project file now being _developer friendly_. In the past it would be filled with XML tags added by the VS tooling which would prevent developers from changing the project file for fear of breaking the project.
+With the SDK-Style or slim project, dependencies are specified in `project.assets.json` automatically generated during `restore` in `/obj`, it is now transparent to developers and is now a build step rather than a development step.
 
 ```
 {
@@ -135,8 +135,7 @@ With the SDK-Style or slim project, dependencies are specified in `project.asset
 }
 ```
 
-We can see here all the dependencies, project references, nuget packages, target frameworks, etc... All the information which were previously in the project file are now generated at build time.
-Once generated, it is then updated dynamically when removing/adding reference in Visual Studio without the need to build.
+We can see here all the dependencies, project references, nuget packages, target frameworks, etc... All the information which were previously in the project file are now generated at build time. Once generated, it is then updated dynamically when removing/adding reference in Visual Studio without the need to build.
 
 There are many advantages for using the SDK-Style projects and those are the ones that affects my daily work:
 
@@ -145,15 +144,14 @@ There are many advantages for using the SDK-Style projects and those are the one
 3. Allow direct editing of the file from VS without the need to unload
 
 **Note:**
-
 It isn't mandatory to be creating a .NET Core application to use the SDK-Style project file. The project file is linked to the version of MSBuild and whether it supports the compilation of the project. Therefore only MSBuild 15.0 will be able to understand it and comes installed with VS2017.
 In fact when creating an ASP.NET Core application project on .NET Framework using the VS template, it will create a SDK-Style project targeting .NET Framework.
 
 
 ## 3. Mixing SDK-Style project and old projects
 
-It is not always possible to use the `dotnet` CLI with a SDK-Style project. If the project targets .NET Framework and has dependencies on other projects that aren't SDK-Style projects, the only way to build will still remain using `msbuild.exe /t:restore;build` as the dependent libraries can't be compiled with `dotnet` CLI.
+It is not always possible to use the `dotnet` CLI with a SDK-Style project. If the project has dependencies on other projects that aren't SDK-Style projects, the only way to build will still remain using `msbuild.exe /t:restore;build` as the dependent libraries can't be compiled with `dotnet` CLI.
 
 ## Conclusion
 
-Today we saw what `project.assets.json` file used for and how we can fix the `Assets file 'C:\Projects\ConsoleApplication1\obj\project.assets.json' not found. Run a NuGet package restore to generate this file.` issue. We then saw what were the differences between a project prior MSBuild 15.0 and a SDK-Style project and what are the advantages of SDK-Style projects. Hope you liked this post, see you next time!
+Today we saw what `project.assets.json` file used for and how we can fix the `Assets file 'C:\[...]\obj\project.assets.json' not found. Run a NuGet package restore to generate this file.` issue. We then saw what were the differences between a project prior MSBuild 15.0 and a SDK-Style project and what are the advantages of SDK-Style projects. Hope you liked this post, see you next time!
