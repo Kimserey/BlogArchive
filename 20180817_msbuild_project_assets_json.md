@@ -156,3 +156,4 @@ It is not always possible to use the `dotnet` CLI with a SDK-Style project. If t
 
 ## Conclusion
 
+Today we saw what `project.assets.json` file used for and how we can fix the `Assets file 'C:\Projects\ConsoleApplication1\obj\project.assets.json' not found. Run a NuGet package restore to generate this file.` issue. We then saw what were the differences between a project prior MSBuild 15.0 and a SDK-Style project and what are the advantages of SDK-Style projects. Hope you liked this post, see you next time!
