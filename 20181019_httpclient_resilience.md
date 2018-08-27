@@ -45,3 +45,15 @@ public static class HttpClientBuilderExtensions
     }
 }
 ```
+
+```
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+    services
+        .AddHttpClient<IHealthCheckService, HealthCheckService>()
+        .AddPolicyHandler(PolicyHandler.WaitAndRetry())
+        .AddPolicyHandler(PolicyHandler.Timeout());
+}
+```
