@@ -10,14 +10,23 @@ Today I will explain a flow which can be followed to version open source project
 
 ## 1. Version with Semantic versioning
 
-Semantic versioning is ideal for versioning libraries. It is formed by three numbers `{major}.{minor}.{patch}`. Each number is used to indicate to the user the level of safety for upgrading the library. 
+[Semantic versioning](https://semver.org/#semantic-versioning-specification-semver) is ideal for versioning libraries. It is formed by three numbers `{major}.{minor}.{patch}`. Each number is used to indicate to the user the level of safety for upgrading the library. 
 
 - Upgrade of the major is risky and has chances to contain breaking changes, therefore looking at release notes or looking for migration would be recommended.
 - Upgrade of the minor has lesser risk and can be used to show availability of new features.
 - Upgrade of the patch is not risky and is used to push patches.
 
-Those definitions are part of the [Semantic versioning specification](https://semver.org/#semantic-versioning-specification-semver) and are part of the common spread knowledge in development. But the library does not have to follow exactly Semantic versioning and could be following some other specification while still following the format and number increment rule of Semantic versioning.
-If the maintainer definition differs from the specification, it is the responsibility of the maintainer to ensure that the user base is aware of it.
+Following this format allows to have a predictable version number which can be used by applications or libraries to setup upgrade rules and avoiding version lock. 
+
+For example, consider the following:
+
+ - we build a `library A` on version `1.5.0`
+ - `library B` references our `library A` on version `1.5.0`
+ - `application A` references `library A` on version `1.5.0` and `library B`
+
+We release a new version `1.6.0` with a new feature which `application A` wants to use.
+If the versions aren't predictable, both `application A` and `library B` will need to upgrade to `library A` `1.6.0`.
+With Semantic version, the version number is predictable and a bump of the `minor` specify no breaking changes. Therefore a compatibility rule on `library A` can be set to support any version of `library B` `1.x.x` as long as it is higher `1.5.0`.
 
 ## 2. Branching strategy
 
