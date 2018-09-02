@@ -45,10 +45,12 @@ __Every single commit has a version attributed to it.__ This is handle as such:
 
 Once the branches and pull requests are merged, the resulting merge is another commit which then has an attributed version `+{commit}`.
 
+Having a version for each commit becomes very handy when working in a continuously integrated pipeline which we will see next.
+
 ## 3. Continuous Integration and Releases
 
+Continuous Integration is a must for open source projects. We must be able to know that `master` branch is always in a compilable state. We also must ensure that all pull-requests are valid and do not break `master`. And lastly, we must ensure that other branches created to develop new features are also valid. To do that we would setup a CI server or use a service like [Appveyor](https://www.appveyor.com/).
 
-```
-Set the build to the actualy version it is building so that there is no need to navigate back to the commit history to know what it is building.
-Once satisfied release by tagging the branch with the number.
-```
+This is where a unique version for each commit is handy as on each commit pushed to the repository, a build will be triggered where the name of the build will be set to the version of the commit. This allows us to easily identify how the build relates to the repository as we will be able to know for which branch, for which version and which commit from the last release is the build trigger for.
+
+Release with tag to release to both package manager and github release.
