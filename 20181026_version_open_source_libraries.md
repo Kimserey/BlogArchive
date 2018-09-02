@@ -1,7 +1,7 @@
 # Versioning for open source library
 
 Few weeks ago I explained how [Gitversion can be used to apply semantic versioning to projects](https://kimsereyblog.blogspot.com/2018/04/sementic-versioning-for-dotnet.html) based on commit and tag history.
-Today I will explain a flow which can be followed to version open source project libraries by looking into four important parts in the lifecycle of an open source library.
+Today I will dive deeper in the purpose of versioning and introduce a flow which can be followed to version open source project libraries by looking into four important parts in the lifecycle of an open source library.
 
 1. Version with Semantic versioning
 2. Branching strategy and Commits
