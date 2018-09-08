@@ -31,7 +31,7 @@ The initial commits before release follow the version `0.x.x`. Before the first 
 
 ## 2. Branching strategy and Commits
 
-For a library, the easiest way is to manage everything around a single `master` branch. And any changes made around `master` is handled as a branch and `pull-request`. 
+For a library, the easiest way is to manage everything around a single `master` branch and make any changes in a branch (or fork in Github) which will be merged via `pull-request`. 
 
 - When new features need to be added, a branch is made out of `master` and `pull-request`'d back into `master`
 - When bug fixes need to be made, a branch is made out of `master` and `pull-request`'d back into `master`
@@ -49,8 +49,12 @@ Having a version for each commit becomes very handy when working in a continuous
 
 ## 3. Continuous Integration and Releases
 
-Continuous Integration is a must for open source projects. We must be able to know that `master` branch is always in a compilable state. We also must ensure that all pull-requests are valid and do not break `master`. And lastly, we must ensure that other branches created to develop new features are also valid. To do that we would setup a CI server or use a service like [Appveyor](https://www.appveyor.com/).
+Continuous Integration is a must for open source projects. We must be able to know that `master` branch is always in a workable state. We also must ensure that all pull-requests are valid and do present a danger tobreak `master`. And lastly, we must ensure that other branches created to develop new features are also valid. To do that we would setup a CI server or use a service like [Appveyor](https://www.appveyor.com/).
 
 This is where a unique version for each commit is handy as on each commit pushed to the repository, a build will be triggered where the name of the build will be set to the version of the commit. This allows us to easily identify how the build relates to the repository as we will be able to know for which branch, for which version and which commit from the last release is the build trigger for.
 
-Release with tag to release to both package manager and github release.
+The last important point is to handle releases. Since the library code changes all occur on `master` branch, we do not want to operate in a continuous delivery approach were every change on `master` would yield a release. Instead we can use `tag` to trigger a release which for a .NET library will produce a NuGet package `.nupkg` and generate a release on GitHub with the package attached to the release. Whenever we want to release, we tag the `master` branch with the exact release number.
+
+## Conclusion
+
+Today we saw the different aspects of versioning for an open source library. We started by looking at semantic versioning and the reason why we would follow it. Then we moved to look into branching and how commits are versioned. Lastly we talked about continuous integration and releases. Hope you liked this post, in the next post, I will show how we can achieve the points we discussed today for a .NET library, see you next time!
