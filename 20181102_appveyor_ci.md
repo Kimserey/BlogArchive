@@ -46,6 +46,24 @@ deploy:
       appveyor_repo_tag: true
 ```
 
+Install FAKE
+
+```
+dotnet tool install fake-cli --tool-path .\.fake
+```
+
+Install FAKE template
+
+```
+dotnet new -i "fake-template::*"
+```
+
+Bootstrap FAKE scripts:
+
+```
+dotnet new fake
+```
+
 ```fsharp
 #load ".fake/build.fsx/intellisense.fsx"
 #nowarn "3180"
