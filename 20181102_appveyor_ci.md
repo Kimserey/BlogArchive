@@ -89,28 +89,164 @@ deploy:
 
 `on` is used to specified when the artifact gets deployed, here we specify that the deployment occurs on tag of the repository [as explained last week]().
 
-The full file can be found on my [GitHub on a sample project](https://github.com/Kimserey/hello-world-nuget/blob/master/appveyor.yml).
+The full file can be found on my [GitHub on a sample project](https://github.com/Kimserey/hello-world-nuget/blob/master/appveyor.yml) and a reference yaml from AppVeyor can be found on [their documentation page](https://www.appveyor.com/docs/appveyor-yml/).
 
 ## 2. FAKE
 
+FAKE is a build tool which allows us to define targets and a pipeline fo building and packaging our .NET projects. Here we use it together with AppVeyor to build and package the application and trigger it in the `build` stage as we seen earlier using the command `ps: .\fake run build.fsx -t All`.
 
-Install FAKE
+We start first by installing FAKE by running the following command (assuming that `dotnet` is already installed):
 
 ```
 dotnet tool install fake-cli --tool-path .\.fake
 ```
 
-Install FAKE template
+This command installs FAKE on a local path under `.fake`. Then we install the `dotnet` FAKE template:
 
 ```
 dotnet new -i "fake-template::*"
 ```
 
-Bootstrap FAKE scripts:
+And lastly we bootstrap FAKE scripts:
 
 ```
 dotnet new fake
 ```
+
+This creates `build.fsx`, `fake.cmd`, `fake.sh` and files under `.fake`. Then we need to run the script first before starting to modify it so that all packages are downloaded via paket `.\fake.cmd build`.
+Next we can build the four targets which constitute the build script:
+
+1. Clean
+2. UpdateBuildVersion
+3. Build
+4. Pack
+
+### 2.1 Clean target
+
+`Clean` target is used to clean all folders which need to be cleared before generating the files:
+
+```fsharp
+Target.create "Clean" (fun _ ->
+    !! "**/bin"
+    ++ "**/obj"
+    ++ "**/artifacts"
+    ++ "gitversion"
+    |> Shell.deleteDirs
+)
+```
+
+### 2.2 UpdateBuildVersion target
+
+Next we deduce the version using `GitVersion` and update the AppVeyor build version using [AppVeyor API](https://www.appveyor.com/docs/build-worker-api/). We start first by defining some utility functions to execute a command and return a result, those will be used to execute the `gitversion /showvariable` command which prints the variable as result.
+
+```fsharp
+module Process =
+    let private timeout =
+        System.TimeSpan.FromMinutes 2.
+
+    let execWithMultiResult f =
+        Process.execWithResult f timeout
+        |> fun r -> r.Messages
+
+    let execWithSingleResult f =
+        execWithMultiResult f
+        |> List.head
+```
+
+Next we define some utility functions to return the version using `gitversion`.
+
+```fsharp
+module GitVersion =
+    let showVariable =
+        let commit =
+            match Environment.environVarOrNone Environment.APPVEYOR_REPO_COMMIT with
+            | Some c -> c
+            | None -> Process.execWithSingleResult (fun info -> { info with FileName = "git"; Arguments = "rev-parse HEAD" })
+
+        printfn "Executing gitversion from commit '%s'." commit
+
+        fun variable ->
+            match Environment.environVarOrNone Environment.APPVEYOR_REPO_BRANCH, Environment.environVarOrNone Environment.APPVEYOR_PULL_REQUEST_NUMBER with
+            | Some branch, None ->
+                Process.execWithSingleResult (fun info ->
+                    { info with
+                        FileName = "gitversion"
+                        Arguments = sprintf "/showvariable %s /url %s /b b-%s /dynamicRepoLocation .\gitversion /c %s" variable Environment.REPOSITORY branch commit })
+            | _ ->
+                Process.execWithSingleResult (fun info -> { info with FileName = "gitversion"; Arguments = sprintf "/showvariable %s" variable })
+
+    let get =
+        let mutable value: Option<string * string * string> = None
+
+        Target.createFinal "ClearGitVersionRepositoryLocation" (fun _ ->
+            Shell.deleteDir "gitversion"
+        )
+
+        fun () ->
+            match value with
+            | None ->
+                value <-
+                    match Environment.environVarOrNone Environment.APPVEYOR_REPO_TAG_NAME with
+                    | Some v -> Some (v, showVariable "AssemblySemVer", v)
+                    | None -> Some (showVariable "FullSemVer", showVariable "AssemblySemVer", showVariable "NuGetVersionV2")
+
+                Target.activateFinal "ClearGitVersionRepositoryLocation"
+                Option.get value
+            | Some v -> v
+```
+
+`showVariable` will get the current commit by either looking into the environment variable provided by AppVeyor or deducing the current commit by using `git rev-parse HEAD` and return a function as result which given the `variable` to show will use `gitversion` process either on a remote repository for branches or on the local repository for pull requests.
+
+The command executed for `gitversion` on a remote repostiory is `gitversion /showvariable fullSemVer /url [my-repo.git] /b b-[my-branch] /dynamicRepoLocation .\gitversion /c [sha1]`. This will download locally the repository under `.\gitversion`, and create a branch `b-branch` which will allow `gitversion` to calculate the version based on that branch. Next we define a getter which when invoked declares a final target which cleans the `gitversion` folder and activate it when getter is invoked for the first time.
+
+Lastly we can define the target and use it.
+
+```fsharp
+Target.create "UpdateBuildVersion" (fun _ ->
+    let (fullSemVer, _, _) = GitVersion.get()
+
+    Shell.Exec("appveyor", sprintf "UpdateBuild -Version \"%s (%s)\"" fullSemVer (Environment.environVar Environment.APPVEYOR_BUILD_NUMBER))
+    |> ignore
+)
+```
+
+### 2.3 Build
+
+```fsharp
+Target.create "Build" (fun _ ->
+    let (fullSemVer, assemblyVer, _) = GitVersion.get()
+
+    let setParams (buildOptions: DotNet.BuildOptions) =
+        { buildOptions with
+            Common = { buildOptions.Common with DotNet.CustomParams = Some (sprintf "/p:Version=%s /p:FileVersion=%s" fullSemVer assemblyVer) }
+            Configuration = DotNet.BuildConfiguration.fromEnvironVarOrDefault Environment.BUILD_CONFIGURATION DotNet.BuildConfiguration.Debug }
+
+    !! "**/*.*proj"
+    -- "**/gitversion/**/*.*proj"
+    |> Seq.iter (DotNet.build setParams)
+)
+```
+
+### 2.4 Pack
+
+```fsharp
+Target.create "Pack" (fun _ ->
+    let (_, _, nuGetVer) = GitVersion.get()
+
+    let setParams (packOptions: DotNet.PackOptions) =
+        { packOptions with
+            Configuration = DotNet.BuildConfiguration.fromEnvironVarOrDefault Environment.BUILD_CONFIGURATION DotNet.BuildConfiguration.Debug
+            OutputPath = Some "../artifacts"
+            NoBuild = true
+            Common = { packOptions.Common with CustomParams = Some (sprintf "/p:PackageVersion=%s" nuGetVer) } }
+
+    !! "**/*.*proj"
+    -- "**/gitversion/**/*.*proj"
+    |> Seq.iter (DotNet.pack setParams)
+)
+```
+
+### 2.5 Complete build script
 
 ```fsharp
 #load ".fake/build.fsx/intellisense.fsx"
