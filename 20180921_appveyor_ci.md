@@ -1,6 +1,6 @@
 # Setup Continuous Integration and Deployment for dotnet library with Appveyor and FAKE
 
-[Last week we saw a flow to manage versioning and releases](). As a continuation of last week, today I will show how we can setup versioning and releases for open source projects by configuring Appveyor and using FAKE to setup a build script.
+[Last week we saw a flow to manage versioning and releases](https://kimsereyblog.blogspot.com/2018/09/versioning-for-open-source-library.html). As a continuation of last week, today I will show how we can setup versioning and releases for open source projects by configuring Appveyor and using FAKE to setup a build script.
 
 1. Configure AppVeyor
 2. FAKE
@@ -87,7 +87,7 @@ deploy:
       appveyor_repo_tag: true
 ```
 
-`on` is used to specified when the artifact gets deployed, here we specify that the deployment occurs on tag of the repository [as explained last week]().
+`on` is used to specified when the artifact gets deployed, here we specify that the deployment occurs on tag of the repository [as explained last week](https://kimsereyblog.blogspot.com/2018/09/versioning-for-open-source-library.html).
 
 The full file can be found on my [GitHub on a sample project](https://github.com/Kimserey/hello-world-nuget/blob/master/appveyor.yml) and a reference yaml from AppVeyor can be found on [their documentation page](https://www.appveyor.com/docs/appveyor-yml/).
 
