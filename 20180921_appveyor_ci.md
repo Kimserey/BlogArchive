@@ -212,6 +212,8 @@ Target.create "UpdateBuildVersion" (fun _ ->
 
 ### 2.3 Build
 
+For building the application we use the `DotNet.build` from FAKE and specify the `Version` and `FileVersion` parameter for the dll. Provided that we are using the [`SDK-Style` project files](https://kimsereyblog.blogspot.com/2018/08/sdk-style-project-and-projectassetsjson.html), the version and file version can be set via parameter of the build instead of AssemblyInfo.
+
 ```fsharp
 Target.create "Build" (fun _ ->
     let (fullSemVer, assemblyVer, _) = GitVersion.get()
@@ -227,7 +229,11 @@ Target.create "Build" (fun _ ->
 )
 ```
 
+_If you haven't heard of SDK-Style, you can refer to my previous blog post https://kimsereyblog.blogspot.com/2018/08/sdk-style-project-and-projectassetsjson.html._
+
 ### 2.4 Pack
+
+The last step is to `Pack`, similarly to build, we use `DotNet.pack` and pass in the `PackageVersion`.
 
 ```fsharp
 Target.create "Pack" (fun _ ->
@@ -247,6 +253,21 @@ Target.create "Pack" (fun _ ->
 ```
 
 ### 2.5 Complete build script
+
+We complete the script by defining the pipeline:
+
+```fsharp
+Target.create "All" ignore
+
+"Clean"
+  =?> ("UpdateBuildVersion", Environment.environVarAsBool Environment.APPVEYOR)
+  ==> "Build"
+  ==> "Pack"
+  ==> "All"
+```
+
+`==>` defines a dependency on the target and `=?>` defines a conditional dependency.
+And that's it, here is the complete build script:
 
 ```fsharp
 #load ".fake/build.fsx/intellisense.fsx"
@@ -371,3 +392,7 @@ Target.create "All" ignore
 
 Target.runOrDefault "Build"
 ```
+
+## Conclusion
+
+Today we saw how we can setup AppVeyor to build and release a dotnet library. We started by setting up the `appveyor.yml` configuration file to prepare the build agent, build the library, pack it and deploy to NuGet and GitHub. We also saw how to configure the whole FAKE build script with the different targets. Now every time a commit is pushed to any branch on the repository, the AppVeyor build will be triggered and the FAKE build script will run entirely and whenever a tag is pushed, it will trigger a release to NuGet and GitHub release. Hope you liked this post, see you next time!
