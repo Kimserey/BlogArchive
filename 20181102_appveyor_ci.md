@@ -1,34 +1,75 @@
 # Setup Continuous Integration and Deployment for dotnet library with Appveyor and FAKE
 
+[Last week we saw a flow to manage versioning and releases](). As a continuation of last week, today I will show how we can setup versioning and releases for open source projects by configuring Appveyor and using FAKE to setup a build script.
+
+1. Configure AppVeyor
+2. FAKE
+
+## 1. Configure AppVeyor
+
+Configuring AppVeyor is done via a yaml file `appveyor.yml` at the root of the repository. Then from the site [https://www.appveyor.com/](https://www.appveyor.com/), we can sign in with our GitHub credentials and add the repository to the AppVeyor projects. All the settings in the settings tab can be configured in the yaml file.
+
+`appveyor.yml` settings can be seen in multiple sections:
+
+1. global environment
+2. build
+3. test
+4. artifact
+5. deploy
+
+The `global configuration` is where we configure the context of the build,
+
 ```yml
+# 1.
 version: '{build}'
 image: Visual Studio 2017
 skip_branch_with_pr: true
-
 skip_commits:
   files:
     - docs/**/*
     - '**/*.md'
     - .gitignore
-
 pull_requests:
   do_not_increment_build_number: true
-
 environment:
   VisualStudioVersion: 15.0
   BuildConfiguration: release
+```
 
+Here we set the `version` to the build number, `image` to the `Visual Studio 2017` image to have access to msbuild 15, set the build to not build branches with PR as PR themselves are built with `skip_branch_with_pr`, skip the build when commits in only on certain files, and lastly we set some global environment variables like the the build configuration to be `release`.
+
+Next we run some installation prior running the build.
+
+```yml
+# 2.
 install:
   - ps: choco install gitversion.portable -pre -y
 
 build_script:
   - ps: .\fake run build.fsx -t All
+```
 
+`ps: choco install gitversion.portable -pre -y` is used to install [Gitversion which we talked about few weeks ago](https://kimsereyblog.blogspot.com/2018/04/sementic-versioning-for-dotnet.html) and figure out the current version of the application or library to release. `ps: .\fake run build.fsx -t All` runs the FAKE build script which we will define in the second part.
+
+Next we can define how we run tests, for this example we don't have any.
+
+```yml
+# 3.
 test: off
+```
 
+Next we define where the build can find the artifacts, our build script will package the library in a NuGet package `.nupkg` and place them in a `artifacts` folder and we tell AppVeyor that it can find them and upload them from that folder.
+
+```yml
+# 4.
 artifacts:
   - path: .\artifacts\**\*.nupkg
+```
 
+Lastly we setup two deployment, one to `NuGet` and the other one to `GitHub` releases. Each deployment requires a secure key which can be encrypted using the [Encrypt data tool from AppVeyor](https://ci.appveyor.com/tools/encrypt).
+
+```yml
+# 5.
 deploy:
   - provider: NuGet
     api_key:
@@ -45,6 +86,13 @@ deploy:
     on:
       appveyor_repo_tag: true
 ```
+
+`on` is used to specified when the artifact gets deployed, here we specify that the deployment occurs on tag of the repository [as explained last week]().
+
+The full file can be found on my [GitHub on a sample project](https://github.com/Kimserey/hello-world-nuget/blob/master/appveyor.yml).
+
+## 2. FAKE
+
 
 Install FAKE
 
