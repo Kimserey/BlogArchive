@@ -121,8 +121,8 @@ With those changes on the pipeline, normal commits would trigger a pipeline of t
 Lastly we can take the tag from the build with the variable `$CI_COMMIT_TAG` and use it when packaging our dotnet application so that our library is built with the version in it. This will be helpful to know in the future which version we are currently using.
 
 ```
-publish:
-  stage: publish
+package:
+  stage: package
   script:
     - dotnet publish MyApp -c Release /p:Version=$CI_COMMIT_TAG
   only:
@@ -135,4 +135,47 @@ If we looked at the property of the dll generated, we would see the version appl
 
 ## 3. Artifacts
 
-Our package stage generates libraries which are deployed to production environment.
+Our package stage generates libraries which are deployed to production environment. Those libraries all together form what is called an artifact. GitLab also support upload of artifacts by using the `artifacts` property:
+
+```
+package:
+  stage: package
+  script:
+    - dotnet publish MyApp -c Release -o ../artifacts/MyApp /p:Version=$CI_COMMIT_TAG
+    - "echo $CI_COMMIT_TAG-$CI_COMMIT_SHA >> artifacts/MyApp/version"
+  artifacts:
+    name: "myapp-$CI_COMMIT_TAG"
+    paths:
+      - artifacts/MyApp
+    expire_in: 2 days
+  only:
+    - tags
+```
+
+Here we set the artifact `name`, `path` and `expiry`. We compose the name with our app name and the tag (which is the version). The path is the artifact path which we provide as the output of the `dotnet publish` command. And we set the expiry to be of a week.
+
+The expiry should be set to match your delay before decision to release to environment. Meaning from the time your build your version, how long will it take for the person in charge to take the decision to click Deploy.
+In this example, I will be release straight away as soon as I know that the packaging succeeded therefore two days is fairly safe.
+
+Even after expiry, it is always possible to rerun the job and deploy right after.
+
+Once packaged, the artifact can be browsed or downloaded from the package job page:
+
+![browse]()
+
+## 4. Environments
+
+```
+deploy:
+  stage: deploy
+  script:
+    - cat artifacts/MyApp/version
+    - echo "Deploy to staging"
+  environment:
+    name: production
+  when: manual
+  only:
+    - tags
+```
+
+![environment]()
