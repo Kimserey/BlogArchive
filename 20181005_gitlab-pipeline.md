@@ -79,7 +79,7 @@ deploy:
 
 Now when we deploy, our pipeline will stop and a manual action will be required:
 
-![manual]()
+![manual](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20181005_gitlab-pipeline/pipeline1.png)
 
 With this step we can manage what is released. The next issue we identified is the version. Understanding releases by looking at the commit hash is hard. Talking to other colleagues about commit hash is even harder. To counter that we use versions.
 
@@ -131,7 +131,7 @@ package:
 
 If we looked at the property of the dll generated, we would see the version applied:
 
-![version]()
+![version](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20181005_gitlab-pipeline/pipeline2.png)
 
 ## 3. Artifacts
 
@@ -161,7 +161,7 @@ Even after expiry, it is always possible to rerun the job and deploy right after
 
 Once packaged, the artifact can be browsed or downloaded from the package job page:
 
-![browse]()
+![browse](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20181005_gitlab-pipeline/pipeline3.png)
 
 ## 4. Environments
 
@@ -178,4 +178,4 @@ deploy:
     - tags
 ```
 
-![environment]()
+![environment](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20181005_gitlab-pipeline/pipeline4.png)
