@@ -1,4 +1,4 @@
-# Gitlab pipeline
+# Gitlab CI/CD with pipeline, artifacts and environments
 
 Almost a year ago I wrote about [how we could setup CI/CD with gitlab pipeline](https://kimsereyblog.blogspot.com/2018/06/setup-cicd-pipeline-with-gitlab-for.html). I showed a very simple 3 stages pipeline build/test/deploy. Since then Gitlab has improved considerably their CI tool with features simplifying releases management. Today we will revisit pipelines and introduce few concepts which will help in managing releases.
 
@@ -163,7 +163,30 @@ Once packaged, the artifact can be browsed or downloaded from the package job pa
 
 ![browse](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20181005_gitlab-pipeline/pipeline3.png)
 
+We now can inspect the content of the artifact before deployment or even after deployment. This can come handy to make sure that what is deployed is actually what we expect.
+
+By default, all artifacts are available on the next stage. If we look at the logs of the package stage, we will see the following:
+
+```
+Uploading artifacts...
+artifacts/MyApp: found 280 matching files 
+Uploading artifacts to coordinator... ok            id=100641327 responseStatus=201 Created token=...
+```
+
+And if we look at the log of the next deploy stage, we should find the counterpart message:
+
+```
+Downloading artifacts for publish (100641327)...
+Downloading artifacts from coordinator... ok        id=100641328 responseStatus=200 OK token=...
+```
+
+This is particularly helpful as even if we redeploy in one day, two days, one month or even one year, this particular artifact will be downloaded and can be used to deploy the application at this particular state.
+
 ## 4. Environments
+
+So far we saw how to build and store artifact and we saw how to version our releases and deployment. Once we have a certain number of releases, it becomes hard to keep track of what was last release to our environment for example production environment. Using the pipeline view is not designed to keep track of releases as each commit will trigger a new pipeline. And if we do need to rollback to earlier version, the lastest successful tagged build will no longer be the one deployed on our production environment. To cater for this, GitLab environments is meant handle those scenarios.
+
+An environment can automatically be created if we define it in the job itself:
 
 ```
 deploy:
@@ -178,4 +201,62 @@ deploy:
     - tags
 ```
 
+Environment can be accessed from Operations > Environments. Here we have created `production`, here we can see that the latest deployment was `2.0.1` and that it was a rollback as previously `2.0.2` was deployed.
+
 ![environment](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20181005_gitlab-pipeline/pipeline4.png)
+
+If we do encounter situation where we need to rollback, we can do so by pressing the right button. The ID represents the latest deployment which occurred on `production`.
+
+And that concludes today's post! Here is a complete Gitlab pipeline yaml file:
+
+```
+image : microsoft/dotnet:latest
+
+stages:
+  - build
+  - test
+  - package
+  - deploy
+
+build:
+  stage: build
+  script:
+    - dotnet build MyApp -c Release
+  only:
+    - master
+
+test:
+  stage: test
+  script:
+    - dotnet test MyApp -c Release
+  only:
+    - master
+
+package:
+  stage: package
+  script:
+    - dotnet publish MyApp -c Release -o ../artifacts/MyApp /p:Version=$CI_COMMIT_TAG
+    - "echo $CI_COMMIT_TAG-$CI_COMMIT_SHA >> artifacts/MyApp/version"
+  artifacts:
+    name: "myapp-$CI_COMMIT_TAG"
+    paths:
+      - artifacts/MyApp
+    expire_in: 2 days
+  only:
+    - tags
+    
+deploy:
+  stage: deploy
+  script:
+    - cat artifacts/MyApp/version
+    - echo "Deploy to staging"
+  environment:
+    name: production
+  when: manual
+  only:
+    - tags
+```
+
+## Conclusion
+
+Today we saw how to setup GitLab pipeline to create a pipeline which handles all important steps in continuous integration and deployment. We saw how to setup two jobs which build and test the application code at each commits, then we saw how we could use tagging to deploy versioned assemblies. We also saw how we could upload those assemblies as an artifact into GitLab and make it available for the next deploy stage. Lastly we saw how to manage deployment in environments and how we could rollback a certain version in the environments. Hope you like this post, see you next time!
