@@ -31,34 +31,59 @@ You just downloaded the `hello-world` image and ran it in a container which prin
 Useful link to the Docker orientation [https://docs.docker.com/get-started/#prepare-your-docker-environment](https://docs.docker.com/get-started/#prepare-your-docker-environment)
 
 
-### If Docker is not starting
+### Fix Docker not starting:
 
-Check that Hypervisor is enabled by opening the `Windows Features` and check if every checkbox is selected under `Hyper-V`.
+ - Check that Hypervisor is enabled by opening the `Windows Features` and check if every checkbox is selected under `Hyper-V`.
+ 
+ ![windowsfeatures](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20180929_docker/docker_2.PNG)
 
-![windowsfeatures]()
+- Next Under Hyper-V Manager check that `MobyLinuxVM` is in `Running` state.
 
-Next Under Hyper-V Manager check that `MobyLinuxVM` is in `Running` state.
+![hypervmanager](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20180929_docker/docker_1.PNG)
 
-![hypervmanager]()
+- If it isn't running, Docker fails to start, virtualization might not be enable on your computer and you will have to enable it on BIOS.
 
-If it isn't running, Docker fails to start, virtualization might not be enable on your computer and you will have to enable it on BIOS.
-
-![bios]()
+![bios](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20180929_docker/docker_3.jpeg)
 
 ## 2. Docker basic commands
 
-docker image ls
+Now that Docker is installed and we can start build images and running containers, we can look into some of the terminology and [commands from the CLI](https://docs.docker.com/engine/reference/commandline/cli/).
+
+An image is a set of layers describe by the `Dockerfile`. It represents a state of an environment. It is built with `docker build`. There can be multiple version of the image tagged to different versions. A container is a running instance of an image bootup using `docker run`. Multiple containers can be started from the same image.
+
+To manage image and containers, we can use the commnad `docker image ...` and `docker container ...`.
+
+For example to list all the containers running:
+
+```
 docker container ls
-docker container stop [container id]
-docker container prune
-docker rmi [image id]
-docker image prune
-docker build
-docker run
+```
+
+Or to see all images:
+
+```
+docker image ls
+```
+
+A container can be seen as a running process, it can be stopped using the following command:
+
+```
+docker container stop [container-id]
+```
+
+Or killed:
+
+```
+docker container kill [container-id]
+```
+
+Rogue images and containers can be cleared with `prune`, `docker image/container prune`.
+And lastly images and containers can be removed using `rm` with `docker image/container rm [image or container id]`.
+
+Now that we have Docker installed, and know some functionalities of the `docker CLI`, let's see how we can setup an ASP NET Core application running in Docker Linux container.
 
 ## 3. Create ASP NET Core application
 
-dotnetcoreapp
 docker-compose project
 docker-compose
 
