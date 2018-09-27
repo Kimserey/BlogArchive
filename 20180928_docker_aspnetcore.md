@@ -103,20 +103,18 @@ In order to get an ASP NET Core application running on Docker, we need to create
 
 ### 3.1 Dockerfile
 
-
-Start by creating an empty ASP NET Core application. Then create the following Docker file:
-
+Start by creating an empty ASP NET Core application. Then right click on the project and select `Add Docker support`. Once added, the toolbox will have created the following Dockerfile in your project:
 
 ```
 FROM microsoft/dotnet:2.1-aspnetcore-runtime AS base
 WORKDIR /app
+EXPOSE 80
 
 FROM microsoft/dotnet:2.1-sdk AS build
 WORKDIR /src
 COPY DockerWebApp/DockerWebApp.csproj DockerWebApp/
 RUN dotnet restore DockerWebApp/DockerWebApp.csproj
 COPY . .
-
 WORKDIR /src/DockerWebApp
 RUN dotnet build DockerWebApp.csproj -c Release -o /app
 
@@ -175,7 +173,62 @@ info: Microsoft.AspNetCore.Hosting.Internal.WebHost[1]
       Request starting HTTP/1.1 GET http://localhost:5000/
 ```
 
-docker-compose project
-docker-compose
+Now we can build images and run ASP NET Core application containers but we lost are ability to use the Visual Studio debugger because it's no longer a process that can be easily attached with a debugger.
 
+To fix that Visual Studio and Docker tools provide an extension which gives full integration of the debugger via `docker-compose` and `dcproj`.
 
+When we enabled Docker support, a `dcproj` was created and saved under the solution. The project contains a `docker-compose.yml` and an override which are used to orchestrate deployment.
+
+```
+version: '3.4'
+
+services:
+  dockerwebapp:
+    image: myregistry/dockerwebapp
+    build:
+      context: .
+      dockerfile: DockerWebApp/Dockerfile
+```
+
+Here we only have one service `dockerwebapp` and under the override file:
+
+```
+version: '3.4'
+
+services:
+  dockerwebapp:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5000:80"
+```
+
+We map the local port 5000 to the container 80 which serves our ASP NET Core application.
+Everytime we make changes to this file, we can see the `Docker` Output on Visual studio:
+
+```
+version: '3.4'
+docker ps --filter "status=running" --filter "name=dockercompose5923735658168190169_dockerwebapp_" --format {{.ID}} -n 1
+docker-compose  -f "C:\Projects\DockerWebApp\docker-compose.yml" -f "C:\Projects\DockerWebApp\docker-compose.override.yml" -f "C:\Projects\DockerWebApp\obj\Docker\docker-compose.vs.debug.g.yml" -p dockercompose5923735658168190169 --no-ansi build 
+Building dockerwebapp
+Step 1/3 : FROM microsoft/dotnet:2.1-aspnetcore-runtime AS base
+ ---> 40d759655ea3
+Step 2/3 : WORKDIR /app
+ ---> Using cache
+ ---> 058625e3a437
+Step 3/3 : EXPOSE 80
+ ---> Using cache
+ ---> e220acc00b8b
+Successfully built e220acc00b8b
+Successfully tagged myregistry/dockerwebapp:dev
+docker-compose  -f "C:\Projects\DockerWebApp\docker-compose.yml" -f "C:\Projects\DockerWebApp\docker-compose.override.yml" -f "C:\Projects\DockerWebApp\obj\Docker\docker-compose.vs.debug.g.yml" -p dockercompose5923735658168190169 --no-ansi up -d --no-build --force-recreate --remove-orphans
+Recreating dockercompose5923735658168190169_dockerwebapp_1 ... 
+Recreating dockercompose5923735658168190169_dockerwebapp_1 ... done
+Done!  Docker containers are ready.
+```
+
+This means that everytme we change the file, the image is updated. For development, the container is already running so there's no need to manually run it. All we have to do is to select the docker project from Visual Studio and set it as a startup project, run it, we will now be able to breakpoint in the project.
+
+And that concludes today post! We now have an ASP NET Core application deployed on Docker Linux container which can be debugged locally via breakpoint.
+
+## Conclusion
