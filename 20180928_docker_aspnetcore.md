@@ -236,3 +236,5 @@ This means that everytme we change the file, the image is updated. For developme
 And that concludes today post! We now have an ASP NET Core application deployed on Docker Linux container which can be debugged locally via breakpoint.
 
 ## Conclusion
+
+Today we saw how we could install Docker Linux containers on Windows, we discovered some of the most common features of the Docker CLI to manage images and containers and lastly we saw a concrete example of how to setup an ASP NET Core application running in Docker Linux container and how we could breakpoint to debug code while running in the container. Hope you like this post, see you next time!
