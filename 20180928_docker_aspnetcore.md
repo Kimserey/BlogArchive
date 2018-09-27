@@ -103,7 +103,11 @@ In order to get an ASP NET Core application running on Docker, we need to create
 
 ### 3.1 Dockerfile
 
-Start by creating an empty ASP NET Core application. Then right click on the project and select `Add Docker support`. Once added, the toolbox will have created the following Dockerfile in your project:
+Start by creating an empty ASP NET Core application. Then right click on the project and select `Add Docker support`.
+
+![docker support](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20180929_docker/docker_4.PNG)
+
+Once added, the toolbox will have created the following Dockerfile in your project:
 
 ```
 FROM microsoft/dotnet:2.1-aspnetcore-runtime AS base
