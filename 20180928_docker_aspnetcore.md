@@ -77,16 +77,105 @@ Or killed:
 docker container kill [container-id]
 ```
 
-Rogue images and containers can be cleared with `prune`, `docker image/container prune`.
-And lastly images and containers can be removed using `rm` with `docker image/container rm [image or container id]`.
+Rogue images and containers can be cleared with `prune`:
+
+```
+docker image/container prune
+```
+
+Images and containers can be removed using `rm` with 
+
+```
+docker image/container rm [image or container id]
+```
+
+Lastly standard output are redirected and can be viewed using:
+
+```
+docker container logs [container-id]
+```
 
 Now that we have Docker installed, and know some functionalities of the `docker CLI`, let's see how we can setup an ASP NET Core application running in Docker Linux container.
 
 ## 3. Create ASP NET Core application
 
+In order to get an ASP NET Core application running on Docker, we need to create a `Dockerfile` which is a file containing instruction on how to build a Docker image of our application.
+
+### 3.1 Dockerfile
+
+
+Start by creating an empty ASP NET Core application. Then create the following Docker file:
+
+
+```
+FROM microsoft/dotnet:2.1-aspnetcore-runtime AS base
+WORKDIR /app
+
+FROM microsoft/dotnet:2.1-sdk AS build
+WORKDIR /src
+COPY DockerWebApp/DockerWebApp.csproj DockerWebApp/
+RUN dotnet restore DockerWebApp/DockerWebApp.csproj
+COPY . .
+
+WORKDIR /src/DockerWebApp
+RUN dotnet build DockerWebApp.csproj -c Release -o /app
+
+FROM build AS publish
+RUN dotnet publish DockerWebApp.csproj -c Release -o /app
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app .
+ENTRYPOINT ["dotnet", "DockerWebApp.dll"]
+```
+
+The Dockerfile contains multiple step, `FROM` specifies the image from you will start, `WORKDIR` specifies the current dictory within the container. `COPY` is used to copy files and `RUN` is used to run processes. At the end of the script we defines the `ENTRYPOINT` as being the dotnet process with the dll as argument just like we would run `dotnet DockerWebApp.dll` in our command prompt.
+
+One we have the Dockerfile, we can build by running the following in the root of the application:
+
+```
+docker build -f DockerWebApp\Dockerfile -t dockertest:dev .\
+```
+
+`docker build` builds the image, `-f` specifies the dockerfile paht while `-t` represents the name of the repository and the tag of the application. We can see the image built with `docker image ls`.
+
+```
+$ docker image ls
+REPOSITORY                                TAG                      IMAGE ID            CREATED             SIZE
+dockertest                                dev                      6663b809a99a        4 seconds ago       255MB
+microsoft/dotnet                          2.1-aspnetcore-runtime   40d759655ea3        7 days ago          255MB
+microsoft/dotnet                          2.1-runtime              cc240a7fd027        7 days ago          180MB
+microsoft/dotnet                          2.1-sdk                  e1a56dca783e        7 days ago          1.73GB
+docker4w/nsenter-dockerd                  latest                   cae870735e91        11 months ago       187kB
+```
+
+Once built we can run this image by mapping the port of the container to 5000 on the local machine.
+
+```
+docker run -p 5000:80 dockertest:dev
+```
+
+If we look at the list of containers, we will see our container runnning and the `PORTS` specifies that the local machine redirects traffic from 5000 to 80 in the container.
+
+```
+docker container ls
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                  NAMES
+a7ab376d75ab        dockertest:dev      "dotnet DockerWebApp…"   32 seconds ago      Up 30 seconds       0.0.0.0:5000->80/tcp   cocky_montalcini
+```
+
+Navigate to `http://localhost:5000` and you will be able to hit your application running in Docker container.
+
+```
+$ docker container logs -f a7ab376d75ab
+Hosting environment: Production
+Content root path: /app
+Now listening on: http://[::]:80
+Application started. Press Ctrl+C to shut down.
+info: Microsoft.AspNetCore.Hosting.Internal.WebHost[1]
+      Request starting HTTP/1.1 GET http://localhost:5000/
+```
+
 docker-compose project
 docker-compose
-
-Test test
 
 
