@@ -89,10 +89,30 @@ Images and containers can be removed using `rm` with
 docker image/container rm [image or container id]
 ```
 
-Lastly standard output are redirected and can be viewed using:
+Standard output are redirected and can be viewed using:
 
 ```
 docker container logs [container-id]
+```
+
+Lastly if we want to inspect the content of the container, we can get access to a bash interactive shell by executing the following:
+
+```
+$ docker container ls
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                  NAMES
+a7ab376d75ab        dockertest:dev      "dotnet DockerWebApp…"   32 seconds ago      Up 30 seconds       0.0.0.0:5000->80/tcp   cocky_montalcini
+
+$ docker container exec -it a7ab376d75ab bash
+root@a7ab376d75ab:/app#
+```
+
+`exec` is used to execute a command on a running container, here we open an interactive shell with `-it` and execute `bash`. To exit, type `exit`.
+
+```
+root@a7ab376d75ab:/# exit
+exit
+
+kimserey.lam@KLAM C:\Projects
 ```
 
 Now that we have Docker installed, and know some functionalities of the `docker CLI`, let's see how we can setup an ASP NET Core application running in Docker Linux container.
