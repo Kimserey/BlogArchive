@@ -83,7 +83,9 @@ id   name
 
 We endup with a fully working SQL Server running in a container. If we were to use SQL Server Management studio (SSMS), we would be able to connect to `localhost,1433` and browse our databse.
 
-![SSMS]()
+![SSMS](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20181005_docker_sqlserver/ssms.PNG)
+
+_Side note to avoid confusion: in the picture I am running the server on 1434_
 
 Now that we know how SQL Server works, we can delete this container which will permanently destroy all data in the database.
 
@@ -94,22 +96,25 @@ docker container rm sqlserver-test
 
 ## 2. Setup an ASP NET Core application with SQL Server
 
+Now that we know how to setup SQL Server, we can add it into our `compose` configuration. We start first by creating a simple ASP NET Core WebApplication and enabling Docker.
+The default enabling of Docker gives us the following `compose` in the `dccproj` (Docker compose project):
+
 ```
 services:
   webapplication1:
     build:
       context: .
       dockerfile: WebApplication1/Dockerfile
-    depends_on:
-      - db
-      - migration
-  migration:
+```
+
+Running this projects start the application. We can then add the SQL Server image which we tested in 1) by adding it into the compose configuration and making it as a dependency of the WebApplication:
+
+```
+services:
+  webapplication1:
     build:
       context: .
-      dockerfile: Migrations/Dockerfile
-    environment:
-        SA_USER: "sa"
-        SA_PASSWORD: "MyPassword001"
+      dockerfile: WebApplication1/Dockerfile
     depends_on:
       - db
   db:
@@ -121,6 +126,99 @@ services:
       - "1433:1433"
 ```
 
+The environment variable which we use to pass through `-e` are now set in `environment`.
+Next we can setup a simple service to query the database:
+
+```
+public interface IPersonRepository
+{
+    IEnumerable<string> GetNames();
+}
+```
+
+With its implementation:
+
+```
+public class PersonRepository : IPersonRepository
+{
+    private IDbConnection _connection;
+
+    public PersonRepository(IDbConnection connection)
+    {
+        _connection = connection;
+    }
+
+    public IEnumerable<string> GetNames()
+    {
+        IEnumerable<string> names = Enumerable.Empty<string>();
+        return _connection.Query<string>("SELECT name FROM Person");
+    }
+}
+```
+
+And we instantiate the DbConnection in `Startup.cs`:
+
+```
+public class Startup
+{
+    public IConfiguration Configuration { get; }
+
+    public Startup(IConfiguration configuration)
+    {
+        Configuration = configuration;
+    }
+
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddTransient<IDbConnection>(sp => new SqlConnection("Server=db;Database=mydb;User=sa;Password=MyPassword001;"));
+        services.AddTransient<IPersonRepository, PersonRepository>();
+        services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+    }
+
+    public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+    {
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+
+        app.UseMvc();
+    }
+}
+```
+
+Notice the connection string `Server=db;Database=mydb;User=sa;Password=MyPassword001;`, the database host is accessible via `db` which is the name specified for the service in the `compose` configuration.
+
+Lastly we call it from the controller:
+
+```
+[ApiController]
+[Route("api/persons")]
+public class PersonsController : ControllerBase
+{
+    [HttpGet]
+    public ActionResult<string[]> Get([FromServices] IPersonRepository repository)
+    {
+        return repository.GetNames().ToArray();
+    }
+}
+```
+
+By running the docker project, we now have the two containers running as a cluster:
+
+```
+$ docker container ls
+CONTAINER ID        IMAGE                            COMMAND                  CREATED             STATUS              PORTS                    NAMES
+4bf1dab248b9        mcr.microsoft.com/mssql/server   "/opt/mssql/bin/sqls…"   9 seconds ago       Up 7 seconds        0.0.0.0:1433->1433/tcp   dockercompose17122146709022121950_db_1
+3a920302b5b4        webapplication1:dev              "tail -f /dev/null"      22 seconds ago      Up 18 seconds       0.0.0.0:5500->80/tcp     dockercompose17122146709022121950_webapplication1_1
+```
+
+But if we hit the endpoint, we will get an exception telling us that `person` is not valid `System.Data.SqlClient.SqlException: 'Invalid object name 'Person'`.
+To fix that we will be creating our first migration.
+
+## 3. Setup a Flyway as migration tool
+
+Start first by cleaning the Docker project which will teardown the cluster and clean up. Then add your migration with [Flyway](https://flywaydb.org/).
 
 ```
 FROM boxfuse/flyway
@@ -131,5 +229,3 @@ ENTRYPOINT flyway migrate -user=$SA_USER -password=$SA_PASSWORD -url="jdbc:sqlse
 
 Check if migration ran:
 docker logs dockercompose17122146709022121950_migration_1
-
-## 3. Setup a Flyway as migration tool
