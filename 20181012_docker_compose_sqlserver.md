@@ -48,11 +48,9 @@ root@3ac875159441:/# /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P MyPasswor
 Next we can execute a SQL command:
 
 ```
-1> CREATE DATABASE mydb
+1> USE master
 2> GO
-1> USE mydb
-2> GO
-Changed database context to 'mydb'.
+Changed database context to 'master'.
 ```
 
 Then insert data into it:
@@ -170,7 +168,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddTransient<IDbConnection>(sp => new SqlConnection("Server=db;Database=mydb;User=sa;Password=MyPassword001;"));
+        services.AddTransient<IDbConnection>(sp => new SqlConnection("Server=db;Database=master;User=sa;Password=MyPassword001;"));
         services.AddTransient<IPersonRepository, PersonRepository>();
         services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
     }
@@ -187,7 +185,7 @@ public class Startup
 }
 ```
 
-Notice the connection string `Server=db;Database=mydb;User=sa;Password=MyPassword001;`, the database host is accessible via `db` which is the name specified for the service in the `compose` configuration.
+Notice the connection string `Server=db;Database=master;User=sa;Password=MyPassword001;`, the database host is accessible via `db` which is the name specified for the service in the `compose` configuration.
 
 Lastly we call it from the controller:
 
@@ -244,7 +242,7 @@ The migration that we have created will create the `PERSON` table and insert `Ki
 
 __Let's try it on a SQL Server container by following 1):__
 
-We start first by starting the container then access an interactive prompt where we log into the database and execute a creation of `mydb` database.
+We start first by starting the container:
 
 ```
 $ docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=MyPassword001" -p 1433:1433 --name sqlserver-test -d mcr.microsoft.com/mssql/server:2017-latest
@@ -252,14 +250,6 @@ $ docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=MyPassword001" -p 1433:1433 --na
 $ docker container ls
 CONTAINER ID        IMAGE                                        COMMAND                  CREATED              STATUS              PORTS                    NAMES
 a3ec23b3dea3        mcr.microsoft.com/mssql/server:2017-latest   "/opt/mssql/bin/sqls…"   About a minute ago   Up About a minute   0.0.0.0:1433->1433/tcp   sqlserver-test
-
-$ docker container exec -it sqlserver-test bash
-root@a3ec23b3dea3:/# /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P MyPassword001
-1> CREATE DATABASE mydb
-2> GO
-1> exit
-root@a3ec23b3dea3:/# exit
-exit
 ```
 
 We then use Flyway to apply the migration we created:
@@ -267,13 +257,13 @@ We then use Flyway to apply the migration we created:
 ```
 $ cd /where/you/downloaded/flyway
 
-$ flyway migrate -user=sa -password=MyPassword001 -url="jdbc:sqlserver://localhost:1433;databaseName=mydb" -locations="filesystem:."
+$ flyway migrate -user=sa -password=MyPassword001 -url="jdbc:sqlserver://localhost:1433;databaseName=master" -locations="filesystem:."
 
 Flyway Community Edition 5.1.4 by Boxfuse
 
-Database: jdbc:sqlserver://localhost:1433;sslProtocol=TLS;jaasConfigurationName=SQLJDBCDriver;statementPoolingCacheSize=0;serverPreparedStatementDiscardThreshold=10;enablePrepareOnFirstPreparedStatementCall=false;fips=false;socketTimeout=0;authentication=NotSpecified;authenticationScheme=nativeAuthentication;xopenStates=false;sendTimeAsDatetime=true;trustStoreType=JKS;trustServerCertificate=false;TransparentNetworkIPResolution=true;serverNameAsACE=false;sendStringParametersAsUnicode=true;selectMethod=direct;responseBuffering=adaptive;queryTimeout=-1;packetSize=8000;multiSubnetFailover=false;loginTimeout=15;lockTimeout=-1;lastUpdateCount=true;encrypt=false;disableStatementPooling=true;databaseName=mydb;columnEncryptionSetting=Disabled;applicationName=Microsoft JDBC Driver for SQL Server;applicationIntent=readwrite; (Microsoft SQL Server 14.0)
+Database: jdbc:sqlserver://localhost:1433;sslProtocol=TLS;jaasConfigurationName=SQLJDBCDriver;statementPoolingCacheSize=0;serverPreparedStatementDiscardThreshold=10;enablePrepareOnFirstPreparedStatementCall=false;fips=false;socketTimeout=0;authentication=NotSpecified;authenticationScheme=nativeAuthentication;xopenStates=false;sendTimeAsDatetime=true;trustStoreType=JKS;trustServerCertificate=false;TransparentNetworkIPResolution=true;serverNameAsACE=false;sendStringParametersAsUnicode=true;selectMethod=direct;responseBuffering=adaptive;queryTimeout=-1;packetSize=8000;multiSubnetFailover=false;loginTimeout=15;lockTimeout=-1;lastUpdateCount=true;encrypt=false;disableStatementPooling=true;databaseName=master;columnEncryptionSetting=Disabled;applicationName=Microsoft JDBC Driver for SQL Server;applicationIntent=readwrite; (Microsoft SQL Server 14.0)
 Successfully validated 1 migration (execution time 00:00.041s)
-Creating Schema History table: [mydb].[dbo].[flyway_schema_history]
+Creating Schema History table: [master].[dbo].[flyway_schema_history]
 Current version of schema [dbo]: << Empty Schema >>
 Migrating schema [dbo] to version 1 - Create person table
 Successfully applied 1 migration to schema [dbo] (execution time 00:00.142s)
@@ -285,9 +275,6 @@ We then verify that our migration has run properly by running the `SELECT` query
 ```
 $ docker container exec -it sqlserver-test bash
 root@a3ec23b3dea3:/# /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P MyPassword001
-1> USE MYDB                          
-2> GO                                
-Changed database context to 'mydb'.  
 1> SELECT * FROM PERSON;             
 2> GO                                
 ID          NAME                     
@@ -308,14 +295,80 @@ Great! We now have started a SQL Server container and ran migration on it. Now t
 
 ### 3.2 Run Flyway as a container
 
-Start first by cleaning the Docker project which will teardown the cluster and clean up the container created in 3.1) with `docker container stop/rm`. 
+Start first by cleaning the Docker project which will teardown the cluster and clean up the container created in 3.1) with `docker container stop/rm sqlserver-test`. 
+
+We want to be able to run migration as we bootstrap our cluster. Therefore the migrations need to be included in the composition and be ran after the database container start and before the application starts. In order to do that, we add a `Dockerfile` describing how the migrations need to be ran. 
 
 ```
 FROM boxfuse/flyway
 WORKDIR /src
 COPY Migrations/sql .
-ENTRYPOINT flyway migrate -user=$SA_USER -password=$SA_PASSWORD -url="jdbc:sqlserver://db:1433;databaseName=master" -locations="filesystem:."
+ENTRYPOINT flyway migrate -user=$SA_USER -password=$SA_PASSWORD -url="jdbc:sqlserver://db:1433;databaseName=master" -locations="filesystem:sql"
 ```
 
-Check if migration ran:
-docker logs dockercompose17122146709022121950_migration_1
+Here we are using the `shell` form of `ENTRYPOINT` which allows us to execute a command containing environment variables `$SA_USER` and `$SA_PASSWORD`. If we were using the `exec` form, we wouldn't be able to pass environment variables as it would take the variable token literally. [More info in Docker documentation](https://docs.docker.com/engine/reference/builder/#shell-form-entrypoint-example).
+
+Our migration file is placed under `Migrations/sql` so our folder structure is as followed:
+
+```
+- MySolution.sln
+- docker-compose.dcproj
+- ...other docker-compose files
+
+- /Migrations/
+- /Migrations/Dockerfile
+- /Migrations/sql/
+- /Migrations/sql/V1__Create_person_table.sql
+
+- /MyWebProject/
+- /MyWebProject/MyWebProject.csproj
+- /MyWebProject/Dockerfile
+- ...other MyWebProject files
+```
+
+And we then modify our compose confiugration to include the migration:
+
+```
+services:
+  webapplication1:
+    build:
+      context: .
+      dockerfile: WebApplication1/Dockerfile
+    depends_on:
+      - db
+      - migration
+  migration:
+    build:
+      context: .
+      dockerfile: Migrations/Dockerfile
+    environment:
+        SA_USER: "sa"
+        SA_PASSWORD: "MyPassword001"
+    depends_on:
+      - db
+  db:
+    image: "mcr.microsoft.com/mssql/server"
+    environment:
+        SA_PASSWORD: "MyPassword001"
+        ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+```
+
+Once the container runs, we can then check that the migration ran properly by using `docker logs`:
+
+```
+$ docker logs dockercompose17122146709022121950_migration_1
+Flyway Community Edition 5.1.4 by Boxfuse
+
+Database: jdbc:sqlserver://db:1433;sslProtocol=TLS;jaasConfigurationName=SQLJDBCDriver;statementPoolingCacheSize=0;serverPreparedStatementDiscardThreshold=10;enablePrepareOnFirstPreparedStatementCall=false;fips=false;socketTimeout=0;authentication=NotSpecified;authenticationScheme=nativeAuthentication;xopenStates=false;sendTimeAsDatetime=true;trustStoreType=JKS;trustServerCertificate=false;TransparentNetworkIPResolution=true;serverNameAsACE=false;sendStringParametersAsUnicode=true;selectMethod=direct;responseBuffering=adaptive;queryTimeout=-1;packetSize=8000;multiSubnetFailover=false;loginTimeout=15;lockTimeout=-1;lastUpdateCount=true;encrypt=false;disableStatementPooling=true;databaseName=master;columnEncryptionSetting=Disabled;applicationName=Microsoft JDBC Driver for SQL Server;applicationIntent=readwrite; (Microsoft SQL Server 14.0)
+Successfully validated 1 migrations (execution time 00:00.026s)
+Creating Schema History table: [master].[dbo].[flyway_schema_history]
+Current version of schema [dbo]: << Empty Schema >>
+Migrating schema [dbo] to version 1 - Create person table
+Successfully applied 1 migrations to schema [dbo] (execution time 00:00.395s)
+```
+
+And that concludes today's post! When we run our application by running the Docker Compose project, we can hit ``http://localhost:5000/api/persons` and get the values we inserted via the migrations!
+
+## Conclusion
