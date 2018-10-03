@@ -297,18 +297,7 @@ Great! We now have started a SQL Server container and ran migration on it. Now t
 
 Start first by cleaning the Docker project which will teardown the cluster and clean up the container created in 3.1) with `docker container stop/rm sqlserver-test`. 
 
-We want to be able to run migration as we bootstrap our cluster. Therefore the migrations need to be included in the composition and be ran after the database container start and before the application starts. In order to do that, we add a `Dockerfile` describing how the migrations need to be ran. 
-
-```
-FROM boxfuse/flyway
-WORKDIR /src
-COPY Migrations/sql .
-ENTRYPOINT flyway migrate -user=$SA_USER -password=$SA_PASSWORD -url="jdbc:sqlserver://db:1433;databaseName=master" -locations="filesystem:sql"
-```
-
-Here we are using the `shell` form of `ENTRYPOINT` which allows us to execute a command containing environment variables `$SA_USER` and `$SA_PASSWORD`. If we were using the `exec` form, we wouldn't be able to pass environment variables as it would take the variable token literally. [More info in Docker documentation](https://docs.docker.com/engine/reference/builder/#shell-form-entrypoint-example).
-
-Our migration file is placed under `Migrations/sql` so our folder structure is as followed:
+We want to be able to run migration as we bootstrap our cluster. Therefore the migrations need to be included in the composition and be ran after the database container start and before the application starts. In order to do that, we add a `Dockerfile` describing how the migrations need to be ran. Before that let take a look at our folder structure:
 
 ```
 - MySolution.sln
@@ -326,7 +315,20 @@ Our migration file is placed under `Migrations/sql` so our folder structure is a
 - ...other MyWebProject files
 ```
 
-And we then modify our compose confiugration to include the migration:
+And the content of our `Dockerfile` for our migration:
+
+```
+FROM boxfuse/flyway
+WORKDIR /src
+COPY Migrations/sql .
+ENTRYPOINT flyway migrate -user=$SA_USER -password=$SA_PASSWORD -url="jdbc:sqlserver://db:1433;databaseName=master" -locations="filesystem:."
+```
+
+We start from the `Flyway` image `boxfuse/flyway` and set the working directory as `/src`. We then copy the migrations from `Migrations/sql` into the current directory by specifying `.` (dot).
+Here we are using the `shell` form of `ENTRYPOINT` which allows us to execute a command containing environment variables `$SA_USER` and `$SA_PASSWORD`. If we were using the `exec` form, we wouldn't be able to pass environment variables as it would take the variable token literally. [More info in Docker documentation](https://docs.docker.com/engine/reference/builder/#shell-form-entrypoint-example).
+Because we copied the migrations files under the current directory, the location is `.`, `-locations="filesystem:."`.
+
+Finally we modify our compose confiugration to include the migration:
 
 ```
 services:
