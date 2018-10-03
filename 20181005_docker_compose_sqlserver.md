@@ -372,3 +372,5 @@ Successfully applied 1 migrations to schema [dbo] (execution time 00:00.395s)
 And that concludes today's post! When we run our application by running the Docker Compose project, we can hit ``http://localhost:5000/api/persons` and get the values we inserted via the migrations!
 
 ## Conclusion
+
+Today we saw how we could compose a Docker cluster with an ASP NET Core application, a SQL Server container and a migration container running at each startup of the cluster. We started by looking at how we could run SQL Server container on its own and saw how it worked and how we could access a SQL command prompt to interact with it. We then moved on to see how we could make it part of a cluster composed by an ASP NET Core application and the SQL Server container itself and lastly we completed this post by looking into creating a migration container using Flyway which would run at startup of the cluster. Hope you liked this post, see you next time!
