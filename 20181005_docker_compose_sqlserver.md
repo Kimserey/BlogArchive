@@ -81,7 +81,7 @@ id   name
 
 We endup with a fully working SQL Server running in a container. If we were to use SQL Server Management studio (SSMS), we would be able to connect to `localhost,1433` and browse our databse.
 
-![SSMS](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20181005_docker_sqlserver/ssms.PNG)
+![SSMS](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20181012_docker_sqlserver/ssms.PNG)
 
 _Side note to avoid confusion: in the picture I am running the server on 1434_
 
