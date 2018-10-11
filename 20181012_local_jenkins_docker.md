@@ -59,6 +59,7 @@ RUN dotnet help
 ```
 
 We start from the official Jenkins image `jenkins/jenkins:lts` and copy the content of the latest dotnet image from `microsoft/dotnet:2.1-sdk` to install dotnet.
+You can replace the runtime with any runtime you'd like to run your application in, in here I am compiling an ASP NET Core application therefore am installing dotnet.
 To build the image we use `docker build [PATH]`. The _context_ is all the files under the `PATH` specified, to avoid sending unnecessary files, we create a `.dockerignore` file which works the same as a `.gitignore` file.
 
 ```
@@ -306,4 +307,4 @@ The source code can be found on my GitHub:
 
 ## Conclusion
 
-Today we saw how to setup a fully functional CI/CD pipeline with Jenkins and deployment via docker. This is meant to be used for local development to try and discover the possibilities of Jenkins pipeline. It can also be used to test your docker containers locally.
+Today we saw how to setup a fully functional CI/CD pipeline with Jenkins and deployment via docker. This is meant to be used for local development to try and discover the possibilities of Jenkins pipeline. It can also be used to test your docker containers locally. In this post we started by looking into how to setup Jenkins locally via Docker container. Then we moved to setting up the pipeline itself to enable continuous integration and we finished by setting up a pipeline which would deploy a container with our application to imitate what a CI/CD pipeline would do for an application. From this setup, we can now easily test code on Jenkinsfile with pipelines locally without affecting our deployed setup. Hope you liked this post, see you next time!
