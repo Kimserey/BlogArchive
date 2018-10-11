@@ -5,6 +5,7 @@ CI/CD pipelines allow us to automatically build, test and deploy code changes. W
 1. Jenkins server via docker
 2. Jenkins pipeline
 3. Simulate deployment to server
+4. Clean everything
 
 ## 1. Jenkins server via docker
 
@@ -286,9 +287,23 @@ pipeline {
 
 Once done, our application can then access `localhost:5000` and see the `Hello World` default message!
 
+## 4. Clean everything
+
+Laslty once we are done with our testing, we can simply kill the containers and delete them together with the images:
+
+```
+docker container rm -f jenkins-test
+docker image rm jenkins-test
+docker container rm -f hello-world-jenkins
+docker image rm hello-world-jenkins
+```
+
+And our machine is cleaned up from everything!
+
 The source code can be found on my GitHub:
 - [https://github.com/Kimserey/local-jenkins-docker](https://github.com/Kimserey/local-jenkins-docker) - Pipeline code, clone the repository and build/run the container directly to start a fresh Jenkins.
 - [https://github.com/Kimserey/hello-world-jenkins](https://github.com/Kimserey/hello-world-jenkins) - Project code, clone the repository and setup the git hook to trigger the pipeline.
 
 ## Conclusion
 
+Today we saw how to setup a fully functional CI/CD pipeline with Jenkins and deployment via docker. This is meant to be used for local development to try and discover the possibilities of Jenkins pipeline. It can also be used to test your docker containers locally.
