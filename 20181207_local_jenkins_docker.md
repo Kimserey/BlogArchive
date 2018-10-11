@@ -146,6 +146,8 @@ The docker CLI is an interface talking to the underlying [docker Engine which is
 In the Jenkinsfile, we can add `sh` steps which will `curl` the `unix-socket`.
 
 ```
+sh "touch artifact.tar"
+sh "tar --exclude=artifact.tar --exclude=.git* --exclude=./test* --exclude=.vs* -cvf artifact.tar ."
 sh	"""
     curl --unix-socket /var/run/docker.sock \
         -X POST -H "Content-Type:application/x-tar" \
@@ -173,9 +175,7 @@ sh	"""
 ```
 
 ```
-sh """
-    curl --unix-socket /var/run/docker.sock -X POST http:/v1.24/containers/hello-world-jenkins/start
-"""
+sh "curl --unix-socket /var/run/docker.sock -X POST http:/v1.24/containers/hello-world-jenkins/start"
 ```
 
 ```
