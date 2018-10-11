@@ -8,6 +8,13 @@ CI/CD pipelines allow us to automatically build, test and deploy code changes. W
 
 ## 1. Jenkins server via docker
 
+We assume that docker Windows is installed. If you don't have docker, you can refer to [my previous post](https://kimsereyblog.blogspot.com/2018/10/docker-compose-asp-net-core-application.html).
+In our example, we will be building a dotnet application which will run on a Linux container. We start first by building a dockerfile which will generate an image containing the following:
+
+1. Jenkins served on 8080
+2. curl installed
+3. .NET Core SDK to build our application on Jenkins
+
 ```
 FROM jenkins/jenkins:lts
 USER root
@@ -50,16 +57,24 @@ ENV ASPNETCORE_URLS=http://+:80 \
 RUN dotnet help
 ```
 
-`.dockerignore` to not send the whole folder as context.
+We start from the official Jenkins image `jenkins/jenkins:lts` and copy the content of the latest dotnet image from `microsoft/dotnet:2.1-sdk` to install dotnet.
+To build the image we use `docker build [PATH]`. The _context_ is all the files under the `PATH` specified, to avoid sending unnecessary files, we create a `.dockerignore` file which works the same as a `.gitignore` file.
 
 ```
 .vscode
 jenkins_home
 ```
 
+Here we exclude `.vscode` and `jenkins_home` folders which aren't necessary to build the image.
+After having that we can then build the image and call it `jenkins-test` by running the following:
+
 ```
 docker build -f .\Dockerfile -t jenkins-test .
- 
+```
+
+Lastly we can create and run a container using the newly built image:
+
+```
 if not exist "C:\Projects\jenkins-pipeline-test\jenkins_home" mkdir C:\Projects\jenkins-pipeline-test\jenkins_home
 
 docker run -p 8080:8080 -p 50000:50000 ^
@@ -69,11 +84,14 @@ docker run -p 8080:8080 -p 50000:50000 ^
     --name jenkins-test jenkins-test
 ```
 
-```
-docker container rm -f jenkins-test
+Before we create and start the container, we make sure that `jenkins_home` folder is created. This folder will be used to persist the data of Jenkins including users, credentials and pipelines.
+We bind multiple volumes:
 
-docker image rm jenkins-test
-```
+- `C:/Projects/jenkins-pipeline-test/jenkins_home:/var/jenkins_home` will bind the `jenkins_home` as explained to persist jenkins data
+- `C:/Projects:/var/projects` will provide access to the projects to build, assuming that `C:/Projects` is where your project lives else place your own directory
+- `/var/run/docker.sock:/var/run/docker.sock` will allow the Jenkins container to send command via unix-socket to the docker host
+
+Once we run the container, a full version of Jenkins will run and we can do the initial setup to create a user account and install default plugins including __Jenkins Pipeline__.
 
 ## 2. Jenkins pipeline
 
@@ -118,11 +136,11 @@ curl --unix-socket /var/run/docker.sock -X POST http:/v1.24/containers/hello-wor
 pipeline {
     agent any
 
-	options {
-		skipDefaultCheckout true
-	}
+    options {
+        skipDefaultCheckout true
+    }
 
-	stages {
+    stages {
         stage('checkout') {
             steps {
                 checkout scm
@@ -130,56 +148,56 @@ pipeline {
         }
 
         stage('build') {
-			steps {
-				sh "dotnet build src/HelloWorldJenkins"
-			}
+            steps {
+                sh "dotnet build src/HelloWorldJenkins"
+            }
         }
 
         stage('test') {
-			steps {
-				sh "dotnet test test/HelloWorldJenkins.UnitTests"
-			}
+            steps {
+                sh "dotnet test test/HelloWorldJenkins.UnitTests"
+            }
         }
 
-		stage('build docker image') {
-			steps {
-				sh "dotnet clean"
+        stage('build docker image') {
+            steps {
+                sh "dotnet clean"
 
-				sh "touch artifact.tar"
+                sh "touch artifact.tar"
 
-				sh "tar --exclude=artifact.tar --exclude=.git* --exclude=./test* --exclude=.vs* -cvf artifact.tar ."
+                sh "tar --exclude=artifact.tar --exclude=.git* --exclude=./test* --exclude=.vs* -cvf artifact.tar ."
 
-				sh	"""
-					curl --unix-socket /var/run/docker.sock \
-						-X POST -H "Content-Type:application/x-tar" \
-						--data-binary '@artifact.tar' \
-						http:/v1.38/build?t=hello-world-jenkins
-				"""
-			}
-		}
+                sh	"""
+                curl --unix-socket /var/run/docker.sock \
+                    -X POST -H "Content-Type:application/x-tar" \
+                    --data-binary '@artifact.tar' \
+                    http:/v1.38/build?t=hello-world-jenkins
+                """
+            }
+        }
 
-		stage('teardown old container') {
-			steps {
-				sh """
-					curl --unix-socket /var/run/docker.sock \
-						-X DELETE \
-						http:/v1.38/containers/hello-world-jenkins?force=1
-				"""
-			}
-		}
+        stage('teardown old container') {
+            steps {
+                sh """
+                curl --unix-socket /var/run/docker.sock \
+                    -X DELETE \
+                    http:/v1.38/containers/hello-world-jenkins?force=1
+                """
+            }
+        }
 
         stage('deploy new container') {
-			steps {
-				sh """
-					curl --unix-socket /var/run/docker.sock \
-						-H "Content-Type: application/json" \
-						-d @create-container.json \
-						-X POST \
-						http:/v1.38/containers/create?name=hello-world-jenkins
-				"""
+            steps {
+                sh """
+                curl --unix-socket /var/run/docker.sock \
+                    -H "Content-Type: application/json" \
+                    -d @create-container.json \
+                    -X POST \
+                    http:/v1.38/containers/create?name=hello-world-jenkins
+                """
 
-				sh "curl --unix-socket /var/run/docker.sock -X POST http:/v1.24/containers/hello-world-jenkins/start"
-			}
+                sh "curl --unix-socket /var/run/docker.sock -X POST http:/v1.24/containers/hello-world-jenkins/start"
+            }
         }
     }
 }
