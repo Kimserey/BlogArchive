@@ -97,11 +97,11 @@ After running the container, we now have a full version of Jenkins will run and 
 
 Jenkins UI can be accessed from `http://localhost:8080`. After having done the initial setup we can start by creating a pipeline. Here we will be setting up a pipeline that builds our local git project. So we start first by creating the pipeline:
 
-![create pipeline]()
+![create pipeline](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/local_jenkins_docker/create_pipeline.PNG)
 
 Under `Build Triggers`, we select `Trigger builds remotely` to allow the pipeline to be triggered via http `GET`.
 
-![trigger]()
+![trigger](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/local_jenkins_docker/build_trigger.PNG)
 
 Then under `Advanced Project Options`, we select `Pipeline script from SCM` with SCM `Git` and for repository URL, we provde the file URI to our repository: 
 
@@ -109,7 +109,7 @@ Then under `Advanced Project Options`, we select `Pipeline script from SCM` with
 file:///var/projects/HelloWorldJenkins/
 ```
 
-![repository]()
+![repository](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/local_jenkins_docker/repository.PNG)
 
 The project should be available on the Jenkins container as we have shared the volume `-v C:/Projects:/var/projects` in 1).
 Lastly to trigger automatically the pipeline at each commit, we add a `post-commit` hook under `.git/hooks/` with the following:
@@ -124,7 +124,7 @@ Lastly in our project, we can create a Jenkinsfile which will contain a single h
 ```
 pipeline {
     agent any
-    
+
     stages {
         stage('hello-world') {
             steps {
@@ -134,6 +134,8 @@ pipeline {
     }
 }
 ```
+
+![pipeline](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/local_jenkins_docker/pipeline.PNG)
 
 ## 3. Simulate deployment to server
 
