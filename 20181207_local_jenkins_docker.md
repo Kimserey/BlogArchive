@@ -156,6 +156,13 @@ sh	"""
 """
 ```
 
+Here we create a `tar` which will contain the context for the build and submit it via a `POST` to the API on `http:/v1.38/build?t=hello-world-jenkins`.
+`t` is used to tag the image.
+
+_Note: I had to place my Dockerfile at the root of the folder, else the POST will always fails to find the Dockerfile._
+
+Next we can then delete the current running container:
+
 ```
 sh	"""
     curl --unix-socket /var/run/docker.sock \
@@ -163,6 +170,8 @@ sh	"""
         http:/v1.38/containers/hello-world-jenkins?force=1
 """
 ```
+
+And then create a new container by passing a json content of the characteristics of the container:
 
 ```
 sh	"""
@@ -174,9 +183,30 @@ sh	"""
 """
 ```
 
+The name is passed as a query string as specified by the [documentation](https://docs.docker.com/engine/api/v1.30/#operation/ContainerList).
+And here is the `create-container.json` content:
+
+```
+{
+  "Image": "hello-world-jenkins",
+  "HostConfig": {
+    "PortBindings": {
+      "80/tcp": [
+        {
+          "HostIp": "0.0.0.0",
+          "HostPort": "5000"
+        }
+      ]
+    }
+  }
+}
+```
+
 ```
 sh "curl --unix-socket /var/run/docker.sock -X POST http:/v1.24/containers/hello-world-jenkins/start"
 ```
+
+Here is the full content of the Jenkinsfile:
 
 ```
 pipeline {
@@ -248,3 +278,5 @@ pipeline {
     }
 }
 ```
+
+![final pipeline]()
