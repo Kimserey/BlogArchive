@@ -89,18 +89,50 @@ We bind multiple volumes:
 
 - `C:/Projects/jenkins-pipeline-test/jenkins_home:/var/jenkins_home` will bind the `jenkins_home` as explained to persist jenkins data
 - `C:/Projects:/var/projects` will provide access to the projects to build, assuming that `C:/Projects` is where your project lives else place your own directory
-- `/var/run/docker.sock:/var/run/docker.sock` will allow the Jenkins container to send command via unix-socket to the docker host
+- `/var/run/docker.sock:/var/run/docker.sock` will allow the Jenkins container to send command via unix-socket to the docker host, we will see more in 3)
 
-Once we run the container, a full version of Jenkins will run and we can do the initial setup to create a user account and install default plugins including __Jenkins Pipeline__.
+After running the container, we now have a full version of Jenkins will run and we can do the initial setup to create a user account and install default plugins including __Jenkins Pipeline__.
 
 ## 2. Jenkins pipeline
 
-`file:///var/projects/HelloWorldJenkins/`
+Jenkins UI can be accessed from `http://localhost:8080`. After having done the initial setup we can start by creating a pipeline. Here we will be setting up a pipeline that builds our local git project. So we start first by creating the pipeline:
 
-`post-commit` in `.git/hooks/`.
+![create pipeline]()
+
+Under `Build Triggers`, we select `Trigger builds remotely` to allow the pipeline to be triggered via http `GET`.
+
+![trigger]()
+
+Then under `Advanced Project Options`, we select `Pipeline script from SCM` with SCM `Git` and for repository URL, we provde the file URI to our repository: 
 
 ```
+file:///var/projects/HelloWorldJenkins/
+```
+
+![repository]()
+
+The project should be available on the Jenkins container as we have shared the volume `-v C:/Projects:/var/projects` in 1).
+Lastly to trigger automatically the pipeline at each commit, we add a `post-commit` hook under `.git/hooks/` with the following:
+
+```
+#!/bin/sh
 curl -u kimserey:12345 http://localhost:8080/job/TestPipeline/build?token=mytoken
+```
+
+Lastly in our project, we can create a Jenkinsfile which will contain a single hello world stage:
+
+```
+pipeline {
+    agent any
+    
+    stages {
+        stage('hello-world') {
+            steps {
+                echo "hello world"
+            }
+        }
+    }
+}
 ```
 
 ## 3. Simulate deployment to server
