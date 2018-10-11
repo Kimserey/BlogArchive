@@ -287,8 +287,8 @@ pipeline {
 Once done, our application can then access `localhost:5000` and see the `Hello World` default message!
 
 The source code can be found on my GitHub:
-- The pipeline code can be found on my GitHub here [https://github.com/Kimserey/local-jenkins-docker](https://github.com/Kimserey/local-jenkins-docker), clone the repository and build/run the container directly to start a fresh Jenkins.
-- The dotnet project can be found on my GitHub here [https://github.com/Kimserey/hello-world-jenkins](https://github.com/Kimserey/hello-world-jenkins), clone the repository and setup the git hook to trigger the pipeline.
+- [https://github.com/Kimserey/local-jenkins-docker](https://github.com/Kimserey/local-jenkins-docker) - Pipeline code, clone the repository and build/run the container directly to start a fresh Jenkins.
+- [https://github.com/Kimserey/hello-world-jenkins](https://github.com/Kimserey/hello-world-jenkins) - Project code, clone the repository and setup the git hook to trigger the pipeline.
 
 ## Conclusion
 
