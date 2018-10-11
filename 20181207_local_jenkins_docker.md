@@ -279,4 +279,4 @@ pipeline {
 }
 ```
 
-![final pipeline]()
+![final pipeline](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/local_jenkins_docker/final_pipeline.PNG)
