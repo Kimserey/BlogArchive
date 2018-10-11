@@ -139,31 +139,43 @@ pipeline {
 
 ## 3. Simulate deployment to server
 
-`-v /var/run/docker.sock:/var/run/docker.sock`
+So far we have Jenkins running locally and being triggered by commits from our local repository. Now to simulate a full CI/CD scenario, we can simulate a deployment of application on a server by spinning up a container with our application deployed. 
+
+The docker CLI is an interface talking to the underlying [docker Engine which is a REST API](https://docs.docker.com/engine/api/v1.30/). Since our Jenkins runs in a container, it's not possible to use the docker CLI but what we can do instead is to __submit HTTP request to the unix-socket that the Docker host listen on__. And we enabled that by sharing the socket earlier in 1) using `-v /var/run/docker.sock:/var/run/docker.sock`.
+
+In the Jenkinsfile, we can add `sh` steps which will `curl` the `unix-socket`.
 
 ```
-curl --unix-socket /var/run/docker.sock \
-    -X POST -H "Content-Type:application/x-tar" \
-    --data-binary '@artifact.tar' \
-    http:/v1.38/build?t=hello-world-jenkins
-```
-
-```
-curl --unix-socket /var/run/docker.sock \
-    -X DELETE \
-    http:/v1.38/containers/hello-world-jenkins?force=1
-```
-
-```
-curl --unix-socket /var/run/docker.sock \
-    -H "Content-Type: application/json" \
-    -d @create-container.json \
-    -X POST \
-    http:/v1.38/containers/create?name=hello-world-jenkins
+sh	"""
+    curl --unix-socket /var/run/docker.sock \
+        -X POST -H "Content-Type:application/x-tar" \
+        --data-binary '@artifact.tar' \
+        http:/v1.38/build?t=hello-world-jenkins
+"""
 ```
 
 ```
-curl --unix-socket /var/run/docker.sock -X POST http:/v1.24/containers/hello-world-jenkins/start
+sh	"""
+    curl --unix-socket /var/run/docker.sock \
+        -X DELETE \
+        http:/v1.38/containers/hello-world-jenkins?force=1
+"""
+```
+
+```
+sh	"""
+    curl --unix-socket /var/run/docker.sock \
+        -H "Content-Type: application/json" \
+        -d @create-container.json \
+        -X POST \
+        http:/v1.38/containers/create?name=hello-world-jenkins
+"""
+```
+
+```
+sh """
+    curl --unix-socket /var/run/docker.sock -X POST http:/v1.24/containers/hello-world-jenkins/start
+"""
 ```
 
 ```
