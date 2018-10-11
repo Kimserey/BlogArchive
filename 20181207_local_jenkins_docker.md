@@ -202,6 +202,9 @@ And here is the `create-container.json` content:
 }
 ```
 
+We use the image `hello-world-jenkins` that we created and bind the port `5000` to `80` as the container application listen on `80`. 
+Lastly we can start the container:
+
 ```
 sh "curl --unix-socket /var/run/docker.sock -X POST http:/v1.24/containers/hello-world-jenkins/start"
 ```
@@ -280,3 +283,12 @@ pipeline {
 ```
 
 ![final pipeline](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/local_jenkins_docker/final_pipeline.PNG)
+
+Once done, our application can then access `localhost:5000` and see the `Hello World` default message!
+
+The source code can be found on my GitHub:
+- The pipeline code can be found on my GitHub here [https://github.com/Kimserey/local-jenkins-docker](https://github.com/Kimserey/local-jenkins-docker), clone the repository and build/run the container directly to start a fresh Jenkins.
+- The dotnet project can be found on my GitHub here [https://github.com/Kimserey/hello-world-jenkins](https://github.com/Kimserey/hello-world-jenkins), clone the repository and setup the git hook to trigger the pipeline.
+
+## Conclusion
+
