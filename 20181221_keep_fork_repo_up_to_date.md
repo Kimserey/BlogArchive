@@ -5,7 +5,7 @@ Today we will see how we can setup a fork repository to get latest commit post f
 
 1. Setup an upstream remote
 2. Prevent write to upstream
-3. Update fork repository
+3. Update fork repository master branch
 
 ## 1. Setup an upstream remote
 
@@ -59,4 +59,11 @@ upstream        https://github.com/primefaces/primeng.git (fetch)
 upstream        disabled (push)
 ```
 
-## 3. Update fork repository
+## 3. Update fork repository master branch
+
+Now that we have the upstream remote, we can update our master branch by merging the upstream branch in our master branch.
+If we haven't changed anything and we just want to update the fork repository to the same state as the main repository, we can reset on the upstream branch.
+
+## Conclusion
+
+Today we saw how to keep a fork repository up-to-date by looking first at how to setup an upstream remote, then making sure that we prevent writes to the main repository and finally looking at options to update our fork repository. Hope you liked this post, see you on the next one!
