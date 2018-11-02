@@ -8,6 +8,10 @@ Last week we saw how we could [Setup CloudWatch to push logs from our applicatio
 
 ## 1. Setup Nginx to log upstream response time
 
+By default Nginx does not log the upstream response time. In order to print it, we can create a new log format which includes it and configure logs to be written into a file using that format. We can add our log configuration in a file called `log_format.conf` which we can place under `/etc/nginx/conf.d/` and nginx will include the configuration under `http` directive by default.
+
+We start first by defining a `log_format` directive:
+
 ```
 log_format main '[$time_local] '
             '$remote_addr '
@@ -23,8 +27,17 @@ log_format main '[$time_local] '
             'upstream_status=$upstream_status '
             'request_time=$request_time '
             'upstream_response_time=$upstream_response_time ';
+```
 
+Then we define where the access log using the format we just defined `main` will be written:
+
+```
 access_log /var/log/nginx/myapp.access.log main;
+```
+
+Once we are done, we should now have access log printed with the upstream response time.
+
+```
 ```
 
 ## 2. Setup logs to be pushed to CloudWatch
