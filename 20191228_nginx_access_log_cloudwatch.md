@@ -17,16 +17,7 @@ log_format main '[$time_local] '
             '$remote_addr '
             '"$request" '
             '$status '
-            '$upstream_response_time '
-            'request_length=$request_length '
-            'bytes_sent=$bytes_sent '
-            'body_bytes_sent=$body_bytes_sent '
-            'referer=$http_referer '
-            'user_agent="$http_user_agent" '
-            'upstream_addr=$upstream_addr '
-            'upstream_status=$upstream_status '
-            'request_time=$request_time '
-            'upstream_response_time=$upstream_response_time ';
+            '$upstream_response_time';
 ```
 
 Then we define where the access log using the format we just defined `main` will be written:
@@ -38,9 +29,17 @@ access_log /var/log/nginx/myapp.access.log main;
 Once we are done, we should now have access log printed with the upstream response time.
 
 ```
+[02/Nov/2018:17:47:57 +0000] x.x.x.x "GET /myapp HTTP/1.1" 200 0.616
+[02/Nov/2018:17:51:23 +0000] x.x.x.x "GET /myapp HTTP/1.1" 200 0.734
+[02/Nov/2018:17:54:52 +0000] x.x.x.x "GET /myapp HTTP/1.1" 200 0.634
 ```
 
+From the access log, we now have valuable information with the upstream response time allowing us to know how long our calls took. 
+
 ## 2. Setup logs to be pushed to CloudWatch
+
+Last week, we saw how to setup CloudWatch to push application logs to CloudWatch, in the same way, we can set it up to push our access log logs which will then allows us to have the logs accessible from the AWS UI.
+We do that by adding the logs in the `collection_list`:
 
 ```
 {
@@ -62,12 +61,22 @@ Once we are done, we should now have access log printed with the upstream respon
 }
 ```
 
+We make sure that the `file_path` is the path where we saved the access log file.
+This will then push our access log to CloudWatch.
+
+[CloudWatch agent documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Agent-Configuration-File-Details.html)
+
 ### 3. Setup metrics filter on CloudWatch
 
-```
-[date, client, request="GET /api*", status_code, response_time, data]
-```
+Lastly, because our logs are of a defined format, we can use the metrics filter to create a metrics which will get all `response_time` for the `GET /myapp`
+We go to CloudWatch, in the logs, select a log group then click on `Create metric filter`. In the file pattern, we use the Space-Delimited Log Events notation to match a text format:
 
 ```
-$response_time
+[date, client, request="GET /myapp*", status_code, response_time]
 ```
+
+This will filter all `Get /myapp` requests as we can see in the example:
+
+![img]()
+
+We then go next and set the metrics details by naming the metrics and selecting the value as `$response_time`. Once created, we can now go to the metrics view and select it to explore the value that we receive.
