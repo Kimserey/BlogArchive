@@ -136,7 +136,7 @@ We then go next and set the metrics details by naming the metrics and selecting 
 
 Once created, we can now go to the metrics view and select it to explore the value that we receive under `Log Metrics > Metrics with no dimensions > GET /myapp Response Time`. From the metrics view, we can construct graphs by selecting multiple metrics or we can also add an arithmetic expression to compute a value out of multiple metrics. Once the graph created, we can then add it to a dashboard to monitor our application through different lenses on a single place.
 
-![dashboard]()
+![dashboard](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20181228_cw_metrics/dashboard.PNG)
 
 For example, we can monitor the response time of different endpoints on a dashboard and follow the error counts.
 
@@ -144,4 +144,4 @@ And that concludes this post on how to monitor upstream response time with Nginx
 
 ## Conclusion
 
-Today we saw how we could setup monitor upstream response time on our application using Nginx and plotting it on a CloudWatch dashboard.
+Today we saw how we could monitor upstream response time on our application using Nginx and plotting it on a CloudWatch dashboard. We started by looking at how to setup Nginx logs to provide upstream response time, then we moved to see how we could push Nginx logs to CloudWatch and lastly we looked into how to create a metric from the Nginx logs on CloudWatch to graph the upstream response time and add it to a dashboard which can then be used to monitor our application. Hope you liked this post, see you on the next one!
