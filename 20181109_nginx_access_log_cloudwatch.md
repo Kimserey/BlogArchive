@@ -134,4 +134,8 @@ We then go next and set the metrics details by naming the metrics and selecting 
 
 ![image](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20181228_cw_metrics/name_mnetrics.PNG)
 
-Once created, we can now go to the metrics view and select it to explore the value that we receive.
+Once created, we can now go to the metrics view and select it to explore the value that we receive under `Log Metrics > Metrics with no dimensions > GET /myapp Response Time`. From the metrics view, we can construct graphs by selecting multiple metrics or we can also add an arithmetic expression to compute a value out of multiple metrics. Once the graph created, we can then add it to a dashboard to monitor our application through different lenses on a single place.
+
+![dashboard]()
+
+For example, we can monitor different endpoints on a dashboard and follow the error counts.
