@@ -26,6 +26,18 @@ Then we define where the access log using the format we just defined `main` will
 access_log /var/log/nginx/myapp.access.log main;
 ```
 
+So here is the full `/etc/nginx/conf.d/log_format.conf` file:
+
+```
+log_format main '[$time_local] '
+            '$remote_addr '
+            '"$request" '
+            '$status '
+            '$upstream_response_time';
+
+access_log /var/log/nginx/myapp.access.log main;
+```
+
 Once we are done, we should now have access log printed with the upstream response time.
 
 ```
@@ -38,7 +50,33 @@ From the access log, we now have valuable information with the upstream response
 
 ## 2. Setup logs to be pushed to CloudWatch
 
-Last week, we saw how to setup CloudWatch to push application logs to CloudWatch, in the same way, we can set it up to push our access log logs which will then allows us to have the logs accessible from the AWS UI.
+If you are not familiar with CloudWatch, refer to my previous blog post where I show how to setup [CloudWatch to push application logs to CloudWatch](https://kimsereyblog.blogspot.com/2018/11/serilog-with-aws-cloudwatch-on-ubuntu.html).
+
+We had the following `config.json`:
+
+```
+{
+    "logs": {
+        "logs_collected": {
+            "files": {
+                "collect_list": [
+                    {
+                        "file_path": "/var/log/myapp/*.json",
+                        "log_group_name": "myapp/json",
+                        "log_stream_name": "myapp",
+                        "timezone": "UTC",
+                        "timestamp_format": "%Y-%m-%dT%H:%M:%S"
+                    }
+                ]
+            }
+        },
+        "log_stream_name": "default"
+    }
+}
+```
+
+This file was configuring log stream containing the logs from `myapp`. From there, we can add a new source file which will be pushed to a CloudWatch stream called `access_log` under a log group named `myapp/ngin`.
+
 We do that by adding the logs in the `collection_list`:
 
 ```
@@ -47,6 +85,13 @@ We do that by adding the logs in the `collection_list`:
         "logs_collected": {
             "files": {
                 "collect_list": [
+                    {
+                        "file_path": "/var/log/myapp/*.json",
+                        "log_group_name": "myapp/json",
+                        "log_stream_name": "myapp",
+                        "timezone": "UTC",
+                        "timestamp_format": "%Y-%m-%dT%H:%M:%S"
+                    },
                     {
                         "file_path": "/var/log/nginx/myapp.*",
                         "log_group_name": "myapp/nginx",
@@ -64,6 +109,12 @@ We do that by adding the logs in the `collection_list`:
 We make sure that the `file_path` is the path where we saved the access log file.
 This will then push our access log to CloudWatch.
 
+We then refrehs the agent:
+
+```
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/config.json -s
+```
+
 [CloudWatch agent documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Agent-Configuration-File-Details.html)
 
 ### 3. Setup metrics filter on CloudWatch
@@ -77,6 +128,10 @@ We go to CloudWatch, in the logs, select a log group then click on `Create metri
 
 This will filter all `Get /myapp` requests as we can see in the example:
 
-![img]()
+![img](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20181228_cw_metrics/metrics.PNG)
 
-We then go next and set the metrics details by naming the metrics and selecting the value as `$response_time`. Once created, we can now go to the metrics view and select it to explore the value that we receive.
+We then go next and set the metrics details by naming the metrics and selecting the value as `$response_time`.
+
+![image](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20181228_cw_metrics/name_mnetrics.PNG)
+
+Once created, we can now go to the metrics view and select it to explore the value that we receive.
