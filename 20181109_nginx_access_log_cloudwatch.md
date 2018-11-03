@@ -117,7 +117,7 @@ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-c
 
 [CloudWatch agent documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Agent-Configuration-File-Details.html)
 
-### 3. Setup metrics filter on CloudWatch
+## 3. Setup metrics filter on CloudWatch
 
 Lastly, because our logs are of a defined format, we can use the metrics filter to create a metrics which will get all `response_time` for the `GET /myapp`
 We go to CloudWatch, in the logs, select a log group then click on `Create metric filter`. In the file pattern, we use the Space-Delimited Log Events notation to match a text format:
@@ -138,4 +138,10 @@ Once created, we can now go to the metrics view and select it to explore the val
 
 ![dashboard]()
 
-For example, we can monitor different endpoints on a dashboard and follow the error counts.
+For example, we can monitor the response time of different endpoints on a dashboard and follow the error counts.
+
+And that concludes this post on how to monitor upstream response time with Nginx on CloudWatch dashboard.
+
+## Conclusion
+
+Today we saw how we could setup monitor upstream response time on our application using Nginx and plotting it on a CloudWatch dashboard.
