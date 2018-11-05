@@ -1,5 +1,7 @@
 # Create a mobile friendly badge list in Angular with PrimeNG and Bootstrap
 
+![demo](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20190112_badge_list_component/badge-list-component.gif)
+
 ```
 <div class="container py-2">
   <div class="d-none d-md-block">
