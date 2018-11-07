@@ -1,6 +1,18 @@
 # Create a mobile friendly badge list in Angular with PrimeNG and Bootstrap
 
+A badge list is common component on a website allowing to display a list of items, usually one word items. Those badges can be clickable which can then be used for filtering or even navigation. When a screen space is available, those badges can be simply displayed inlined but when screen space is reduced, mobile screens are a good example, having a list of badges can potentially take up 30% of the screen. Today we will see how we can free up screen space, we need to move the badge list into a mobile friendly component in three steps:
+
+1. Bootstrap display directive
+2. PrimeNG side panel
+3. Repsonse badge list 
+
 ![demo](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20190112_badge_list_component/badge-list-component.gif)
+
+## 1. Bootstrap display directive
+
+## 2. PrimeNG side panel
+
+## 3. Repsonse badge list 
 
 ```
 <div class="container py-2">
@@ -9,7 +21,7 @@
       [label]="badge.name" 
       class="ui-button-rounded mb-2" 
       [ngClass]="{ 'mr-2': !last, 'ui-button-primary': badge.selected, 'ui-button-secondary': !badge.selected }" 
-      (click)="$event.preventDefault(); select(badge);"
+      (click)="select(badge)"
       *ngFor="let badge of badges; last as last"></button>
   </div>
 
@@ -30,7 +42,7 @@
         [label]="badge.name" 
         class="ui-button-rounded mb-2" 
         [ngClass]="{ 'mr-2': !last, 'ui-button-primary': badge.selected, 'ui-button-secondary': !badge.selected }" 
-        (click)="$event.preventDefault(); select(badge);"
+        (click)="select(badge)"
         *ngFor="let badge of badges; last as last"></button>
     </div>
   </p-sidebar>
