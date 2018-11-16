@@ -10,6 +10,19 @@ For this post I will be using the [local setup Jenkins + Git repository](https:/
 
 ## 1. Setup a reusable groovy component
 
+In this example we will be providing a reusable component which provides a log functionality. This is how it will look like when using it in a pipeline:
+
+```
+log {
+  type = "warning"
+  message = "test warning closure!"
+}
+```
+
+What we want to achieve is a DSL implementation with a single `log {}` element. 
+This functionality will be available across all pipelines therefore we will be able to use it everywhere we need it.
+_This is actually how Jenkins pipeline is built itself with `node {}`, `stage {}`, etc.._
+
 We start by setting up a git repository with the following structure:
 
 ```
@@ -18,17 +31,19 @@ We start by setting up a git repository with the following structure:
     - logs.groovy
 ```
 
-
+We then create the content of the `logs.groovy` file.
 
 ```
-// /jenkins-shared/var/logs.groovy
-
-def info(message) {
+def log_info(message) {
     echo "INFO: ${message}"
 }
 
-def warning(message) {
+def log_warning(message) {
     echo "WARNING: ${message}"
+}
+
+def log_error(message) {
+    echo "ERROR: ${message}"
 }
 
 def call(body) {
@@ -37,22 +52,72 @@ def call(body) {
     body.delegate = config
     body()
 
-    println config
-
     switch (config.type) {
-       case 'info':
-          info config.message
-          break
+      case 'info':
+        log_info config.message
+        break
       case 'warning':
-          warning config.message
-          break
-       default:
-          error "Unhandled type."
+        log_warning config.message
+        break
+      case 'error':
+        log_error config.message
+        break
+      default:
+        error "Unhandled type."
     }
 }
 ```
 
+The function `call` is a special function in groovy that can be called without going `.call ()`. We use it in order to be able to call `logs {}` without the need of going `logs.call {}`. The `body` parameter is expected to be a [closure](http://groovy-lang.org/closures.html) which will set values in the closure to the config. This allow the following notation to set the values on the map config.
+
+```
+{
+  type = "warning"
+  message = "test warning closure!"
+}
+```
+
+Line by line, we create an empty map which will hold the configuration, then we set the strategy of the closure to resolve the delegate first and set the delegate to be the configuration. This allows the closure to sets values on the `config` instead of setting the current class. Lastly we execute the closure `body()`.
+
+```
+def config = [:]
+body.resolveStrategy = Closure.DELEGATE_FIRST
+body.delegate = config
+body()
+```
+
+To understand better what `Closure.DELEGATE_FIRST` mean, take a look at the following:
+
+```
+def config = [:]
+def body = {
+  type = "warning"
+  message = "test warning closure!"
+}
+body.resolveStrategy = Closure.DELEGATE_FIRST
+body.delegate = config
+body()
+
+println "config:" + config.message
+println "this:" + this.message
+```
+
+If we execute this on [an online groovy compiler](https://www.jdoodle.com/execute-groovy-online), we will see that when we set `Closure.DELEGATE_FIRST`, the `message` is present on the config, while when we remove it, the `message` is present on the current class `this` instead. 
+
+We now have a class that can be used on its own with the notation we wanted:
+
+```
+log {
+  type = "warning"
+  message = "test warning closure!"
+}
+```
+
+Now let's see how we can make it available in Jenkins pipeline.
+
 ## 2. Setup a shared library in Jenkins
+
+To make our 
 
 ## 3. Use shared library in Jenkins pipeline 
 
