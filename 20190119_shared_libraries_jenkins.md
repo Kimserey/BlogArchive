@@ -113,6 +113,28 @@ log {
 }
 ```
 
+### Limitations
+
+There are limitations to be aware of, the first one being that if you are using parameters for your pipeline, the `params` will not be available within the closure therefore the following will not work:
+
+```
+log {
+  type = "warning"
+  message = params.MESSAGE // <= this will throw null exception
+}
+```
+
+Another limitation is that it's not possible to use the same name as the property itself as it will result in null. For example the following will not work:
+
+```
+def message = "My Message"
+
+log {
+  type = "warning"
+  message = message // <= this will be null
+}
+```
+
 Now let's see how we can make it available in Jenkins pipeline.
 
 ## 2. Setup a shared library in Jenkins
