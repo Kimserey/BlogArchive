@@ -139,36 +139,39 @@ Now let's see how we can make it available in Jenkins pipeline.
 
 ## 2. Setup a shared library in Jenkins
 
-To make our functionality available in Jenkins pipelines, we need to setup Jenkins to recognize our repository as a shared library.
+To make our functionality available in Jenkins pipelines, we need to setup Jenkins to recognize our repository as a shared library via ``Manage Jenkins`:
 
-![]()
+![manage_jenkins](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20190119_shared_lib_jenkins/1_manage_jenkins.PNG)
+
+Then in the `Global Pipeline libraries`, we add our repository. The name will be the name used to import the library.
+
+![pipeline_libraries](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20190119_shared_lib_jenkins/2_library.PNG)
+
+In this example, my repository is local therefore the URI is a `file://` URI. Once this is setup, we will now be able to use our `log` functionality in our pipeline.
 
 ## 3. Use shared library in Jenkins pipeline 
+
+We can now use the library by importing it:
+
+```
+@Library('my-shared-library') _
+```
+
+We then can use it in our pipeline:
 
 ```
 @Library('my-shared-library') _
 
-properties([
-  parameters([
-    string(name: 'MESSAGE', defaultValue: 'HEY HEY', description: 'Some message')
-   ])
-])
-
-
 stage ("Shared Library Test") {
-  
-  log.info "test info!"
-  
   log {
     type = "warning"
-    message = "test warning closure!"
-  }
-
-  def msg = params.MESSAGE
-
-  log {
-    type = "info"
-    message = msg
+    message = "This is a log message!"
   }
 }
 ```
+
+We are now able to import `my-shared-library` and use `log` in any pipeline we created.
+
+## Conclusion
+
+Today we saw how we could create a reusable functionality to be used between multiple Jenkins pipeline. We started by looking at how we could create a DSL by leveraging groovy `call` function and `closure`. Then we moved on to setup shared libraries on Jenkins portal and finally we saw how we could import the library and use it. Hope you liked this post, see you on the next one!
