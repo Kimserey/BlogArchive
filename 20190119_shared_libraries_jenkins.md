@@ -139,7 +139,9 @@ Now let's see how we can make it available in Jenkins pipeline.
 
 ## 2. Setup a shared library in Jenkins
 
-To make our 
+To make our functionality available in Jenkins pipelines, we need to setup Jenkins to recognize our repository as a shared library.
+
+![]()
 
 ## 3. Use shared library in Jenkins pipeline 
 
