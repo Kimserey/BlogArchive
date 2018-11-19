@@ -127,4 +127,39 @@ info: Microsoft.EntityFrameworkCore.Database.Command[20101]
 
 ## 2. Include and ThenInclude
 
+```c#
+var result = (await _dbContext.Blogs
+    .Select(b => new
+    {
+        url = b.Url,
+        posts = b.Posts.Select(p => new { title = p.Title, author = p.Author.Name }) // <-- Author is accessible
+    })
+    .ToListAsync());
+```
+
+```c#
+var result = (await _dbContext.Blogs.ToListAsync())
+    .Select(b => new
+    {
+        url = b.Url,
+        posts = b.Posts.Select(p => new { title = p.Title, author = p.Author.Name }) // <-- System.ArgumentNullException: 'Value cannot be null.' -- 'Posts' is null.
+    });
+```
+
+```c#
+var result = (await _dbContext.Blogs
+    .Include(b => b.Posts)    
+    .ThenInclude(p => p.Author) // <-- Include Posts in Blog then include Author in Post in the query
+    .ToListAsync())
+    .Select(b => new
+    {
+        url = b.Url,
+        posts = b.Posts.Select(p => new { title = p.Title, author = p.Author.Name }) // <-- Posts and Author are included in the query
+    });
+```
+
 ## 3. NoTracking
+
+```
+.AsNoTracking()
+```
