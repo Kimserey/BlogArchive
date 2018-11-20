@@ -159,6 +159,8 @@ info: Microsoft.EntityFrameworkCore.Database.Command[20101]
 
 ## 3. Include and ThenInclude
 
+The next case is regarding relational entities. Here `Posts` is a collection within `Blogs`. With the following query, we can use `Posts`:
+
 ```c#
 var result = (await _dbContext.Blogs
     .Select(b => new
@@ -169,6 +171,8 @@ var result = (await _dbContext.Blogs
     .ToListAsync());
 ```
 
+But if we move the execution to earlier, `Posts` will no longer be available as the collection will not be loaded:
+
 ```c#
 var result = (await _dbContext.Blogs.ToListAsync())
     .Select(b => new
@@ -177,6 +181,8 @@ var result = (await _dbContext.Blogs.ToListAsync())
         posts = b.Posts.Select(p => new { title = p.Title, author = p.Author.Name }) // <-- System.ArgumentNullException: 'Value cannot be null.' -- 'Posts' is null.
     });
 ```
+
+That code will yield a null reference as `b.Posts` will be null. To load it we need to use `.Include()` which allows us to load a collection from `Blog` then we can use `.ThenInclude()` to load a relation from `Post`, here the `Author`:
 
 ```c#
 var result = (await _dbContext.Blogs
@@ -192,8 +198,19 @@ var result = (await _dbContext.Blogs
 
 ## 4. NoTracking
 
+The last case is more of a performance improvement. Each query from Entity Framework Core returns object that are tracked by the DbContext. The tracking allows to know what property changed and when the context is saved with `dbContext.SaveChanges()`. But when we just want to query to retrieve values and return them for API calls for example, we can disable the tracking with `.AsNoTracking()`:s
+
 ```
-.AsNoTracking()
+var result = (await _dbContext.Blogs
+    .AsNoTracking()
+    .Include(b => b.Posts)    
+    .ThenInclude(p => p.Author)
+    .ToListAsync())
+    .Select(b => new
+    {
+        url = b.Url,
+        posts = b.Posts.Select(p => new { title = p.Title, author = p.Author.Name }) // <-- Posts and Author are included in the query
+    });
 ```
 
 ## Conclusion
