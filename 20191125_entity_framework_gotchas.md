@@ -1,10 +1,24 @@
-# Entity Framework Core Gotchas
+# Entity Framework Core Optimizations
 
-1. Forcing iterations
+Last year I talked about [Entity Framework Core](https://kimsereyblog.blogspot.com/2017/05/saving-data-with-entity-framework-core.html). It is a easy and feature rich ORM which makes working with database in a .NET environment typesafe. But even though it makes things easy, there are ambiguous cases which can take us off guard. Today we will see three of this cases and how to deal with them.  
+
+1. Client evaluation
+2. Iteration
 2. Include and ThenInclude
 3. NoTracking
 
+_For the following examples, I will be using SQLite with Entity Framework Core._
+
+## tl;dr
+
+1. Make sure that the query constructed in c# uses function that can be translated to SQL,
+2. Make sure that there isn't an abnormal amount of queries created and that it does not iter item per item,
+3. Make sure to use `Include` and `ThenInclude` for object relation to include them after query execution, before query execution it is not needed,
+4. Use `NoTracking` for readonly queries to disable tracking on entity to yield better performance.
+
 ## 1. Client evaluation
+
+The following example illustrates the first case, `client evaluation`:
 
 ```c#
 var query = _dbContext.Posts
@@ -13,10 +27,14 @@ var query = _dbContext.Posts
 return await query.ToListAsync();
 ```
 
+We are executing a query and using `.Contains(string, StringComparison.OrdinalIgnoreCase)`, the compiler allows us to write it as it is valid code and Entity Framework runs properly. But if we look at the logs, we'll see a warning:
+
 ```c#
 warn: Microsoft.EntityFrameworkCore.Query[20500]
       The LINQ expression 'where [p].Title.Contains(__title_2, OrdinalIgnoreCase)' could not be translated and will be evaluated locally.
 ```
+
+This indicates that the `where` clause will be executed locally therefore all elements that satisfy `p.BlogId == blogId && p.AuthorId == authorId` will be fetched locally then filtered locally, in log we can see the query:
 
 ```c#
 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
@@ -26,12 +44,16 @@ info: Microsoft.EntityFrameworkCore.Database.Command[20101]
       WHERE ("p"."BlogId" = @__blogId_0) AND ("p"."AuthorId" = @__authorId_1)
 ```
 
+This could be problematic if there were a lot of data as it would degrade the performance. Changing it to `.Contains(string)`:
+
 ```c#
 var query = _dbContext.Posts
     .Where(p => p.BlogId == blogId && p.AuthorId == authorId && p.Title.Contains(title));
 
 return await query.ToListAsync();
 ```
+
+We can see from the query that it uses `instr(...)` which is supported by SQLite:
 
 ```c#
 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
@@ -40,6 +62,10 @@ info: Microsoft.EntityFrameworkCore.Database.Command[20101]
       FROM "Posts" AS "p"
       WHERE (("p"."BlogId" = @__blogId_0) AND ("p"."AuthorId" = @__authorId_1)) AND ((instr("p"."Title", @__title_2) > 0) OR (@__title_2 = ''))
 ```
+
+## 2. Iterations
+
+The second case is about `iterations`, consider the following:
 
 ```c#
 var result = (await _dbContext.Blogs
@@ -50,6 +76,8 @@ var result = (await _dbContext.Blogs
     })
     .ToListAsync());
 ```
+
+The execution of the query happens at `.ToListAsync()`, but in the query, we have an anonymous type which within the construct 
 
 ```c#
 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
