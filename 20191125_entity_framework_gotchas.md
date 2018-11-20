@@ -1,11 +1,11 @@
 # Entity Framework Core Optimizations
 
-Last year I talked about [Entity Framework Core](https://kimsereyblog.blogspot.com/2017/05/saving-data-with-entity-framework-core.html). It is a easy and feature rich ORM which makes working with database in a .NET environment typesafe. But even though it makes things easy, there are ambiguous cases which can take us off guard. Today we will see three of this cases and how to deal with them.  
+Last year I talked about [Entity Framework Core](https://kimsereyblog.blogspot.com/2017/05/saving-data-with-entity-framework-core.html). It is a easy and feature rich ORM which makes working with database in a .NET environment typesafe. But even though it makes things easy, there are ambiguous cases which can take us off guard. Today we will see four of this cases and how to deal with them.  
 
 1. Client evaluation
 2. Iteration
-2. Include and ThenInclude
-3. NoTracking
+3. Include and ThenInclude
+4. NoTracking
 
 _For the following examples, I will be using SQLite with Entity Framework Core._
 
@@ -77,7 +77,7 @@ var result = (await _dbContext.Blogs
     .ToListAsync());
 ```
 
-The execution of the query happens at `.ToListAsync()`, but in the query, we have an anonymous type which within the construct 
+The execution of the query happens at `.ToListAsync()`, but in the query, we have an anonymous type which within the construct maps to another anonymous type. The problem with this query is that the query can't be translated to a SQL query. Therefore the result is a query on `Blogs` then one query __per__ blog to get the posts:
 
 ```c#
 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
@@ -119,6 +119,8 @@ info: Microsoft.EntityFrameworkCore.Database.Command[20101]
       WHERE @_outer_Id = "p"."BlogId"
 ```
 
+Again this wasn't expected as knowing SQL, we would have expected a single query with some sort of `JOIN`. To do that, we can force the execution and translation of the query earlier:
+
 ```c#
 var result = (await _dbContext.Blogs
     .Include(b => b.Posts)
@@ -130,6 +132,8 @@ var result = (await _dbContext.Blogs
         posts = b.Posts.Select(p => new { title = p.Title, author = p.Author.Name })
     });
 ```
+
+Which results in an expected query:
 
 ```c#
 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
@@ -153,7 +157,7 @@ info: Microsoft.EntityFrameworkCore.Database.Command[20101]
       ORDER BY "t"."Id"
 ```
 
-## 2. Include and ThenInclude
+## 3. Include and ThenInclude
 
 ```c#
 var result = (await _dbContext.Blogs
@@ -186,8 +190,19 @@ var result = (await _dbContext.Blogs
     });
 ```
 
-## 3. NoTracking
+## 4. NoTracking
 
 ```
 .AsNoTracking()
 ```
+
+## Conclusion
+
+Today we saw four cases where Entity Framework Core can behave in an unexpected manner. To conclude, here is a summary of advices:
+
+1. Make sure that the query constructed in c# uses function that can be translated to SQL,
+2. Make sure that there isn't an abnormal amount of queries created and that it does not iter item per item,
+3. Make sure to use `Include` and `ThenInclude` for object relation to include them after query execution, before query execution it is not needed,
+4. Use `NoTracking` for readonly queries to disable tracking on entity to yield better performance.
+
+Hope you liked this post, see you on the next one!
