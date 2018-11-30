@@ -10,11 +10,11 @@ Today we will see how we can setup HTTPS on using Certbot Nginx configuration on
 
 We start first by creating an Azure VM on Ubuntu 18.04 with either password or SSH and allowing `HTTP`, `HTTPS`, `SSH`.
 
-![creation]()
+![creation](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20181207_nginx_certbot/azurevm.PNG)
 
 Once done, we can select a custom DNS for our VM. This makes it easier to SSH but also it will be required for our SSL certificate setup.
 
-![]()
+![dns](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20181207_nginx_certbot/vm_overview.PNG)
 
 We set the Assignment as Static then we choose a DNS name label. Here we choose `azure-test-vm` therefore the VM will be accessible at `azure-test-vm.southcentralus.cloudapp.azure.com`.
 
@@ -90,6 +90,8 @@ sudo certbot --nginx
 We follow the wizard which asks first for an email to let you know when the cert is close to expiry, then to select the server, then if you'd like to redirect HTTP to HTTPS.
 
 Once done, we should have our server served via HTTPS `http://azure-test-vm.southcentralus.cloudapp.azure.com/`. If we click on the lock, we should see that our certificate is issued by Letsencrypt.
+
+![ssl](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20181207_nginx_certbot/ssl.PNG)
 
 ## Conclusion
 
