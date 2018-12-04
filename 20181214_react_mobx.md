@@ -277,8 +277,6 @@ We now have a state observed by components. Selecting a user from `SelectUser` w
 
 But as we see, we are injecting the store on all components. To avoid this repetition, we can use a `Provider` which would automatically inject the store. 
 
-We start by placing components inside a `Provider` tag which would define `store`
-
 ```
 class App extends Component {
   store = new AppState();
@@ -296,3 +294,58 @@ class App extends Component {
   }
 }
 ```
+
+We start by placing components inside a `Provider` tag which would define `store` as a property available in `props` without the need of specifying it explicitly.
+
+Next on the components where we need the store, we can use `inject` from `mobx-react` to inject the store to the props.
+
+```
+const HelloWorld =  inject("store") (
+  observer (
+    class HelloWorld extends Component<{ store?: AppState }> {
+      constructor(props: { store?: AppState }) {
+        super(props);
+      }
+      
+      render() {
+        return (
+          <div>Hello World {this.props.store!.selectedUser}</div>
+        );
+      }
+    }
+  )
+);
+```
+
+Same for the function components:
+
+```
+const SelectedUser = inject("store") (
+  observer ((props: { store?: AppState }) => <p>Selected {props.store!.selectedUser}</p>)
+);
+
+const SelectUser = inject("store") (
+  observer ((props: { store?: AppState }) => {
+    const onChange = (e: ChangeEvent<HTMLSelectElement>) => {
+      props.store!.selectUser(e.target.value);
+    }
+
+    const options = 
+      props.store!.users.map(u => <option key={u} value={u}>{u}</option>);
+
+    return (
+      <select value={props.store!.selectedUser} onChange={onChange}>
+        {options}
+      </select>
+    );
+  })
+);
+```
+
+Note that we specify the `store` as an optional variable `store?` in the definition which makes the type `AppState | undefined`, therefore to be able to use it, we need to use the `non-null-assertion` operator `props.store!.x` which allows us to indicate to Typescript that we know that this value isn't undefined.
+
+And that's it, that concludes today's post!
+
+## Conclusion
+
+Today we saw how to create a simple React application using Create React App with Mobx, a state management library, in Typescript. We started by bootstrapping the project and installing the necessary libraries. Next we create our first components and saw two different formats, one as a function and the other one as a class. We then moved on to look into creating a global state managed with Mobx and saw how to define containers which are state observer components. Hope you liked this post, see you on the next one!
