@@ -175,6 +175,124 @@ The state management we will be using is `Mobx`. We start first by installing it
 
 ```
 npm install mobx --save
+npm install mobx-react --save
 ```
 
-Next we 
+Next we can create our first state by creating a class in a file `AppState.tsx`.
+
+```
+import { observable, computed, action, decorate } from "mobx";
+
+export class AppState {
+  users = [
+    "Kim",
+    "Tom",
+    "Sam"
+  ];
+
+  selectedUser = "Kim";
+
+  selectUser(user: string) {
+    this.selectedUser = user;
+  }
+}
+
+decorate (AppState, {
+  users: observable,
+  selectedUser: observable,
+  selectUser: action
+});
+```
+
+We start by importing from mobx `observable`, `action` and `decorate`. We then define a state which is a simple class with `users` and a `selectedUser` for variables. And `selectUser` as action mutating the state.
+
+Lastly we use the `mobx` functions we imported to call `decorate` passing in the type of our state `AppState`, and an object specifying each decorator for our interested variables/properties/actions. Here we specify that our variables are `observable` meaning that changes occuring on them needs to trigger a rendering. And we specify that the `setX` are `actions` which means that they will be mutating the state.
+
+## 4. Create observers containers
+
+Now that we have defined the state, we can use it in our application by instantiating it inside our App main component passing it inside the props but to be able to `observe` the changes of the observable state, we need to decorate our classes as `observers`. This is done by using `òbserver` from `mobx-react`.
+
+For our `HelloWorld` class, it would be:
+
+```
+const HelloWorld = observer (
+  class HelloWorld extends Component<{ store: AppState }> {
+    constructor(props: { store: AppState }) {
+      super(props);
+    }
+    
+    render() {
+      return (
+        <div>Hello World {this.props.store.selectedUser}</div>
+      );
+    }
+  }
+);
+```
+
+And for a function component displaying the selected user:
+
+```
+const SelectedUser = observer ((props: { store: AppState }) => <p>Selected {props.store.selectedUser}</p>);
+```
+
+And the following function to select a user from a option select: 
+
+```
+const SelectUser = observer ((props: { store?: AppState }) => {
+  const onChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    props.store!.selectUser(e.target.value);
+  }
+
+  const options = 
+    props.store!.users.map(u => <option key={u} value={u}>{u}</option>);
+
+  return (
+    <select value={props.store!.selectedUser} onChange={onChange}>
+      {options}
+    </select>
+  );
+});
+```
+
+We specified that our component expect the state as input therefore we would need to provide the state:
+
+```
+class App extends Component {
+  store = new AppState();
+  
+  render() {
+    return (
+      <div>
+        <SelectedUser store={this.store}/>
+        <SelectUser store={this.store}/>
+        <HelloWorld store={this.store}/>
+      </div>
+    );
+  }
+}
+```
+
+We now have a state observed by components. Selecting a user from `SelectUser` would modify the state which would be observed from both `SelectedUser` and `HelloWorld`.
+
+But as we see, we are injecting the store on all components. To avoid this repetition, we can use a `Provider` which would automatically inject the store. 
+
+We start by placing components inside a `Provider` tag which would define `store`
+
+```
+class App extends Component {
+  store = new AppState();
+  
+  render() {
+    return (
+      <Provider store={this.store}>
+        <div>
+          <SelectedUser/>
+          <SelectUser/>
+          <HelloWorld/>
+        </div>
+      </Provider>
+    );
+  }
+}
+```
