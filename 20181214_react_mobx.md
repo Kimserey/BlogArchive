@@ -346,6 +346,69 @@ Note that we specify the `store` as an optional variable `store?` in the definit
 
 And that's it, that concludes today's post!
 
+Here is the full code for reference:
+
+```
+import React, { Component, ChangeEvent, PureComponent } from 'react';
+import { Provider, observer, inject } from 'mobx-react';
+import { AppState } from './AppState';
+
+const SelectedUser = inject("store") (
+  observer ((props: { store?: AppState }) => <p>Selected {props.store!.selectedUser}</p>)
+);
+
+const SelectUser = inject("store") (
+  observer ((props: { store?: AppState }) => {
+    const onChange = (e: ChangeEvent<HTMLSelectElement>) => {
+      props.store!.selectUser(e.target.value);
+    }
+
+    const options = 
+      props.store!.users.map(u => <option key={u} value={u}>{u}</option>);
+
+    return (
+      <select value={props.store!.selectedUser} onChange={onChange}>
+        {options}
+      </select>
+    );
+  })
+);
+
+const HelloWorld = inject("store") (
+  observer (
+    class HelloWorld extends Component<{ store?: AppState }> {
+      constructor(props: { store?: AppState }) {
+        super(props);
+      }
+      
+      render() {
+        return (
+          <div>Hello World {this.props.store!.selectedUser}</div>
+        );
+      }
+    }
+  )
+);
+
+class App extends Component {
+  store = new AppState();
+  
+  render() {
+    return (
+      <Provider store={this.store}>
+        <div>
+          <SelectedUser/>
+          <SelectUser/>
+          <HelloWorld/>
+        </div>
+      </Provider>
+    );
+  }
+}
+
+export default App;
+```
+
 ## Conclusion
 
 Today we saw how to create a simple React application using Create React App with Mobx, a state management library, in Typescript. We started by bootstrapping the project and installing the necessary libraries. Next we create our first components and saw two different formats, one as a function and the other one as a class. We then moved on to look into creating a global state managed with Mobx and saw how to define containers which are state observer components. Hope you liked this post, see you on the next one!
