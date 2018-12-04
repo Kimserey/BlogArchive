@@ -3,9 +3,9 @@
 I have been using state management frameworks for the past few years, mainly with [Angular](https://kimsereyblog.blogspot.com/search/label/Angular) and [NGRX](https://kimsereyblog.blogspot.com/search/label/ngrx). Today we will see how we can get started with `Create-React-App` using `Mobx` as a state management system.
 
 1. Bootstrap a fresh application
-2. Create a component
+2. Create components
 3. Create an observable state / store
-4. Create observers containers
+4. Create observers components
 
 ## 1. Bootstrap a fresh application
 
@@ -24,7 +24,7 @@ npm start
 
 The application should now build and run properly and any changes done on the application should be reflected on the browser. We now have all the necessary tool to start writing code in React.
 
-## 2. Create a component
+## 2. Create components
 
 In React with Typescript, creating a component can be done in two ways,
 
@@ -208,7 +208,7 @@ We start by importing from mobx `observable`, `action` and `decorate`. We then d
 
 Lastly we use the `mobx` functions we imported to call `decorate` passing in the type of our state `AppState`, and an object specifying each decorator for our interested variables/properties/actions. Here we specify that our variables are `observable` meaning that changes occuring on them needs to trigger a rendering. And we specify that the `setX` are `actions` which means that they will be mutating the state.
 
-## 4. Create observers containers
+## 4. Create observers components
 
 Now that we have defined the state, we can use it in our application by instantiating it inside our App main component passing it inside the props but to be able to `observe` the changes of the observable state, we need to decorate our classes as `observers`. This is done by using `òbserver` from `mobx-react`.
 
