@@ -36,11 +36,126 @@ We added a job named `api` and specified the target being `localhost:5000/metric
 
 ## 2. Push metrics from ASP NET Core
 
-```
-public class MonitorAttribute : Attribute { }
-```
+For Prometheus metrics in ASP NET core, we will be using [prometheus-net](https://github.com/prometheus-net/prometheus-net). We start by installing it from NuGet, next we register it on the app builder:
 
 ```
+app..UseMetricServer();
+```
+
+It serves the metrics on a default `/metrics` endpoint. We can now run the application and navigate to `/metrics`.
+
+```
+# HELP dotnet_totalmemory Total known allocated memory
+# TYPE dotnet_totalmemory gauge
+dotnet_totalmemory 7802936
+# HELP process_windows_virtual_bytes Process virtual memory size
+# TYPE process_windows_virtual_bytes gauge
+process_windows_virtual_bytes 2217721794560
+# HELP process_windows_processid Process ID
+# TYPE process_windows_processid gauge
+process_windows_processid 1000
+# HELP api_status_code_count API Status Code count
+# TYPE api_status_code_count counter
+api_status_code_count{method="GET",path="/api/hello",status_code="200"} 1
+# HELP process_windows_open_handles Number of open handles
+# TYPE process_windows_open_handles gauge
+process_windows_open_handles 504
+# HELP process_start_time_seconds Start time of the process since unix epoch in seconds.
+# TYPE process_start_time_seconds gauge
+process_start_time_seconds 1544041587.04771
+# HELP process_cpu_seconds_total Total user and system CPU time spent in seconds.
+# TYPE process_cpu_seconds_total counter
+process_cpu_seconds_total 1.359375
+# HELP dotnet_collection_count_total GC collection count
+# TYPE dotnet_collection_count_total counter
+dotnet_collection_count_total{generation="0"} 0
+dotnet_collection_count_total{generation="2"} 0
+dotnet_collection_count_total{generation="1"} 0
+# HELP process_windows_num_threads Total number of threads
+# TYPE process_windows_num_threads gauge
+process_windows_num_threads 25
+```
+
+When we go to metrics, we get the following text data as response. Those are the default Kestrel metrics setup by `prometheus-net` in a format understood by Prometheus. It starts with a `HELP` explaining what the metrics is and followed by the metrics type `gauge|counter|histogram|summary` and followed by the metrics format `name{labels} value`. We should now be able to access those metrics from the Prometheus UI `localhost:9090`. `prometheus-net` makes the task easier for us to push metrics in the proper format by providing static functions creating any type of metrics. In this post we will see how we can setup our application to push response time. Considering the following controller:
+
+```c#
+[ApiController]
+[Route("api/hello")]
+public class HelloController : ControllerBase
+{
+    [HttpGet]
+    public ActionResult<string> Get()
+    {
+        return "Hello";
+    }
+}
+```
+
+We want to be able to measure its response time. To do that we use the `Metrics.CreateHistogram(...)` from `prometheus-net`.
+
+```c#
+public class ResponseTimeMiddleware
+{
+    private readonly RequestDelegate _next;
+
+    public ResponseTimeMiddleware(RequestDelegate next)
+    {
+        _next = next;
+    }
+
+    public async Task InvokeAsync(HttpContext context, IMonitoringService service)
+    {
+        var sw = Stopwatch.StartNew();
+        await _next(context);
+        sw.Stop();
+
+        var histogram =
+            Metrics
+                .CreateHistogram(
+                    "api_response_time_seconds",
+                    "API Response Time in seconds",
+                    new[] { 0.02, 0.05, 0.1, 0.15, 0.2, 0.5, 0.8, 1 },
+                    "method",
+                    "path");
+
+        histogram
+            .WithLabels(context.Request.Method, context.Request.Path)
+            .Observe(sw.Elapsed.TotalSeconds);
+    }
+}
+```
+
+We use a middleware to start a stopwatch before and stop it after the underlying mvc core middleware. We then create a histogram metrics specifying in order:
+ 1. the name of the metrics `api_response_time_seconds`
+ 2. a description
+ 3. the buckets for the histogram
+ 4. labels `method` and `path` which will serve as further filters
+
+```
+app
+  .UseMetricServer()
+  .UseMiddleware<ResponseTimeMiddleware>();
+```
+
+We then save our response time in the histogram by calling `.Observe()`. Note that `.WithLabels()` must be called before observing the value. Once we run and navigate, we will now be pushing metrics to Prometheus and when we look at the UI `localhost:9090`, we should now see the metrics:
+
+```
+api_response_time_seconds_bucket{instance="localhost:5000",job="api",le="+Inf",method="GET",path="/api/hello"}	1
+api_response_time_seconds_bucket{instance="localhost:5000",job="api",le="0.02",method="GET",path="/api/hello"}	0
+api_response_time_seconds_bucket{instance="localhost:5000",job="api",le="0.05",method="GET",path="/api/hello"}	0
+api_response_time_seconds_bucket{instance="localhost:5000",job="api",le="0.1",method="GET",path="/api/hello"}	0
+api_response_time_seconds_bucket{instance="localhost:5000",job="api",le="0.15",method="GET",path="/api/hello"}	0
+api_response_time_seconds_bucket{instance="localhost:5000",job="api",le="0.2",method="GET",path="/api/hello"}	0
+api_response_time_seconds_bucket{instance="localhost:5000",job="api",le="0.5",method="GET",path="/api/hello"}	1
+api_response_time_seconds_bucket{instance="localhost:5000",job="api",le="0.8",method="GET",path="/api/hello"}	1
+api_response_time_seconds_bucket{instance="localhost:5000",job="api",le="1",method="GET",path="/api/hello"}	1
+```
+
+On the query input of the UI, we can filter by metrics name and label, for example `api_response_time_seconds_bucket{le="0.05"}`. We can also filter using regex on label with `=~` for example `api_response_time_seconds_bucket{le=~"(0.05|0.1)"}`. It works fine but the problem is that we are handling all requests and saving response time for any requests sent to the server whether valid or not.
+
+```
+public class MonitorAttribute : Attribute { }
+
 public interface IMonitoringService
 {
     bool Monitor(string httpMethod, PathString path);
@@ -92,58 +207,8 @@ public static class MonitoringExtensions
     {
         return builder
             .UseMetricServer()
-            .UseMiddleware<ResponseTimeMiddleware>()
-            .UseMiddleware<StatusCodeMiddleware>();
+            .UseMiddleware<ResponseTimeMiddleware>();
     }
-}
-```
-
-```
-public class ResponseTimeMiddleware
-{
-    private readonly RequestDelegate _next;
-
-    public ResponseTimeMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
-
-    public async Task InvokeAsync(HttpContext context, IMonitoringService service, ICollectorRegistry registry)
-    {
-        if (service.Monitor(context.Request.Method, context.Request.Path))
-        {
-            var sw = Stopwatch.StartNew();
-            await _next(context);
-            sw.Stop();
-
-            var histogram =
-                Metrics
-                    .WithCustomRegistry(registry)
-                    .CreateHistogram(
-                        "api_response_time_seconds",
-                        "API Response Time in seconds",
-                        null,
-                        "method",
-                        "path");
-
-            histogram
-                .WithLabels(context.Request.Method, context.Request.Path)
-                .Observe(sw.Elapsed.TotalSeconds);
-        }
-        else
-        {
-            await _next(context);
-        }
-    }
-}
-```
-
-```
-[Monitor]
-[HttpGet]
-public ActionResult<string> Get()
-{
-    return "Hello";
 }
 ```
 
@@ -157,4 +222,16 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 {
   app.UseMonitoring();
 }
+```
+
+```
+api_response_time_seconds_bucket{instance="localhost:5000",job="api",le="+Inf",method="GET",path="/api/hello"}	1
+api_response_time_seconds_bucket{instance="localhost:5000",job="api",le="0.02",method="GET",path="/api/hello"}	0
+api_response_time_seconds_bucket{instance="localhost:5000",job="api",le="0.05",method="GET",path="/api/hello"}	0
+api_response_time_seconds_bucket{instance="localhost:5000",job="api",le="0.1",method="GET",path="/api/hello"}	0
+api_response_time_seconds_bucket{instance="localhost:5000",job="api",le="0.15",method="GET",path="/api/hello"}	0
+api_response_time_seconds_bucket{instance="localhost:5000",job="api",le="0.2",method="GET",path="/api/hello"}	0
+api_response_time_seconds_bucket{instance="localhost:5000",job="api",le="0.5",method="GET",path="/api/hello"}	1
+api_response_time_seconds_bucket{instance="localhost:5000",job="api",le="0.8",method="GET",path="/api/hello"}	1
+api_response_time_seconds_bucket{instance="localhost:5000",job="api",le="1",method="GET",path="/api/hello"}	1
 ```
