@@ -35,3 +35,126 @@ scrape_configs:
 We added a job named `api` and specified the target being `localhost:5000/metrics`. Next we simply restart Prometheus and it will pick up the configuration and start scrapping `localhost:5000/metrics` for metrics every 15 seconds (default interval setup).
 
 ## 2. Push metrics from ASP NET Core
+
+```
+public class MonitorAttribute : Attribute { }
+```
+
+```
+public interface IMonitoringService
+{
+    bool Monitor(string httpMethod, PathString path);
+}
+```
+
+```
+public class MonitoringService: IMonitoringService
+{
+    private (string httpMethod, TemplateMatcher matcher)[] _matchers;
+
+    public MonitoringService(IApiDescriptionGroupCollectionProvider provider)
+    {
+        _matchers =
+            provider
+                .ApiDescriptionGroups
+                .Items
+                .SelectMany(group => group.Items)
+                .Where(x =>
+                    x.ActionDescriptor is ControllerActionDescriptor
+                    && ((ControllerActionDescriptor)x.ActionDescriptor).MethodInfo.CustomAttributes.Any(attr => attr.AttributeType == typeof(MonitorAttribute)))
+                .Select(desc => {
+                    var routeTemplate = TemplateParser.Parse(desc.RelativePath);
+                    var routeValues = new RouteValueDictionary (routeTemplate
+                        .Parameters
+                        .ToDictionary(x => x.Name, y => y.DefaultValue));
+                    var matcher = new TemplateMatcher(routeTemplate, routeValues);
+                    return (desc.HttpMethod, matcher);
+                })
+                .ToArray();
+    }
+
+    public bool Monitor(string httpMethod, PathString path)
+    {
+        return _matchers.Any(m => m.httpMethod == httpMethod && m.matcher.TryMatch(path, new RouteValueDictionary()));
+    }
+}
+```
+
+```
+public static class MonitoringExtensions
+{
+    public static IServiceCollection AddMonitoring(this IServiceCollection services)
+    {
+        return services.AddSingleton<IMonitoringService, MonitoringService>();
+    }
+
+    public static IApplicationBuilder UseMonitoring(this IApplicationBuilder builder)
+    {
+        return builder
+            .UseMetricServer()
+            .UseMiddleware<ResponseTimeMiddleware>()
+            .UseMiddleware<StatusCodeMiddleware>();
+    }
+}
+```
+
+```
+public class ResponseTimeMiddleware
+{
+    private readonly RequestDelegate _next;
+
+    public ResponseTimeMiddleware(RequestDelegate next)
+    {
+        _next = next;
+    }
+
+    public async Task InvokeAsync(HttpContext context, IMonitoringService service, ICollectorRegistry registry)
+    {
+        if (service.Monitor(context.Request.Method, context.Request.Path))
+        {
+            var sw = Stopwatch.StartNew();
+            await _next(context);
+            sw.Stop();
+
+            var histogram =
+                Metrics
+                    .WithCustomRegistry(registry)
+                    .CreateHistogram(
+                        "api_response_time_seconds",
+                        "API Response Time in seconds",
+                        null,
+                        "method",
+                        "path");
+
+            histogram
+                .WithLabels(context.Request.Method, context.Request.Path)
+                .Observe(sw.Elapsed.TotalSeconds);
+        }
+        else
+        {
+            await _next(context);
+        }
+    }
+}
+```
+
+```
+[Monitor]
+[HttpGet]
+public ActionResult<string> Get()
+{
+    return "Hello";
+}
+```
+
+```
+public void ConfigureServices(IServiceCollection services)
+{
+  services.AddMonitoring();
+}
+
+public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+{
+  app.UseMonitoring();
+}
+```
