@@ -203,6 +203,33 @@ public static class HealthCheckBuilderExtensions
 }
 ```
 
+We also define an extension on the service collection:
+
+```c#
+public static class ServiceCollectionExtensions
+{
+    public static IServiceCollection AddHealthChecks(this IServiceCollection services, Action<IHealthCheckBuilder> configureHealthCheckBuilder)
+    {
+        if (configureHealthCheckBuilder == null)
+        {
+            throw new ArgumentNullException(nameof(configureHealthCheckBuilder));
+        }
+
+        services.AddTransient<IHealthCheckService, HealthCheckService>();
+
+        var builder = new HealthCheckBuilder();
+        configureHealthCheckBuilder(builder);
+
+        foreach (var factory in builder.GetAll())
+        {
+            services.AddTransient(sp => factory(sp));
+        }
+
+        return services;
+    }
+}
+```
+
 It becomes now more explicit at registration.
 
 ```c#
