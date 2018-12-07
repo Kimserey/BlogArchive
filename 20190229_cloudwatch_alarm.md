@@ -91,7 +91,7 @@ The documentation can be found on the [official AWS documentation](https://docs.
 
 And that concludes today's post, we then endup with a fully configured alarm which triggers when `disk space usage is over 80% for 3 consecutive (5 minutes period) datapoints over 15 minutes`.
 
-![]()
+![cw alarm](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20190229_cw_alarm/alarm.PNG)
 
 ## Conclusion
 
