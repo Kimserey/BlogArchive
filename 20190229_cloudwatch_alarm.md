@@ -72,19 +72,19 @@ This specifies that our metrics come from `CWAgent` for `disk_used_percent` meas
 
 Now that we have the source metrics, we can create an alarm from the alarm section of CloudWatch. Creating an alarm is composed of 4 important steps:
 
-1. select the metrics
+1. Select the metrics
 
 Following this steps, we select the metrics that we created or copy paste the source from 2). 
 
-2. select the threshold
+2. Select the threshold
 
 Then we set a value for the threshold, here we are using disk used in percent therefore we can put `>= 80` which would mean the alert would trigger for disk space used over 80%.
 
-3. set the datapoints for trigger
+3. Set the datapoints for trigger
 
 Then we set the datapoint to `for 3 out of 3 datapoints`. This means that the check interval is of 15 minutes (3 datapoints of 5 minutes each), and we will trigger an alert if the 3 datapoints are over the threshold.
 
-4. set how missing data are treated
+4. Set how missing data are treated
 
 Lastly we treat the missing data as `missing` which that missing datapoints will just be considered as missing datapoints, not breaching. There are other way of treating missing data, like considering them as `breach` which would be adequate for different alerts. 
 The documentation can be found on the [official AWS documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html).
@@ -95,3 +95,4 @@ And that concludes today's post, we then endup with a fully configured alarm whi
 
 ## Conclusion
 
+Today we saw how to setup an alarm on CloudWatch which would trigger when the disk space used on our EC2 instance exceeds 80% for 3 consecutives 5 minutes intervals. We started by configuring the CloudWatch agent to collect and push disk space metrics, then we looked at how to graph the metrics and the options to average each over datapoints. Lastly we looked into how to setup an alarm whic would trigger when the disk space used exceeds 80% for 3 consecutives 5 minutes intervals (in other words, over a period of 15 minutes). Hope you liked this post, see you on the next one!
