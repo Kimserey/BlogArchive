@@ -1,22 +1,16 @@
 # Create alert on disk used with CloudWatch Alarm
 
-Today I will show you how to setup Cloudwatch alerts.
+Few weeks ago we saw [how to configure CloudWatch to monitor upstream response time from logs](https://kimsereyblog.blogspot.com/2018/11/monitor-upstream-response-time-with.html). We create a CloudWatch configuration which allowed us to create metrics by parsing the logs and create a dashboard out of it. Building up from there, today we will see how we can monitor disk used space and trigger an alarm when the remaining disk space is critical. This post will be composed by three parts:
 
 1. Setup CloudWatch agent to monitor disk space used
 2. CloudWatch Metrics
 3. CloudWatch Alarm
 
-## 1. Setup CloudWatch agent to monitor disk space used
-
 [AWS Documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Agent-Configuration-File-Details.html)
 
-```
-$ lsblk
+## 1. Setup CloudWatch agent to monitor disk space used
 
-NAME    MAJ:MIN RM SIZE RO TYPE MOUNTPOINT
-xvda    202:0    0   8G  0 disk
-└─xvda1 202:1    0   8G  0 part /
-```
+The CloudWatch agent which [we installed previously](https://kimsereyblog.blogspot.com/2018/11/monitor-upstream-response-time-with.html) on our machine to ship logs can be configured to ship default metrics as well. In order to do that all we need to do is to modify the configuration to include the metrics section:
 
 ```
 {
@@ -33,7 +27,28 @@ xvda    202:0    0   8G  0 disk
 }
 ```
 
+We specify that we want to measure `used_percent` at an interval of `60` seconds on the resource `"/"` which is our main volume mountpoint. To figure our volume, we can use `lsblk`: 
+
+```
+$ lsblk
+
+NAME    MAJ:MIN RM SIZE RO TYPE MOUNTPOINT
+xvda    202:0    0   8G  0 disk
+└─xvda1 202:1    0   8G  0 part /
+```
+
+Once we've done that we can then update our configuration and restart the agent to make sure everything is alright:
+
+```
+sudo ./amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:config.json -s
+sudo ./amazon-cloudwatch-agent-ctl -a stop
+sudo ./amazon-cloudwatch-agent-ctl -a start
+```
+
+CloudWatch agent should now be setup to push the disk space metrics to CloudWatch.
+
 ## 2. CloudWatch Metrics
+
 
 
 ```
