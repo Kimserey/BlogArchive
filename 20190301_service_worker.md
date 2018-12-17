@@ -78,9 +78,17 @@ We can see that it defines the following properties:
  - the `display` defines how the browser UI displays the app - here `standalone` indicates that it should look and feel like a native app,
  - the `background_color` defines the background color used on the splashscreen.
 
+[The full documentation can be found on Google documentation.](https://developers.google.com/web/fundamentals/web-app-manifest/)
+
 It should also be automatically added to the assests in `angular.json` under `build` and `test` architects.
 
+To make sure that our manifest is found, we can run the application and look into the chrome debugger > Application section, we should be able to see our settings:
+
+![](){}
+
 ## 2. Configure service worker
+
+As we saw in 1), installing `@angular/pwa` with `ng` CLI also installed `@angular/service-worker`.
 
 ```
 {
