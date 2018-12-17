@@ -85,7 +85,7 @@ It should also be automatically added to the assests in `angular.json` under `bu
 
 To make sure that our manifest is found, we can run the application and look into the chrome debugger > Application section, we should be able to see our settings:
 
-![manifest]()
+![manifest](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20190301_pwa/pwa-manifest.PNG)
 
 ## 2. Configure service worker
 
@@ -214,13 +214,13 @@ We use `http-server` to host locally our `dist` folder containing the production
 
 In action, the file dictating how the browser should act is the `ngsw-config.json`. It is downloaded every time the app is launched or the website is opened.
 
-![ngsw]()
+![ngsw](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20190301_pwa/ngsw.PNG)
 
 _As a side note, we can see that the default behavior for assets is `installMode: lazy/updateMode: prefetch` and for the application is `installModle: prefetch/updateMode: prefetch`. We can also see the hash generated in the `hashTable` property._
 
 And for the API calls, we can see that when a request to `/api/persons` is made, it is first `fetched` and subsequent calls are instantly returned from the service worker. After a minute as we set, another fetch will occur.
 
-![person]()
+![person](https://raw.githubusercontent.com/Kimserey/BlogArchive/master/img/20190301_pwa/person.PNG)
 
 When the application updates, once relauched, the new version will be updated as the behavior for the application is `prefetch`.
 
