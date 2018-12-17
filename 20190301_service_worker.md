@@ -4,6 +4,7 @@ Progressive Web App allows an Angular website to be installed locally and be ava
 
 1. Install @angular/pwa
 2. Configure service worker
+3. Service worker in action
 
 ## 1. Install @angular/pwa
 
@@ -103,6 +104,12 @@ As we saw in 1), installing `@angular/pwa` with `ng` CLI also installed `@angula
 export class AppModule { }
 ```
 
+`environment.production` points to the default environment settings which is a boolean `true` when building for production with `ng build --prod`. The service worker will only be enabled for production. `ngsw-worker.js` is the default service worker script used which comes in `@angular/service-worker` package.
+
+It also automatically add a configuration in production under the `build` architect for `"serviceWorker": true` in `angular.json` which will setuo Angular CLI to build the application augmented with service worker. We can leave the `angular.json` setting to `true` and when we need to disable service worker, we can set `{ enabled: false }` on the module registration which will make the application act as if service worker was not supported by the browser.
+
+Lastly it also added the `ngsw-config.json` at the root:
+
 ```
 {
   "index": "/index.html",
@@ -130,5 +137,83 @@ export class AppModule { }
     }
   ]
 }
+```
+
+The `ngsw-config` sets the caching policies for the service worker. It is composed by five properties, here is the typescript interface which the json deserialize to:
 
 ```
+export interface Config {
+    appData?: {};
+    index: string;
+    assetGroups?: AssetGroup[];
+    dataGroups?: DataGroup[];
+    navigationUrls?: string[];
+}
+```
+
+- `appData` is an object that can be used to store any data which will be available in the [`UpdateAvailableEvent`](https://angular.io/api/service-worker/UpdateAvailableEvent) and [`UpdateActivatedEvent`](https://angular.io/api/service-worker/UpdateActivatedEvent) from the `SwUpdate` service.
+- `index` defines the index page which will be use for navigation.
+- `assetGroups` defines the caching for the assets in the application, by default it defines two groups - the files composing the application and the static resources. `installMode` defines how the resources are being downloaded on installation and `updateMode` defines how the resources are being updated when they have changed. `prefetch` would download them as soon as changes were made while `lazy` would download them on demand as they are requested.
+- `dataGroups` defines the caching for data related requests, like API requests.
+
+The difference between `assetGroups` and `dataGroups` is that assets compose the application and each asset is versioned with a hash key. Any change in those files will yield a different hash which will indicate to service worker that the version of the app changed and one of the file needs to be downloaded. `dataGroups` on the other end represent the data which are separated from the application version. But on their own, data have a `version` as well which can be used to maintain compatibility between app version and data version for situation where upgrade of API aren't backward compatible.
+
+In our example, our app has API calls to `/api/persons` and `/api/companies` therefore we need to define those as `dataGroups`:
+
+```
+{
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "resources": {
+        "files": [
+          "/favicon.ico",
+          "/manifest.json",
+          "/index.html",
+          "/*.css",
+          "/*.js"
+        ]
+      }
+    }, {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/assets/**"
+        ]
+      }
+    }
+  ],
+  "dataGroups": [
+    {
+      "name": "api",
+      "urls": [ "/api/**" ],
+      "cacheConfig": {
+        "maxSize": 100,
+        "maxAge": "1m"
+      }
+    }
+  ] 
+}
+```
+
+Here our API and webapp are both hosted under the same domain therefore it is necessary to define the `dataGroups`, when browsing `mysite.com/api/persons`, the service worker will kick in and forward the route to the Angular router which will fail as no such route exists.
+We are now done with setting up the service worker. To be able to test it, we need to build in prod:
+
+```
+ng build --prod
+http-server dist\service-worker-test
+```
+
+We use `http-server` to host locally our `dist` folder containing the production build of our app.
+
+## 3. Service worker in action
+
+In action, the file dictating how the browser should act is the `ngsw-config.json`. It is downloaded every time the app is launched or the website is opened.
+
+![ngsw]()
+
+And for the API calls, we can see that when a request to `/api/persons` is made, it is first `fetched` and subsequent calls are instantly returned from the service worker. After a minute as we set, another fetch will occur.
