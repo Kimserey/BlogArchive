@@ -216,4 +216,14 @@ In action, the file dictating how the browser should act is the `ngsw-config.jso
 
 ![ngsw]()
 
+_As a side note, we can see that the default behavior for assets is `installMode: lazy/updateMode: prefetch` and for the application is `installModle: prefetch/updateMode: prefetch`. We can also see the hash generated in the `hashTable` property._
+
 And for the API calls, we can see that when a request to `/api/persons` is made, it is first `fetched` and subsequent calls are instantly returned from the service worker. After a minute as we set, another fetch will occur.
+
+![person]()
+
+When the application updates, once relauched, the new version will be updated as the behavior for the application is `prefetch`.
+
+## Conclusion
+
+Today we saw how we could setup our Angular application to become a Progressive Web App, we started by looking at how we can install the packages needed on Angular using the angular CLI. Then we moved on to configuring a `manifest.json` which sets look and feel for the application, then we moved on to configuring the behavior of the service worker which provides offline capabilities and lastly we saw how the service worker acts on the browser itself. Hope you liked this post, see you on the next one!
