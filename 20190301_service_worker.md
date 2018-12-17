@@ -84,11 +84,24 @@ It should also be automatically added to the assests in `angular.json` under `bu
 
 To make sure that our manifest is found, we can run the application and look into the chrome debugger > Application section, we should be able to see our settings:
 
-![](){}
+![manifest]()
 
 ## 2. Configure service worker
 
-As we saw in 1), installing `@angular/pwa` with `ng` CLI also installed `@angular/service-worker`.
+As we saw in 1), installing `@angular/pwa` with `ng` CLI also installed `@angular/service-worker`. A service worker brings offline capabilities to a web application. It can be viewed as a caching layer for HTTP methods. `@angular/service-worker` provides an abstraction over service worker which would normally be coded in Javascript. It allows us to configure the caching mechanism via a Json file called `ngsw-config.json` which can be found at the root of the project. Installing the package also registered the `ServiceWorkerModule` in the `AppModule`:
+
+```
+@NgModule({
+  declarations: [AppComponent],
+  imports: [
+    ...
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
 
 ```
 {
